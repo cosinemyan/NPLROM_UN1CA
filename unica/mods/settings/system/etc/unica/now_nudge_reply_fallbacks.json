@@ -1,5 +1,5 @@
 {
-  "default_language": "en",
+  "default_language": "ko",
   "category_rules": {
     "greeting": [
       "hello",
@@ -9,14 +9,20 @@
       "hai",
       "bonjour",
       "salut",
-      "coucou"
+      "coucou",
+      "안녕",
+      "안뇽",
+      "하이"
     ],
     "morning": [
       "good morning",
       "morning",
       "selamat pagi",
       "pagi",
-      "bon matin"
+      "bon matin",
+      "좋은 아침",
+      "굿모닝",
+      "아침"
     ],
     "evening": [
       "good evening",
@@ -24,7 +30,10 @@
       "selamat malam",
       "malam",
       "bonsoir",
-      "bonne nuit"
+      "bonne nuit",
+      "좋은 저녁",
+      "굿나잇",
+      "잘자"
     ],
     "thanks": [
       "thank",
@@ -32,14 +41,18 @@
       "merci",
       "makasih",
       "terima kasih",
-      "trimakasih"
+      "trimakasih",
+      "고마워",
+      "감사"
     ],
     "apology": [
       "sorry",
       "apolog",
       "maaf",
       "desole",
-      "pardon"
+      "pardon",
+      "미안",
+      "죄송"
     ],
     "confirm": [
       "confirm",
@@ -47,7 +60,9 @@
       "konfirmasi",
       "confirmasi",
       "valider",
-      "confirmer"
+      "confirmer",
+      "확인",
+      "컨펌"
     ],
     "approval": [
       "is it ok",
@@ -55,7 +70,9 @@
       "boleh",
       "setuju",
       "d accord",
-      "ca te va"
+      "ca te va",
+      "괜찮아",
+      "괜찮나요"
     ],
     "decline": [
       "cannot",
@@ -64,7 +81,10 @@
       "tidak bisa",
       "gak bisa",
       "ga bisa",
-      "ne peux pas"
+      "ne peux pas",
+      "안돼",
+      "못해",
+      "힘들어"
     ],
     "time": [
       "tomorrow",
@@ -78,14 +98,20 @@
       "malam",
       "demain",
       "ce soir",
-      "heure"
+      "heure",
+      "내일",
+      "오늘",
+      "이따",
+      "나중에"
     ],
     "schedule": [
       "schedule",
       "jadwal",
       "agenda",
       "rendez-vous",
-      "rendez vous"
+      "rendez vous",
+      "일정",
+      "스케줄"
     ],
     "appointment": [
       "appointment",
@@ -93,7 +119,9 @@
       "janji",
       "rdv",
       "reservation",
-      "reservasi"
+      "reservasi",
+      "약속",
+      "예약"
     ],
     "delay": [
       "late",
@@ -101,7 +129,10 @@
       "delayed",
       "telat",
       "terlambat",
-      "retard"
+      "retard",
+      "늦어",
+      "지연",
+      "늦었어"
     ],
     "arriving": [
       "arrive",
@@ -110,14 +141,18 @@
       "otw",
       "on the way",
       "j arrive",
-      "je suis la"
+      "je suis la",
+      "도착",
+      "다왔어"
     ],
     "meeting": [
       "meeting",
       "meet ",
       "rapat",
       "meetingnya",
-      "reunion"
+      "reunion",
+      "회의",
+      "미팅"
     ],
     "meeting_link": [
       "zoom",
@@ -125,7 +160,9 @@
       "meet link",
       "google meet",
       "link meeting",
-      "lien zoom"
+      "lien zoom",
+      "줌",
+      "미팅 링크"
     ],
     "location": [
       "where are you",
@@ -134,12 +171,15 @@
       "dimana",
       "di mana",
       "ou es-tu",
-      "tu es ou"
+      "tu es ou",
+      "어디야",
+      "위치"
     ],
     "address": [
       "address",
       "alamat",
-      "adresse"
+      "adresse",
+      "주소"
     ],
     "commute": [
       "commute",
@@ -147,14 +187,19 @@
       "pulang",
       "berangkat",
       "trajet",
-      "rentrer"
+      "rentrer",
+      "출근",
+      "퇴근",
+      "가는중"
     ],
     "traffic": [
       "traffic",
       "jammed",
       "macet",
       "embouteillage",
-      "bouchon"
+      "bouchon",
+      "교통체증",
+      "막혀"
     ],
     "weather": [
       "weather",
@@ -163,26 +208,34 @@
       "hujan",
       "cuaca",
       "meteo",
-      "pluie"
+      "pluie",
+      "날씨",
+      "비와"
     ],
     "reminder": [
       "remind",
       "reminder",
       "ingatkan",
       "pengingat",
-      "rappel"
+      "rappel",
+      "알림",
+      "리마인드"
     ],
     "calendar": [
       "calendar",
       "kalender",
-      "agenda"
+      "agenda",
+      "캘린더",
+      "달력"
     ],
     "alarm": [
       "alarm",
       "wake me",
       "bangunin",
       "alarmku",
-      "reveil"
+      "reveil",
+      "알람",
+      "깨워줘"
     ],
     "shopping": [
       "shopping",
@@ -190,13 +243,17 @@
       "beli",
       "belanja",
       "acheter",
-      "courses"
+      "courses",
+      "쇼핑",
+      "사야돼"
     ],
     "shopping_list": [
       "grocery",
       "groceries",
       "daftar belanja",
-      "liste de courses"
+      "liste de courses",
+      "장보기",
+      "장볼목록"
     ],
     "delivery": [
       "delivery",
@@ -205,7 +262,9 @@
       "paket",
       "kurir",
       "livraison",
-      "colis"
+      "colis",
+      "배송",
+      "택배"
     ],
     "payment": [
       "payment",
@@ -214,21 +273,27 @@
       "bayar",
       "dibayar",
       "paiement",
-      "payer"
+      "payer",
+      "결제",
+      "지불"
     ],
     "bank": [
       "bank",
       "transfer",
       "rekening",
       "iban",
-      "virement"
+      "virement",
+      "은행",
+      "이체"
     ],
     "money_request": [
       "borrow",
       "loan",
       "pinjam uang",
       "hutang",
-      "pret"
+      "pret",
+      "빌려줘",
+      "대출"
     ],
     "food": [
       "food",
@@ -236,22 +301,27 @@
       "makan",
       "lapar",
       "nourriture",
-      "faim"
+      "faim",
+      "배고파",
+      "먹자"
     ],
     "coffee": [
       "coffee",
       "kopi",
-      "cafe"
+      "cafe",
+      "커피"
     ],
     "lunch": [
       "lunch",
       "makan siang",
-      "dejeuner"
+      "dejeuner",
+      "점심"
     ],
     "dinner": [
       "dinner",
       "makan malam",
-      "diner"
+      "diner",
+      "저녁"
     ],
     "work": [
       "work",
@@ -259,14 +329,18 @@
       "kerja",
       "kantor",
       "travail",
-      "bureau"
+      "bureau",
+      "회사",
+      "직장"
     ],
     "deadline": [
       "deadline",
       "due date",
       "tenggat",
       "deadline-nya",
-      "echeance"
+      "echeance",
+      "마감",
+      "데드라인"
     ],
     "status_update": [
       "status",
@@ -274,14 +348,18 @@
       "progress",
       "perkembangan",
       "progres",
-      "avancement"
+      "avancement",
+      "진행상황",
+      "업데이트"
     ],
     "documents": [
       "document",
       "doc ",
       "file",
       "dokumen",
-      "fichier"
+      "fichier",
+      "문서",
+      "서류"
     ],
     "school": [
       "school",
@@ -290,19 +368,25 @@
       "sekolah",
       "kelas",
       "devoirs",
-      "ecole"
+      "ecole",
+      "학교",
+      "수업",
+      "숙제"
     ],
     "child_school": [
       "pick up the kids",
       "jemput anak",
       "anak sekolah",
-      "sortie ecole"
+      "sortie ecole",
+      "애 데리러",
+      "등하교"
     ],
     "home": [
       "home",
       "house",
       "rumah",
-      "maison"
+      "maison",
+      "집"
     ],
     "chores": [
       "clean",
@@ -311,7 +395,10 @@
       "bersih",
       "cuci",
       "menage",
-      "vaisselle"
+      "vaisselle",
+      "청소",
+      "빨래",
+      "설거지"
     ],
     "family": [
       "family",
@@ -322,7 +409,10 @@
       "keluarga",
       "famille",
       "maman",
-      "papa"
+      "papa",
+      "가족",
+      "엄마",
+      "아빠"
     ],
     "friend": [
       "friend",
@@ -330,7 +420,8 @@
       "teman",
       "sahabat",
       "ami ",
-      "amie"
+      "amie",
+      "친구"
     ],
     "health": [
       "sick",
@@ -340,14 +431,18 @@
       "dokter",
       "malade",
       "douleur",
-      "medecin"
+      "medecin",
+      "아파",
+      "병원"
     ],
     "medicine": [
       "medicine",
       "medication",
       "obat",
       "vitamin",
-      "medicament"
+      "medicament",
+      "약",
+      "비타민"
     ],
     "tired": [
       "tired",
@@ -355,14 +450,17 @@
       "capek",
       "lelah",
       "ngantuk",
-      "fatigue"
+      "fatigue",
+      "피곤",
+      "졸려"
     ],
     "busy": [
       "busy",
       "occupied",
       "sibuk",
       "lagi penuh",
-      "occupe"
+      "occupe",
+      "바빠"
     ],
     "urgent": [
       "urgent",
@@ -370,14 +468,17 @@
       "important",
       "mendesak",
       "penting",
-      "urgence"
+      "urgence",
+      "급해",
+      "중요"
     ],
     "help": [
       "help",
       "assist",
       "tolong",
       "bantu",
-      "aide"
+      "aide",
+      "도와줘"
     ],
     "invite": [
       "invite",
@@ -386,74 +487,91 @@
       "ajak",
       "undang",
       "inviter",
-      "viens"
+      "viens",
+      "초대",
+      "같이가자"
     ],
     "follow_up": [
       "follow up",
       "following up",
       "menindaklanjuti",
-      "relance"
+      "relance",
+      "후속",
+      "확인해줄래"
     ],
     "send_file": [
       "send me",
       "kirimkan",
       "kirim ",
       "envoyer",
-      "envoie"
+      "envoie",
+      "보내줘"
     ],
     "photo": [
       "photo",
       "picture",
       "image",
       "foto",
-      "gambar"
+      "gambar",
+      "사진"
     ],
     "screenshot": [
       "screenshot",
       "screen shot",
       "ss ",
-      "capture ecran"
+      "capture ecran",
+      "스크린샷",
+      "캡처"
     ],
     "call": [
       "call me",
       "phone",
       "telepon",
       "telpon",
-      "appelle"
+      "appelle",
+      "전화"
     ],
     "voice_note": [
       "voice note",
       "vn ",
       "voice message",
       "pesan suara",
-      "message vocal"
+      "message vocal",
+      "음성메시지"
     ],
     "email": [
       "email",
       "e-mail",
       "mail ",
-      "surat elektronik"
+      "surat elektronik",
+      "이메일",
+      "메일"
     ],
     "contact": [
       "contact",
       "phone number",
       "nomor",
       "kontak",
-      "numero"
+      "numero",
+      "연락처",
+      "번호"
     ],
     "travel": [
       "travel",
       "trip",
       "perjalanan",
       "jalan-jalan",
-      "voyage"
+      "voyage",
+      "여행"
     ],
     "vacation": [
       "vacation",
       "holiday",
       "liburan",
       "cuti",
-      "vacances"
+      "vacances",
+      "휴가",
+      "방학"
     ],
     "flight": [
       "flight",
@@ -462,32 +580,41 @@
       "pesawat",
       "bandara",
       "vol ",
-      "aeroport"
+      "aeroport",
+      "비행기",
+      "공항"
     ],
     "hotel": [
       "hotel",
       "check-in",
       "check in",
-      "penginapan"
+      "penginapan",
+      "호텔",
+      "체크인"
     ],
     "train": [
       "train",
       "station",
       "kereta",
       "stasiun",
-      "gare"
+      "gare",
+      "기차",
+      "역"
     ],
     "parking": [
       "parking",
       "parkir",
-      "stationnement"
+      "stationnement",
+      "주차"
     ],
     "lost": [
       "lost",
       "missing",
       "hilang",
       "tersesat",
-      "perdu"
+      "perdu",
+      "잃어버렸어",
+      "분실"
     ],
     "mistake": [
       "mistake",
@@ -495,7 +622,9 @@
       "typo",
       "salah",
       "keliru",
-      "erreur"
+      "erreur",
+      "실수",
+      "틀렸어"
     ],
     "praise": [
       "great job",
@@ -504,48 +633,59 @@
       "bagus",
       "keren",
       "hebat",
-      "bravo"
+      "bravo",
+      "잘했어",
+      "대박",
+      "최고"
     ],
     "support": [
       "hope you are ok",
       "semangat",
       "stay strong",
-      "courage"
+      "courage",
+      "힘내",
+      "화이팅"
     ],
     "congratulations": [
       "congrats",
       "congratulations",
       "selamat",
-      "felicitations"
+      "felicitations",
+      "축하해"
     ],
     "birthday": [
       "birthday",
       "ulang tahun",
-      "anniversaire"
+      "anniversaire",
+      "생일"
     ],
     "condolence": [
       "condolence",
       "passed away",
       "meninggal",
       "duka",
-      "deces"
+      "deces",
+      "부고"
     ],
     "weekend": [
       "weekend",
       "akhir pekan",
-      "fin de semaine"
+      "fin de semaine",
+      "주말"
     ],
     "movie": [
       "movie",
       "film",
       "cinema",
-      "bioskop"
+      "bioskop",
+      "영화"
     ],
     "gaming": [
       "game",
       "gaming",
       "main game",
-      "jouer"
+      "jouer",
+      "게임"
     ],
     "sports": [
       "football",
@@ -554,7 +694,9 @@
       "tennis",
       "bola",
       "olahraga",
-      "sport"
+      "sport",
+      "축구",
+      "농구"
     ],
     "repair": [
       "repair",
@@ -563,20 +705,24 @@
       "rusak",
       "perbaiki",
       "reparer",
-      "casse"
+      "casse",
+      "고쳐줘",
+      "고장"
     ],
     "battery": [
       "battery",
       "low battery",
       "baterai",
       "batere",
-      "batterie"
+      "batterie",
+      "배터리"
     ],
     "charger": [
       "charger",
       "charging",
       "cas ",
-      "chargeur"
+      "chargeur",
+      "충전기"
     ],
     "internet": [
       "internet",
@@ -584,14 +730,17 @@
       "wi-fi",
       "connection",
       "sinyal",
-      "reseau"
+      "reseau",
+      "인터넷",
+      "와이파이"
     ],
     "password": [
       "password",
       "passcode",
       "pin ",
       "kata sandi",
-      "mot de passe"
+      "mot de passe",
+      "비밀번호"
     ],
     "safety": [
       "safe",
@@ -600,34 +749,44 @@
       "danger",
       "bahaya",
       "securite",
-      "dangereux"
+      "dangereux",
+      "안전",
+      "위험"
     ],
     "emergency": [
       "emergency",
       "911",
       "112",
       "darurat",
-      "urgence"
+      "urgence",
+      "응급",
+      "긴급"
     ],
     "maybe_later": [
       "later?",
       "another time",
       "lain kali",
       "nanti saja",
-      "plus tard"
+      "plus tard",
+      "나중에?",
+      "다음에"
     ],
     "permission": [
       "can i",
       "may i",
       "boleh aku",
       "izin",
-      "permission"
+      "permission",
+      "해도돼",
+      "허락"
     ],
     "opinion": [
       "what do you think",
       "menurutmu",
       "opinion",
-      "avis"
+      "avis",
+      "어떻게생각해",
+      "의견"
     ],
     "decision": [
       "decide",
@@ -635,7 +794,9 @@
       "choose",
       "pilih",
       "putusan",
-      "choisir"
+      "choisir",
+      "결정",
+      "선택"
     ],
     "availability": [
       "available",
@@ -643,527 +804,640 @@
       "are you free",
       "kosong",
       "luang",
-      "disponible"
+      "disponible",
+      "시간돼",
+      "가능해"
     ],
     "language": [
       "language",
       "bahasa",
-      "langue"
+      "langue",
+      "언어"
     ],
     "translation": [
       "translate",
       "translation",
       "terjemah",
       "traduire",
-      "traduction"
+      "traduction",
+      "번역"
     ],
     "quiet": [
       "quiet",
       "do not disturb",
       "jangan ganggu",
       "diam dulu",
-      "ne derange pas"
+      "ne derange pas",
+      "조용히",
+      "방해하지마"
     ],
     "pickup": [
       "pick me up",
       "pickup",
       "jemput aku",
       "jemput",
-      "recuperer"
+      "recuperer",
+      "데리러와줘",
+      "픽업"
     ],
     "dropoff": [
       "drop me",
       "drop off",
       "antar aku",
       "antar",
-      "deposer"
+      "deposer",
+      "내려줘",
+      "데려다줘"
     ],
     "reservation": [
       "reserve",
       "book a table",
       "pesan tempat",
       "reservasi",
-      "reserver"
+      "reserver",
+      "예약",
+      "자리예약"
     ],
     "music": [
       "music",
       "song",
       "lagu",
       "playlist",
-      "musique"
+      "musique",
+      "음악",
+      "노래"
     ],
     "breakfast": [
       "breakfast",
       "sarapan",
-      "petit dejeuner"
+      "petit dejeuner",
+      "아침식사"
     ],
     "snack": [
       "snack",
       "cemilan",
       "camilan",
-      "gouter"
+      "gouter",
+      "간식"
     ],
     "dessert": [
       "dessert",
-      "pencuci mulut"
+      "pencuci mulut",
+      "디저트"
     ],
     "restaurant": [
       "restaurant",
       "resto",
-      "warung"
+      "warung",
+      "레스토랑",
+      "식당"
     ],
     "cooking": [
       "cooking",
       "cook ",
       "masak",
-      "cuisiner"
+      "cuisiner",
+      "요리"
     ],
     "recipe": [
       "recipe",
       "resep",
-      "recette"
+      "recette",
+      "레시피"
     ],
     "pharmacy": [
       "pharmacy",
       "apotek",
-      "pharmacie"
+      "pharmacie",
+      "약국"
     ],
     "dentist": [
       "dentist",
       "dokter gigi",
-      "dentiste"
+      "dentiste",
+      "치과"
     ],
     "hospital": [
       "hospital",
       "rumah sakit",
-      "hopital"
+      "hopital",
+      "병원"
     ],
     "health_insurance": [
       "health insurance",
       "asuransi kesehatan",
-      "assurance sante"
+      "assurance sante",
+      "건강보험"
     ],
     "workout": [
       "workout",
       "gym",
       "olahraga pagi",
-      "sport ce soir"
+      "sport ce soir",
+      "운동",
+      "헬스"
     ],
     "walking": [
       "walk ",
       "walking",
       "jalan kaki",
-      "promenade"
+      "promenade",
+      "산책"
     ],
     "rest": [
       "take a rest",
       "istirahat",
-      "repos"
+      "repos",
+      "휴식"
     ],
     "sleep": [
       "sleep",
       "tidur",
-      "dormir"
+      "dormir",
+      "잠",
+      "수면"
     ],
     "headache": [
       "headache",
       "sakit kepala",
-      "mal a la tete"
+      "mal a la tete",
+      "두통"
     ],
     "fever": [
       "fever",
       "demam",
-      "fievre"
+      "fievre",
+      "열"
     ],
     "allergy": [
       "allergy",
       "alergi",
-      "allergie"
+      "allergie",
+      "알레르기"
     ],
     "vaccine": [
       "vaccine",
       "vaccination",
-      "vaksin"
+      "vaksin",
+      "백신"
     ],
     "taxi": [
       "taxi",
-      "taksi"
+      "taksi",
+      "택시"
     ],
     "bus": [
       "bus ",
       "busnya",
       "bus stop",
-      "arret de bus"
+      "arret de bus",
+      "버스"
     ],
     "metro": [
       "metro",
       "subway",
       "mrt ",
-      "rer "
+      "rer ",
+      "지하철"
     ],
     "car_rental": [
       "car rental",
       "rental mobil",
-      "location voiture"
+      "location voiture",
+      "렌터카"
     ],
     "fuel": [
       "fuel",
       "gasoline",
       "bensin",
-      "essence"
+      "essence",
+      "주유",
+      "기름"
     ],
     "toll": [
       "toll",
       "tol ",
-      "peage"
+      "peage",
+      "통행료"
     ],
     "ride_hailing": [
       "grab",
       "gojek",
       "uber",
-      "bolt"
+      "bolt",
+      "카카오택시"
     ],
     "passport": [
       "passport",
       "paspor",
-      "passeport"
+      "passeport",
+      "여권"
     ],
     "visa": [
       "visa ",
-      "visa-nya"
+      "visa-nya",
+      "비자"
     ],
     "luggage": [
       "luggage",
       "baggage",
       "koper",
       "bagasi",
-      "bagage"
+      "bagage",
+      "짐",
+      "수하물"
     ],
     "map": [
       "map ",
       "maps",
       "peta",
-      "carte"
+      "carte",
+      "지도"
     ],
     "travel_checkin": [
       "online check-in",
       "check in online",
-      "check-in online"
+      "check-in online",
+      "온라인체크인"
     ],
     "travel_checkout": [
       "check-out",
       "checkout",
-      "check out"
+      "check out",
+      "체크아웃"
     ],
     "boarding": [
       "boarding",
-      "boarding pass"
+      "boarding pass",
+      "탑승"
     ],
     "customs": [
       "customs",
       "imigrasi",
-      "douane"
+      "douane",
+      "세관",
+      "입국심사"
     ],
     "client": [
       "client",
-      "klien"
+      "klien",
+      "고객"
     ],
     "manager": [
       "manager",
       "atasan",
-      "boss"
+      "boss",
+      "상사",
+      "매니저"
     ],
     "coworker": [
       "coworker",
       "colleague",
       "rekan kerja",
-      "collegue"
+      "collegue",
+      "동료"
     ],
     "interview": [
       "interview",
       "wawancara",
-      "entretien"
+      "entretien",
+      "면접"
     ],
     "contract": [
       "contract",
       "kontrak",
-      "contrat"
+      "contrat",
+      "계약"
     ],
     "invoice": [
       "invoice",
       "faktur",
       "tagihan invoice",
-      "facture"
+      "facture",
+      "인보이스"
     ],
     "receipt": [
       "receipt",
       "struk",
       "kwitansi",
-      "recu"
+      "recu",
+      "영수증"
     ],
     "refund": [
       "refund",
       "pengembalian dana",
-      "remboursement"
+      "remboursement",
+      "환불"
     ],
     "discount": [
       "discount",
       "promo",
       "diskon",
-      "reduction"
+      "reduction",
+      "할인"
     ],
     "subscription": [
       "subscription",
       "langganan",
-      "abonnement"
+      "abonnement",
+      "구독"
     ],
     "bill": [
       "bill ",
       "tagihan",
-      "facture a payer"
+      "facture a payer",
+      "청구서"
     ],
     "salary": [
       "salary",
       "gaji",
-      "salaire"
+      "salaire",
+      "월급",
+      "급여"
     ],
     "leave_request": [
       "leave request",
       "annual leave",
       "cuti",
-      "conge"
+      "conge",
+      "휴가신청"
     ],
     "shift": [
       "shift",
       "jadwal shift",
-      "service du soir"
+      "service du soir",
+      "근무"
     ],
     "report": [
       "report",
       "laporan",
-      "rapport"
+      "rapport",
+      "보고서"
     ],
     "presentation": [
       "presentation",
-      "presentasi"
+      "presentasi",
+      "발표"
     ],
     "project": [
       "project",
       "proyek",
-      "projet"
+      "projet",
+      "프로젝트"
     ],
     "task": [
       "task",
       "todo",
       "tugas",
-      "tache"
+      "tache",
+      "할일"
     ],
     "bug_report": [
       "bug ",
       "error app",
       "bugnya",
-      "rapport de bug"
+      "rapport de bug",
+      "버그"
     ],
     "deployment": [
       "deploy",
       "deployment",
       "rilis app",
-      "deploiement"
+      "deploiement",
+      "배포"
     ],
     "login_issue": [
       "login issue",
       "cannot login",
       "tidak bisa login",
-      "probleme connexion"
+      "probleme connexion",
+      "로그인안됨"
     ],
     "rent": [
       "rent",
       "sewa",
-      "loyer"
+      "loyer",
+      "월세"
     ],
     "landlord": [
       "landlord",
       "pemilik rumah",
-      "proprietaire"
+      "proprietaire",
+      "집주인"
     ],
     "electricity": [
       "electricity",
       "listrik",
-      "electricite"
+      "electricite",
+      "전기"
     ],
     "water_supply": [
       "water bill",
       "water supply",
       "air mati",
-      "eau"
+      "eau",
+      "수도"
     ],
     "gas_bill": [
       "gas bill",
       "tagihan gas",
-      "facture gaz"
+      "facture gaz",
+      "가스요금"
     ],
     "home_maintenance": [
       "home maintenance",
       "maintenance rumah",
-      "reparation maison"
+      "reparation maison",
+      "집수리"
     ],
     "trash": [
       "trash",
       "garbage",
       "sampah",
-      "poubelle"
+      "poubelle",
+      "쓰레기"
     ],
     "kitchen": [
       "kitchen",
       "dapur",
-      "cuisine maison"
+      "cuisine maison",
+      "주방"
     ],
     "bathroom": [
       "bathroom",
       "kamar mandi",
-      "salle de bain"
+      "salle de bain",
+      "화장실"
     ],
     "bedroom": [
       "bedroom",
       "kamar tidur",
-      "chambre"
+      "chambre",
+      "침실"
     ],
     "keys": [
       "keys",
       "key ",
       "kunci",
-      "cle "
+      "cle ",
+      "열쇠"
     ],
     "door": [
       "door",
       "pintu",
-      "porte"
+      "porte",
+      "문"
     ],
     "window": [
       "window",
       "jendela",
-      "fenetre"
+      "fenetre",
+      "창문"
     ],
     "party": [
       "party",
       "pesta",
-      "soiree"
+      "soiree",
+      "파티"
     ],
     "wedding": [
       "wedding",
       "nikahan",
-      "mariage"
+      "mariage",
+      "결혼식"
     ],
     "ceremony": [
       "ceremony",
       "upacara",
-      "ceremonie"
+      "ceremonie",
+      "행사"
     ],
     "concert": [
       "concert",
-      "konser"
+      "konser",
+      "콘서트"
     ],
     "ticket": [
       "ticket",
       "tiket",
-      "billet"
+      "billet",
+      "티켓"
     ],
     "museum": [
       "museum",
-      "musee"
+      "musee",
+      "박물관"
     ],
     "park": [
       "park ",
       "taman",
-      "parc"
+      "parc",
+      "공원"
     ],
     "picnic": [
       "picnic",
       "piknik",
-      "pique-nique"
+      "pique-nique",
+      "소풍"
     ],
     "new_year": [
       "new year",
       "tahun baru",
-      "nouvel an"
+      "nouvel an",
+      "새해"
     ],
     "neighbor": [
       "neighbor",
       "tetangga",
-      "voisin"
+      "voisin",
+      "이웃"
     ],
     "guest": [
       "guest",
       "tamu",
-      "invite a la maison"
+      "invite a la maison",
+      "손님"
     ],
     "host": [
       "host ",
       "hosting",
       "tuan rumah",
-      "accueillir"
+      "accueillir",
+      "호스트"
     ],
     "rsvp": [
       "rsvp",
       "confirm attendance",
       "konfirmasi hadir",
-      "confirmer presence"
+      "confirmer presence",
+      "참석확인"
     ],
     "gift": [
       "gift",
       "present",
       "hadiah",
-      "cadeau"
+      "cadeau",
+      "선물"
     ],
     "lost_phone": [
       "lost phone",
       "hp hilang",
-      "telephone perdu"
+      "telephone perdu",
+      "폰잃어버렸어"
     ],
     "wallet": [
       "wallet",
       "dompet",
-      "portefeuille"
+      "portefeuille",
+      "지갑"
     ],
     "id_card": [
       "id card",
       "ktp",
       "identity card",
-      "carte identite"
+      "carte identite",
+      "신분증"
     ],
     "police": [
       "police",
-      "polisi"
+      "polisi",
+      "경찰"
     ],
     "security_check": [
       "security check",
       "pemeriksaan keamanan",
-      "controle securite"
+      "controle securite",
+      "보안검사"
     ],
     "lab_result": [
       "lab result",
       "hasil lab",
-      "resultat labo"
+      "resultat labo",
+      "검사결과"
     ],
     "cancel_plan": [
       "cancel",
       "batalkan",
-      "annuler"
+      "annuler",
+      "취소"
     ],
     "reschedule_plan": [
       "reschedule",
       "ubah jadwal",
-      "reprogrammer"
+      "reprogrammer",
+      "일정변경"
     ],
     "childcare": [
       "childcare",
       "babysit",
       "jaga anak",
-      "garde enfant"
+      "garde enfant",
+      "육아"
     ],
     "parent": [
       "parent",
-      "orang tua"
+      "orang tua",
+      "부모님"
     ],
     "sibling": [
       "brother",
@@ -1171,147 +1445,181 @@
       "kakak",
       "adik",
       "frere",
-      "soeur"
+      "soeur",
+      "형",
+      "누나",
+      "동생"
     ],
     "partner": [
       "partner",
       "pacar",
       "suami",
       "istri",
-      "conjoint"
+      "conjoint",
+      "남친",
+      "여친",
+      "남편",
+      "아내"
     ],
     "mood_happy": [
       "happy",
       "senang",
       "bahagia",
-      "content"
+      "content",
+      "행복",
+      "기뻐"
     ],
     "mood_sad": [
       "sad",
       "sedih",
-      "triste"
+      "triste",
+      "슬퍼"
     ],
     "mood_angry": [
       "angry",
       "marah",
-      "fache"
+      "fache",
+      "화나"
     ],
     "mood_worried": [
       "worried",
       "khawatir",
       "cemas",
-      "inquiet"
+      "inquiet",
+      "걱정"
     ],
     "mood_stressed": [
       "stressed",
       "stress",
-      "tertekan"
+      "tertekan",
+      "스트레스"
     ],
     "mood_excited": [
       "excited",
       "tidak sabar",
       "hyped",
-      "enthousiaste"
+      "enthousiaste",
+      "신나"
     ],
     "mood_confused": [
       "confused",
       "bingung",
-      "confus"
+      "confus",
+      "헷갈려"
     ],
     "study": [
       "study",
       "belajar",
-      "etudier"
+      "etudier",
+      "공부"
     ],
     "exam": [
       "exam",
       "ujian",
-      "examen"
+      "examen",
+      "시험"
     ],
     "lesson": [
       "lesson",
       "pelajaran",
-      "cours"
+      "cours",
+      "수업"
     ],
     "book": [
       "book ",
       "buku",
-      "livre"
+      "livre",
+      "책"
     ],
     "library": [
       "library",
       "perpustakaan",
-      "bibliotheque"
+      "bibliotheque",
+      "도서관"
     ],
     "photo_album": [
       "album",
       "gallery",
-      "galeri"
+      "galeri",
+      "앨범"
     ],
     "camera_issue": [
       "camera problem",
       "kamera rusak",
-      "probleme camera"
+      "probleme camera",
+      "카메라고장"
     ],
     "storage_full": [
       "storage full",
       "memori penuh",
-      "stockage plein"
+      "stockage plein",
+      "저장공간부족"
     ],
     "phone_update": [
       "phone update",
       "software update",
       "update hp",
-      "mise a jour telephone"
+      "mise a jour telephone",
+      "폰업데이트"
     ],
     "backup_data": [
       "backup data",
       "cadangkan",
-      "sauvegarde"
+      "sauvegarde",
+      "백업"
     ],
     "restore_data": [
       "restore data",
       "pulihkan data",
-      "restaurer"
+      "restaurer",
+      "복원"
     ],
     "data_plan": [
       "data plan",
       "paket data",
-      "forfait mobile"
+      "forfait mobile",
+      "데이터요금제"
     ],
     "roaming": [
       "roaming",
-      "jelajah data"
+      "jelajah data",
+      "로밍"
     ],
     "video_call": [
       "video call",
       "vc ",
-      "appel video"
+      "appel video",
+      "영상통화"
     ],
     "missed_call": [
       "missed call",
       "panggilan tak terjawab",
-      "appel manque"
+      "appel manque",
+      "부재중전화"
     ],
     "voicemail": [
       "voicemail",
       "pesan suara telepon",
-      "messagerie vocale"
+      "messagerie vocale",
+      "음성사서함"
     ],
     "quiet_hours": [
       "quiet hours",
       "jam tenang",
-      "heures calmes"
+      "heures calmes",
+      "조용한시간"
     ],
     "meeting_notes": [
       "meeting notes",
       "catatan rapat",
-      "notes reunion"
+      "notes reunion",
+      "회의록"
     ],
     "quick_reply": [
       "quick reply",
       "balasan cepat",
-      "reponse rapide"
+      "reponse rapide",
+      "빠른답장"
     ],
     "question": [
       "?",
@@ -1328,3235 +1636,1081 @@
     ]
   },
   "languages": {
-    "en": {
+    "ko": {
       "default": [
-        "Yes",
-        "Let me check",
-        "Sorry, I can't"
+        "네",
+        "확인해볼게요",
+        "죄송해요, 안 될 것 같아요"
       ],
       "greeting": [
-        "Hi.",
-        "Hey, how are you?",
-        "Hello, I am here."
+        "안녕.",
+        "안녕, 잘 지내?",
+        "응, 나 여기 있어."
       ],
       "morning": [
-        "Good morning.",
-        "Morning, hope your day starts well.",
-        "I will reply in a bit."
+        "좋은 아침이야.",
+        "좋은 아침, 오늘 하루 잘 시작하길 바라.",
+        "조금 있다가 답장할게."
       ],
       "evening": [
-        "Good evening.",
-        "Have a good night.",
-        "I will check this tomorrow."
+        "좋은 저녁이야.",
+        "좋은 밤 보내.",
+        "이건 내일 확인할게."
       ],
       "thanks": [
-        "You're welcome.",
-        "No problem.",
-        "Anytime."
+        "천만에.",
+        "괜찮아.",
+        "언제든지."
       ],
       "apology": [
-        "No worries.",
-        "It is okay.",
-        "Thanks for letting me know."
+        "괜찮아.",
+        "괜찮아, 신경 쓰지 마.",
+        "알려줘서 고마워."
       ],
       "confirm": [
-        "Confirmed.",
-        "Yes, that is correct.",
-        "I confirm it."
+        "확인했어.",
+        "응, 맞아.",
+        "확정할게."
       ],
       "approval": [
-        "Yes, that is fine.",
-        "That works for me.",
-        "Let me check first."
+        "응, 괜찮아.",
+        "그거 좋아.",
+        "먼저 확인해볼게."
       ],
       "decline": [
-        "No problem.",
-        "Maybe another time.",
-        "Thanks for telling me."
+        "괜찮아.",
+        "다음에 하자.",
+        "알려줘서 고마워."
       ],
       "time": [
-        "Yes, that time works.",
-        "Let me check first.",
-        "Sorry, I am not available then."
+        "응, 그 시간 괜찮아.",
+        "먼저 확인해볼게.",
+        "미안, 그때는 안 될 것 같아."
       ],
       "schedule": [
-        "I can add it to my schedule.",
-        "Please send the details.",
-        "I need to check my calendar first."
+        "일정에 추가할게.",
+        "자세한 내용 보내줘.",
+        "먼저 캘린더 확인해볼게."
       ],
       "appointment": [
-        "The appointment works for me.",
-        "Can you confirm the place?",
-        "I need to reschedule."
+        "약속 시간 괜찮아.",
+        "장소 확인해줄 수 있어?",
+        "일정을 변경해야 할 것 같아."
       ],
       "delay": [
-        "No problem, take your time.",
-        "Thanks for the update.",
-        "Please let me know when you arrive."
+        "괜찮아, 천천히 와.",
+        "알려줘서 고마워.",
+        "도착하면 알려줘."
       ],
       "arriving": [
-        "Great, see you soon.",
-        "I will be there shortly.",
-        "Please wait a moment."
+        "좋아, 곧 보자.",
+        "금방 도착할게.",
+        "잠깐만 기다려줘."
       ],
       "meeting": [
-        "I can join the meeting.",
-        "Please send the meeting link.",
-        "I may be a few minutes late."
+        "회의 참석할 수 있어.",
+        "회의 링크 보내줘.",
+        "몇 분 늦을 수도 있어."
       ],
       "meeting_link": [
-        "Please send the link.",
-        "I will join from the link.",
-        "The link is not working for me."
+        "링크 보내줘.",
+        "그 링크로 들어갈게.",
+        "링크가 안 열려."
       ],
       "location": [
-        "I will share my location.",
-        "I am nearby.",
-        "Can you send the location?"
+        "위치 공유할게.",
+        "거의 다 왔어.",
+        "위치 보내줄 수 있어?"
       ],
       "address": [
-        "Please send the address.",
-        "I will check the address now.",
-        "I found the place."
+        "주소 보내줘.",
+        "지금 주소 확인해볼게.",
+        "장소 찾았어."
       ],
       "commute": [
-        "I am on my way.",
-        "I will leave soon.",
-        "I will update you when I arrive."
+        "가는 중이야.",
+        "곧 출발할게.",
+        "도착하면 알려줄게."
       ],
       "traffic": [
-        "Traffic is heavy right now.",
-        "I may arrive late.",
-        "I will take another route."
+        "지금 길이 많이 막혀.",
+        "조금 늦을 수도 있어.",
+        "다른 길로 가볼게."
       ],
       "weather": [
-        "Looks like it may rain.",
-        "Please bring an umbrella.",
-        "Let me check the weather first."
+        "비가 올 것 같아.",
+        "우산 챙겨.",
+        "먼저 날씨 확인해볼게."
       ],
       "reminder": [
-        "Please remind me later.",
-        "I will set a reminder.",
-        "Thanks for the reminder."
+        "나중에 알려줘.",
+        "알림 설정해둘게.",
+        "알려줘서 고마워."
       ],
       "calendar": [
-        "I will check my calendar.",
-        "My calendar looks free.",
-        "That conflicts with another plan."
+        "캘린더 확인해볼게.",
+        "일정이 비어있는 것 같아.",
+        "다른 일정이랑 겹치네."
       ],
       "alarm": [
-        "I will set an alarm.",
-        "Please wake me up then.",
-        "I already set it."
+        "알람 맞춰둘게.",
+        "그때 깨워줘.",
+        "이미 맞춰뒀어."
       ],
       "shopping": [
-        "I can buy it later.",
-        "Please send the list.",
-        "I already bought it."
+        "나중에 살게.",
+        "목록 보내줘.",
+        "이미 샀어."
       ],
       "shopping_list": [
-        "Please add it to the list.",
-        "I will get those items.",
-        "Anything else to add?"
+        "목록에 추가해줘.",
+        "그 물건들 사올게.",
+        "더 추가할 거 있어?"
       ],
       "delivery": [
-        "I will check the delivery status.",
-        "The package has arrived.",
-        "Please leave it at the door."
+        "배송 상태 확인해볼게.",
+        "택배 도착했어.",
+        "문 앞에 놔줘."
       ],
       "payment": [
-        "I will pay now.",
-        "Payment has been sent.",
-        "Please send the amount."
+        "지금 결제할게.",
+        "결제 보냈어.",
+        "금액 보내줘."
       ],
       "bank": [
-        "Please send the bank details.",
-        "I will transfer it shortly.",
-        "I already sent the transfer."
+        "계좌 정보 보내줘.",
+        "곧 이체할게.",
+        "이미 이체했어."
       ],
       "money_request": [
-        "Let me check my budget first.",
-        "I can help a little.",
-        "Sorry, I cannot help with that now."
+        "먼저 예산 확인해볼게.",
+        "조금은 도와줄 수 있어.",
+        "미안, 지금은 도와주기 어려워."
       ],
       "food": [
-        "Let us eat soon.",
-        "What do you want to eat?",
-        "I already ate."
+        "곧 먹자.",
+        "뭐 먹고 싶어?",
+        "이미 먹었어."
       ],
       "coffee": [
-        "Coffee sounds good.",
-        "I can grab coffee later.",
-        "Maybe another time."
+        "커피 좋아.",
+        "나중에 커피 마실 수 있어.",
+        "다음에 하자."
       ],
       "lunch": [
-        "Lunch works for me.",
-        "Where do you want to eat?",
-        "I cannot make lunch today."
+        "점심 괜찮아.",
+        "어디서 먹을까?",
+        "오늘은 점심 같이 못 먹을 것 같아."
       ],
       "dinner": [
-        "Dinner sounds good.",
-        "Let us decide the place.",
-        "I may be late for dinner."
+        "저녁 괜찮아.",
+        "장소 정하자.",
+        "저녁에 좀 늦을 수도 있어."
       ],
       "work": [
-        "I am working right now.",
-        "I will reply after work.",
-        "Let us handle it tomorrow."
+        "지금 일하는 중이야.",
+        "일 끝나고 답장할게.",
+        "내일 처리하자."
       ],
       "deadline": [
-        "I will try to finish before the deadline.",
-        "Can we extend the deadline?",
-        "I need more details first."
+        "마감 전에 끝내볼게.",
+        "마감 연장할 수 있어?",
+        "먼저 자세한 내용이 필요해."
       ],
       "status_update": [
-        "I will send an update soon.",
-        "Still in progress.",
-        "It is done."
+        "곧 업데이트 보낼게.",
+        "아직 진행 중이야.",
+        "다 끝났어."
       ],
       "documents": [
-        "Please send the document.",
-        "I will review the file.",
-        "I have attached it."
+        "문서 보내줘.",
+        "파일 확인해볼게.",
+        "첨부했어."
       ],
       "school": [
-        "I will check the assignment.",
-        "Class starts soon.",
-        "Please send the homework details."
+        "과제 확인해볼게.",
+        "수업 곧 시작해.",
+        "과제 자세한 내용 보내줘."
       ],
       "child_school": [
-        "I can pick them up.",
-        "Please remind me before pickup.",
-        "I may be a little late."
+        "내가 데리러 갈 수 있어.",
+        "데리러 가기 전에 알려줘.",
+        "조금 늦을 수도 있어."
       ],
       "home": [
-        "I am at home.",
-        "I will be home soon.",
-        "Please lock the door."
+        "집이야.",
+        "곧 집에 갈게.",
+        "문 잠가줘."
       ],
       "chores": [
-        "I will handle it later.",
-        "Can you do it today?",
-        "It is already done."
+        "나중에 할게.",
+        "오늘 해줄 수 있어?",
+        "이미 끝냈어."
       ],
       "family": [
-        "Please send my regards.",
-        "I will call them later.",
-        "Hope everyone is okay."
+        "안부 전해줘.",
+        "나중에 전화할게.",
+        "다들 잘 지내길 바라."
       ],
       "friend": [
-        "That sounds fun.",
-        "Let us invite them too.",
-        "I will message them."
+        "재밌겠다.",
+        "같이 초대하자.",
+        "메시지 보낼게."
       ],
       "health": [
-        "Please take care.",
-        "You should rest first.",
-        "Do you need help?"
+        "몸조리 잘해.",
+        "먼저 좀 쉬어.",
+        "도움 필요해?"
       ],
       "medicine": [
-        "Please take your medicine.",
-        "I will buy it later.",
-        "Did you already take it?"
+        "약 챙겨 먹어.",
+        "나중에 사올게.",
+        "약 먹었어?"
       ],
       "tired": [
-        "Please get some rest.",
-        "Take a short break.",
-        "We can continue tomorrow."
+        "좀 쉬어.",
+        "잠깐 쉬어가자.",
+        "내일 계속하자."
       ],
       "busy": [
-        "I am busy right now.",
-        "I will reply when I am free.",
-        "Can we talk later?"
+        "지금 바빠.",
+        "한가할 때 답장할게.",
+        "나중에 얘기할까?"
       ],
       "urgent": [
-        "I will check it now.",
-        "Please call me if it is urgent.",
-        "I will prioritize this."
+        "지금 확인해볼게.",
+        "급하면 전화해.",
+        "이거 우선으로 처리할게."
       ],
       "help": [
-        "I can help.",
-        "Tell me what you need.",
-        "Sorry, I cannot help right now."
+        "도와줄 수 있어.",
+        "뭐가 필요한지 말해줘.",
+        "미안, 지금은 도와주기 어려워."
       ],
       "invite": [
-        "Thanks for inviting me.",
-        "I would like to join.",
-        "I cannot join this time."
+        "초대해줘서 고마워.",
+        "가고 싶어.",
+        "이번엔 못 갈 것 같아."
       ],
       "follow_up": [
-        "Thanks for following up.",
-        "I will check and update you.",
-        "I have not had time yet."
+        "신경 써줘서 고마워.",
+        "확인하고 알려줄게.",
+        "아직 시간이 없었어."
       ],
       "send_file": [
-        "I will send it now.",
-        "Please send it to me.",
-        "I will send it later."
+        "지금 보낼게.",
+        "보내줘.",
+        "나중에 보낼게."
       ],
       "photo": [
-        "Please send the photo.",
-        "I will take a photo.",
-        "The photo looks good."
+        "사진 보내줘.",
+        "사진 찍을게.",
+        "사진 잘 나왔다."
       ],
       "screenshot": [
-        "Please send a screenshot.",
-        "I will send a screenshot.",
-        "That screenshot helps."
+        "스크린샷 보내줘.",
+        "스크린샷 보낼게.",
+        "이 스크린샷 도움 되네."
       ],
       "call": [
-        "I will call you.",
-        "Can you call me later?",
-        "I cannot talk right now."
+        "전화할게.",
+        "나중에 전화해줄 수 있어?",
+        "지금은 통화하기 어려워."
       ],
       "voice_note": [
-        "I will listen to it soon.",
-        "Please send a voice note.",
-        "Can you type it instead?"
+        "곧 들어볼게.",
+        "음성 메시지 보내줘.",
+        "글로 써줄 수 있어?"
       ],
       "email": [
-        "I will check my email.",
-        "Please send it by email.",
-        "I already replied by email."
+        "이메일 확인해볼게.",
+        "이메일로 보내줘.",
+        "이미 이메일로 답장했어."
       ],
       "contact": [
-        "Please send the contact.",
-        "I will share the number.",
-        "I do not have that contact."
+        "연락처 보내줘.",
+        "번호 공유할게.",
+        "그 연락처는 없어."
       ],
       "travel": [
-        "Have a safe trip.",
-        "Please send the itinerary.",
-        "Let us plan the trip."
+        "잘 다녀와.",
+        "일정표 보내줘.",
+        "여행 계획 짜보자."
       ],
       "vacation": [
-        "Enjoy your vacation.",
-        "I will check my leave dates.",
-        "Let us choose the dates."
+        "휴가 잘 보내.",
+        "휴가 날짜 확인해볼게.",
+        "날짜 정해보자."
       ],
       "flight": [
-        "Have a safe flight.",
-        "Please send the flight details.",
-        "I will check the arrival time."
+        "비행 잘 다녀와.",
+        "항공편 정보 보내줘.",
+        "도착 시간 확인해볼게."
       ],
       "hotel": [
-        "Please send the hotel address.",
-        "I will check the booking.",
-        "Check-in should be fine."
+        "호텔 주소 보내줘.",
+        "예약 확인해볼게.",
+        "체크인은 괜찮을 것 같아."
       ],
       "train": [
-        "I will check the train time.",
-        "Meet me at the station.",
-        "I may miss the train."
+        "기차 시간 확인해볼게.",
+        "역에서 만나자.",
+        "기차 놓칠 수도 있어."
       ],
       "parking": [
-        "I will look for parking.",
-        "Parking is available nearby.",
-        "I cannot find parking yet."
+        "주차할 곳 찾아볼게.",
+        "근처에 주차장이 있어.",
+        "아직 주차할 곳을 못 찾았어."
       ],
       "lost": [
-        "Let me help you find it.",
-        "Where did you last see it?",
-        "Please stay where you are."
+        "같이 찾아볼게.",
+        "마지막으로 어디서 봤어?",
+        "일단 지금 있는 곳에 있어줘."
       ],
       "mistake": [
-        "No problem, thanks for correcting it.",
-        "I will fix it.",
-        "That was my mistake."
+        "괜찮아, 고쳐줘서 고마워.",
+        "고칠게.",
+        "내 실수였어."
       ],
       "praise": [
-        "Thank you, I appreciate it.",
-        "Glad it helped.",
-        "That means a lot."
+        "고마워, 정말 고맙게 생각해.",
+        "도움이 됐다니 다행이야.",
+        "정말 큰 의미가 있어."
       ],
       "support": [
-        "Thank you, I needed that.",
-        "I appreciate your support.",
-        "I will do my best."
+        "고마워, 그 말이 필요했어.",
+        "응원해줘서 고마워.",
+        "최선을 다할게."
       ],
       "congratulations": [
-        "Thank you so much.",
-        "I am really happy about it.",
-        "That means a lot."
+        "정말 고마워.",
+        "정말 기뻐.",
+        "정말 큰 의미가 있어."
       ],
       "birthday": [
-        "Happy birthday.",
-        "Hope you have a great day.",
-        "Wishing you all the best."
+        "생일 축하해.",
+        "좋은 하루 보내길 바라.",
+        "모든 게 잘 되길 바라."
       ],
       "condolence": [
-        "I am so sorry for your loss.",
-        "My thoughts are with you.",
-        "Please let me know if you need anything."
+        "삼가 조의를 표해.",
+        "네 생각하고 있어.",
+        "필요한 게 있으면 알려줘."
       ],
       "weekend": [
-        "This weekend works.",
-        "Let us plan something.",
-        "I may be busy this weekend."
+        "이번 주말 괜찮아.",
+        "뭔가 계획해보자.",
+        "이번 주말엔 좀 바쁠 수도 있어."
       ],
       "movie": [
-        "That movie sounds good.",
-        "Let us book the tickets.",
-        "Maybe we can watch it later."
+        "그 영화 재밌겠다.",
+        "티켓 예매하자.",
+        "나중에 볼 수도 있겠다."
       ],
       "gaming": [
-        "I can play later.",
-        "Invite me when you start.",
-        "Not tonight, maybe tomorrow."
+        "나중에 게임할 수 있어.",
+        "시작하면 초대해줘.",
+        "오늘 밤은 안 되고, 내일은 될 것 같아."
       ],
       "sports": [
-        "That match sounds good.",
-        "I will check the score.",
-        "Let us watch it together."
+        "그 경기 재밌겠다.",
+        "점수 확인해볼게.",
+        "같이 보자."
       ],
       "repair": [
-        "I will try to fix it.",
-        "We may need a technician.",
-        "Can you send a photo of the issue?"
+        "고쳐볼게.",
+        "기술자가 필요할 수도 있어.",
+        "문제 사진 보내줄 수 있어?"
       ],
       "battery": [
-        "My battery is low.",
-        "I will charge my phone soon.",
-        "I may be offline for a bit."
+        "배터리가 부족해.",
+        "곧 충전할게.",
+        "잠깐 연락이 안 될 수도 있어."
       ],
       "charger": [
-        "Please bring a charger.",
-        "I am charging it now.",
-        "Do you have a charger?"
+        "충전기 가져와줘.",
+        "지금 충전 중이야.",
+        "충전기 있어?"
       ],
       "internet": [
-        "My connection is unstable.",
-        "I will try again on Wi-Fi.",
-        "Please send the Wi-Fi password."
+        "연결이 불안정해.",
+        "와이파이로 다시 해볼게.",
+        "와이파이 비밀번호 보내줘."
       ],
       "password": [
-        "Please send it securely.",
-        "I cannot share that password.",
-        "I will reset it."
+        "안전하게 보내줘.",
+        "그 비밀번호는 공유할 수 없어.",
+        "다시 초기화할게."
       ],
       "safety": [
-        "Please stay safe.",
-        "Let me know when you are safe.",
-        "Call me if you need help."
+        "조심해.",
+        "안전하면 알려줘.",
+        "도움 필요하면 전화해."
       ],
       "emergency": [
-        "Please call emergency services now.",
-        "Share your location if you can.",
-        "I am calling you now."
+        "지금 바로 응급 서비스에 전화해.",
+        "가능하면 위치 공유해줘.",
+        "지금 전화할게."
       ],
       "maybe_later": [
-        "Maybe later.",
-        "Let us do it another time.",
-        "I will let you know."
+        "나중에 하자.",
+        "다음에 하자.",
+        "다시 알려줄게."
       ],
       "permission": [
-        "Yes, go ahead.",
-        "Please wait first.",
-        "Sorry, not right now."
+        "응, 해도 돼.",
+        "일단 기다려줘.",
+        "미안, 지금은 안 돼."
       ],
       "opinion": [
-        "I think it is a good idea.",
-        "I need more context first.",
-        "I am not sure yet."
+        "좋은 생각인 것 같아.",
+        "좀 더 상황을 알아야 할 것 같아.",
+        "아직 잘 모르겠어."
       ],
       "decision": [
-        "Let us choose the simple option.",
-        "I will decide after checking.",
-        "You can choose this time."
+        "간단한 걸로 하자.",
+        "확인하고 나서 정할게.",
+        "이번엔 네가 정해."
       ],
       "availability": [
-        "I am available.",
-        "I am free later.",
-        "Sorry, I am not available."
+        "시간 돼.",
+        "나중에 한가해.",
+        "미안, 시간이 안 될 것 같아."
       ],
       "language": [
-        "Which language should we use?",
-        "I can reply in English.",
-        "I can try to translate it."
+        "어떤 언어로 할까?",
+        "영어로 답할 수 있어.",
+        "번역해볼게."
       ],
       "translation": [
-        "I will translate it.",
-        "Can you translate this for me?",
-        "The translation may not be perfect."
+        "번역해줄게.",
+        "이거 번역해줄 수 있어?",
+        "번역이 완벽하지 않을 수도 있어."
       ],
       "quiet": [
-        "I will keep it quiet.",
-        "I will message you later.",
-        "Sorry, I will stop for now."
+        "조용히 있을게.",
+        "나중에 메시지할게.",
+        "미안, 지금은 그만할게."
       ],
       "pickup": [
-        "I can pick you up.",
-        "Where should I pick you up?",
-        "I cannot pick you up today."
+        "데리러 갈 수 있어.",
+        "어디서 데리러 갈까?",
+        "오늘은 데리러 가기 어려울 것 같아."
       ],
       "dropoff": [
-        "I can drop you off.",
-        "Where should I drop you?",
-        "I cannot drive right now."
+        "데려다줄 수 있어.",
+        "어디로 데려다줄까?",
+        "지금은 운전하기 어려워."
       ],
       "reservation": [
-        "Please make the reservation.",
-        "I will book it now.",
-        "What time should I reserve?"
+        "예약해줘.",
+        "지금 예약할게.",
+        "몇 시로 예약할까?"
       ],
       "music": [
-        "That song is good.",
-        "Send me the playlist.",
-        "I will listen later."
+        "그 노래 좋다.",
+        "플레이리스트 보내줘.",
+        "나중에 들어볼게."
       ],
       "breakfast": [
-        "I will check breakfast.",
-        "Please send more details about breakfast.",
-        "Let us handle breakfast later."
+        "아침식사 확인해볼게.",
+        "아침식사에 대해 자세히 알려줘.",
+        "아침식사는 나중에 처리할게."
       ],
       "snack": [
-        "I will check the snack.",
-        "Please send more details about the snack.",
-        "Let us handle the snack later."
+        "간식 확인해볼게.",
+        "간식에 대해 자세히 알려줘.",
+        "간식은 나중에 처리할게."
       ],
       "dessert": [
-        "I will check dessert.",
-        "Please send more details about dessert.",
-        "Let us handle dessert later."
+        "디저트 확인해볼게.",
+        "디저트에 대해 자세히 알려줘.",
+        "디저트는 나중에 처리할게."
       ],
       "restaurant": [
-        "I will check the restaurant.",
-        "Please send more details about the restaurant.",
-        "Let us handle the restaurant later."
+        "레스토랑 확인해볼게.",
+        "레스토랑에 대해 자세히 알려줘.",
+        "레스토랑은 나중에 처리할게."
       ],
       "cooking": [
-        "I will check the cooking.",
-        "Please send more details about the cooking.",
-        "Let us handle the cooking later."
+        "요리 확인해볼게.",
+        "요리에 대해 자세히 알려줘.",
+        "요리는 나중에 처리할게."
       ],
       "recipe": [
-        "I will check the recipe.",
-        "Please send more details about the recipe.",
-        "Let us handle the recipe later."
+        "레시피 확인해볼게.",
+        "레시피에 대해 자세히 알려줘.",
+        "레시피는 나중에 처리할게."
       ],
       "pharmacy": [
-        "I will check the pharmacy.",
-        "Please send more details about the pharmacy.",
-        "Let us handle the pharmacy later."
+        "약국 확인해볼게.",
+        "약국에 대해 자세히 알려줘.",
+        "약국 일은 나중에 처리할게."
       ],
       "dentist": [
-        "I will check the dentist visit.",
-        "Please send more details about the dentist visit.",
-        "Let us handle the dentist visit later."
+        "치과 진료 확인해볼게.",
+        "치과 진료에 대해 자세히 알려줘.",
+        "치과 진료는 나중에 처리할게."
       ],
       "hospital": [
-        "I will check the hospital visit.",
-        "Please send more details about the hospital visit.",
-        "Let us handle the hospital visit later."
+        "병원 진료 확인해볼게.",
+        "병원 진료에 대해 자세히 알려줘.",
+        "병원 진료는 나중에 처리할게."
       ],
       "health_insurance": [
-        "I will check the health insurance.",
-        "Please send more details about the health insurance.",
-        "Let us handle the health insurance later."
+        "건강보험 확인해볼게.",
+        "건강보험에 대해 자세히 알려줘.",
+        "건강보험은 나중에 처리할게."
       ],
       "workout": [
-        "I will check the workout.",
-        "Please send more details about the workout.",
-        "Let us handle the workout later."
+        "운동 확인해볼게.",
+        "운동에 대해 자세히 알려줘.",
+        "운동은 나중에 처리할게."
       ],
       "walking": [
-        "I will check the walk.",
-        "Please send more details about the walk.",
-        "Let us handle the walk later."
+        "산책 확인해볼게.",
+        "산책에 대해 자세히 알려줘.",
+        "산책은 나중에 처리할게."
       ],
       "rest": [
-        "I will check the rest time.",
-        "Please send more details about the rest time.",
-        "Let us handle the rest time later."
+        "휴식 시간 확인해볼게.",
+        "휴식 시간에 대해 자세히 알려줘.",
+        "휴식 시간은 나중에 처리할게."
       ],
       "sleep": [
-        "I will check sleep.",
-        "Please send more details about sleep.",
-        "Let us handle sleep later."
+        "수면 확인해볼게.",
+        "수면에 대해 자세히 알려줘.",
+        "수면은 나중에 처리할게."
       ],
       "headache": [
-        "I will check the headache.",
-        "Please send more details about the headache.",
-        "Let us handle the headache later."
+        "두통 확인해볼게.",
+        "두통에 대해 자세히 알려줘.",
+        "두통은 나중에 처리할게."
       ],
       "fever": [
-        "I will check the fever.",
-        "Please send more details about the fever.",
-        "Let us handle the fever later."
+        "열 확인해볼게.",
+        "열에 대해 자세히 알려줘.",
+        "열은 나중에 처리할게."
       ],
       "allergy": [
-        "I will check the allergy.",
-        "Please send more details about the allergy.",
-        "Let us handle the allergy later."
+        "알레르기 확인해볼게.",
+        "알레르기에 대해 자세히 알려줘.",
+        "알레르기는 나중에 처리할게."
       ],
       "vaccine": [
-        "I will check the vaccine appointment.",
-        "Please send more details about the vaccine appointment.",
-        "Let us handle the vaccine appointment later."
+        "백신 접종 확인해볼게.",
+        "백신 접종에 대해 자세히 알려줘.",
+        "백신 접종은 나중에 처리할게."
       ],
       "taxi": [
-        "I will check the taxi.",
-        "Please send more details about the taxi.",
-        "Let us handle the taxi later."
+        "택시 확인해볼게.",
+        "택시에 대해 자세히 알려줘.",
+        "택시는 나중에 처리할게."
       ],
       "bus": [
-        "I will check the bus.",
-        "Please send more details about the bus.",
-        "Let us handle the bus later."
+        "버스 확인해볼게.",
+        "버스에 대해 자세히 알려줘.",
+        "버스는 나중에 처리할게."
       ],
       "metro": [
-        "I will check the metro.",
-        "Please send more details about the metro.",
-        "Let us handle the metro later."
+        "지하철 확인해볼게.",
+        "지하철에 대해 자세히 알려줘.",
+        "지하철은 나중에 처리할게."
       ],
       "car_rental": [
-        "I will check the car rental.",
-        "Please send more details about the car rental.",
-        "Let us handle the car rental later."
+        "렌터카 확인해볼게.",
+        "렌터카에 대해 자세히 알려줘.",
+        "렌터카는 나중에 처리할게."
       ],
       "fuel": [
-        "I will check the fuel stop.",
-        "Please send more details about the fuel stop.",
-        "Let us handle the fuel stop later."
+        "주유 확인해볼게.",
+        "주유에 대해 자세히 알려줘.",
+        "주유는 나중에 처리할게."
       ],
       "toll": [
-        "I will check the toll route.",
-        "Please send more details about the toll route.",
-        "Let us handle the toll route later."
+        "통행료 경로 확인해볼게.",
+        "통행료 경로에 대해 자세히 알려줘.",
+        "통행료 경로는 나중에 처리할게."
       ],
       "ride_hailing": [
-        "I will check the ride.",
-        "Please send more details about the ride.",
-        "Let us handle the ride later."
+        "라이드 확인해볼게.",
+        "라이드에 대해 자세히 알려줘.",
+        "라이드는 나중에 처리할게."
       ],
       "passport": [
-        "I will check the passport.",
-        "Please send more details about the passport.",
-        "Let us handle the passport later."
+        "여권 확인해볼게.",
+        "여권에 대해 자세히 알려줘.",
+        "여권 일은 나중에 처리할게."
       ],
       "visa": [
-        "I will check the visa.",
-        "Please send more details about the visa.",
-        "Let us handle the visa later."
+        "비자 확인해볼게.",
+        "비자에 대해 자세히 알려줘.",
+        "비자는 나중에 처리할게."
       ],
       "luggage": [
-        "I will check the luggage.",
-        "Please send more details about the luggage.",
-        "Let us handle the luggage later."
+        "짐 확인해볼게.",
+        "짐에 대해 자세히 알려줘.",
+        "짐은 나중에 처리할게."
       ],
       "map": [
-        "I will check the map.",
-        "Please send more details about the map.",
-        "Let us handle the map later."
+        "지도 확인해볼게.",
+        "지도에 대해 자세히 알려줘.",
+        "지도는 나중에 처리할게."
       ],
       "travel_checkin": [
-        "I will check online check-in.",
-        "Please send more details about online check-in.",
-        "Let us handle online check-in later."
+        "온라인 체크인 확인해볼게.",
+        "온라인 체크인에 대해 자세히 알려줘.",
+        "온라인 체크인은 나중에 처리할게."
       ],
       "travel_checkout": [
-        "I will check check-out.",
-        "Please send more details about check-out.",
-        "Let us handle check-out later."
+        "체크아웃 확인해볼게.",
+        "체크아웃에 대해 자세히 알려줘.",
+        "체크아웃은 나중에 처리할게."
       ],
       "boarding": [
-        "I will check boarding.",
-        "Please send more details about boarding.",
-        "Let us handle boarding later."
+        "탑승 확인해볼게.",
+        "탑승에 대해 자세히 알려줘.",
+        "탑승은 나중에 처리할게."
       ],
       "customs": [
-        "I will check customs.",
-        "Please send more details about customs.",
-        "Let us handle customs later."
+        "세관 확인해볼게.",
+        "세관에 대해 자세히 알려줘.",
+        "세관은 나중에 처리할게."
       ],
       "client": [
-        "I will check the client.",
-        "Please send more details about the client.",
-        "Let us handle the client later."
+        "고객 확인해볼게.",
+        "고객에 대해 자세히 알려줘.",
+        "고객 일은 나중에 처리할게."
       ],
       "manager": [
-        "I will check the manager.",
-        "Please send more details about the manager.",
-        "Let us handle the manager later."
+        "상사 관련 확인해볼게.",
+        "그 건에 대해 자세히 알려줘.",
+        "그 건은 나중에 처리할게."
       ],
       "coworker": [
-        "I will check the coworker.",
-        "Please send more details about the coworker.",
-        "Let us handle the coworker later."
+        "동료 관련 확인해볼게.",
+        "그 건에 대해 자세히 알려줘.",
+        "그 건은 나중에 처리할게."
       ],
       "interview": [
-        "I will check the interview.",
-        "Please send more details about the interview.",
-        "Let us handle the interview later."
+        "면접 확인해볼게.",
+        "면접에 대해 자세히 알려줘.",
+        "면접은 나중에 처리할게."
       ],
       "contract": [
-        "I will check the contract.",
-        "Please send more details about the contract.",
-        "Let us handle the contract later."
+        "계약서 확인해볼게.",
+        "계약서에 대해 자세히 알려줘.",
+        "계약서는 나중에 처리할게."
       ],
       "invoice": [
-        "I will check the invoice.",
-        "Please send more details about the invoice.",
-        "Let us handle the invoice later."
+        "인보이스 확인해볼게.",
+        "인보이스에 대해 자세히 알려줘.",
+        "인보이스는 나중에 처리할게."
       ],
       "receipt": [
-        "I will check the receipt.",
-        "Please send more details about the receipt.",
-        "Let us handle the receipt later."
+        "영수증 확인해볼게.",
+        "영수증에 대해 자세히 알려줘.",
+        "영수증은 나중에 처리할게."
       ],
       "refund": [
-        "I will check the refund.",
-        "Please send more details about the refund.",
-        "Let us handle the refund later."
+        "환불 확인해볼게.",
+        "환불에 대해 자세히 알려줘.",
+        "환불은 나중에 처리할게."
       ],
       "discount": [
-        "I will check the discount.",
-        "Please send more details about the discount.",
-        "Let us handle the discount later."
+        "할인 확인해볼게.",
+        "할인에 대해 자세히 알려줘.",
+        "할인은 나중에 처리할게."
       ],
       "subscription": [
-        "I will check the subscription.",
-        "Please send more details about the subscription.",
-        "Let us handle the subscription later."
+        "구독 확인해볼게.",
+        "구독에 대해 자세히 알려줘.",
+        "구독은 나중에 처리할게."
       ],
       "bill": [
-        "I will check the bill.",
-        "Please send more details about the bill.",
-        "Let us handle the bill later."
+        "청구서 확인해볼게.",
+        "청구서에 대해 자세히 알려줘.",
+        "청구서는 나중에 처리할게."
       ],
       "salary": [
-        "I will check the salary.",
-        "Please send more details about the salary.",
-        "Let us handle the salary later."
+        "급여 확인해볼게.",
+        "급여에 대해 자세히 알려줘.",
+        "급여는 나중에 처리할게."
       ],
       "leave_request": [
-        "I will check the leave request.",
-        "Please send more details about the leave request.",
-        "Let us handle the leave request later."
+        "휴가 신청 확인해볼게.",
+        "휴가 신청에 대해 자세히 알려줘.",
+        "휴가 신청은 나중에 처리할게."
       ],
       "shift": [
-        "I will check the shift.",
-        "Please send more details about the shift.",
-        "Let us handle the shift later."
+        "근무 시간 확인해볼게.",
+        "근무 시간에 대해 자세히 알려줘.",
+        "근무 시간은 나중에 처리할게."
       ],
       "report": [
-        "I will check the report.",
-        "Please send more details about the report.",
-        "Let us handle the report later."
+        "보고서 확인해볼게.",
+        "보고서에 대해 자세히 알려줘.",
+        "보고서는 나중에 처리할게."
       ],
       "presentation": [
-        "I will check the presentation.",
-        "Please send more details about the presentation.",
-        "Let us handle the presentation later."
+        "발표 확인해볼게.",
+        "발표에 대해 자세히 알려줘.",
+        "발표는 나중에 처리할게."
       ],
       "project": [
-        "I will check the project.",
-        "Please send more details about the project.",
-        "Let us handle the project later."
+        "프로젝트 확인해볼게.",
+        "프로젝트에 대해 자세히 알려줘.",
+        "프로젝트는 나중에 처리할게."
       ],
       "task": [
-        "I will check the task.",
-        "Please send more details about the task.",
-        "Let us handle the task later."
+        "할 일 확인해볼게.",
+        "할 일에 대해 자세히 알려줘.",
+        "할 일은 나중에 처리할게."
       ],
       "bug_report": [
-        "I will check the bug report.",
-        "Please send more details about the bug report.",
-        "Let us handle the bug report later."
+        "버그 신고 확인해볼게.",
+        "버그 신고에 대해 자세히 알려줘.",
+        "버그 신고는 나중에 처리할게."
       ],
       "deployment": [
-        "I will check the deployment.",
-        "Please send more details about the deployment.",
-        "Let us handle the deployment later."
+        "배포 확인해볼게.",
+        "배포에 대해 자세히 알려줘.",
+        "배포는 나중에 처리할게."
       ],
       "login_issue": [
-        "I will check the login issue.",
-        "Please send more details about the login issue.",
-        "Let us handle the login issue later."
+        "로그인 문제 확인해볼게.",
+        "로그인 문제에 대해 자세히 알려줘.",
+        "로그인 문제는 나중에 처리할게."
       ],
       "rent": [
-        "I will check the rent.",
-        "Please send more details about the rent.",
-        "Let us handle the rent later."
+        "월세 확인해볼게.",
+        "월세에 대해 자세히 알려줘.",
+        "월세는 나중에 처리할게."
       ],
       "landlord": [
-        "I will check the landlord.",
-        "Please send more details about the landlord.",
-        "Let us handle the landlord later."
+        "집주인 관련 확인해볼게.",
+        "그 건에 대해 자세히 알려줘.",
+        "그 건은 나중에 처리할게."
       ],
       "electricity": [
-        "I will check the electricity issue.",
-        "Please send more details about the electricity issue.",
-        "Let us handle the electricity issue later."
+        "전기 문제 확인해볼게.",
+        "전기 문제에 대해 자세히 알려줘.",
+        "전기 문제는 나중에 처리할게."
       ],
       "water_supply": [
-        "I will check the water issue.",
-        "Please send more details about the water issue.",
-        "Let us handle the water issue later."
+        "수도 문제 확인해볼게.",
+        "수도 문제에 대해 자세히 알려줘.",
+        "수도 문제는 나중에 처리할게."
       ],
       "gas_bill": [
-        "I will check the gas bill.",
-        "Please send more details about the gas bill.",
-        "Let us handle the gas bill later."
+        "가스 요금 확인해볼게.",
+        "가스 요금에 대해 자세히 알려줘.",
+        "가스 요금은 나중에 처리할게."
       ],
       "home_maintenance": [
-        "I will check home maintenance.",
-        "Please send more details about home maintenance.",
-        "Let us handle home maintenance later."
+        "집 수리 확인해볼게.",
+        "집 수리에 대해 자세히 알려줘.",
+        "집 수리는 나중에 처리할게."
       ],
       "trash": [
-        "I will check the trash.",
-        "Please send more details about the trash.",
-        "Let us handle the trash later."
+        "쓰레기 확인해볼게.",
+        "쓰레기에 대해 자세히 알려줘.",
+        "쓰레기는 나중에 처리할게."
       ],
       "kitchen": [
-        "I will check the kitchen.",
-        "Please send more details about the kitchen.",
-        "Let us handle the kitchen later."
+        "주방 확인해볼게.",
+        "주방에 대해 자세히 알려줘.",
+        "주방은 나중에 처리할게."
       ],
       "bathroom": [
-        "I will check the bathroom.",
-        "Please send more details about the bathroom.",
-        "Let us handle the bathroom later."
+        "화장실 확인해볼게.",
+        "화장실에 대해 자세히 알려줘.",
+        "화장실은 나중에 처리할게."
       ],
       "bedroom": [
-        "I will check the bedroom.",
-        "Please send more details about the bedroom.",
-        "Let us handle the bedroom later."
+        "침실 확인해볼게.",
+        "침실에 대해 자세히 알려줘.",
+        "침실은 나중에 처리할게."
       ],
       "keys": [
-        "I will check the keys.",
-        "Please send more details about the keys.",
-        "Let us handle the keys later."
+        "열쇠 확인해볼게.",
+        "열쇠에 대해 자세히 알려줘.",
+        "열쇠는 나중에 처리할게."
       ],
       "door": [
-        "I will check the door.",
-        "Please send more details about the door.",
-        "Let us handle the door later."
+        "문 확인해볼게.",
+        "문에 대해 자세히 알려줘.",
+        "문은 나중에 처리할게."
       ],
       "window": [
-        "I will check the window.",
-        "Please send more details about the window.",
-        "Let us handle the window later."
+        "창문 확인해볼게.",
+        "창문에 대해 자세히 알려줘.",
+        "창문은 나중에 처리할게."
       ],
       "party": [
-        "I will check the party.",
-        "Please send more details about the party.",
-        "Let us handle the party later."
+        "파티 확인해볼게.",
+        "파티에 대해 자세히 알려줘.",
+        "파티는 나중에 처리할게."
       ],
       "wedding": [
-        "I will check the wedding.",
-        "Please send more details about the wedding.",
-        "Let us handle the wedding later."
+        "결혼식 확인해볼게.",
+        "결혼식에 대해 자세히 알려줘.",
+        "결혼식은 나중에 처리할게."
       ],
       "ceremony": [
-        "I will check the ceremony.",
-        "Please send more details about the ceremony.",
-        "Let us handle the ceremony later."
+        "행사 확인해볼게.",
+        "행사에 대해 자세히 알려줘.",
+        "행사는 나중에 처리할게."
       ],
       "concert": [
-        "I will check the concert.",
-        "Please send more details about the concert.",
-        "Let us handle the concert later."
+        "콘서트 확인해볼게.",
+        "콘서트에 대해 자세히 알려줘.",
+        "콘서트는 나중에 처리할게."
       ],
       "ticket": [
-        "I will check the ticket.",
-        "Please send more details about the ticket.",
-        "Let us handle the ticket later."
+        "티켓 확인해볼게.",
+        "티켓에 대해 자세히 알려줘.",
+        "티켓은 나중에 처리할게."
       ],
       "museum": [
-        "I will check the museum visit.",
-        "Please send more details about the museum visit.",
-        "Let us handle the museum visit later."
+        "박물관 방문 확인해볼게.",
+        "박물관 방문에 대해 자세히 알려줘.",
+        "박물관 방문은 나중에 처리할게."
       ],
       "park": [
-        "I will check the park plan.",
-        "Please send more details about the park plan.",
-        "Let us handle the park plan later."
+        "공원 계획 확인해볼게.",
+        "공원 계획에 대해 자세히 알려줘.",
+        "공원 계획은 나중에 처리할게."
       ],
       "picnic": [
-        "I will check the picnic.",
-        "Please send more details about the picnic.",
-        "Let us handle the picnic later."
+        "소풍 확인해볼게.",
+        "소풍에 대해 자세히 알려줘.",
+        "소풍은 나중에 처리할게."
       ],
       "new_year": [
-        "I will check New Year plans.",
-        "Please send more details about New Year plans.",
-        "Let us handle New Year plans later."
+        "새해 계획 확인해볼게.",
+        "새해 계획에 대해 자세히 알려줘.",
+        "새해 계획은 나중에 처리할게."
       ],
       "neighbor": [
-        "I will check the neighbor.",
-        "Please send more details about the neighbor.",
-        "Let us handle the neighbor later."
+        "이웃 관련 확인해볼게.",
+        "그 건에 대해 자세히 알려줘.",
+        "그 건은 나중에 처리할게."
       ],
       "guest": [
-        "I will check the guest.",
-        "Please send more details about the guest.",
-        "Let us handle the guest later."
+        "손님 확인해볼게.",
+        "손님에 대해 자세히 알려줘.",
+        "손님 건은 나중에 처리할게."
       ],
       "host": [
-        "I will check hosting.",
-        "Please send more details about hosting.",
-        "Let us handle hosting later."
+        "호스팅 확인해볼게.",
+        "호스팅에 대해 자세히 알려줘.",
+        "호스팅은 나중에 처리할게."
       ],
       "rsvp": [
-        "I will check the RSVP.",
-        "Please send more details about the RSVP.",
-        "Let us handle the RSVP later."
+        "참석 확인해볼게.",
+        "참석 여부에 대해 자세히 알려줘.",
+        "참석 확인은 나중에 처리할게."
       ],
       "gift": [
-        "I will check the gift.",
-        "Please send more details about the gift.",
-        "Let us handle the gift later."
+        "선물 확인해볼게.",
+        "선물에 대해 자세히 알려줘.",
+        "선물은 나중에 처리할게."
       ],
       "lost_phone": [
-        "I will check the lost phone.",
-        "Please send more details about the lost phone.",
-        "Let us handle the lost phone later."
+        "분실된 휴대폰 확인해볼게.",
+        "분실된 휴대폰에 대해 자세히 알려줘.",
+        "휴대폰 건은 나중에 처리할게."
       ],
       "wallet": [
-        "I will check the wallet.",
-        "Please send more details about the wallet.",
-        "Let us handle the wallet later."
+        "지갑 확인해볼게.",
+        "지갑에 대해 자세히 알려줘.",
+        "지갑은 나중에 처리할게."
       ],
       "id_card": [
-        "I will check the ID card.",
-        "Please send more details about the ID card.",
-        "Let us handle the ID card later."
+        "신분증 확인해볼게.",
+        "신분증에 대해 자세히 알려줘.",
+        "신분증은 나중에 처리할게."
       ],
       "police": [
-        "I will check the police report.",
-        "Please send more details about the police report.",
-        "Let us handle the police report later."
+        "경찰 신고 확인해볼게.",
+        "경찰 신고에 대해 자세히 알려줘.",
+        "경찰 신고는 나중에 처리할게."
       ],
       "security_check": [
-        "I will check the security check.",
-        "Please send more details about the security check.",
-        "Let us handle the security check later."
+        "보안 검사 확인해볼게.",
+        "보안 검사에 대해 자세히 알려줘.",
+        "보안 검사는 나중에 처리할게."
       ],
       "lab_result": [
-        "I will check the lab result.",
-        "Please send more details about the lab result.",
-        "Let us handle the lab result later."
+        "검사 결과 확인해볼게.",
+        "검사 결과에 대해 자세히 알려줘.",
+        "검사 결과는 나중에 처리할게."
       ],
       "cancel_plan": [
-        "I will check the cancellation.",
-        "Please send more details about the cancellation.",
-        "Let us handle the cancellation later."
+        "취소 확인해볼게.",
+        "취소 건에 대해 자세히 알려줘.",
+        "취소는 나중에 처리할게."
       ],
       "reschedule_plan": [
-        "I will check the reschedule.",
-        "Please send more details about the reschedule.",
-        "Let us handle the reschedule later."
+        "일정 변경 확인해볼게.",
+        "일정 변경에 대해 자세히 알려줘.",
+        "일정 변경은 나중에 처리할게."
       ],
       "childcare": [
-        "I will check childcare.",
-        "Please send more details about childcare.",
-        "Let us handle childcare later."
+        "육아 관련 확인해볼게.",
+        "그 건에 대해 자세히 알려줘.",
+        "그 건은 나중에 처리할게."
       ],
       "parent": [
-        "I will check the parent message.",
-        "Please send more details about the parent message.",
-        "Let us handle the parent message later."
+        "부모님 메시지 확인해볼게.",
+        "자세히 알려줘.",
+        "그 건은 나중에 처리할게."
       ],
       "sibling": [
-        "I will check the sibling message.",
-        "Please send more details about the sibling message.",
-        "Let us handle the sibling message later."
+        "가족 메시지 확인해볼게.",
+        "자세히 알려줘.",
+        "그 건은 나중에 처리할게."
       ],
       "partner": [
-        "I will check the partner message.",
-        "Please send more details about the partner message.",
-        "Let us handle the partner message later."
+        "메시지 확인해볼게.",
+        "자세히 알려줘.",
+        "그 건은 나중에 처리할게."
       ],
       "mood_happy": [
-        "I will check the good news.",
-        "Please send more details about the good news.",
-        "Let us handle the good news later."
+        "좋은 소식 확인해볼게.",
+        "자세히 알려줘.",
+        "그 얘기는 나중에 하자."
       ],
       "mood_sad": [
-        "I will check the sad news.",
-        "Please send more details about the sad news.",
-        "Let us handle the sad news later."
+        "무슨 일인지 확인해볼게.",
+        "자세히 알려줘.",
+        "그 얘기는 나중에 하자."
       ],
       "mood_angry": [
-        "I will check the frustration.",
-        "Please send more details about the frustration.",
-        "Let us handle the frustration later."
+        "무슨 일인지 확인해볼게.",
+        "자세히 알려줘.",
+        "그 얘기는 나중에 하자."
       ],
       "mood_worried": [
-        "I will check the concern.",
-        "Please send more details about the concern.",
-        "Let us handle the concern later."
+        "걱정되는 부분 확인해볼게.",
+        "자세히 알려줘.",
+        "그 얘기는 나중에 하자."
       ],
       "mood_stressed": [
-        "I will check the stress.",
-        "Please send more details about the stress.",
-        "Let us handle the stress later."
+        "스트레스 상황 확인해볼게.",
+        "자세히 알려줘.",
+        "그 얘기는 나중에 하자."
       ],
       "mood_excited": [
-        "I will check the excitement.",
-        "Please send more details about the excitement.",
-        "Let us handle the excitement later."
+        "신나는 소식 확인해볼게.",
+        "자세히 알려줘.",
+        "그 얘기는 나중에 하자."
       ],
       "mood_confused": [
-        "I will check the confusion.",
-        "Please send more details about the confusion.",
-        "Let us handle the confusion later."
+        "헷갈리는 부분 확인해볼게.",
+        "자세히 알려줘.",
+        "그 얘기는 나중에 하자."
       ],
       "study": [
-        "I will check study time.",
-        "Please send more details about study time.",
-        "Let us handle study time later."
+        "공부 시간 확인해볼게.",
+        "공부 시간에 대해 자세히 알려줘.",
+        "공부 시간은 나중에 처리할게."
       ],
       "exam": [
-        "I will check the exam.",
-        "Please send more details about the exam.",
-        "Let us handle the exam later."
+        "시험 확인해볼게.",
+        "시험에 대해 자세히 알려줘.",
+        "시험은 나중에 처리할게."
       ],
       "lesson": [
-        "I will check the lesson.",
-        "Please send more details about the lesson.",
-        "Let us handle the lesson later."
+        "수업 확인해볼게.",
+        "수업에 대해 자세히 알려줘.",
+        "수업은 나중에 처리할게."
       ],
       "book": [
-        "I will check the book.",
-        "Please send more details about the book.",
-        "Let us handle the book later."
+        "책 확인해볼게.",
+        "책에 대해 자세히 알려줘.",
+        "책은 나중에 처리할게."
       ],
       "library": [
-        "I will check the library plan.",
-        "Please send more details about the library plan.",
-        "Let us handle the library plan later."
+        "도서관 계획 확인해볼게.",
+        "도서관 계획에 대해 자세히 알려줘.",
+        "도서관 계획은 나중에 처리할게."
       ],
       "photo_album": [
-        "I will check the album.",
-        "Please send more details about the album.",
-        "Let us handle the album later."
+        "앨범 확인해볼게.",
+        "앨범에 대해 자세히 알려줘.",
+        "앨범은 나중에 처리할게."
       ],
       "camera_issue": [
-        "I will check the camera issue.",
-        "Please send more details about the camera issue.",
-        "Let us handle the camera issue later."
+        "카메라 문제 확인해볼게.",
+        "카메라 문제에 대해 자세히 알려줘.",
+        "카메라 문제는 나중에 처리할게."
       ],
       "storage_full": [
-        "I will check storage.",
-        "Please send more details about storage.",
-        "Let us handle storage later."
+        "저장 공간 확인해볼게.",
+        "저장 공간에 대해 자세히 알려줘.",
+        "저장 공간은 나중에 처리할게."
       ],
       "phone_update": [
-        "I will check the phone update.",
-        "Please send more details about the phone update.",
-        "Let us handle the phone update later."
+        "휴대폰 업데이트 확인해볼게.",
+        "휴대폰 업데이트에 대해 자세히 알려줘.",
+        "휴대폰 업데이트는 나중에 처리할게."
       ],
       "backup_data": [
-        "I will check the backup.",
-        "Please send more details about the backup.",
-        "Let us handle the backup later."
+        "백업 확인해볼게.",
+        "백업에 대해 자세히 알려줘.",
+        "백업은 나중에 처리할게."
       ],
       "restore_data": [
-        "I will check the restore.",
-        "Please send more details about the restore.",
-        "Let us handle the restore later."
+        "데이터 복원 확인해볼게.",
+        "데이터 복원에 대해 자세히 알려줘.",
+        "데이터 복원은 나중에 처리할게."
       ],
       "data_plan": [
-        "I will check the data plan.",
-        "Please send more details about the data plan.",
-        "Let us handle the data plan later."
+        "데이터 요금제 확인해볼게.",
+        "데이터 요금제에 대해 자세히 알려줘.",
+        "데이터 요금제는 나중에 처리할게."
       ],
       "roaming": [
-        "I will check roaming.",
-        "Please send more details about roaming.",
-        "Let us handle roaming later."
+        "로밍 확인해볼게.",
+        "로밍에 대해 자세히 알려줘.",
+        "로밍은 나중에 처리할게."
       ],
       "video_call": [
-        "I will check the video call.",
-        "Please send more details about the video call.",
-        "Let us handle the video call later."
+        "영상 통화 확인해볼게.",
+        "영상 통화에 대해 자세히 알려줘.",
+        "영상 통화는 나중에 처리할게."
       ],
       "missed_call": [
-        "I will check the missed call.",
-        "Please send more details about the missed call.",
-        "Let us handle the missed call later."
+        "부재중 전화 확인해볼게.",
+        "부재중 전화에 대해 자세히 알려줘.",
+        "부재중 전화는 나중에 처리할게."
       ],
       "voicemail": [
-        "I will check voicemail.",
-        "Please send more details about voicemail.",
-        "Let us handle voicemail later."
+        "음성 메시지함 확인해볼게.",
+        "음성 메시지함에 대해 자세히 알려줘.",
+        "음성 메시지함은 나중에 처리할게."
       ],
       "quiet_hours": [
-        "I will check quiet hours.",
-        "Please send more details about quiet hours.",
-        "Let us handle quiet hours later."
+        "조용한 시간 확인해볼게.",
+        "조용한 시간에 대해 자세히 알려줘.",
+        "조용한 시간은 나중에 처리할게."
       ],
       "meeting_notes": [
-        "I will check the meeting notes.",
-        "Please send more details about the meeting notes.",
-        "Let us handle the meeting notes later."
+        "회의록 확인해볼게.",
+        "회의록에 대해 자세히 알려줘.",
+        "회의록은 나중에 처리할게."
       ],
       "quick_reply": [
-        "I will check the quick reply.",
-        "Please send more details about the quick reply.",
-        "Let us handle the quick reply later."
+        "빠른 답장 확인해볼게.",
+        "빠른 답장에 대해 자세히 알려줘.",
+        "빠른 답장은 나중에 처리할게."
       ],
       "question": [
-        "Yes, that works.",
-        "Maybe, can you tell me more?",
-        "Sorry, I can't."
-      ]
-    },
-    "id": {
-      "default": [
-        "Iya",
-        "Aku cek dulu",
-        "Maaf, belum bisa"
-      ],
-      "greeting": [
-        "Hai.",
-        "Halo, apa kabar?",
-        "Iya, aku di sini."
-      ],
-      "morning": [
-        "Selamat pagi.",
-        "Pagi, semoga harimu lancar.",
-        "Aku balas sebentar lagi."
-      ],
-      "evening": [
-        "Selamat malam.",
-        "Semoga istirahatnya enak.",
-        "Aku cek ini besok."
-      ],
-      "thanks": [
-        "Sama-sama.",
-        "Tidak masalah.",
-        "Siap."
-      ],
-      "apology": [
-        "Tidak apa-apa.",
-        "Santai saja.",
-        "Makasih sudah kabari."
-      ],
-      "confirm": [
-        "Terkonfirmasi.",
-        "Iya, itu benar.",
-        "Aku konfirmasi."
-      ],
-      "approval": [
-        "Iya, boleh.",
-        "Itu cocok buat aku.",
-        "Aku cek dulu ya."
-      ],
-      "decline": [
-        "Tidak apa-apa.",
-        "Mungkin lain kali.",
-        "Makasih sudah bilang."
-      ],
-      "time": [
-        "Bisa, waktunya oke.",
-        "Aku cek dulu ya.",
-        "Maaf, aku belum tersedia saat itu."
-      ],
-      "schedule": [
-        "Aku bisa masukkan ke jadwal.",
-        "Tolong kirim detailnya.",
-        "Aku cek kalender dulu."
-      ],
-      "appointment": [
-        "Janjinya cocok buat aku.",
-        "Bisa konfirmasi tempatnya?",
-        "Aku perlu ubah jadwal."
-      ],
-      "delay": [
-        "Tidak apa-apa, santai saja.",
-        "Makasih infonya.",
-        "Kabari kalau sudah sampai ya."
-      ],
-      "arriving": [
-        "Oke, sampai ketemu sebentar lagi.",
-        "Aku segera ke sana.",
-        "Tunggu sebentar ya."
-      ],
-      "meeting": [
-        "Aku bisa ikut meeting.",
-        "Tolong kirim link meetingnya.",
-        "Aku mungkin telat beberapa menit."
-      ],
-      "meeting_link": [
-        "Tolong kirim linknya.",
-        "Aku akan masuk lewat link itu.",
-        "Linknya tidak bisa dibuka di aku."
-      ],
-      "location": [
-        "Aku share lokasi ya.",
-        "Aku sudah dekat.",
-        "Bisa kirim lokasinya?"
-      ],
-      "address": [
-        "Tolong kirim alamatnya.",
-        "Aku cek alamatnya sekarang.",
-        "Aku sudah ketemu tempatnya."
-      ],
-      "commute": [
-        "Aku sedang di jalan.",
-        "Aku berangkat sebentar lagi.",
-        "Aku kabari kalau sudah sampai."
-      ],
-      "traffic": [
-        "Sekarang macet.",
-        "Aku mungkin sampai agak telat.",
-        "Aku coba lewat rute lain."
-      ],
-      "weather": [
-        "Sepertinya akan hujan.",
-        "Bawa payung ya.",
-        "Aku cek cuaca dulu."
-      ],
-      "reminder": [
-        "Tolong ingatkan aku nanti.",
-        "Aku akan pasang pengingat.",
-        "Makasih sudah ingatkan."
-      ],
-      "calendar": [
-        "Aku cek kalender dulu.",
-        "Sepertinya jadwalku kosong.",
-        "Itu bentrok dengan rencana lain."
-      ],
-      "alarm": [
-        "Aku akan pasang alarm.",
-        "Tolong bangunin aku waktu itu.",
-        "Aku sudah pasang."
-      ],
-      "shopping": [
-        "Aku bisa beli nanti.",
-        "Tolong kirim daftarnya.",
-        "Aku sudah beli."
-      ],
-      "shopping_list": [
-        "Tambahkan ke daftar ya.",
-        "Aku akan beli barang itu.",
-        "Ada yang mau ditambah?"
-      ],
-      "delivery": [
-        "Aku cek status pengirimannya.",
-        "Paketnya sudah sampai.",
-        "Tolong taruh di depan pintu."
-      ],
-      "payment": [
-        "Aku bayar sekarang.",
-        "Pembayaran sudah dikirim.",
-        "Tolong kirim nominalnya."
-      ],
-      "bank": [
-        "Tolong kirim detail rekeningnya.",
-        "Aku transfer sebentar lagi.",
-        "Aku sudah transfer."
-      ],
-      "money_request": [
-        "Aku cek budget dulu.",
-        "Aku bisa bantu sedikit.",
-        "Maaf, sekarang aku belum bisa bantu."
-      ],
-      "food": [
-        "Ayo makan sebentar lagi.",
-        "Mau makan apa?",
-        "Aku sudah makan."
-      ],
-      "coffee": [
-        "Ngopi boleh.",
-        "Aku bisa beli kopi nanti.",
-        "Mungkin lain kali."
-      ],
-      "lunch": [
-        "Makan siang bisa.",
-        "Mau makan di mana?",
-        "Aku belum bisa makan siang hari ini."
-      ],
-      "dinner": [
-        "Makan malam boleh.",
-        "Ayo tentukan tempatnya.",
-        "Aku mungkin telat untuk makan malam."
-      ],
-      "work": [
-        "Aku sedang kerja.",
-        "Aku balas setelah kerja.",
-        "Kita urus besok ya."
-      ],
-      "deadline": [
-        "Aku coba selesaikan sebelum deadline.",
-        "Bisa diperpanjang deadlinenya?",
-        "Aku butuh detail dulu."
-      ],
-      "status_update": [
-        "Aku kirim update sebentar lagi.",
-        "Masih proses.",
-        "Sudah selesai."
-      ],
-      "documents": [
-        "Tolong kirim dokumennya.",
-        "Aku akan cek filenya.",
-        "Sudah aku lampirkan."
-      ],
-      "school": [
-        "Aku cek tugasnya.",
-        "Kelas segera mulai.",
-        "Tolong kirim detail tugasnya."
-      ],
-      "child_school": [
-        "Aku bisa jemput mereka.",
-        "Tolong ingatkan sebelum jemput.",
-        "Aku mungkin agak telat."
-      ],
-      "home": [
-        "Aku di rumah.",
-        "Aku segera pulang.",
-        "Tolong kunci pintunya."
-      ],
-      "chores": [
-        "Aku kerjakan nanti.",
-        "Bisa kamu kerjakan hari ini?",
-        "Sudah selesai."
-      ],
-      "family": [
-        "Titip salam ya.",
-        "Aku telepon mereka nanti.",
-        "Semoga semuanya baik-baik saja."
-      ],
-      "friend": [
-        "Kedengarannya seru.",
-        "Ajak mereka juga yuk.",
-        "Aku chat mereka."
-      ],
-      "health": [
-        "Jaga kesehatan ya.",
-        "Istirahat dulu sebaiknya.",
-        "Butuh bantuan?"
-      ],
-      "medicine": [
-        "Minum obatnya ya.",
-        "Aku beli nanti.",
-        "Sudah diminum obatnya?"
-      ],
-      "tired": [
-        "Istirahat dulu ya.",
-        "Ambil jeda sebentar.",
-        "Kita lanjut besok."
-      ],
-      "busy": [
-        "Aku sedang sibuk.",
-        "Aku balas kalau sudah senggang.",
-        "Bisa ngobrol nanti?"
-      ],
-      "urgent": [
-        "Aku cek sekarang.",
-        "Telepon aku kalau mendesak.",
-        "Aku prioritaskan ini."
-      ],
-      "help": [
-        "Aku bisa bantu.",
-        "Bilang butuh apa ya.",
-        "Maaf, aku belum bisa bantu sekarang."
-      ],
-      "invite": [
-        "Makasih sudah ajak.",
-        "Aku mau ikut.",
-        "Kali ini aku belum bisa ikut."
-      ],
-      "follow_up": [
-        "Makasih sudah follow up.",
-        "Aku cek dan kabari lagi.",
-        "Aku belum sempat."
-      ],
-      "send_file": [
-        "Aku kirim sekarang.",
-        "Tolong kirim ke aku.",
-        "Aku kirim nanti."
-      ],
-      "photo": [
-        "Tolong kirim fotonya.",
-        "Aku akan foto dulu.",
-        "Fotonya bagus."
-      ],
-      "screenshot": [
-        "Tolong kirim screenshot.",
-        "Aku kirim screenshot.",
-        "Screenshot itu membantu."
-      ],
-      "call": [
-        "Aku telepon kamu.",
-        "Bisa telepon aku nanti?",
-        "Aku belum bisa bicara sekarang."
-      ],
-      "voice_note": [
-        "Aku dengarkan sebentar lagi.",
-        "Tolong kirim voice note.",
-        "Bisa diketik saja?"
-      ],
-      "email": [
-        "Aku cek email dulu.",
-        "Tolong kirim lewat email.",
-        "Aku sudah balas lewat email."
-      ],
-      "contact": [
-        "Tolong kirim kontaknya.",
-        "Aku share nomornya.",
-        "Aku tidak punya kontak itu."
-      ],
-      "travel": [
-        "Selamat jalan.",
-        "Tolong kirim itinerarynya.",
-        "Ayo rencanakan perjalanannya."
-      ],
-      "vacation": [
-        "Selamat liburan.",
-        "Aku cek tanggal cutiku.",
-        "Ayo pilih tanggalnya."
-      ],
-      "flight": [
-        "Semoga penerbangannya lancar.",
-        "Tolong kirim detail penerbangannya.",
-        "Aku cek jam tibanya."
-      ],
-      "hotel": [
-        "Tolong kirim alamat hotelnya.",
-        "Aku cek bookingnya.",
-        "Check-in harusnya aman."
-      ],
-      "train": [
-        "Aku cek jadwal keretanya.",
-        "Ketemu di stasiun ya.",
-        "Aku mungkin ketinggalan kereta."
-      ],
-      "parking": [
-        "Aku cari parkir dulu.",
-        "Parkir ada di dekat sini.",
-        "Aku belum dapat parkir."
-      ],
-      "lost": [
-        "Aku bantu cari ya.",
-        "Terakhir lihat di mana?",
-        "Tetap di tempat dulu ya."
-      ],
-      "mistake": [
-        "Tidak apa-apa, makasih koreksinya.",
-        "Aku perbaiki.",
-        "Itu salahku."
-      ],
-      "praise": [
-        "Terima kasih, aku apresiasi.",
-        "Senang kalau membantu.",
-        "Itu berarti banget."
-      ],
-      "support": [
-        "Makasih, aku butuh itu.",
-        "Aku apresiasi dukunganmu.",
-        "Aku akan berusaha."
-      ],
-      "congratulations": [
-        "Terima kasih banyak.",
-        "Aku senang banget.",
-        "Itu berarti banget."
-      ],
-      "birthday": [
-        "Selamat ulang tahun.",
-        "Semoga harimu menyenangkan.",
-        "Semoga yang terbaik untukmu."
-      ],
-      "condolence": [
-        "Turut berduka cita.",
-        "Aku ikut memikirkan kamu.",
-        "Kabari kalau butuh apa pun."
-      ],
-      "weekend": [
-        "Akhir pekan ini bisa.",
-        "Ayo rencanakan sesuatu.",
-        "Aku mungkin sibuk akhir pekan ini."
-      ],
-      "movie": [
-        "Film itu kedengarannya bagus.",
-        "Ayo pesan tiketnya.",
-        "Mungkin kita tonton nanti."
-      ],
-      "gaming": [
-        "Aku bisa main nanti.",
-        "Invite aku kalau mulai.",
-        "Malam ini belum bisa, mungkin besok."
-      ],
-      "sports": [
-        "Pertandingannya seru sepertinya.",
-        "Aku cek skornya.",
-        "Ayo nonton bareng."
-      ],
-      "repair": [
-        "Aku coba perbaiki.",
-        "Mungkin perlu teknisi.",
-        "Bisa kirim foto masalahnya?"
-      ],
-      "battery": [
-        "Bateraiku lemah.",
-        "Aku cas HP sebentar lagi.",
-        "Aku mungkin offline sebentar."
-      ],
-      "charger": [
-        "Tolong bawa charger.",
-        "Aku sedang cas sekarang.",
-        "Kamu punya charger?"
-      ],
-      "internet": [
-        "Koneksiku tidak stabil.",
-        "Aku coba lagi pakai Wi-Fi.",
-        "Tolong kirim password Wi-Fi."
-      ],
-      "password": [
-        "Tolong kirim dengan aman.",
-        "Aku tidak bisa share password itu.",
-        "Aku reset dulu."
-      ],
-      "safety": [
-        "Tetap aman ya.",
-        "Kabari kalau sudah aman.",
-        "Telepon aku kalau butuh bantuan."
-      ],
-      "emergency": [
-        "Segera hubungi layanan darurat.",
-        "Share lokasi kalau bisa.",
-        "Aku telepon kamu sekarang."
-      ],
-      "maybe_later": [
-        "Mungkin nanti.",
-        "Kita lakukan lain kali.",
-        "Aku kabari lagi."
-      ],
-      "permission": [
-        "Iya, silakan.",
-        "Tunggu dulu ya.",
-        "Maaf, jangan sekarang."
-      ],
-      "opinion": [
-        "Menurutku itu ide bagus.",
-        "Aku butuh konteks dulu.",
-        "Aku belum yakin."
-      ],
-      "decision": [
-        "Kita pilih opsi yang sederhana.",
-        "Aku putuskan setelah cek dulu.",
-        "Kamu pilih kali ini."
-      ],
-      "availability": [
-        "Aku tersedia.",
-        "Aku luang nanti.",
-        "Maaf, aku belum bisa."
-      ],
-      "language": [
-        "Mau pakai bahasa apa?",
-        "Aku bisa balas dalam bahasa Inggris.",
-        "Aku bisa coba terjemahkan."
-      ],
-      "translation": [
-        "Aku terjemahkan ya.",
-        "Bisa tolong terjemahkan ini?",
-        "Terjemahannya mungkin belum sempurna."
-      ],
-      "quiet": [
-        "Aku akan diam dulu.",
-        "Aku chat nanti ya.",
-        "Maaf, aku berhenti dulu."
-      ],
-      "pickup": [
-        "Aku bisa jemput.",
-        "Jemput di mana?",
-        "Hari ini aku belum bisa jemput."
-      ],
-      "dropoff": [
-        "Aku bisa antar.",
-        "Antar ke mana?",
-        "Aku belum bisa nyetir sekarang."
-      ],
-      "reservation": [
-        "Tolong buat reservasinya.",
-        "Aku pesan sekarang.",
-        "Jam berapa harus reservasi?"
-      ],
-      "music": [
-        "Lagunya bagus.",
-        "Kirim playlistnya ya.",
-        "Aku dengarkan nanti."
-      ],
-      "breakfast": [
-        "Aku cek sarapan dulu.",
-        "Tolong kirim detail tentang sarapan.",
-        "Kita urus sarapan nanti."
-      ],
-      "snack": [
-        "Aku cek camilannya dulu.",
-        "Tolong kirim detail tentang camilannya.",
-        "Kita urus camilannya nanti."
-      ],
-      "dessert": [
-        "Aku cek dessertnya dulu.",
-        "Tolong kirim detail tentang dessertnya.",
-        "Kita urus dessertnya nanti."
-      ],
-      "restaurant": [
-        "Aku cek restorannya dulu.",
-        "Tolong kirim detail tentang restorannya.",
-        "Kita urus restorannya nanti."
-      ],
-      "cooking": [
-        "Aku cek masakannya dulu.",
-        "Tolong kirim detail tentang masakannya.",
-        "Kita urus masakannya nanti."
-      ],
-      "recipe": [
-        "Aku cek resepnya dulu.",
-        "Tolong kirim detail tentang resepnya.",
-        "Kita urus resepnya nanti."
-      ],
-      "pharmacy": [
-        "Aku cek apoteknya dulu.",
-        "Tolong kirim detail tentang apoteknya.",
-        "Kita urus apoteknya nanti."
-      ],
-      "dentist": [
-        "Aku cek dokter giginya dulu.",
-        "Tolong kirim detail tentang dokter giginya.",
-        "Kita urus dokter giginya nanti."
-      ],
-      "hospital": [
-        "Aku cek rumah sakitnya dulu.",
-        "Tolong kirim detail tentang rumah sakitnya.",
-        "Kita urus rumah sakitnya nanti."
-      ],
-      "health_insurance": [
-        "Aku cek asuransi kesehatannya dulu.",
-        "Tolong kirim detail tentang asuransi kesehatannya.",
-        "Kita urus asuransi kesehatannya nanti."
-      ],
-      "workout": [
-        "Aku cek olahraganya dulu.",
-        "Tolong kirim detail tentang olahraganya.",
-        "Kita urus olahraganya nanti."
-      ],
-      "walking": [
-        "Aku cek jalan kakinya dulu.",
-        "Tolong kirim detail tentang jalan kakinya.",
-        "Kita urus jalan kakinya nanti."
-      ],
-      "rest": [
-        "Aku cek waktu istirahatnya dulu.",
-        "Tolong kirim detail tentang waktu istirahatnya.",
-        "Kita urus waktu istirahatnya nanti."
-      ],
-      "sleep": [
-        "Aku cek tidurnya dulu.",
-        "Tolong kirim detail tentang tidurnya.",
-        "Kita urus tidurnya nanti."
-      ],
-      "headache": [
-        "Aku cek sakit kepalanya dulu.",
-        "Tolong kirim detail tentang sakit kepalanya.",
-        "Kita urus sakit kepalanya nanti."
-      ],
-      "fever": [
-        "Aku cek demamnya dulu.",
-        "Tolong kirim detail tentang demamnya.",
-        "Kita urus demamnya nanti."
-      ],
-      "allergy": [
-        "Aku cek alerginya dulu.",
-        "Tolong kirim detail tentang alerginya.",
-        "Kita urus alerginya nanti."
-      ],
-      "vaccine": [
-        "Aku cek jadwal vaksinnya dulu.",
-        "Tolong kirim detail tentang jadwal vaksinnya.",
-        "Kita urus jadwal vaksinnya nanti."
-      ],
-      "taxi": [
-        "Aku cek taksinya dulu.",
-        "Tolong kirim detail tentang taksinya.",
-        "Kita urus taksinya nanti."
-      ],
-      "bus": [
-        "Aku cek busnya dulu.",
-        "Tolong kirim detail tentang busnya.",
-        "Kita urus busnya nanti."
-      ],
-      "metro": [
-        "Aku cek metro/MRT-nya dulu.",
-        "Tolong kirim detail tentang metro/MRT-nya.",
-        "Kita urus metro/MRT-nya nanti."
-      ],
-      "car_rental": [
-        "Aku cek rental mobilnya dulu.",
-        "Tolong kirim detail tentang rental mobilnya.",
-        "Kita urus rental mobilnya nanti."
-      ],
-      "fuel": [
-        "Aku cek bensinnya dulu.",
-        "Tolong kirim detail tentang bensinnya.",
-        "Kita urus bensinnya nanti."
-      ],
-      "toll": [
-        "Aku cek jalur tolnya dulu.",
-        "Tolong kirim detail tentang jalur tolnya.",
-        "Kita urus jalur tolnya nanti."
-      ],
-      "ride_hailing": [
-        "Aku cek ride-nya dulu.",
-        "Tolong kirim detail tentang ride-nya.",
-        "Kita urus ride-nya nanti."
-      ],
-      "passport": [
-        "Aku cek paspornya dulu.",
-        "Tolong kirim detail tentang paspornya.",
-        "Kita urus paspornya nanti."
-      ],
-      "visa": [
-        "Aku cek visanya dulu.",
-        "Tolong kirim detail tentang visanya.",
-        "Kita urus visanya nanti."
-      ],
-      "luggage": [
-        "Aku cek kopernya dulu.",
-        "Tolong kirim detail tentang kopernya.",
-        "Kita urus kopernya nanti."
-      ],
-      "map": [
-        "Aku cek petanya dulu.",
-        "Tolong kirim detail tentang petanya.",
-        "Kita urus petanya nanti."
-      ],
-      "travel_checkin": [
-        "Aku cek check-in online dulu.",
-        "Tolong kirim detail tentang check-in online.",
-        "Kita urus check-in online nanti."
-      ],
-      "travel_checkout": [
-        "Aku cek check-outnya dulu.",
-        "Tolong kirim detail tentang check-outnya.",
-        "Kita urus check-outnya nanti."
-      ],
-      "boarding": [
-        "Aku cek boarding-nya dulu.",
-        "Tolong kirim detail tentang boarding-nya.",
-        "Kita urus boarding-nya nanti."
-      ],
-      "customs": [
-        "Aku cek imigrasinya dulu.",
-        "Tolong kirim detail tentang imigrasinya.",
-        "Kita urus imigrasinya nanti."
-      ],
-      "client": [
-        "Aku cek kliennya dulu.",
-        "Tolong kirim detail tentang kliennya.",
-        "Kita urus kliennya nanti."
-      ],
-      "manager": [
-        "Aku cek atasannya dulu.",
-        "Tolong kirim detail tentang atasannya.",
-        "Kita urus atasannya nanti."
-      ],
-      "coworker": [
-        "Aku cek rekan kerjanya dulu.",
-        "Tolong kirim detail tentang rekan kerjanya.",
-        "Kita urus rekan kerjanya nanti."
-      ],
-      "interview": [
-        "Aku cek wawancaranya dulu.",
-        "Tolong kirim detail tentang wawancaranya.",
-        "Kita urus wawancaranya nanti."
-      ],
-      "contract": [
-        "Aku cek kontraknya dulu.",
-        "Tolong kirim detail tentang kontraknya.",
-        "Kita urus kontraknya nanti."
-      ],
-      "invoice": [
-        "Aku cek invoicenya dulu.",
-        "Tolong kirim detail tentang invoicenya.",
-        "Kita urus invoicenya nanti."
-      ],
-      "receipt": [
-        "Aku cek struknya dulu.",
-        "Tolong kirim detail tentang struknya.",
-        "Kita urus struknya nanti."
-      ],
-      "refund": [
-        "Aku cek refundnya dulu.",
-        "Tolong kirim detail tentang refundnya.",
-        "Kita urus refundnya nanti."
-      ],
-      "discount": [
-        "Aku cek diskonnya dulu.",
-        "Tolong kirim detail tentang diskonnya.",
-        "Kita urus diskonnya nanti."
-      ],
-      "subscription": [
-        "Aku cek langganannya dulu.",
-        "Tolong kirim detail tentang langganannya.",
-        "Kita urus langganannya nanti."
-      ],
-      "bill": [
-        "Aku cek tagihannya dulu.",
-        "Tolong kirim detail tentang tagihannya.",
-        "Kita urus tagihannya nanti."
-      ],
-      "salary": [
-        "Aku cek gajinya dulu.",
-        "Tolong kirim detail tentang gajinya.",
-        "Kita urus gajinya nanti."
-      ],
-      "leave_request": [
-        "Aku cek permintaan cutinya dulu.",
-        "Tolong kirim detail tentang permintaan cutinya.",
-        "Kita urus permintaan cutinya nanti."
-      ],
-      "shift": [
-        "Aku cek shiftnya dulu.",
-        "Tolong kirim detail tentang shiftnya.",
-        "Kita urus shiftnya nanti."
-      ],
-      "report": [
-        "Aku cek laporannya dulu.",
-        "Tolong kirim detail tentang laporannya.",
-        "Kita urus laporannya nanti."
-      ],
-      "presentation": [
-        "Aku cek presentasinya dulu.",
-        "Tolong kirim detail tentang presentasinya.",
-        "Kita urus presentasinya nanti."
-      ],
-      "project": [
-        "Aku cek proyeknya dulu.",
-        "Tolong kirim detail tentang proyeknya.",
-        "Kita urus proyeknya nanti."
-      ],
-      "task": [
-        "Aku cek tugasnya dulu.",
-        "Tolong kirim detail tentang tugasnya.",
-        "Kita urus tugasnya nanti."
-      ],
-      "bug_report": [
-        "Aku cek bug reportnya dulu.",
-        "Tolong kirim detail tentang bug reportnya.",
-        "Kita urus bug reportnya nanti."
-      ],
-      "deployment": [
-        "Aku cek deploy-nya dulu.",
-        "Tolong kirim detail tentang deploy-nya.",
-        "Kita urus deploy-nya nanti."
-      ],
-      "login_issue": [
-        "Aku cek masalah loginnya dulu.",
-        "Tolong kirim detail tentang masalah loginnya.",
-        "Kita urus masalah loginnya nanti."
-      ],
-      "rent": [
-        "Aku cek sewanya dulu.",
-        "Tolong kirim detail tentang sewanya.",
-        "Kita urus sewanya nanti."
-      ],
-      "landlord": [
-        "Aku cek pemilik rumahnya dulu.",
-        "Tolong kirim detail tentang pemilik rumahnya.",
-        "Kita urus pemilik rumahnya nanti."
-      ],
-      "electricity": [
-        "Aku cek masalah listriknya dulu.",
-        "Tolong kirim detail tentang masalah listriknya.",
-        "Kita urus masalah listriknya nanti."
-      ],
-      "water_supply": [
-        "Aku cek masalah airnya dulu.",
-        "Tolong kirim detail tentang masalah airnya.",
-        "Kita urus masalah airnya nanti."
-      ],
-      "gas_bill": [
-        "Aku cek tagihan gasnya dulu.",
-        "Tolong kirim detail tentang tagihan gasnya.",
-        "Kita urus tagihan gasnya nanti."
-      ],
-      "home_maintenance": [
-        "Aku cek maintenance rumahnya dulu.",
-        "Tolong kirim detail tentang maintenance rumahnya.",
-        "Kita urus maintenance rumahnya nanti."
-      ],
-      "trash": [
-        "Aku cek sampahnya dulu.",
-        "Tolong kirim detail tentang sampahnya.",
-        "Kita urus sampahnya nanti."
-      ],
-      "kitchen": [
-        "Aku cek dapurnya dulu.",
-        "Tolong kirim detail tentang dapurnya.",
-        "Kita urus dapurnya nanti."
-      ],
-      "bathroom": [
-        "Aku cek kamar mandinya dulu.",
-        "Tolong kirim detail tentang kamar mandinya.",
-        "Kita urus kamar mandinya nanti."
-      ],
-      "bedroom": [
-        "Aku cek kamar tidurnya dulu.",
-        "Tolong kirim detail tentang kamar tidurnya.",
-        "Kita urus kamar tidurnya nanti."
-      ],
-      "keys": [
-        "Aku cek kuncinya dulu.",
-        "Tolong kirim detail tentang kuncinya.",
-        "Kita urus kuncinya nanti."
-      ],
-      "door": [
-        "Aku cek pintunya dulu.",
-        "Tolong kirim detail tentang pintunya.",
-        "Kita urus pintunya nanti."
-      ],
-      "window": [
-        "Aku cek jendelanya dulu.",
-        "Tolong kirim detail tentang jendelanya.",
-        "Kita urus jendelanya nanti."
-      ],
-      "party": [
-        "Aku cek pestanya dulu.",
-        "Tolong kirim detail tentang pestanya.",
-        "Kita urus pestanya nanti."
-      ],
-      "wedding": [
-        "Aku cek nikahannya dulu.",
-        "Tolong kirim detail tentang nikahannya.",
-        "Kita urus nikahannya nanti."
-      ],
-      "ceremony": [
-        "Aku cek upacaranya dulu.",
-        "Tolong kirim detail tentang upacaranya.",
-        "Kita urus upacaranya nanti."
-      ],
-      "concert": [
-        "Aku cek konsernya dulu.",
-        "Tolong kirim detail tentang konsernya.",
-        "Kita urus konsernya nanti."
-      ],
-      "ticket": [
-        "Aku cek tiketnya dulu.",
-        "Tolong kirim detail tentang tiketnya.",
-        "Kita urus tiketnya nanti."
-      ],
-      "museum": [
-        "Aku cek kunjungan museumnya dulu.",
-        "Tolong kirim detail tentang kunjungan museumnya.",
-        "Kita urus kunjungan museumnya nanti."
-      ],
-      "park": [
-        "Aku cek rencana ke tamannya dulu.",
-        "Tolong kirim detail tentang rencana ke tamannya.",
-        "Kita urus rencana ke tamannya nanti."
-      ],
-      "picnic": [
-        "Aku cek pikniknya dulu.",
-        "Tolong kirim detail tentang pikniknya.",
-        "Kita urus pikniknya nanti."
-      ],
-      "new_year": [
-        "Aku cek rencana tahun barunya dulu.",
-        "Tolong kirim detail tentang rencana tahun barunya.",
-        "Kita urus rencana tahun barunya nanti."
-      ],
-      "neighbor": [
-        "Aku cek tetangganya dulu.",
-        "Tolong kirim detail tentang tetangganya.",
-        "Kita urus tetangganya nanti."
-      ],
-      "guest": [
-        "Aku cek tamunya dulu.",
-        "Tolong kirim detail tentang tamunya.",
-        "Kita urus tamunya nanti."
-      ],
-      "host": [
-        "Aku cek jadi tuan rumah dulu.",
-        "Tolong kirim detail tentang jadi tuan rumah.",
-        "Kita urus jadi tuan rumah nanti."
-      ],
-      "rsvp": [
-        "Aku cek konfirmasi hadirnya dulu.",
-        "Tolong kirim detail tentang konfirmasi hadirnya.",
-        "Kita urus konfirmasi hadirnya nanti."
-      ],
-      "gift": [
-        "Aku cek hadiahnya dulu.",
-        "Tolong kirim detail tentang hadiahnya.",
-        "Kita urus hadiahnya nanti."
-      ],
-      "lost_phone": [
-        "Aku cek HP yang hilang dulu.",
-        "Tolong kirim detail tentang HP yang hilang.",
-        "Kita urus HP yang hilang nanti."
-      ],
-      "wallet": [
-        "Aku cek dompetnya dulu.",
-        "Tolong kirim detail tentang dompetnya.",
-        "Kita urus dompetnya nanti."
-      ],
-      "id_card": [
-        "Aku cek KTP-nya dulu.",
-        "Tolong kirim detail tentang KTP-nya.",
-        "Kita urus KTP-nya nanti."
-      ],
-      "police": [
-        "Aku cek laporan polisinya dulu.",
-        "Tolong kirim detail tentang laporan polisinya.",
-        "Kita urus laporan polisinya nanti."
-      ],
-      "security_check": [
-        "Aku cek pemeriksaan keamanannya dulu.",
-        "Tolong kirim detail tentang pemeriksaan keamanannya.",
-        "Kita urus pemeriksaan keamanannya nanti."
-      ],
-      "lab_result": [
-        "Aku cek hasil labnya dulu.",
-        "Tolong kirim detail tentang hasil labnya.",
-        "Kita urus hasil labnya nanti."
-      ],
-      "cancel_plan": [
-        "Aku cek pembatalannya dulu.",
-        "Tolong kirim detail tentang pembatalannya.",
-        "Kita urus pembatalannya nanti."
-      ],
-      "reschedule_plan": [
-        "Aku cek ubah jadwalnya dulu.",
-        "Tolong kirim detail tentang ubah jadwalnya.",
-        "Kita urus ubah jadwalnya nanti."
-      ],
-      "childcare": [
-        "Aku cek jaga anaknya dulu.",
-        "Tolong kirim detail tentang jaga anaknya.",
-        "Kita urus jaga anaknya nanti."
-      ],
-      "parent": [
-        "Aku cek pesan orang tuanya dulu.",
-        "Tolong kirim detail tentang pesan orang tuanya.",
-        "Kita urus pesan orang tuanya nanti."
-      ],
-      "sibling": [
-        "Aku cek pesan saudara dulu.",
-        "Tolong kirim detail tentang pesan saudara.",
-        "Kita urus pesan saudara nanti."
-      ],
-      "partner": [
-        "Aku cek pesan pasangan dulu.",
-        "Tolong kirim detail tentang pesan pasangan.",
-        "Kita urus pesan pasangan nanti."
-      ],
-      "mood_happy": [
-        "Aku cek kabar baiknya dulu.",
-        "Tolong kirim detail tentang kabar baiknya.",
-        "Kita urus kabar baiknya nanti."
-      ],
-      "mood_sad": [
-        "Aku cek kabar sedihnya dulu.",
-        "Tolong kirim detail tentang kabar sedihnya.",
-        "Kita urus kabar sedihnya nanti."
-      ],
-      "mood_angry": [
-        "Aku cek rasa kesalnya dulu.",
-        "Tolong kirim detail tentang rasa kesalnya.",
-        "Kita urus rasa kesalnya nanti."
-      ],
-      "mood_worried": [
-        "Aku cek kekhawatirannya dulu.",
-        "Tolong kirim detail tentang kekhawatirannya.",
-        "Kita urus kekhawatirannya nanti."
-      ],
-      "mood_stressed": [
-        "Aku cek stressnya dulu.",
-        "Tolong kirim detail tentang stressnya.",
-        "Kita urus stressnya nanti."
-      ],
-      "mood_excited": [
-        "Aku cek semangatnya dulu.",
-        "Tolong kirim detail tentang semangatnya.",
-        "Kita urus semangatnya nanti."
-      ],
-      "mood_confused": [
-        "Aku cek kebingungannya dulu.",
-        "Tolong kirim detail tentang kebingungannya.",
-        "Kita urus kebingungannya nanti."
-      ],
-      "study": [
-        "Aku cek waktu belajarnya dulu.",
-        "Tolong kirim detail tentang waktu belajarnya.",
-        "Kita urus waktu belajarnya nanti."
-      ],
-      "exam": [
-        "Aku cek ujiannya dulu.",
-        "Tolong kirim detail tentang ujiannya.",
-        "Kita urus ujiannya nanti."
-      ],
-      "lesson": [
-        "Aku cek pelajarannya dulu.",
-        "Tolong kirim detail tentang pelajarannya.",
-        "Kita urus pelajarannya nanti."
-      ],
-      "book": [
-        "Aku cek bukunya dulu.",
-        "Tolong kirim detail tentang bukunya.",
-        "Kita urus bukunya nanti."
-      ],
-      "library": [
-        "Aku cek rencana ke perpustakaan dulu.",
-        "Tolong kirim detail tentang rencana ke perpustakaan.",
-        "Kita urus rencana ke perpustakaan nanti."
-      ],
-      "photo_album": [
-        "Aku cek albumnya dulu.",
-        "Tolong kirim detail tentang albumnya.",
-        "Kita urus albumnya nanti."
-      ],
-      "camera_issue": [
-        "Aku cek masalah kameranya dulu.",
-        "Tolong kirim detail tentang masalah kameranya.",
-        "Kita urus masalah kameranya nanti."
-      ],
-      "storage_full": [
-        "Aku cek memorinya dulu.",
-        "Tolong kirim detail tentang memorinya.",
-        "Kita urus memorinya nanti."
-      ],
-      "phone_update": [
-        "Aku cek update HP-nya dulu.",
-        "Tolong kirim detail tentang update HP-nya.",
-        "Kita urus update HP-nya nanti."
-      ],
-      "backup_data": [
-        "Aku cek backupnya dulu.",
-        "Tolong kirim detail tentang backupnya.",
-        "Kita urus backupnya nanti."
-      ],
-      "restore_data": [
-        "Aku cek restore datanya dulu.",
-        "Tolong kirim detail tentang restore datanya.",
-        "Kita urus restore datanya nanti."
-      ],
-      "data_plan": [
-        "Aku cek paket datanya dulu.",
-        "Tolong kirim detail tentang paket datanya.",
-        "Kita urus paket datanya nanti."
-      ],
-      "roaming": [
-        "Aku cek roamingnya dulu.",
-        "Tolong kirim detail tentang roamingnya.",
-        "Kita urus roamingnya nanti."
-      ],
-      "video_call": [
-        "Aku cek video callnya dulu.",
-        "Tolong kirim detail tentang video callnya.",
-        "Kita urus video callnya nanti."
-      ],
-      "missed_call": [
-        "Aku cek missed callnya dulu.",
-        "Tolong kirim detail tentang missed callnya.",
-        "Kita urus missed callnya nanti."
-      ],
-      "voicemail": [
-        "Aku cek voicemailnya dulu.",
-        "Tolong kirim detail tentang voicemailnya.",
-        "Kita urus voicemailnya nanti."
-      ],
-      "quiet_hours": [
-        "Aku cek jam tenangnya dulu.",
-        "Tolong kirim detail tentang jam tenangnya.",
-        "Kita urus jam tenangnya nanti."
-      ],
-      "meeting_notes": [
-        "Aku cek catatan rapatnya dulu.",
-        "Tolong kirim detail tentang catatan rapatnya.",
-        "Kita urus catatan rapatnya nanti."
-      ],
-      "quick_reply": [
-        "Aku cek balasan cepatnya dulu.",
-        "Tolong kirim detail tentang balasan cepatnya.",
-        "Kita urus balasan cepatnya nanti."
-      ],
-      "question": [
-        "Bisa.",
-        "Mungkin, boleh info lebih jelas?",
-        "Maaf, aku belum bisa."
-      ]
-    },
-    "fr": {
-      "default": [
-        "Oui",
-        "Je vais verifier",
-        "Desole, je ne peux pas"
-      ],
-      "greeting": [
-        "Salut.",
-        "Bonjour, ca va ?",
-        "Oui, je suis la."
-      ],
-      "morning": [
-        "Bonjour.",
-        "Bonne matinee, j espere que ca commence bien.",
-        "Je reponds dans un instant."
-      ],
-      "evening": [
-        "Bonsoir.",
-        "Bonne nuit.",
-        "Je regarde ca demain."
-      ],
-      "thanks": [
-        "Avec plaisir.",
-        "Pas de probleme.",
-        "Je t'en prie."
-      ],
-      "apology": [
-        "Pas de souci.",
-        "Ce n est pas grave.",
-        "Merci de me l avoir dit."
-      ],
-      "confirm": [
-        "Confirme.",
-        "Oui, c est correct.",
-        "Je confirme."
-      ],
-      "approval": [
-        "Oui, ca me va.",
-        "Ca marche pour moi.",
-        "Je verifie d abord."
-      ],
-      "decline": [
-        "Pas de probleme.",
-        "Peut-etre une autre fois.",
-        "Merci de me prevenir."
-      ],
-      "time": [
-        "Oui, cet horaire me va.",
-        "Je verifie d abord.",
-        "Desole, je ne suis pas disponible a ce moment-la."
-      ],
-      "schedule": [
-        "Je peux l ajouter a mon agenda.",
-        "Envoie-moi les details.",
-        "Je dois verifier mon calendrier d abord."
-      ],
-      "appointment": [
-        "Le rendez-vous me convient.",
-        "Tu peux confirmer le lieu ?",
-        "Je dois le deplacer."
-      ],
-      "delay": [
-        "Pas de souci, prends ton temps.",
-        "Merci pour l info.",
-        "Dis-moi quand tu arrives."
-      ],
-      "arriving": [
-        "Super, a tout de suite.",
-        "J arrive bientot.",
-        "Attends-moi un instant."
-      ],
-      "meeting": [
-        "Je peux rejoindre la reunion.",
-        "Envoie-moi le lien de reunion.",
-        "Je risque d avoir quelques minutes de retard."
-      ],
-      "meeting_link": [
-        "Envoie-moi le lien.",
-        "Je rejoins avec ce lien.",
-        "Le lien ne fonctionne pas chez moi."
-      ],
-      "location": [
-        "Je vais partager ma position.",
-        "Je suis tout pres.",
-        "Tu peux envoyer la position ?"
-      ],
-      "address": [
-        "Envoie-moi l adresse.",
-        "Je regarde l adresse maintenant.",
-        "J ai trouve l endroit."
-      ],
-      "commute": [
-        "Je suis en route.",
-        "Je pars bientot.",
-        "Je te tiens au courant quand j arrive."
-      ],
-      "traffic": [
-        "Il y a beaucoup de circulation.",
-        "Je risque d arriver en retard.",
-        "Je vais prendre un autre trajet."
-      ],
-      "weather": [
-        "On dirait qu il va pleuvoir.",
-        "Prends un parapluie.",
-        "Je verifie la meteo d abord."
-      ],
-      "reminder": [
-        "Rappelle-le-moi plus tard.",
-        "Je vais mettre un rappel.",
-        "Merci pour le rappel."
-      ],
-      "calendar": [
-        "Je verifie mon calendrier.",
-        "Mon agenda semble libre.",
-        "J ai deja quelque chose a ce moment-la."
-      ],
-      "alarm": [
-        "Je vais mettre une alarme.",
-        "Reveille-moi a ce moment-la.",
-        "C est deja regle."
-      ],
-      "shopping": [
-        "Je peux l acheter plus tard.",
-        "Envoie-moi la liste.",
-        "Je l ai deja achete."
-      ],
-      "shopping_list": [
-        "Ajoute-le a la liste.",
-        "Je vais prendre ces articles.",
-        "Tu veux ajouter autre chose ?"
-      ],
-      "delivery": [
-        "Je verifie le suivi.",
-        "Le colis est arrive.",
-        "Tu peux le laisser devant la porte."
-      ],
-      "payment": [
-        "Je paie maintenant.",
-        "Le paiement est envoye.",
-        "Envoie-moi le montant."
-      ],
-      "bank": [
-        "Envoie-moi les infos bancaires.",
-        "Je fais le virement bientot.",
-        "J ai deja fait le virement."
-      ],
-      "money_request": [
-        "Je regarde mon budget d abord.",
-        "Je peux aider un peu.",
-        "Desole, je ne peux pas aider maintenant."
-      ],
-      "food": [
-        "On mange bientot.",
-        "Tu veux manger quoi ?",
-        "J ai deja mange."
-      ],
-      "coffee": [
-        "Un cafe, ca me va.",
-        "Je peux prendre un cafe plus tard.",
-        "Peut-etre une autre fois."
-      ],
-      "lunch": [
-        "Le dejeuner me va.",
-        "Tu veux manger ou ?",
-        "Je ne peux pas dejeuner aujourd hui."
-      ],
-      "dinner": [
-        "Le diner me va.",
-        "Choisissons l endroit.",
-        "Je risque d etre en retard pour le diner."
-      ],
-      "work": [
-        "Je travaille maintenant.",
-        "Je reponds apres le travail.",
-        "On s en occupe demain."
-      ],
-      "deadline": [
-        "Je vais essayer de finir avant l echeance.",
-        "On peut prolonger le delai ?",
-        "J ai besoin de plus de details d abord."
-      ],
-      "status_update": [
-        "J envoie une mise a jour bientot.",
-        "C est en cours.",
-        "C est termine."
-      ],
-      "documents": [
-        "Envoie-moi le document.",
-        "Je vais verifier le fichier.",
-        "Je l ai joint."
-      ],
-      "school": [
-        "Je verifie le devoir.",
-        "Le cours commence bientot.",
-        "Envoie-moi les details du devoir."
-      ],
-      "child_school": [
-        "Je peux les recuperer.",
-        "Rappelle-moi avant la sortie.",
-        "Je risque d etre un peu en retard."
-      ],
-      "home": [
-        "Je suis a la maison.",
-        "Je rentre bientot.",
-        "Ferme la porte a cle, s il te plait."
-      ],
-      "chores": [
-        "Je m en occupe plus tard.",
-        "Tu peux le faire aujourd hui ?",
-        "C est deja fait."
-      ],
-      "family": [
-        "Passe le bonjour de ma part.",
-        "Je les appellerai plus tard.",
-        "J espere que tout le monde va bien."
-      ],
-      "friend": [
-        "Ca a l air sympa.",
-        "Invitons-les aussi.",
-        "Je vais leur ecrire."
-      ],
-      "health": [
-        "Prends soin de toi.",
-        "Tu devrais te reposer d abord.",
-        "Tu as besoin d aide ?"
-      ],
-      "medicine": [
-        "Prends ton medicament.",
-        "Je vais l acheter plus tard.",
-        "Tu l as deja pris ?"
-      ],
-      "tired": [
-        "Repose-toi un peu.",
-        "Fais une petite pause.",
-        "On peut continuer demain."
-      ],
-      "busy": [
-        "Je suis occupe maintenant.",
-        "Je reponds quand je suis libre.",
-        "On peut parler plus tard ?"
-      ],
-      "urgent": [
-        "Je regarde ca maintenant.",
-        "Appelle-moi si c est urgent.",
-        "Je vais prioriser ca."
-      ],
-      "help": [
-        "Je peux aider.",
-        "Dis-moi ce dont tu as besoin.",
-        "Desole, je ne peux pas aider maintenant."
-      ],
-      "invite": [
-        "Merci pour l invitation.",
-        "J aimerais venir.",
-        "Je ne peux pas cette fois."
-      ],
-      "follow_up": [
-        "Merci pour la relance.",
-        "Je verifie et je te tiens au courant.",
-        "Je n ai pas encore eu le temps."
-      ],
-      "send_file": [
-        "Je l envoie maintenant.",
-        "Envoie-le-moi.",
-        "Je l enverrai plus tard."
-      ],
-      "photo": [
-        "Envoie-moi la photo.",
-        "Je vais prendre une photo.",
-        "La photo est bien."
-      ],
-      "screenshot": [
-        "Envoie une capture d ecran.",
-        "Je vais envoyer une capture.",
-        "Cette capture aide beaucoup."
-      ],
-      "call": [
-        "Je vais t appeler.",
-        "Tu peux m appeler plus tard ?",
-        "Je ne peux pas parler maintenant."
-      ],
-      "voice_note": [
-        "Je vais l ecouter bientot.",
-        "Envoie un message vocal.",
-        "Tu peux l ecrire plutot ?"
-      ],
-      "email": [
-        "Je vais verifier mes mails.",
-        "Envoie-le par mail.",
-        "J ai deja repondu par mail."
-      ],
-      "contact": [
-        "Envoie-moi le contact.",
-        "Je vais partager le numero.",
-        "Je n ai pas ce contact."
-      ],
-      "travel": [
-        "Bon voyage.",
-        "Envoie-moi l itineraire.",
-        "Planifions le voyage."
-      ],
-      "vacation": [
-        "Profite bien de tes vacances.",
-        "Je verifie mes dates de conge.",
-        "Choisissons les dates."
-      ],
-      "flight": [
-        "Bon vol.",
-        "Envoie les details du vol.",
-        "Je verifie l heure d arrivee."
-      ],
-      "hotel": [
-        "Envoie l adresse de l hotel.",
-        "Je verifie la reservation.",
-        "Le check-in devrait aller."
-      ],
-      "train": [
-        "Je verifie l horaire du train.",
-        "Retrouve-moi a la gare.",
-        "Je risque de rater le train."
-      ],
-      "parking": [
-        "Je cherche une place.",
-        "Il y a du stationnement tout pres.",
-        "Je ne trouve pas encore de place."
-      ],
-      "lost": [
-        "Je vais t aider a le retrouver.",
-        "Tu l as vu ou en dernier ?",
-        "Reste ou tu es pour l instant."
-      ],
-      "mistake": [
-        "Pas de souci, merci pour la correction.",
-        "Je vais corriger.",
-        "C etait mon erreur."
-      ],
-      "praise": [
-        "Merci, j apprecie.",
-        "Content que ca aide.",
-        "Ca me touche beaucoup."
-      ],
-      "support": [
-        "Merci, j en avais besoin.",
-        "J apprecie ton soutien.",
-        "Je vais faire de mon mieux."
-      ],
-      "congratulations": [
-        "Merci beaucoup.",
-        "Je suis vraiment content.",
-        "Ca me touche beaucoup."
-      ],
-      "birthday": [
-        "Bon anniversaire.",
-        "Passe une tres belle journee.",
-        "Je te souhaite le meilleur."
-      ],
-      "condolence": [
-        "Toutes mes condoleances.",
-        "Je pense a toi.",
-        "Dis-moi si tu as besoin de quelque chose."
-      ],
-      "weekend": [
-        "Ce week-end me va.",
-        "Planifions quelque chose.",
-        "Je risque d etre pris ce week-end."
-      ],
-      "movie": [
-        "Ce film a l air bien.",
-        "Reservons les billets.",
-        "On peut peut-etre le regarder plus tard."
-      ],
-      "gaming": [
-        "Je peux jouer plus tard.",
-        "Invite-moi quand tu commences.",
-        "Pas ce soir, peut-etre demain."
-      ],
-      "sports": [
-        "Ce match a l air interessant.",
-        "Je vais verifier le score.",
-        "Regardons-le ensemble."
-      ],
-      "repair": [
-        "Je vais essayer de reparer.",
-        "Il faudra peut-etre un technicien.",
-        "Tu peux envoyer une photo du probleme ?"
-      ],
-      "battery": [
-        "Ma batterie est faible.",
-        "Je vais charger mon telephone.",
-        "Je risque d etre hors ligne un moment."
-      ],
-      "charger": [
-        "Apporte un chargeur, s il te plait.",
-        "Je le charge maintenant.",
-        "Tu as un chargeur ?"
-      ],
-      "internet": [
-        "Ma connexion est instable.",
-        "Je reessaie en Wi-Fi.",
-        "Envoie-moi le mot de passe Wi-Fi."
-      ],
-      "password": [
-        "Envoie-le de facon securisee.",
-        "Je ne peux pas partager ce mot de passe.",
-        "Je vais le reinitialiser."
-      ],
-      "safety": [
-        "Reste en securite.",
-        "Dis-moi quand tu es en securite.",
-        "Appelle-moi si tu as besoin d aide."
-      ],
-      "emergency": [
-        "Appelle les urgences maintenant.",
-        "Partage ta position si tu peux.",
-        "Je t appelle maintenant."
-      ],
-      "maybe_later": [
-        "Peut-etre plus tard.",
-        "Faisons ca une autre fois.",
-        "Je te tiendrai au courant."
-      ],
-      "permission": [
-        "Oui, vas-y.",
-        "Attends d abord.",
-        "Desole, pas maintenant."
-      ],
-      "opinion": [
-        "Je pense que c est une bonne idee.",
-        "J ai besoin de plus de contexte.",
-        "Je ne suis pas encore sur."
-      ],
-      "decision": [
-        "Prenons l option simple.",
-        "Je deciderai apres verification.",
-        "Tu peux choisir cette fois."
-      ],
-      "availability": [
-        "Je suis disponible.",
-        "Je suis libre plus tard.",
-        "Desole, je ne suis pas disponible."
-      ],
-      "language": [
-        "Quelle langue veux-tu utiliser ?",
-        "Je peux repondre en anglais.",
-        "Je peux essayer de traduire."
-      ],
-      "translation": [
-        "Je vais le traduire.",
-        "Tu peux traduire ca pour moi ?",
-        "La traduction peut ne pas etre parfaite."
-      ],
-      "quiet": [
-        "Je reste discret.",
-        "Je t ecrirai plus tard.",
-        "Desole, j arrete pour l instant."
-      ],
-      "pickup": [
-        "Je peux venir te chercher.",
-        "Je te recupere ou ?",
-        "Je ne peux pas venir te chercher aujourd hui."
-      ],
-      "dropoff": [
-        "Je peux te deposer.",
-        "Je te depose ou ?",
-        "Je ne peux pas conduire maintenant."
-      ],
-      "reservation": [
-        "Fais la reservation, s il te plait.",
-        "Je reserve maintenant.",
-        "Pour quelle heure je reserve ?"
-      ],
-      "music": [
-        "Cette chanson est bien.",
-        "Envoie-moi la playlist.",
-        "J ecouterai plus tard."
-      ],
-      "breakfast": [
-        "Je verifie le petit dejeuner.",
-        "Envoie-moi plus de details sur le petit dejeuner.",
-        "On s occupe de le petit dejeuner plus tard."
-      ],
-      "snack": [
-        "Je verifie le gouter.",
-        "Envoie-moi plus de details sur le gouter.",
-        "On s occupe de le gouter plus tard."
-      ],
-      "dessert": [
-        "Je verifie le dessert.",
-        "Envoie-moi plus de details sur le dessert.",
-        "On s occupe de le dessert plus tard."
-      ],
-      "restaurant": [
-        "Je verifie le restaurant.",
-        "Envoie-moi plus de details sur le restaurant.",
-        "On s occupe de le restaurant plus tard."
-      ],
-      "cooking": [
-        "Je verifie la cuisine.",
-        "Envoie-moi plus de details sur la cuisine.",
-        "On s occupe de la cuisine plus tard."
-      ],
-      "recipe": [
-        "Je verifie la recette.",
-        "Envoie-moi plus de details sur la recette.",
-        "On s occupe de la recette plus tard."
-      ],
-      "pharmacy": [
-        "Je verifie la pharmacie.",
-        "Envoie-moi plus de details sur la pharmacie.",
-        "On s occupe de la pharmacie plus tard."
-      ],
-      "dentist": [
-        "Je verifie le rendez-vous dentiste.",
-        "Envoie-moi plus de details sur le rendez-vous dentiste.",
-        "On s occupe de le rendez-vous dentiste plus tard."
-      ],
-      "hospital": [
-        "Je verifie l hopital.",
-        "Envoie-moi plus de details sur l hopital.",
-        "On s occupe de l hopital plus tard."
-      ],
-      "health_insurance": [
-        "Je verifie l assurance sante.",
-        "Envoie-moi plus de details sur l assurance sante.",
-        "On s occupe de l assurance sante plus tard."
-      ],
-      "workout": [
-        "Je verifie la seance de sport.",
-        "Envoie-moi plus de details sur la seance de sport.",
-        "On s occupe de la seance de sport plus tard."
-      ],
-      "walking": [
-        "Je verifie la promenade.",
-        "Envoie-moi plus de details sur la promenade.",
-        "On s occupe de la promenade plus tard."
-      ],
-      "rest": [
-        "Je verifie le temps de repos.",
-        "Envoie-moi plus de details sur le temps de repos.",
-        "On s occupe de le temps de repos plus tard."
-      ],
-      "sleep": [
-        "Je verifie le sommeil.",
-        "Envoie-moi plus de details sur le sommeil.",
-        "On s occupe de le sommeil plus tard."
-      ],
-      "headache": [
-        "Je verifie le mal de tete.",
-        "Envoie-moi plus de details sur le mal de tete.",
-        "On s occupe de le mal de tete plus tard."
-      ],
-      "fever": [
-        "Je verifie la fievre.",
-        "Envoie-moi plus de details sur la fievre.",
-        "On s occupe de la fievre plus tard."
-      ],
-      "allergy": [
-        "Je verifie l allergie.",
-        "Envoie-moi plus de details sur l allergie.",
-        "On s occupe de l allergie plus tard."
-      ],
-      "vaccine": [
-        "Je verifie le vaccin.",
-        "Envoie-moi plus de details sur le vaccin.",
-        "On s occupe de le vaccin plus tard."
-      ],
-      "taxi": [
-        "Je verifie le taxi.",
-        "Envoie-moi plus de details sur le taxi.",
-        "On s occupe de le taxi plus tard."
-      ],
-      "bus": [
-        "Je verifie le bus.",
-        "Envoie-moi plus de details sur le bus.",
-        "On s occupe de le bus plus tard."
-      ],
-      "metro": [
-        "Je verifie le metro.",
-        "Envoie-moi plus de details sur le metro.",
-        "On s occupe de le metro plus tard."
-      ],
-      "car_rental": [
-        "Je verifie la location de voiture.",
-        "Envoie-moi plus de details sur la location de voiture.",
-        "On s occupe de la location de voiture plus tard."
-      ],
-      "fuel": [
-        "Je verifie l essence.",
-        "Envoie-moi plus de details sur l essence.",
-        "On s occupe de l essence plus tard."
-      ],
-      "toll": [
-        "Je verifie le peage.",
-        "Envoie-moi plus de details sur le peage.",
-        "On s occupe de le peage plus tard."
-      ],
-      "ride_hailing": [
-        "Je verifie la course.",
-        "Envoie-moi plus de details sur la course.",
-        "On s occupe de la course plus tard."
-      ],
-      "passport": [
-        "Je verifie le passeport.",
-        "Envoie-moi plus de details sur le passeport.",
-        "On s occupe de le passeport plus tard."
-      ],
-      "visa": [
-        "Je verifie le visa.",
-        "Envoie-moi plus de details sur le visa.",
-        "On s occupe de le visa plus tard."
-      ],
-      "luggage": [
-        "Je verifie les bagages.",
-        "Envoie-moi plus de details sur les bagages.",
-        "On s occupe de les bagages plus tard."
-      ],
-      "map": [
-        "Je verifie la carte.",
-        "Envoie-moi plus de details sur la carte.",
-        "On s occupe de la carte plus tard."
-      ],
-      "travel_checkin": [
-        "Je verifie le check-in en ligne.",
-        "Envoie-moi plus de details sur le check-in en ligne.",
-        "On s occupe de le check-in en ligne plus tard."
-      ],
-      "travel_checkout": [
-        "Je verifie le check-out.",
-        "Envoie-moi plus de details sur le check-out.",
-        "On s occupe de le check-out plus tard."
-      ],
-      "boarding": [
-        "Je verifie l embarquement.",
-        "Envoie-moi plus de details sur l embarquement.",
-        "On s occupe de l embarquement plus tard."
-      ],
-      "customs": [
-        "Je verifie la douane.",
-        "Envoie-moi plus de details sur la douane.",
-        "On s occupe de la douane plus tard."
-      ],
-      "client": [
-        "Je verifie le client.",
-        "Envoie-moi plus de details sur le client.",
-        "On s occupe de le client plus tard."
-      ],
-      "manager": [
-        "Je verifie le manager.",
-        "Envoie-moi plus de details sur le manager.",
-        "On s occupe de le manager plus tard."
-      ],
-      "coworker": [
-        "Je verifie le collegue.",
-        "Envoie-moi plus de details sur le collegue.",
-        "On s occupe de le collegue plus tard."
-      ],
-      "interview": [
-        "Je verifie l entretien.",
-        "Envoie-moi plus de details sur l entretien.",
-        "On s occupe de l entretien plus tard."
-      ],
-      "contract": [
-        "Je verifie le contrat.",
-        "Envoie-moi plus de details sur le contrat.",
-        "On s occupe de le contrat plus tard."
-      ],
-      "invoice": [
-        "Je verifie la facture.",
-        "Envoie-moi plus de details sur la facture.",
-        "On s occupe de la facture plus tard."
-      ],
-      "receipt": [
-        "Je verifie le recu.",
-        "Envoie-moi plus de details sur le recu.",
-        "On s occupe de le recu plus tard."
-      ],
-      "refund": [
-        "Je verifie le remboursement.",
-        "Envoie-moi plus de details sur le remboursement.",
-        "On s occupe de le remboursement plus tard."
-      ],
-      "discount": [
-        "Je verifie la reduction.",
-        "Envoie-moi plus de details sur la reduction.",
-        "On s occupe de la reduction plus tard."
-      ],
-      "subscription": [
-        "Je verifie l abonnement.",
-        "Envoie-moi plus de details sur l abonnement.",
-        "On s occupe de l abonnement plus tard."
-      ],
-      "bill": [
-        "Je verifie la facture.",
-        "Envoie-moi plus de details sur la facture.",
-        "On s occupe de la facture plus tard."
-      ],
-      "salary": [
-        "Je verifie le salaire.",
-        "Envoie-moi plus de details sur le salaire.",
-        "On s occupe de le salaire plus tard."
-      ],
-      "leave_request": [
-        "Je verifie la demande de conge.",
-        "Envoie-moi plus de details sur la demande de conge.",
-        "On s occupe de la demande de conge plus tard."
-      ],
-      "shift": [
-        "Je verifie le service.",
-        "Envoie-moi plus de details sur le service.",
-        "On s occupe de le service plus tard."
-      ],
-      "report": [
-        "Je verifie le rapport.",
-        "Envoie-moi plus de details sur le rapport.",
-        "On s occupe de le rapport plus tard."
-      ],
-      "presentation": [
-        "Je verifie la presentation.",
-        "Envoie-moi plus de details sur la presentation.",
-        "On s occupe de la presentation plus tard."
-      ],
-      "project": [
-        "Je verifie le projet.",
-        "Envoie-moi plus de details sur le projet.",
-        "On s occupe de le projet plus tard."
-      ],
-      "task": [
-        "Je verifie la tache.",
-        "Envoie-moi plus de details sur la tache.",
-        "On s occupe de la tache plus tard."
-      ],
-      "bug_report": [
-        "Je verifie le rapport de bug.",
-        "Envoie-moi plus de details sur le rapport de bug.",
-        "On s occupe de le rapport de bug plus tard."
-      ],
-      "deployment": [
-        "Je verifie le deploiement.",
-        "Envoie-moi plus de details sur le deploiement.",
-        "On s occupe de le deploiement plus tard."
-      ],
-      "login_issue": [
-        "Je verifie le probleme de connexion.",
-        "Envoie-moi plus de details sur le probleme de connexion.",
-        "On s occupe de le probleme de connexion plus tard."
-      ],
-      "rent": [
-        "Je verifie le loyer.",
-        "Envoie-moi plus de details sur le loyer.",
-        "On s occupe de le loyer plus tard."
-      ],
-      "landlord": [
-        "Je verifie le proprietaire.",
-        "Envoie-moi plus de details sur le proprietaire.",
-        "On s occupe de le proprietaire plus tard."
-      ],
-      "electricity": [
-        "Je verifie l electricite.",
-        "Envoie-moi plus de details sur l electricite.",
-        "On s occupe de l electricite plus tard."
-      ],
-      "water_supply": [
-        "Je verifie l eau.",
-        "Envoie-moi plus de details sur l eau.",
-        "On s occupe de l eau plus tard."
-      ],
-      "gas_bill": [
-        "Je verifie la facture de gaz.",
-        "Envoie-moi plus de details sur la facture de gaz.",
-        "On s occupe de la facture de gaz plus tard."
-      ],
-      "home_maintenance": [
-        "Je verifie l entretien de la maison.",
-        "Envoie-moi plus de details sur l entretien de la maison.",
-        "On s occupe de l entretien de la maison plus tard."
-      ],
-      "trash": [
-        "Je verifie les poubelles.",
-        "Envoie-moi plus de details sur les poubelles.",
-        "On s occupe de les poubelles plus tard."
-      ],
-      "kitchen": [
-        "Je verifie la cuisine.",
-        "Envoie-moi plus de details sur la cuisine.",
-        "On s occupe de la cuisine plus tard."
-      ],
-      "bathroom": [
-        "Je verifie la salle de bain.",
-        "Envoie-moi plus de details sur la salle de bain.",
-        "On s occupe de la salle de bain plus tard."
-      ],
-      "bedroom": [
-        "Je verifie la chambre.",
-        "Envoie-moi plus de details sur la chambre.",
-        "On s occupe de la chambre plus tard."
-      ],
-      "keys": [
-        "Je verifie les cles.",
-        "Envoie-moi plus de details sur les cles.",
-        "On s occupe de les cles plus tard."
-      ],
-      "door": [
-        "Je verifie la porte.",
-        "Envoie-moi plus de details sur la porte.",
-        "On s occupe de la porte plus tard."
-      ],
-      "window": [
-        "Je verifie la fenetre.",
-        "Envoie-moi plus de details sur la fenetre.",
-        "On s occupe de la fenetre plus tard."
-      ],
-      "party": [
-        "Je verifie la soiree.",
-        "Envoie-moi plus de details sur la soiree.",
-        "On s occupe de la soiree plus tard."
-      ],
-      "wedding": [
-        "Je verifie le mariage.",
-        "Envoie-moi plus de details sur le mariage.",
-        "On s occupe de le mariage plus tard."
-      ],
-      "ceremony": [
-        "Je verifie la ceremonie.",
-        "Envoie-moi plus de details sur la ceremonie.",
-        "On s occupe de la ceremonie plus tard."
-      ],
-      "concert": [
-        "Je verifie le concert.",
-        "Envoie-moi plus de details sur le concert.",
-        "On s occupe de le concert plus tard."
-      ],
-      "ticket": [
-        "Je verifie le billet.",
-        "Envoie-moi plus de details sur le billet.",
-        "On s occupe de le billet plus tard."
-      ],
-      "museum": [
-        "Je verifie la visite du musee.",
-        "Envoie-moi plus de details sur la visite du musee.",
-        "On s occupe de la visite du musee plus tard."
-      ],
-      "park": [
-        "Je verifie la sortie au parc.",
-        "Envoie-moi plus de details sur la sortie au parc.",
-        "On s occupe de la sortie au parc plus tard."
-      ],
-      "picnic": [
-        "Je verifie le pique-nique.",
-        "Envoie-moi plus de details sur le pique-nique.",
-        "On s occupe de le pique-nique plus tard."
-      ],
-      "new_year": [
-        "Je verifie le nouvel an.",
-        "Envoie-moi plus de details sur le nouvel an.",
-        "On s occupe de le nouvel an plus tard."
-      ],
-      "neighbor": [
-        "Je verifie le voisin.",
-        "Envoie-moi plus de details sur le voisin.",
-        "On s occupe de le voisin plus tard."
-      ],
-      "guest": [
-        "Je verifie l invite.",
-        "Envoie-moi plus de details sur l invite.",
-        "On s occupe de l invite plus tard."
-      ],
-      "host": [
-        "Je verifie l accueil.",
-        "Envoie-moi plus de details sur l accueil.",
-        "On s occupe de l accueil plus tard."
-      ],
-      "rsvp": [
-        "Je verifie la confirmation de presence.",
-        "Envoie-moi plus de details sur la confirmation de presence.",
-        "On s occupe de la confirmation de presence plus tard."
-      ],
-      "gift": [
-        "Je verifie le cadeau.",
-        "Envoie-moi plus de details sur le cadeau.",
-        "On s occupe de le cadeau plus tard."
-      ],
-      "lost_phone": [
-        "Je verifie le telephone perdu.",
-        "Envoie-moi plus de details sur le telephone perdu.",
-        "On s occupe de le telephone perdu plus tard."
-      ],
-      "wallet": [
-        "Je verifie le portefeuille.",
-        "Envoie-moi plus de details sur le portefeuille.",
-        "On s occupe de le portefeuille plus tard."
-      ],
-      "id_card": [
-        "Je verifie la carte d identite.",
-        "Envoie-moi plus de details sur la carte d identite.",
-        "On s occupe de la carte d identite plus tard."
-      ],
-      "police": [
-        "Je verifie le signalement a la police.",
-        "Envoie-moi plus de details sur le signalement a la police.",
-        "On s occupe de le signalement a la police plus tard."
-      ],
-      "security_check": [
-        "Je verifie le controle de securite.",
-        "Envoie-moi plus de details sur le controle de securite.",
-        "On s occupe de le controle de securite plus tard."
-      ],
-      "lab_result": [
-        "Je verifie le resultat du labo.",
-        "Envoie-moi plus de details sur le resultat du labo.",
-        "On s occupe de le resultat du labo plus tard."
-      ],
-      "cancel_plan": [
-        "Je verifie l annulation.",
-        "Envoie-moi plus de details sur l annulation.",
-        "On s occupe de l annulation plus tard."
-      ],
-      "reschedule_plan": [
-        "Je verifie le changement d horaire.",
-        "Envoie-moi plus de details sur le changement d horaire.",
-        "On s occupe de le changement d horaire plus tard."
-      ],
-      "childcare": [
-        "Je verifie la garde d enfant.",
-        "Envoie-moi plus de details sur la garde d enfant.",
-        "On s occupe de la garde d enfant plus tard."
-      ],
-      "parent": [
-        "Je verifie le message du parent.",
-        "Envoie-moi plus de details sur le message du parent.",
-        "On s occupe de le message du parent plus tard."
-      ],
-      "sibling": [
-        "Je verifie le message familial.",
-        "Envoie-moi plus de details sur le message familial.",
-        "On s occupe de le message familial plus tard."
-      ],
-      "partner": [
-        "Je verifie le message du conjoint.",
-        "Envoie-moi plus de details sur le message du conjoint.",
-        "On s occupe de le message du conjoint plus tard."
-      ],
-      "mood_happy": [
-        "Je verifie la bonne nouvelle.",
-        "Envoie-moi plus de details sur la bonne nouvelle.",
-        "On s occupe de la bonne nouvelle plus tard."
-      ],
-      "mood_sad": [
-        "Je verifie la nouvelle triste.",
-        "Envoie-moi plus de details sur la nouvelle triste.",
-        "On s occupe de la nouvelle triste plus tard."
-      ],
-      "mood_angry": [
-        "Je verifie la frustration.",
-        "Envoie-moi plus de details sur la frustration.",
-        "On s occupe de la frustration plus tard."
-      ],
-      "mood_worried": [
-        "Je verifie l inquietude.",
-        "Envoie-moi plus de details sur l inquietude.",
-        "On s occupe de l inquietude plus tard."
-      ],
-      "mood_stressed": [
-        "Je verifie le stress.",
-        "Envoie-moi plus de details sur le stress.",
-        "On s occupe de le stress plus tard."
-      ],
-      "mood_excited": [
-        "Je verifie l enthousiasme.",
-        "Envoie-moi plus de details sur l enthousiasme.",
-        "On s occupe de l enthousiasme plus tard."
-      ],
-      "mood_confused": [
-        "Je verifie la confusion.",
-        "Envoie-moi plus de details sur la confusion.",
-        "On s occupe de la confusion plus tard."
-      ],
-      "study": [
-        "Je verifie le temps d etude.",
-        "Envoie-moi plus de details sur le temps d etude.",
-        "On s occupe de le temps d etude plus tard."
-      ],
-      "exam": [
-        "Je verifie l examen.",
-        "Envoie-moi plus de details sur l examen.",
-        "On s occupe de l examen plus tard."
-      ],
-      "lesson": [
-        "Je verifie le cours.",
-        "Envoie-moi plus de details sur le cours.",
-        "On s occupe de le cours plus tard."
-      ],
-      "book": [
-        "Je verifie le livre.",
-        "Envoie-moi plus de details sur le livre.",
-        "On s occupe de le livre plus tard."
-      ],
-      "library": [
-        "Je verifie la bibliotheque.",
-        "Envoie-moi plus de details sur la bibliotheque.",
-        "On s occupe de la bibliotheque plus tard."
-      ],
-      "photo_album": [
-        "Je verifie l album.",
-        "Envoie-moi plus de details sur l album.",
-        "On s occupe de l album plus tard."
-      ],
-      "camera_issue": [
-        "Je verifie le probleme de camera.",
-        "Envoie-moi plus de details sur le probleme de camera.",
-        "On s occupe de le probleme de camera plus tard."
-      ],
-      "storage_full": [
-        "Je verifie le stockage.",
-        "Envoie-moi plus de details sur le stockage.",
-        "On s occupe de le stockage plus tard."
-      ],
-      "phone_update": [
-        "Je verifie la mise a jour du telephone.",
-        "Envoie-moi plus de details sur la mise a jour du telephone.",
-        "On s occupe de la mise a jour du telephone plus tard."
-      ],
-      "backup_data": [
-        "Je verifie la sauvegarde.",
-        "Envoie-moi plus de details sur la sauvegarde.",
-        "On s occupe de la sauvegarde plus tard."
-      ],
-      "restore_data": [
-        "Je verifie la restauration.",
-        "Envoie-moi plus de details sur la restauration.",
-        "On s occupe de la restauration plus tard."
-      ],
-      "data_plan": [
-        "Je verifie le forfait mobile.",
-        "Envoie-moi plus de details sur le forfait mobile.",
-        "On s occupe de le forfait mobile plus tard."
-      ],
-      "roaming": [
-        "Je verifie l itinerance.",
-        "Envoie-moi plus de details sur l itinerance.",
-        "On s occupe de l itinerance plus tard."
-      ],
-      "video_call": [
-        "Je verifie l appel video.",
-        "Envoie-moi plus de details sur l appel video.",
-        "On s occupe de l appel video plus tard."
-      ],
-      "missed_call": [
-        "Je verifie l appel manque.",
-        "Envoie-moi plus de details sur l appel manque.",
-        "On s occupe de l appel manque plus tard."
-      ],
-      "voicemail": [
-        "Je verifie la messagerie vocale.",
-        "Envoie-moi plus de details sur la messagerie vocale.",
-        "On s occupe de la messagerie vocale plus tard."
-      ],
-      "quiet_hours": [
-        "Je verifie les heures calmes.",
-        "Envoie-moi plus de details sur les heures calmes.",
-        "On s occupe de les heures calmes plus tard."
-      ],
-      "meeting_notes": [
-        "Je verifie les notes de reunion.",
-        "Envoie-moi plus de details sur les notes de reunion.",
-        "On s occupe de les notes de reunion plus tard."
-      ],
-      "quick_reply": [
-        "Je verifie la reponse rapide.",
-        "Envoie-moi plus de details sur la reponse rapide.",
-        "On s occupe de la reponse rapide plus tard."
-      ],
-      "question": [
-        "Oui, ca marche.",
-        "Peut-etre, tu peux preciser ?",
-        "Desole, je ne peux pas."
+        "응, 돼.",
+        "아마도, 좀 더 자세히 알려줄 수 있어?",
+        "미안, 안 될 것 같아."
       ]
     }
   }
