@@ -179,12 +179,21 @@ elif $BUILD_TARGET_FILES || $BUILD_FLASHABLE_ZIP; then
     fi
     ZIP_FILE_NAME+="-target_files.zip"
 
+    NEED_TARGET_FILES=false
     if [ ! -f "$OUT_DIR/$ZIP_FILE_NAME" ]; then
+        NEED_TARGET_FILES=true
+    elif $BUILD_ROM; then
+        LOGW "Regenerating target-files zip (work dir was rebuilt)"
+        rm -f "$OUT_DIR/$ZIP_FILE_NAME"
+        NEED_TARGET_FILES=true
+    else
+        LOGW "File already exists: ${OUT_DIR//$SRC_DIR\//}/$ZIP_FILE_NAME"
+    fi
+
+    if $NEED_TARGET_FILES; then
         LOG_STEP_IN true "Creating target-files zip"
         "$SRC_DIR/scripts/internal/create_target_files_zip.sh" "$OUT_DIR/$ZIP_FILE_NAME" || exit 1
         LOG_STEP_OUT
-    else
-        LOGW "File already exists: ${OUT_DIR//$SRC_DIR\//}/$ZIP_FILE_NAME"
     fi
 
     if $BUILD_FLASHABLE_ZIP; then

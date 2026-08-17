@@ -1,0 +1,14 @@
+#!/bin/bash
+# UN1CA signapk launcher. Use PATH/JAVA_HOME java; enable Conscrypt JNI on JDK 24+.
+DIR="$(cd "$(dirname "$0")" && pwd)"
+JAVA_BIN=""
+if [ -n "${JAVA_HOME:-}" ] && [ -x "$JAVA_HOME/bin/java" ]; then
+  JAVA_BIN="$JAVA_HOME/bin/java"
+else
+  JAVA_BIN="$(command -v java || true)"
+fi
+if [ -z "$JAVA_BIN" ]; then
+  echo "signapk: java not found" >&2
+  exit 1
+fi
+exec "$JAVA_BIN" -Xmx1024M --enable-native-access=ALL-UNNAMED -jar "$DIR/signapk.jar" "$@"

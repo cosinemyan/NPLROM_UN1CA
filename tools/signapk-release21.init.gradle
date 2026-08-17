@@ -1,0 +1,10 @@
+// Compile signapk to Java 21 bytecode. Fedora's `java` alternative is often
+// an older JRE (25) than the JDK used to compile (26). Class file 70 (Java 26)
+// cannot load on Java 25.
+allprojects {
+    afterEvaluate {
+        tasks.withType(JavaCompile).configureEach {
+            options.release.set(21)
+        }
+    }
+}

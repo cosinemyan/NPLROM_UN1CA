@@ -169,9 +169,25 @@ fi
 need_apktool=false
 if [ ! -f "$BIN_DIR/apktool" ] || [ ! -f "$BIN_DIR/apktool.jar" ]; then
   need_apktool=true
-elif ! java -jar "$BIN_DIR/apktool.jar" -version 2>/dev/null | grep -qE '^3\.'; then
-  echo "[!] Existing apktool is not 3.x — upgrading to ${APKTOOL_VERSION}"
-  need_apktool=true
+elif ! "$BIN_DIR/apktool" b --help 2>&1 | grep -q 'shorten-res-paths'; then
+  echo "[!] apktool in $BIN_DIR is stock (no -srp). UN1CA needs the patched build."
+  if [ -x "$PROJECT_ROOT/external/apktool/gradlew" ]; then
+    echo "[>] Building patched apktool from external/apktool..."
+    # shellcheck source=/dev/null
+    source "$PROJECT_ROOT/tools/ensure_build_jdk.sh"
+    (
+      cd "$PROJECT_ROOT/external/apktool"
+      git reset --hard
+      git apply "$PROJECT_ROOT/external/patches/apktool/0001-feat-support-aapt-optimization.patch"
+      ./gradlew shadowJar -x test --no-daemon
+    )
+    cp -a "$PROJECT_ROOT/external/apktool/scripts/linux/apktool" "$BIN_DIR/apktool"
+    cp -a "$PROJECT_ROOT/external/apktool/brut.apktool/apktool-cli/build/libs/apktool-cli.jar" "$BIN_DIR/apktool.jar"
+    chmod +x "$BIN_DIR/apktool"
+    need_apktool=false
+  else
+    need_apktool=true
+  fi
 fi
 
 if $need_apktool; then
@@ -204,16 +220,47 @@ if ! command -v zipalign &>/dev/null && [ ! -f "$BIN_DIR/zipalign" ]; then
   echo "[✓] zipalign installed"
 fi
 
-if [ ! -f "$BIN_DIR/signapk" ] || [ ! -f "$BIN_DIR/signapk.jar" ]; then
-  echo "[>] Downloading signapk.jar..."
-  curl -fsSL "https://android.googlesource.com/platform/prebuilts/sdk/+/refs/heads/main/tools/lib/signapk.jar?format=TEXT" | base64 -d > "$BIN_DIR/signapk.jar"
-  cat > "$BIN_DIR/signapk" << 'EOF'
-#!/bin/bash
-exec java -jar "$(dirname "$0")/signapk.jar" "$@"
-EOF
-  chmod +x "$BIN_DIR/signapk"
-  echo "[✓] signapk installed"
+# Gradle auto-picks /usr/lib/jvm/java-*-openjdk JRE (no javac) on Fedora.
+# Prefer the SDK that actually has a compiler.
+if [ ! -x "${JAVA_HOME:-}/bin/javac" ]; then
+  for _jdk in /usr/lib/jvm/java /usr/lib/jvm/java-latest-openjdk /usr/lib/jvm/java-21-openjdk /usr/lib/jvm/java-17-openjdk; do
+    if [ -x "$_jdk/bin/javac" ]; then
+      export JAVA_HOME="$_jdk"
+      export PATH="$JAVA_HOME/bin:$PATH"
+      break
+    fi
+  done
+  unset _jdk
 fi
+
+# AOSP prebuilt signapk.jar (~3MB) needs conscrypt JNI and crashes at APEX
+# sign. UN1CA's shadow fat jar (~18MB) bundles the native bits.
+_signapk_ok() {
+  [ -f "$BIN_DIR/signapk" ] && [ -f "$BIN_DIR/signapk.jar" ] || return 1
+  [ "$(stat -c%s "$BIN_DIR/signapk.jar" 2>/dev/null || echo 0)" -gt 8000000 ] || return 1
+  grep -q "Xmx1024M" "$BIN_DIR/signapk" 2>/dev/null || return 1
+}
+if ! _signapk_ok; then
+  if [ -x "$PROJECT_ROOT/external/signapk/gradlew" ]; then
+    echo "[>] Building signapk from external/signapk (UN1CA fat jar, Java 21 bytecode)..."
+    # shellcheck source=/dev/null
+    source "$PROJECT_ROOT/tools/ensure_build_jdk.sh"
+    (cd "$PROJECT_ROOT/external/signapk" && ./gradlew build --no-daemon \
+      --init-script "$PROJECT_ROOT/tools/signapk-release21.init.gradle")
+    cp -a "$PROJECT_ROOT/tools/signapk" "$BIN_DIR/signapk"
+    cp -a "$PROJECT_ROOT/external/signapk/signapk/build/libs/signapk-all.jar" "$BIN_DIR/signapk.jar"
+    chmod +x "$BIN_DIR/signapk"
+  fi
+  if ! _signapk_ok; then
+    echo "[!] signapk is missing or is the AOSP stub (conscrypt JNI). Bluetooth APEX signing will fail."
+    echo "    Fix: JAVA_HOME must have javac, then: cd external/signapk && ./gradlew build"
+  else
+    echo "[✓] signapk installed (UN1CA fat jar)"
+  fi
+else
+  echo "[✓] signapk already works"
+fi
+unset -f _signapk_ok
 
 _is_real_elf() { file "$1" 2>/dev/null | grep -q "ELF"; }
 if ! _is_real_elf "$BIN_DIR/fsck.erofs" || ! _is_real_elf "$BIN_DIR/mkfs.erofs"; then

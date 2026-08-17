@@ -106,6 +106,33 @@ VERIFY_ODIN_PACKAGES()
         LOG_STEP_OUT
     done < <(find "$ODIN_DIR/${MODEL}_${CSC}" -type f -name "*.md5")
 }
+
+# Samsung FUS resets large transfers; samloader resumes from a partial *.enc4.
+DOWNLOAD_FIRMWARE_BUNDLE()
+{
+    local DEST="$1"
+    local ATTEMPT=1
+    local MAX_ATTEMPTS=12
+    local DELAY=8
+
+    mkdir -p "$DEST"
+    while [ "$ATTEMPT" -le "$MAX_ATTEMPTS" ]; do
+        LOG "- Downloading firmware (attempt ${ATTEMPT}/${MAX_ATTEMPTS})..."
+        if (
+            cd "$OUT_DIR" || exit 1
+            # Keep tqdm/resume messages on the TTY; samloader auto-resumes if *.enc4 exists
+            samloader -m "$MODEL" -r "$CSC" -i "$IMEI" -s "$SERIAL_NO" download -O "$DEST"
+        ); then
+            return 0
+        fi
+        LOG "\033[0;33m! Connection dropped — keeping the partial file and retrying in ${DELAY}s\033[0m"
+        sleep "$DELAY"
+        ATTEMPT=$((ATTEMPT + 1))
+        DELAY=$((DELAY + 8))
+        [ "$DELAY" -gt 60 ] && DELAY=60
+    done
+    return 1
+}
 # ]
 
 PREPARE_SCRIPT "$@"
@@ -149,13 +176,14 @@ for i in "${FIRMWARES[@]}"; do
     fi
 
     LOG "- Downloading firmware..."
-    [ -f "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" ] && rm -rf "$ODIN_DIR/${MODEL}_${CSC}"
-    mkdir -p "$ODIN_DIR/${MODEL}_${CSC}"
-    # Anan's samloader stores its logs in the current working directory, let's move into OUT_DIR just for this time
-    (
-    cd "$OUT_DIR" || exit 1
-    samloader -m "$MODEL" -r "$CSC" -i "$IMEI" -s "$SERIAL_NO" download -O "$ODIN_DIR/${MODEL}_${CSC}" 1> /dev/null || exit 1
-    )
+    # Only wipe a completed download (force). Keep partial *.enc4 so FUS Range-resume works.
+    if [ -f "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" ]; then
+        rm -rf "$ODIN_DIR/${MODEL}_${CSC}"
+    fi
+    if ! DOWNLOAD_FIRMWARE_BUNDLE "$ODIN_DIR/${MODEL}_${CSC}"; then
+        LOG "\033[0;31m! Download failed after retries (partial file kept in $ODIN_DIR/${MODEL}_${CSC})\033[0m"
+        exit 1
+    fi
 
     ZIP_FILE="$(find "$ODIN_DIR/${MODEL}_${CSC}" -name "*.zip" | sort -r | head -n 1)"
     if [ ! "$ZIP_FILE" ] || [ ! -f "$ZIP_FILE" ]; then

@@ -1,0 +1,8 @@
+# NPL wallpaper picker order (Sagarmatha first — matches NPL branding)
+sagarmatha_everest_zone.jpg
+dodhara_chadani_mahakali_bridge.jpg
+everest_himalayas.jpg
+sunset_everest.jpg
+gokyo_lake.jpg
+ama_dablam.jpg
+himalayas_nasa.jpg

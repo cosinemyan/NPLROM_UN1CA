@@ -233,7 +233,13 @@ print_steps() {
   echo ""
   echo -e "  $(step_status $STEP_DEPS)    ${BOLD}Step 0${RESET}  Check & install dependencies"
   echo -e "  $(step_status $STEP_ENV)    ${BOLD}Step 1${RESET}  Select target device & init environment"
-  echo -e "  $(step_status $STEP_FW_DOWNLOADED)    ${BOLD}Step 2${RESET}  Download stock firmware"
+  local step2_extra=""
+  if [ -n "${SOURCE_FIRMWARE:-}" ] && [ -n "$(fw_partial_enc4 "$SOURCE_FIRMWARE" 2>/dev/null)" ]; then
+    step2_extra="  ${YELLOW}(partial — resume)${RESET}"
+  elif [ -n "${TARGET_FIRMWARE:-}" ] && [ -n "$(fw_partial_enc4 "$TARGET_FIRMWARE" 2>/dev/null)" ]; then
+    step2_extra="  ${YELLOW}(partial — resume)${RESET}"
+  fi
+  echo -e "  $(step_status $STEP_FW_DOWNLOADED)    ${BOLD}Step 2${RESET}  Download stock firmware${step2_extra}"
   echo -e "  $(step_status $STEP_FW_EXTRACTED)    ${BOLD}Step 3${RESET}  Extract firmware"
   echo -e "  $(step_status $STEP_ROM_BUILT)    ${BOLD}Step 4${RESET}  Build ROM ZIP"
   echo ""
@@ -245,13 +251,121 @@ press_enter() {
   read -r
 }
 
+latest_flashable_zip() {
+  find "$OUT_DIR" -maxdepth 1 -type f -name 'NPL_*-sign_*.zip' ! -name '*target_files*' \
+    -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-
+}
+
+latest_target_files_zip() {
+  find "$OUT_DIR" -maxdepth 1 -type f -name '*-target_files.zip' \
+    -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-
+}
+
+print_build_artifacts() {
+  local codename="${SELECTED_TARGET:-}"
+  local flash tf wp wp_size flash_size tf_size
+
+  flash="$(latest_flashable_zip)"
+  tf="$(latest_target_files_zip)"
+  if [ -n "$codename" ]; then
+    wp="$OUT_DIR/target/$codename/work_dir/system/system/priv-app/wallpaper-res/wallpaper-res.apk"
+  fi
+
+  echo ""
+  echo -e "  ${BOLD}Output files${RESET}"
+  echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
+
+  if [ -n "$flash" ] && [ -f "$flash" ]; then
+    flash_size="$(du -h "$flash" 2>/dev/null | awk '{print $1}')"
+    echo -e "  ${GREEN}Share in community:${RESET} ${flash#$SRC_DIR/}"
+    echo -e "  ${DIM}${flash_size} — signed flashable ZIP for Odin / recovery${RESET}"
+  else
+    echo -e "  ${YELLOW}No flashable ZIP found in out/ yet.${RESET}"
+  fi
+
+  if [ -n "$tf" ] && [ -f "$tf" ]; then
+    tf_size="$(du -h "$tf" 2>/dev/null | awk '{print $1}')"
+    echo -e "  ${DIM}Dev / rebuild only:${RESET} ${tf#$SRC_DIR/} (${tf_size})"
+  fi
+
+  if [ -n "${wp:-}" ] && [ -f "$wp" ]; then
+    wp_size="$(du -h "$wp" 2>/dev/null | awk '{print $1}')"
+    echo -e "  ${CYAN}Wallpapers only:${RESET} ${wp#$SRC_DIR/}"
+    echo -e "  ${DIM}${wp_size} — replace stock wallpaper-res.apk (root + remount)${RESET}"
+  fi
+}
+
 run_step() {
   export SRC_DIR OUT_DIR FW_DIR TMP_DIR WORK_DIR APKTOOL_DIR TOOLS_DIR SECURITY_DIR ODIN_DIR
   export TARGET_CODENAME TARGET_MODEL TARGET_DEFAULT_CSC TARGET_OS_SINGLE_SYSTEM_IMAGE
   export SOURCE_FIRMWARE TARGET_FIRMWARE SOURCE_EXTRA_FIRMWARES TARGET_EXTRA_FIRMWARES
   export ROM_IS_OFFICIAL NPL_VERSION NPL_CODENAME NPL_MAINTAINER NPL_BUILD_TYPE FW_MODE
   echo -e "\n  ${CYAN}▶ Running:${RESET} ${BOLD}$*${RESET}\n"
+  local rc
+  set +e
   "$@"
+  rc=$?
+  set -e
+  return "$rc"
+}
+
+fw_partial_enc4() {
+  local p
+  p="$(fw_odin_path "$1")"
+  [ -d "$p" ] || return 0
+  find "$p" -maxdepth 1 -type f -name '*.enc4' 2>/dev/null | head -1 || true
+}
+
+fw_show_partial() {
+  local fw="$1" label="$2" f sz
+  f="$(fw_partial_enc4 "$fw")"
+  [ -n "$f" ] || return 1
+  sz="$(du -h "$f" 2>/dev/null | awk '{print $1}')"
+  echo -e "  ${YELLOW}⚠ ${label} partial download${RESET}  ${sz}  ${DIM}${f#$SRC_DIR/}${RESET}"
+  return 0
+}
+
+# Keep the TUI alive on FUS drops; resume from *.enc4 unless the user discards.
+download_until_done() {
+  local args=("$@")
+  while true; do
+    if run_step "$SRC_DIR/scripts/download_fw.sh" "${args[@]}"; then
+      return 0
+    fi
+    local filtered=() a
+    for a in "${args[@]}"; do
+      [[ "$a" == "-f" || "$a" == "--force" ]] && continue
+      filtered+=("$a")
+    done
+    args=("${filtered[@]}")
+
+    echo ""
+    echo -e "  ${YELLOW}Download interrupted (Samsung CDN reset). The menu is still running.${RESET}"
+    local f
+    f="$(find "$ODIN_DIR" -maxdepth 2 -type f -name '*.enc4' 2>/dev/null | head -1)"
+    if [ -n "$f" ]; then
+      echo -e "  ${DIM}$(du -h "$f" | awk '{print $1}') already on disk — resume will continue, not restart.${RESET}"
+    fi
+    echo ""
+    echo -e "  ${BOLD}[1]${RESET}  Resume now  ${DIM}(default)${RESET}"
+    echo -e "  ${BOLD}[2]${RESET}  Back to menu"
+    echo -e "  ${BOLD}[3]${RESET}  Discard partial file and start over"
+    echo ""
+    echo -e -n "  ${BOLD}Choice [1]:${RESET} "
+    local c
+    read -r c
+    case "$c" in
+      2)
+        echo -e "\n  ${DIM}Partial download kept. Open Step 2 again and choose Resume.${RESET}"
+        return 1
+        ;;
+      3)
+        find "$ODIN_DIR" -maxdepth 2 -type f -name '*.enc4' -delete 2>/dev/null || true
+        echo -e "  ${YELLOW}Partial file removed.${RESET}"
+        ;;
+      *) ;;
+    esac
+  done
 }
 
 
@@ -331,7 +445,15 @@ step_check_deps() {
   fi
 
   echo -e "\n  ${CYAN}▶ ./tools/setup.sh${RESET}"
+  set +e
   "$SRC_DIR/tools/setup.sh"
+  local setup_rc=$?
+  set -e
+  if [ "$setup_rc" -ne 0 ]; then
+    echo -e "\n  ${YELLOW}setup.sh exited ${setup_rc} — some tools may still be usable. Menu stays open.${RESET}"
+    press_enter
+    return
+  fi
 
   echo -e "\n  ${GREEN}✔ Dependencies ready.${RESET}"
   STEP_DEPS=true
@@ -444,6 +566,7 @@ step_download_fw() {
     echo -e "  ${GREEN}✔ SOURCE Odin present${RESET}  $(fw_odin_path "$SOURCE_FIRMWARE" | sed "s|$SRC_DIR/||")"
   else
     echo -e "  ${YELLOW}○ SOURCE Odin missing${RESET}  $(cut -d/ -f1-2 <<< "$SOURCE_FIRMWARE" | tr / _)"
+    fw_show_partial "$SOURCE_FIRMWARE" "SOURCE" || true
   fi
   if [[ "$SOURCE_FIRMWARE" == "$TARGET_FIRMWARE" ]]; then
     echo -e "  ${DIM}(TARGET same as SOURCE — one package set)${RESET}"
@@ -451,20 +574,38 @@ step_download_fw() {
     echo -e "  ${GREEN}✔ TARGET Odin present${RESET}  $(fw_odin_path "$TARGET_FIRMWARE" | sed "s|$SRC_DIR/||")"
   else
     echo -e "  ${YELLOW}○ TARGET Odin missing${RESET}  $(cut -d/ -f1-2 <<< "$TARGET_FIRMWARE" | tr / _)"
+    fw_show_partial "$TARGET_FIRMWARE" "TARGET" || true
   fi
   echo ""
 
-  echo -e "  ${BOLD}[1]${RESET}  Download what this build needs  ${DIM}(SOURCE + TARGET from config)${RESET}"
+  local has_partial=false
+  [ -n "$(fw_partial_enc4 "$SOURCE_FIRMWARE")" ] && has_partial=true
+  if [[ "$SOURCE_FIRMWARE" != "$TARGET_FIRMWARE" ]] && [ -n "$(fw_partial_enc4 "$TARGET_FIRMWARE")" ]; then
+    has_partial=true
+  fi
+
+  if $has_partial; then
+    echo -e "  ${BOLD}[1]${RESET}  Resume interrupted download  ${DIM}(default — continue from partial *.enc4)${RESET}"
+  else
+    echo -e "  ${BOLD}[1]${RESET}  Download what this build needs  ${DIM}(SOURCE + TARGET from config)${RESET}"
+  fi
   echo -e "  ${BOLD}[2]${RESET}  Download all S23 models  ${DIM}(dm1q + dm2q + dm3q — max multi-device cache)${RESET}"
-  echo -e "  ${BOLD}[3]${RESET}  Force re-download for this build  ${DIM}(--force)${RESET}"
+  echo -e "  ${BOLD}[3]${RESET}  Force re-download for this build  ${DIM}(deletes completed packages; keeps partial unless you discard)${RESET}"
   if $src_ok && { [[ "$SOURCE_FIRMWARE" == "$TARGET_FIRMWARE" ]] || $tgt_ok; }; then
     echo -e "  ${BOLD}[4]${RESET}  Skip — keep existing packages"
   fi
+  echo -e "  ${BOLD}[b]${RESET}  Back to menu"
   echo ""
-  echo -e -n "  ${BOLD}Choice [1]:${RESET} "
+  local default_choice="1"
+  echo -e -n "  ${BOLD}Choice [${default_choice}]:${RESET} "
   read -r dl_choice
+  [ -z "$dl_choice" ] && dl_choice="$default_choice"
 
+  local ok=false
   case "$dl_choice" in
+    b|B)
+      return
+      ;;
     4)
       if $src_ok && { [[ "$SOURCE_FIRMWARE" == "$TARGET_FIRMWARE" ]] || $tgt_ok; }; then
         STEP_FW_DOWNLOADED=true
@@ -474,14 +615,13 @@ step_download_fw() {
         return
       fi
       echo -e "  ${YELLOW}Packages incomplete — downloading what is needed.${RESET}"
-      run_step "$SRC_DIR/scripts/download_fw.sh"
+      download_until_done && ok=true
       ;;
     2)
       echo -e "\n  ${CYAN}▶ Downloading QSSI base + every target firmware…${RESET}"
-      # Base from qssi
       local base_fw
       base_fw="$(grep '^SOURCE_FIRMWARE=' "$SRC_DIR/unica/configs/qssi.sh" | head -1 | cut -d= -f2- | tr -d '"')"
-      run_step "$SRC_DIR/scripts/download_fw.sh" --ignore-source --ignore-target "$base_fw" || true
+      download_until_done --ignore-source --ignore-target "$base_fw" || true
       local t cfg tf
       for t in dm1q dm2q dm3q; do
         cfg="$SRC_DIR/target/$t/config.sh"
@@ -489,19 +629,28 @@ step_download_fw() {
         tf="$(bash -c "source '$cfg' >/dev/null 2>&1; echo \"\$TARGET_FIRMWARE\"")"
         [ -n "$tf" ] || continue
         echo -e "\n  ${CYAN}▶ $t → $tf${RESET}"
-        run_step "$SRC_DIR/scripts/download_fw.sh" --ignore-source --ignore-target "$tf" || true
+        download_until_done --ignore-source --ignore-target "$tf" || true
       done
+      fw_has_odin "$SOURCE_FIRMWARE" && { [[ "$SOURCE_FIRMWARE" == "$TARGET_FIRMWARE" ]] || fw_has_odin "$TARGET_FIRMWARE"; } && ok=true
       ;;
     3)
-      run_step "$SRC_DIR/scripts/download_fw.sh" -f
+      download_until_done -f && ok=true
       ;;
     *)
-      run_step "$SRC_DIR/scripts/download_fw.sh"
+      download_until_done && ok=true
       ;;
   esac
 
-  STEP_FW_DOWNLOADED=true
-  save_state
+  if $ok && fw_has_odin "$SOURCE_FIRMWARE" && \
+     { [[ "$SOURCE_FIRMWARE" == "$TARGET_FIRMWARE" ]] || fw_has_odin "$TARGET_FIRMWARE"; }; then
+    STEP_FW_DOWNLOADED=true
+    save_state
+    echo -e "\n  ${GREEN}✔ Firmware ready.${RESET}"
+  else
+    STEP_FW_DOWNLOADED=false
+    save_state
+    echo -e "\n  ${YELLOW}Firmware not complete yet. Use Step 2 → Resume when you are ready.${RESET}"
+  fi
   press_enter
 }
 
@@ -560,11 +709,19 @@ step_extract_fw() {
       press_enter
       return
     fi
-    run_step "$SRC_DIR/scripts/extract_fw.sh" -f
+    run_step "$SRC_DIR/scripts/extract_fw.sh" -f || {
+      echo -e "\n  ${YELLOW}Extract failed. Menu stays open — fix and retry Step 3.${RESET}"
+      press_enter
+      return
+    }
   else
     [ -L "$src_path" ] && rm -f "$src_path"
     [ -L "$tgt_path" ] && rm -f "$tgt_path"
-    run_step "$SRC_DIR/scripts/extract_fw.sh"
+    run_step "$SRC_DIR/scripts/extract_fw.sh" || {
+      echo -e "\n  ${YELLOW}Extract failed. Menu stays open — fix and retry Step 3.${RESET}"
+      press_enter
+      return
+    }
   fi
 
   STEP_FW_DOWNLOADED=true
@@ -574,57 +731,95 @@ step_extract_fw() {
 }
 
 step_build_rom() {
-  clear_screen
-  print_header
-  echo -e "  ${BOLD}Step 4: Build ROM ZIP${RESET}"
-  echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
-  echo ""
+  local build_log="$OUT_DIR/.npl_last_build.log"
+  local build_rc=0
 
-  if ! $STEP_FW_EXTRACTED; then
-    echo -e "  ${RED}⚠  Please complete Step 3 first.${RESET}"
-    press_enter
+  while true; do
+    clear_screen
+    print_header
+    echo -e "  ${BOLD}Step 4: Build ROM ZIP${RESET}"
+    echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
+    echo ""
+
+    if ! $STEP_FW_EXTRACTED; then
+      echo -e "  ${RED}⚠  Please complete Step 3 first.${RESET}"
+      press_enter
+      return
+    fi
+
+    if [ -z "${SELECTED_TARGET:-}" ]; then
+      echo -e "  ${RED}⚠  Please complete Step 1 first.${RESET}"
+      press_enter
+      return
+    fi
+
+    # Ensure buildenv vars (WORK_DIR, APKTOOL_DIR, PATH→out/tools) are loaded
+    if ! init_target "$SELECTED_TARGET"; then
+      echo -e "  ${RED}buildenv failed${RESET}"
+      press_enter
+      return
+    fi
+
+    echo -e "  ${DIM}FW mode=${FW_MODE}  SOURCE=${SOURCE_FIRMWARE}${RESET}"
+    echo -e "  ${DIM}TARGET=${TARGET_FIRMWARE}${RESET}"
+    echo ""
+    echo -e "  ${BOLD}[1]${RESET}  Normal build  ${DIM}(make_rom -z; skips if no skin/target changes)${RESET}"
+    echo -e "  ${BOLD}[2]${RESET}  Force rebuild  ${DIM}(-f -z; wipes apktool + .completed)${RESET}"
+    echo -e "  ${BOLD}[3]${RESET}  Wipe apktool only, then force rebuild"
+    echo -e "  ${BOLD}[0]${RESET}  Back to main menu"
+    echo ""
+    echo -e -n "  ${BOLD}Choice [1]:${RESET} "
+    read -r build_choice
+
+    case "$build_choice" in
+      0|q|Q|b|B) return ;;
+    esac
+
+    local flags=("-z")
+    case "$build_choice" in
+      2) flags=("-f" "-z") ;;
+      3)
+        echo -e "\n  ${CYAN}▶ rm -rf out/target/${SELECTED_TARGET}/apktool …/.completed${RESET}"
+        rm -rf "$OUT_DIR/target/$SELECTED_TARGET/apktool"
+        rm -f "$OUT_DIR/target/$SELECTED_TARGET/work_dir/.completed"
+        flags=("-f" "-z")
+        ;;
+    esac
+
+    echo -e "\n  ${CYAN}▶ source buildenv.sh ${SELECTED_TARGET} && npl make_rom ${flags[*]}${RESET}"
+    echo -e "  ${DIM}Logging to out/.npl_last_build.log${RESET}\n"
+
+    mkdir -p "$OUT_DIR"
+    export SRC_DIR OUT_DIR FW_DIR TMP_DIR WORK_DIR APKTOOL_DIR TOOLS_DIR SECURITY_DIR ODIN_DIR
+    export TARGET_CODENAME TARGET_MODEL TARGET_DEFAULT_CSC TARGET_OS_SINGLE_SYSTEM_IMAGE
+    export SOURCE_FIRMWARE TARGET_FIRMWARE SOURCE_EXTRA_FIRMWARES TARGET_EXTRA_FIRMWARES
+    export ROM_IS_OFFICIAL NPL_VERSION NPL_CODENAME NPL_MAINTAINER NPL_BUILD_TYPE FW_MODE
+
+    set +e
+    "$SRC_DIR/scripts/make_rom.sh" "${flags[@]}" 2>&1 | tee "$build_log"
+    build_rc="${PIPESTATUS[0]}"
+    set -e
+
+    echo ""
+    if [ "$build_rc" -eq 0 ]; then
+      STEP_ROM_BUILT=true
+      save_state
+      echo -e "  ${GREEN}✔ ROM build finished.${RESET}"
+    else
+      echo -e "  ${YELLOW}Build failed. Log saved — fix errors above, then retry.${RESET}"
+    fi
+
+    print_build_artifacts
+    echo -e "  ${DIM}Full log: out/.npl_last_build.log${RESET}"
+    echo ""
+    echo -e "  ${BOLD}[Enter]${RESET}  Return to main menu"
+    echo -e "  ${BOLD}[b]${RESET}     Build again (stay on Step 4)"
+    echo ""
+    echo -e -n "  ${BOLD}Choice:${RESET} "
+    read -r post_choice
+    [[ "$post_choice" == "b" || "$post_choice" == "B" ]] && continue
     return
-  fi
-
-  if [ -z "${SELECTED_TARGET:-}" ]; then
-    echo -e "  ${RED}⚠  Please complete Step 1 first.${RESET}"
-    press_enter
-    return
-  fi
-
-  # Ensure buildenv vars (WORK_DIR, APKTOOL_DIR, PATH→out/tools) are loaded
-  if ! init_target "$SELECTED_TARGET"; then
-    echo -e "  ${RED}buildenv failed${RESET}"
-    press_enter
-    return
-  fi
-
-  echo -e "  ${DIM}FW mode=${FW_MODE}  SOURCE=${SOURCE_FIRMWARE}${RESET}"
-  echo -e "  ${DIM}TARGET=${TARGET_FIRMWARE}${RESET}"
-  echo ""
-  echo -e "  ${BOLD}[1]${RESET}  Normal build  ${DIM}(make_rom -z; skips if no skin/target changes)${RESET}"
-  echo -e "  ${BOLD}[2]${RESET}  Force rebuild  ${DIM}(-f -z; wipes apktool + .completed)${RESET}"
-  echo -e "  ${BOLD}[3]${RESET}  Wipe apktool only, then force rebuild"
-  echo ""
-  echo -e -n "  ${BOLD}Choice [1]:${RESET} "
-  read -r build_choice
-
-  local flags=("-z")
-  case "$build_choice" in
-    2) flags=("-f" "-z") ;;
-    3)
-      echo -e "\n  ${CYAN}▶ rm -rf out/target/${SELECTED_TARGET}/apktool …/.completed${RESET}"
-      rm -rf "$OUT_DIR/target/$SELECTED_TARGET/apktool"
-      rm -f "$OUT_DIR/target/$SELECTED_TARGET/work_dir/.completed"
-      flags=("-f" "-z")
-      ;;
-  esac
-
-  echo -e "\n  ${CYAN}▶ source buildenv.sh ${SELECTED_TARGET} && npl make_rom ${flags[*]}${RESET}\n"
-  run_step "$SRC_DIR/scripts/make_rom.sh" "${flags[@]}"
-  STEP_ROM_BUILT=true
-  save_state
-  press_enter
+  done
 }
 
 

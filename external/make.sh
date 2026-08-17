@@ -146,6 +146,12 @@ APKTOOL_EXEC=(
     "apktool" "apktool.jar"
 )
 CHECK_TOOLS "${APKTOOL_EXEC[@]}" && APKTOOL=false
+# Stock iBotPeaches 3.x has no -srp; UN1CA needs the aapt-optimization patch.
+if ! $APKTOOL && [ -x "$TOOLS_DIR/bin/apktool" ]; then
+    if ! "$TOOLS_DIR/bin/apktool" b --help 2>&1 | grep -q 'shorten-res-paths'; then
+        APKTOOL=true
+    fi
+fi
 EROFS_UTILS_EXEC=(
     "dump.erofs" "extract.erofs" "fsck.erofs" "fuse.erofs" "mkfs.erofs"
 )
@@ -162,6 +168,12 @@ SIGNAPK_EXEC=(
     "signapk" "signapk.jar"
 )
 CHECK_TOOLS "${SIGNAPK_EXEC[@]}" && SIGNAPK=false
+# AOSP prebuilt stub (~3MB) cannot sign APEX (missing conscrypt JNI).
+if ! $SIGNAPK && [ -f "$TOOLS_DIR/bin/signapk.jar" ]; then
+    if [ "$(stat -c%s "$TOOLS_DIR/bin/signapk.jar")" -le 8000000 ]; then
+        SIGNAPK=true
+    fi
+fi
 
 if [[ "$1" == "--check-tools" ]]; then
     if ! $ANDROID_TOOLS && \
@@ -203,10 +215,13 @@ if $ANDROID_TOOLS; then
     BUILD "android-tools" "$SRC_DIR/external/android-tools" "${ANDROID_TOOLS_CMDS[@]}"
 fi
 if $APKTOOL; then
+    # shellcheck source=/dev/null
+    source "$SRC_DIR/tools/ensure_build_jdk.sh"
+
     APKTOOL_CMDS=(
         "git reset --hard"
         "git apply \"$SRC_DIR/external/patches/apktool/0001-feat-support-aapt-optimization.patch\""
-        "./gradlew build shadowJar"
+        "./gradlew shadowJar -x test --no-daemon"
         "cp -a \"scripts/linux/apktool\" \"$TOOLS_DIR/bin\""
         "cp -a \"brut.apktool/apktool-cli/build/libs/apktool-cli.jar\" \"$TOOLS_DIR/bin/apktool.jar\""
     )
@@ -239,9 +254,23 @@ if $SAMLOADER; then
     BUILD "samloader" "$SRC_DIR/external/samloader" "${SAMLOADER_CMDS[@]}"
 fi
 if $SIGNAPK; then
+    # Fedora often has java → JRE while javac lives in a different JAVA_HOME.
+    # shellcheck source=/dev/null
+    source "$SRC_DIR/tools/ensure_build_jdk.sh"
+    if [ ! -x "${JAVA_HOME:-}/bin/javac" ]; then
+        for _jdk in /usr/lib/jvm/java /usr/lib/jvm/java-latest-openjdk /usr/lib/jvm/java-21-openjdk /usr/lib/jvm/java-17-openjdk; do
+            if [ -x "$_jdk/bin/javac" ]; then
+                export JAVA_HOME="$_jdk"
+                export PATH="$JAVA_HOME/bin:$PATH"
+                break
+            fi
+        done
+        unset _jdk
+    fi
+
     SIGNAPK_CMDS=(
-        "./gradlew build"
-        "cp -a \"scripts/linux/signapk\" \"$TOOLS_DIR/bin\""
+        "./gradlew build --init-script \"$SRC_DIR/tools/signapk-release21.init.gradle\""
+        "cp -a \"$SRC_DIR/tools/signapk\" \"$TOOLS_DIR/bin/signapk\""
         "cp -a \"signapk/build/libs/signapk-all.jar\" \"$TOOLS_DIR/bin/signapk.jar\""
     )
 

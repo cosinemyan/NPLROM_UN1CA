@@ -18,6 +18,12 @@ FILE=""
 INPUT_FILE=""
 OUTPUT_PATH=""
 
+# UN1CA patches apktool with -srp (shorten resource paths). Stock 3.x does not.
+APKTOOL_SUPPORTS_SRP=false
+if apktool b --help 2>&1 | grep -q 'shorten-res-paths'; then
+    APKTOOL_SUPPORTS_SRP=true
+fi
+
 THREAD_COUNT=$(awk -v max="$(nproc)" '/MemTotal/ {
   tc = int(($2 + 1048575) / 2097152);
   print (tc < 1 ? 1 : (tc > max ? max : tc));
@@ -81,13 +87,12 @@ BUILD()
     # kept expanded because its known working CHN build uses expanded res paths.
     find "$OUTPUT_PATH" -type f \( -name "*.orig" -o -name "*.rej" \) -delete
     REBALANCE_DEX
-    if $SHORTEN_RESOURCE_PATHS; then
-        # -srp needs UN1CA's apktool patch; stock apktool 3.x falls back without it.
-        if ! EVAL "apktool b -j \"$THREAD_COUNT\" -p \"$FRAMEWORK_DIR\" -srp \"$OUTPUT_PATH\""; then
-            LOGW "apktool -srp unsupported; rebuilding without resource path shortening"
-            EVAL "apktool b -j \"$THREAD_COUNT\" -p \"$FRAMEWORK_DIR\" \"$OUTPUT_PATH\"" || exit 1
-        fi
+    if $SHORTEN_RESOURCE_PATHS && $APKTOOL_SUPPORTS_SRP; then
+        EVAL "apktool b -j \"$THREAD_COUNT\" -p \"$FRAMEWORK_DIR\" -srp \"$OUTPUT_PATH\"" || exit 1
     else
+        if $SHORTEN_RESOURCE_PATHS && ! $APKTOOL_SUPPORTS_SRP; then
+            LOGW "apktool has no -srp (need UN1CA patched apktool); building without resource path shortening"
+        fi
         EVAL "apktool b -j \"$THREAD_COUNT\" -p \"$FRAMEWORK_DIR\" \"$OUTPUT_PATH\"" || exit 1
     fi
 
