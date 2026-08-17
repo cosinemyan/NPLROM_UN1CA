@@ -267,7 +267,7 @@ step_check_deps() {
   local all_ok=true
 
   # Host packages (apktool comes from out/tools — do not use system 2.10)
-  for pkg in java xxd curl unzip lz4 python3 rsync jq 7z bc clang cmake ffmpeg cwebp protoc getfattr git; do
+  for pkg in java xxd curl unzip lz4 python3 rsync jq 7z bc clang cmake ffmpeg cwebp protoc getfattr git pkg-config make; do
     if command -v "$pkg" &>/dev/null; then
       echo -e "  ${GREEN}✔${RESET}  $pkg"
     else
@@ -276,6 +276,19 @@ step_check_deps() {
       all_ok=false
     fi
   done
+
+  # cmake/pkg-config names (lz4 CLI ≠ liblz4 headers)
+  if command -v pkg-config &>/dev/null; then
+    for pc in liblz4 libbrotlicommon zlib; do
+      if pkg-config --exists "$pc" 2>/dev/null; then
+        echo -e "  ${GREEN}✔${RESET}  $pc (pkg-config)"
+      else
+        echo -e "  ${RED}✘${RESET}  $pc  ${DIM}(headers missing)${RESET}"
+        missing_apt+=("$pc")
+        all_ok=false
+      fi
+    done
+  fi
 
   echo ""
   if [ -x "$TOOLS_DIR/bin/apktool" ]; then
@@ -298,7 +311,7 @@ step_check_deps() {
   fi
 
   echo ""
-  echo -e "  ${DIM}This step runs: git submodule update --init --recursive && ./tools/setup.sh${RESET}"
+  echo -e "  ${DIM}This runs ./tools/setup.sh — host packages (dnf/apt/pacman/zypper), submodules, then UN1CA tools.${RESET}"
   echo ""
 
   if $all_ok; then
@@ -317,81 +330,7 @@ step_check_deps() {
     return
   fi
 
-  echo ""
-
-  if [ ${#missing_apt[@]} -gt 0 ]; then
-    local PM=""
-    if command -v dnf &>/dev/null; then
-      PM="dnf"
-    elif command -v apt-get &>/dev/null; then
-      PM="apt-get"
-    elif command -v apt &>/dev/null; then
-      PM="apt"
-    elif command -v yum &>/dev/null; then
-      PM="yum"
-    elif command -v pacman &>/dev/null; then
-      PM="pacman"
-    elif command -v zypper &>/dev/null; then
-      PM="zypper"
-    fi
-
-    local sys_pkgs=()
-    for p in "${missing_apt[@]}"; do
-      case "$PM" in
-        dnf|yum)
-          case "$p" in
-            java) sys_pkgs+=("java-latest-openjdk") ;;
-            xxd) sys_pkgs+=("vim-common") ;;
-            7z) sys_pkgs+=("p7zip") ;;
-            cwebp) sys_pkgs+=("libwebp-tools") ;;
-            protoc) sys_pkgs+=("protobuf-compiler") ;;
-            getfattr) sys_pkgs+=("attr") ;;
-            *) sys_pkgs+=("$p") ;;
-          esac
-          ;;
-        pacman)
-          case "$p" in
-            java) sys_pkgs+=("jdk-openjdk") ;;
-            xxd) sys_pkgs+=("vim") ;;
-            7z) sys_pkgs+=("p7zip") ;;
-            cwebp) sys_pkgs+=("libwebp") ;;
-            protoc) sys_pkgs+=("protobuf") ;;
-            getfattr) sys_pkgs+=("attr") ;;
-            *) sys_pkgs+=("$p") ;;
-          esac
-          ;;
-        *)
-          case "$p" in
-            java) sys_pkgs+=("openjdk-17-jdk") ;;
-            7z) sys_pkgs+=("p7zip-full") ;;
-            cwebp) sys_pkgs+=("webp") ;;
-            protoc) sys_pkgs+=("protobuf-compiler") ;;
-            getfattr) sys_pkgs+=("attr") ;;
-            *) sys_pkgs+=("$p") ;;
-          esac
-          ;;
-      esac
-    done
-
-    if [ -n "$PM" ] && [ ${#sys_pkgs[@]} -gt 0 ]; then
-      echo -e "  ${CYAN}▶ Installing system packages using $PM (sudo required)...${RESET}"
-      case "$PM" in
-        pacman) sudo pacman -S --noconfirm "${sys_pkgs[@]}" ;;
-        zypper) sudo zypper install -y "${sys_pkgs[@]}" ;;
-        *) sudo "$PM" install -y "${sys_pkgs[@]}" ;;
-      esac
-    fi
-  fi
-
-  echo -e "\n  ${CYAN}▶ git submodule update --init --recursive${RESET}"
-  if [ -d "$SRC_DIR/.git" ]; then
-    git -C "$SRC_DIR" submodule update --init --recursive || \
-      echo -e "  ${YELLOW}⚠ submodule update failed — setup will use fast-path tools only${RESET}"
-  else
-    echo -e "  ${YELLOW}⚠ not a git checkout — skipping submodules${RESET}"
-  fi
-
-  echo -e "\n  ${CYAN}▶ ./tools/setup.sh  ${DIM}(apktool 3.x + mkuserimg → out/tools)${RESET}"
+  echo -e "\n  ${CYAN}▶ ./tools/setup.sh${RESET}"
   "$SRC_DIR/tools/setup.sh"
 
   echo -e "\n  ${GREEN}✔ Dependencies ready.${RESET}"
@@ -544,7 +483,7 @@ step_download_fw() {
       base_fw="$(grep '^SOURCE_FIRMWARE=' "$SRC_DIR/unica/configs/qssi.sh" | head -1 | cut -d= -f2- | tr -d '"')"
       run_step "$SRC_DIR/scripts/download_fw.sh" --ignore-source --ignore-target "$base_fw" || true
       local t cfg tf
-      for t in $(find "$SRC_DIR/target" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | sort); do
+      for t in dm1q dm2q dm3q; do
         cfg="$SRC_DIR/target/$t/config.sh"
         [ -f "$cfg" ] || continue
         tf="$(bash -c "source '$cfg' >/dev/null 2>&1; echo \"\$TARGET_FIRMWARE\"")"

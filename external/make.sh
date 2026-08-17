@@ -58,6 +58,18 @@ GET_CMAKE_FLAGS()
     fi
     FLAGS+="-DCMAKE_C_COMPILER=\"clang\" "
     FLAGS+="-DCMAKE_CXX_COMPILER=\"clang++\""
+    if [ -d "$SRC_DIR/tools/include" ]; then
+        FLAGS+=" -DCMAKE_CXX_FLAGS=\"-I$SRC_DIR/tools/include\""
+        FLAGS+=" -DCMAKE_C_FLAGS=\"-I$SRC_DIR/tools/include\""
+    fi
+    # clang+lld -static needs explicit -L for libc.a / libstdc++.a
+    local LFLAGS="" d gcc_lib
+    for d in /usr/lib64 /usr/lib /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu; do
+        [ -d "$d" ] && LFLAGS+=" -L$d"
+    done
+    gcc_lib="$(dirname "$(gcc -print-file-name=libgcc.a 2>/dev/null || true)")"
+    [ -n "$gcc_lib" ] && [ -d "$gcc_lib" ] && LFLAGS+=" -L$gcc_lib"
+    [ -n "$LFLAGS" ] && FLAGS+=" -DCMAKE_EXE_LINKER_FLAGS=\"${LFLAGS# }\""
 
     echo "$FLAGS"
 }

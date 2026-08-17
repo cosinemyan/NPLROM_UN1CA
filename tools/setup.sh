@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# NPL toolchain bootstrap (UN1CA-compatible layout under out/tools).
-# Prefer: scripts/build_dependencies.sh after git submodule update --init --recursive
-# This script is a fast path for apktool 3.x + mkuserimg when submodules are not built yet.
+# NPL toolchain bootstrap (UN1CA layout under out/tools).
+# One entry: host packages (any common Linux) → submodules → build_dependencies → fast-path leftovers.
+# Skip host packages with: SKIP_HOST_PACKAGES=1 ./tools/setup.sh
 
 set -euo pipefail
 
@@ -11,31 +11,161 @@ OUT_TOOLS="$PROJECT_ROOT/out/tools"
 BIN_DIR="$OUT_TOOLS/bin"
 LIB_DIR="$OUT_TOOLS/lib"
 VENV_DIR="$OUT_TOOLS/venv"
-
 APKTOOL_VERSION="3.0.2"
+
+_sudo() {
+  if [ "$(id -u)" -eq 0 ]; then
+    "$@"
+  elif command -v sudo >/dev/null; then
+    sudo "$@"
+  else
+    echo "[!] Need root (or sudo) to install: $*" >&2
+    return 1
+  fi
+}
+
+detect_pm() {
+  if command -v dnf >/dev/null; then echo dnf
+  elif command -v apt-get >/dev/null; then echo apt-get
+  elif command -v apt >/dev/null; then echo apt
+  elif command -v pacman >/dev/null; then echo pacman
+  elif command -v zypper >/dev/null; then echo zypper
+  elif command -v yum >/dev/null; then echo yum
+  else echo ""
+  fi
+}
+
+host_pkgs_needed() {
+  # Return 0 if android-tools cmake deps (or general UN1CA cmds) are missing
+  local cmd pc
+  for cmd in java clang cmake make git curl unzip python3 pkg-config protoc rsync jq xxd lz4 7z bc ffmpeg cwebp getfattr ld.lld; do
+    command -v "$cmd" >/dev/null || return 0
+  done
+  command -v pkg-config >/dev/null || return 0
+  for pc in liblz4 libbrotlicommon libbrotlidec libbrotlienc libpcre2-8 libzstd zlib; do
+    pkg-config --exists "$pc" 2>/dev/null || return 0
+  done
+  [ -f /usr/include/gtest/gtest_prod.h ] || [ -f /usr/src/googletest/googletest/include/gtest/gtest_prod.h ] || \
+    [ -f "$SCRIPT_DIR/include/gtest/gtest_prod.h" ] || return 0
+  # erofs-utils links -static; Fedora splits these into glibc-static / libstdc++-static
+  { [ -f /usr/lib64/libc.a ] || [ -f /usr/lib/libc.a ] || [ -f /usr/lib/x86_64-linux-gnu/libc.a ]; } || return 0
+  local _stdcpp
+  _stdcpp="$(gcc -print-file-name=libstdc++.a 2>/dev/null || true)"
+  [ -n "$_stdcpp" ] && [ -f "$_stdcpp" ] || return 0
+  return 1
+}
+
+install_host_packages() {
+  local PM
+  PM="$(detect_pm)"
+  if [ -z "$PM" ]; then
+    echo "[!] Unknown distro — install clang cmake java git lz4-devel brotli-devel pcre2-devel libzstd-devel protobuf yourself."
+    return 1
+  fi
+
+  echo "[>] Installing host packages with $PM (sudo if needed)..."
+  case "$PM" in
+    dnf|yum)
+      _sudo "$PM" install -y \
+        java-latest-openjdk java-latest-openjdk-devel \
+        vim-common curl unzip lz4 python3 python3-pip python3-virtualenv \
+        rsync jq p7zip bc clang cmake make git ffmpeg libwebp-tools \
+        protobuf-compiler protobuf-devel attr pkgconf-pkg-config \
+        lz4-devel brotli-devel zlib-devel pcre2-devel libzstd-devel bzip2-devel \
+        gtest-devel lld glibc-static libstdc++-static gcc-c++ \
+        file zip zstd perl brotli
+      ;;
+    apt-get|apt)
+      _sudo "$PM" update -y || true
+      _sudo "$PM" install -y \
+        openjdk-17-jdk xxd curl unzip lz4 python3 python3-pip python3-venv \
+        rsync jq p7zip-full bc clang cmake make git ffmpeg webp \
+        protobuf-compiler libprotobuf-dev attr pkg-config \
+        liblz4-dev libbrotli-dev zlib1g-dev libpcre2-dev libzstd-dev libbz2-dev \
+        libgtest-dev lld g++ libc6-dev \
+        file zip zstd perl brotli
+      ;;
+    pacman)
+      _sudo pacman -Sy --noconfirm --needed \
+        jdk-openjdk vim curl unzip lz4 python python-pip python-virtualenv \
+        rsync jq p7zip bc clang cmake make git ffmpeg libwebp \
+        protobuf attr pkgconf pcre2 zstd bzip2 zlib brotli gtest lld gcc \
+        glibc fuse3 file zip perl
+      ;;
+    zypper)
+      _sudo zypper install -y \
+        java-17-openjdk-devel vim curl unzip lz4 python3 python3-pip python3-virtualenv \
+        rsync jq p7zip bc clang cmake make git ffmpeg libwebp-tools \
+        protobuf-devel pkg-config liblz4-devel libbrotli-devel zlib-devel \
+        pcre2-devel libzstd-devel libbz2-devel gtest lld gcc-c++ glibc-devel-static libstdc++-devel \
+        attr file zip zstd perl brotli
+      ;;
+  esac
+}
 
 echo "=========================================="
 echo " Setting up NPL ROM Builder Toolchain..."
-echo " (tools live in out/tools — same as UN1CA)"
+echo " (host packages + out/tools — same as UN1CA)"
 echo "=========================================="
 
 mkdir -p "$BIN_DIR" "$LIB_DIR"
 
-# Prefer full UN1CA-style build when submodules exist
-if [ -f "$PROJECT_ROOT/scripts/build_dependencies.sh" ]; then
-  if [ -d "$PROJECT_ROOT/external/android-tools/.git" ] || [ -f "$PROJECT_ROOT/external/android-tools/CMakeLists.txt" ]; then
-    echo "[>] Submodules present — running build_dependencies.sh..."
-    bash "$PROJECT_ROOT/scripts/build_dependencies.sh" || \
-      echo "[!] build_dependencies failed; continuing with fast-path tools."
+if [ "${SKIP_HOST_PACKAGES:-0}" != "1" ]; then
+  if host_pkgs_needed; then
+    install_host_packages || echo "[!] Host package install failed — cmake may still fail."
   else
-    echo "[!] external/* submodules not initialized."
-    echo "    Run: git submodule update --init --recursive"
-    echo "    Then: scripts/build_dependencies.sh"
-    echo "    Continuing with apktool + mkuserimg fast path..."
+    echo "[✓] Host packages already present"
+  fi
+else
+  echo "[>] SKIP_HOST_PACKAGES=1 — not installing distro packages"
+fi
+
+if git -C "$PROJECT_ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  echo "[>] git submodule update --init --recursive"
+  git -C "$PROJECT_ROOT" submodule update --init --recursive || \
+    echo "[!] submodule update failed — continuing"
+fi
+
+export SRC_DIR="${SRC_DIR:-$PROJECT_ROOT}"
+export OUT_DIR="${OUT_DIR:-$PROJECT_ROOT/out}"
+export TOOLS_DIR="${TOOLS_DIR:-$OUT_TOOLS}"
+if [[ ":$PATH:" != *":$BIN_DIR:"* ]]; then
+  export PATH="$BIN_DIR:$PATH"
+fi
+
+# zip_writer.h includes <gtest/gtest_prod.h> — use bundled stub + boringssl googletest
+GTEST_INCS="$SCRIPT_DIR/include"
+_BSSL_GTEST="$PROJECT_ROOT/external/android-tools/vendor/boringssl/third_party/googletest/googletest/include"
+[ -d "$_BSSL_GTEST" ] && GTEST_INCS="$GTEST_INCS:$_BSSL_GTEST"
+export CPLUS_INCLUDE_PATH="$GTEST_INCS${CPLUS_INCLUDE_PATH:+:$CPLUS_INCLUDE_PATH}"
+export C_INCLUDE_PATH="$GTEST_INCS${C_INCLUDE_PATH:+:$C_INCLUDE_PATH}"
+export CXXFLAGS="-I$SCRIPT_DIR/include ${CXXFLAGS:-}"
+export CMAKE_CXX_FLAGS="-I$SCRIPT_DIR/include ${CMAKE_CXX_FLAGS:-}"
+
+# clang+lld -static looks for -lc/-lm/-lstdc++ via LIBRARY_PATH
+_gcc_lib="$(dirname "$(gcc -print-file-name=libgcc.a 2>/dev/null || true)")"
+export LIBRARY_PATH="/usr/lib64:/usr/lib:/usr/lib/x86_64-linux-gnu:/usr/lib/aarch64-linux-gnu${_gcc_lib:+:$_gcc_lib}${LIBRARY_PATH:+:$LIBRARY_PATH}"
+unset _gcc_lib
+
+if [ -f "$PROJECT_ROOT/scripts/build_dependencies.sh" ]; then
+  if [ -f "$PROJECT_ROOT/external/android-tools/CMakeLists.txt" ]; then
+    echo "[>] Building UN1CA tools (android-tools / apktool / erofs / …)..."
+    # Stale cmake cache from a failed gtest-less configure
+    if [ -d "$PROJECT_ROOT/external/android-tools/build" ] && [ ! -x "$BIN_DIR/mke2fs.android" ]; then
+      rm -rf "$PROJECT_ROOT/external/android-tools/build"
+    fi
+    if [ -d "$PROJECT_ROOT/external/erofs-utils/out" ] && \
+       [ ! -x "$PROJECT_ROOT/external/erofs-utils/out/erofs-tools/fuse.erofs" ]; then
+      rm -rf "$PROJECT_ROOT/external/erofs-utils/out"
+    fi
+    if ! bash "$PROJECT_ROOT/scripts/build_dependencies.sh"; then
+      echo "[!] build_dependencies failed; continuing with fast-path tools."
+    fi
+  else
+    echo "[!] external/android-tools not initialized — fast-path only"
   fi
 fi
 
-# Apktool >= 3.0.2 required for DEX 041 multi-dex (One UI 8 services.jar)
 need_apktool=false
 if [ ! -f "$BIN_DIR/apktool" ] || [ ! -f "$BIN_DIR/apktool.jar" ]; then
   need_apktool=true
@@ -54,22 +184,18 @@ else
   echo "[✓] apktool 3.x already in $BIN_DIR"
 fi
 
-# mkuserimg_mke2fs (Bluetooth APEX / ext4 images) — wrapper from UN1CA external/ext4_utils
 if [ ! -e "$BIN_DIR/mkuserimg_mke2fs" ]; then
   if [ -f "$PROJECT_ROOT/external/ext4_utils/mkuserimg_mke2fs.py" ]; then
     cp -a "$PROJECT_ROOT/external/ext4_utils/mkuserimg_mke2fs.py" "$BIN_DIR/mkuserimg_mke2fs.py"
     ln -sfn "$BIN_DIR/mkuserimg_mke2fs.py" "$BIN_DIR/mkuserimg_mke2fs"
     [ -f "$PROJECT_ROOT/external/ext4_utils/mke2fs.conf" ] && \
       cp -a "$PROJECT_ROOT/external/ext4_utils/mke2fs.conf" "$BIN_DIR/mke2fs.conf"
-    echo "[✓] mkuserimg_mke2fs installed (needs mke2fs.android from android-tools for full APEX builds)"
-  else
-    echo "[!] external/ext4_utils missing — copy from UN1CA or init submodules"
+    echo "[✓] mkuserimg_mke2fs wrapper installed"
   fi
 else
   echo "[✓] mkuserimg_mke2fs already present"
 fi
 
-# Zipalign (if missing)
 if ! command -v zipalign &>/dev/null && [ ! -f "$BIN_DIR/zipalign" ]; then
   echo "[>] Downloading zipalign..."
   curl -fsSL "https://android.googlesource.com/platform/prebuilts/sdk/+/refs/heads/main/tools/linux/bin/zipalign?format=TEXT" | base64 -d > "$BIN_DIR/zipalign"
@@ -78,7 +204,6 @@ if ! command -v zipalign &>/dev/null && [ ! -f "$BIN_DIR/zipalign" ]; then
   echo "[✓] zipalign installed"
 fi
 
-# Signapk
 if [ ! -f "$BIN_DIR/signapk" ] || [ ! -f "$BIN_DIR/signapk.jar" ]; then
   echo "[>] Downloading signapk.jar..."
   curl -fsSL "https://android.googlesource.com/platform/prebuilts/sdk/+/refs/heads/main/tools/lib/signapk.jar?format=TEXT" | base64 -d > "$BIN_DIR/signapk.jar"
@@ -90,7 +215,6 @@ EOF
   echo "[✓] signapk installed"
 fi
 
-# EROFS utils
 _is_real_elf() { file "$1" 2>/dev/null | grep -q "ELF"; }
 if ! _is_real_elf "$BIN_DIR/fsck.erofs" || ! _is_real_elf "$BIN_DIR/mkfs.erofs"; then
   echo "[>] Downloading erofs-utils..."
@@ -108,8 +232,6 @@ if ! _is_real_elf "$BIN_DIR/fsck.erofs" || ! _is_real_elf "$BIN_DIR/mkfs.erofs";
     done
     rm -rf /tmp/_erofs_utils.zip /tmp/_erofs_utils
     echo "[✓] erofs-utils installed"
-  else
-    echo "[!] Could not fetch erofs-utils URL"
   fi
   unset _EROFS_URL _bin
 else
@@ -117,7 +239,6 @@ else
 fi
 unset -f _is_real_elf
 
-# samloader venv under out/tools
 if [ ! -d "$VENV_DIR" ]; then
   echo "[>] Creating Python venv..."
   python3 -m venv "$VENV_DIR" 2>/dev/null || true
@@ -128,8 +249,13 @@ if [ -f "$VENV_DIR/bin/pip" ]; then
 fi
 [ -f "$BIN_DIR/samloader" ] && echo "[✓] samloader at $BIN_DIR/samloader"
 
+if [ -x "$BIN_DIR/mke2fs.android" ]; then
+  echo "[✓] mke2fs.android (android-tools built)"
+else
+  echo "[!] mke2fs.android missing — APEX/ext4 rebuilds will fail until build_dependencies succeeds"
+fi
+
 echo "=========================================="
 echo " Toolchain setup completed!"
 echo " PATH should include: $BIN_DIR"
-echo " (source buildenv.sh <target> sets this automatically)"
 echo "=========================================="

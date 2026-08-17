@@ -1,0 +1,56 @@
+<!-- S23 (Qualcomm Snapdragon 8 Gen 2 SM-S911*) Target Framework Manifest -->
+<manifest version="9.0" type="framework">
+    <!-- Android 14+부터는 완전히 제거되거나 AIDL로 대체된 구형 displayservice/schedulerservice는 빌드 에러 방지를 위해 제외하거나 max-level을 최신 FCM 레벨에 맞춰 조정합니다. -->
+
+    <!-- Sensor Service: S23은 AIDL 기반 센서 매니저를 기본으로 사용합니다 -->
+    <hal format="aidl">
+        <name>android.frameworks.sensorservice</name>
+        <fqname>ISensorManager/default</fqname>
+    </hal>
+
+    <!-- Memory & Network: 최신 안드로이드 빌드용 매트릭스 유지 -->
+    <hal format="hidl" max-level="8">
+        <name>android.hidl.memory</name>
+        <transport arch="32+64">passthrough</transport>
+        <fqname>@1.0::IMapper/ashmem</fqname>
+    </hal>
+    <hal format="hidl" max-level="7">
+        <name>android.system.net.netd</name>
+        <transport>hwbinder</transport>
+        <fqname>@1.1::INetd/default</fqname>
+    </hal>
+    <hal format="native">
+        <name>netutils-wrapper</name>
+        <version>1.0</version>
+    </hal>
+
+    <!-- Qualcomm S23 (kalama) Commonsys 핵심 HAL 선언 -->
+    <hal format="hidl">
+        <name>vendor.qti.hardware.qccsyshal</name>
+        <transport>hwbinder</transport>
+        <fqname>@1.2::IQccsyshal/qccsyshal</fqname>
+    </hal>
+
+    <!-- S23 모뎀 및 Telephony 라우팅을 위한 AT CMD 및 Radio 패스 -->
+    <hal format="hidl">
+        <name>vendor.qti.hardware.radio.atcmdfwd</name>
+        <transport>hwbinder</transport>
+        <fqname>@1.0::IAtCmdFwd/AtCmdFwdService</fqname>
+    </hal>
+
+    <!-- S23 퀄컴 퍼포먼스 및 시스템 헬퍼 프로세스 (Astra/UN1CA 등에서 크래시 방지) -->
+    <hal format="hidl" max-level="8">
+        <name>vendor.qti.hardware.systemhelper</name>
+        <transport>hwbinder</transport>
+        <fqname>@1.0::ISystemEvent/default</fqname>
+        <fqname>@1.0::ISystemResource/default</fqname>
+    </hal>
+
+    <!-- System SDK Version: S23의 최초 출시 빌드(33)부터 최신 안드로이드 빌드 타겟까지 커버 -->
+    <system-sdk>
+        <version>33</version>
+        <version>34</version>
+        <version>35</version>
+        <version>36</version>
+    </system-sdk>
+</manifest>

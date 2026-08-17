@@ -1,0 +1,71 @@
+#
+# Copyright (C) 2024 Salvo Giangreco
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+# SEC Floating Feature configuration file for Galaxy S23 (dm1q)
+
+# Camera
+# 울트라 전용 10배줌(Tele2) 관련 설정 삭제됨
+# SEC_FLOATING_FEATURE_CAMERA_CONFIG_NIGHT_FRONT_DISPLAY_FLASH_TRANSPARENT=65
+# SEC_FLOATING_FEATURE_CAMERA_CONFIG_SDK_FEATURE_INFO=super_night.v1,preview_dis.v1,video_hdr.v1,smooth_zoom.v1,logical_rear_camera_id.v20,exposure_table_control.v1,selfie_tone.v1
+# SEC_FLOATING_FEATURE_CAMERA_CONFIG_UW_DISTORTION_CORRECTION=0,109,2,22011703,4000,3000,1,0,60,0
+# SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO=food.samsung.v1,ai_clear_zoom.arcsoft.v1,beauty.samsung.v4,face_landmark.arcsoft.v2_1,facial_attribute.samsung.v1,image_enhance.arcsoft.v1,scene_detection.samsung.v1,swuwdc.arcsoft.v1,event_detection.samsung.v2,selfie_correction.samsung.v1,super_night.mpi.v2,super_resolution_raw.arcsoft.v2,macro_raw_sr.arcsoft.v1,fr_tracking.arcsoft.v1,human_tracking_hand.arcsoft.v4,mfhdr.arcsoft.v4,hybridhdr.arcsoft.v1,aebhdr.arcsoft.v1,llhdr.arcsoft.v4,facial_restoration.arcsoft.v1,dual_bokeh.samsung.v1_1,smart_scan.samsung.v2,single_bokeh.samsung.v2,localtm.samsung.v1_1,pro_single_rgb.mpi.v1,aimode.samsung.v2,aimfisp.samsung.v1
+# SEC_FLOATING_FEATURE_CAMERA_CONFIG_WIDE_DISTORTION_CORRECTION=0,109,2,22011703,4000,3000,0,150,60,0
+
+# Display
+# 기본형은 WQHD를 지원하지 않으므로 FHD,HD로 변경
+# SEC_FLOATING_FEATURE_COMMON_CONFIG_DYN_RESOLUTION_CONTROL=FHD,HD
+# SEC_FLOATING_FEATURE_LCD_CONFIG_AOD_REFRESH_RATE=1
+# SEC_FLOATING_FEATURE_LCD_CONFIG_HFR_MODE=3
+
+# S Pen
+# 기본형은 S펜을 지원하지 않으므로 관련 설정 전부 삭제됨
+
+# Frameworks
+# SEC_FLOATING_FEATURE_SYSTEM_CONFIG_SIOP_POLICY_FILENAME=siop_dm1q_sm8550
+
+# Lockscreen
+# SEC_FLOATING_FEATURE_LOCKSCREEN_CONFIG_PUNCHHOLE_VI=face,type:circle
+
+# Device specific
+# SEC_FLOATING_FEATURE_SETTINGS_CONFIG_BRAND_NAME=Galaxy S23
+# 25W 충전 스펙에 맞게 전압/전류 변경 (기존 45W 10V 4.5A -> 25W 9V 2.77A)
+# SEC_FLOATING_FEATURE_SETTINGS_CONFIG_ELECTRIC_RATED_VALUE=DC 9 V; 2.77 A
+# SEC_FLOATING_FEATURE_SETTINGS_CONFIG_FCC_ID=A3LSMS911B
+# S펜 FCC ID 삭제됨
+
+# Rezoss dm1q-only overrides.
+# Exact S26U matches and Rezoss-owned entries live in unica/mods/rezoss/customize.sh.
+
+# Audio values intentionally differ from S26U.
+SEC_FLOATING_FEATURE_AUDIO_CONFIG_EFFECTS_VIDEOCALL=TRUE
+SEC_FLOATING_FEATURE_AUDIO_CONFIG_SOUNDALIVE_VERSION=eq_custom,uhq_onoff,karaoke,adapt,spk_stereo,dvfs_20_percent,dvfs_max_45_percent,voice_boost,dolby_game_spk_off
+
+# Camera values intentionally differ from S26U or need dm1q camera IDs.
+# physical_camera_tele2(10배줌) 파라미터 삭제
+SEC_FLOATING_FEATURE_CAMERA_CONFIG_SDK_FEATURE_INFO=version2,super_night,preview_dis,video_hdr,smooth_zoom,logical_rear_camera:camera_id=20,exposure_table_control,selfie_tone,physical_camera_tele:camera_id=52
+SEC_FLOATING_FEATURE_CAMERA_CONFIG_WINE_DETECTOR=V1_SNAP_CPU
+
+# Framework/UI values are S23-specific or intentionally different from S26U.
+SEC_FLOATING_FEATURE_COMMON_CONFIG_DEX_MODE=dual,wireless,dexforpc
+SEC_FLOATING_FEATURE_COMMON_CONFIG_EDGE=people,task,circle,panel,-edgefeeds,debug,search,phonecolor
+SEC_FLOATING_FEATURE_LCD_CONFIG_AOD_REFRESH_RATE=10
+SEC_FLOATING_FEATURE_LCD_CONFIG_REPLACE_COLOR_FOR_DARKMODE=#FF000000
+SEC_FLOATING_FEATURE_LOCKSCREEN_CONFIG_WALLPAPER_STYLE=VIDEO,COVER_MP4,GENWEATHER
+
+# SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO=de_flicker.arcsoft.v1,de_flicker_hdr.arcsoft.v1,food.samsung.v1,face_landmark.arcsoft.v2_1,beauty.samsung.v4,facial_restoration.arcsoft.v1,facial_attribute.samsung.v1,human_tracking_hand.arcsoft.v4,fr_tracking.arcsoft.v1,smart_scan.samsung.v2,aimode.samsung.v2,aimfisp.samsung.v1,ai_clear_zoom.arcsoft.v1,macro_raw_sr.arcsoft.v1,super_resolution_raw.arcsoft.v2,aebhdr.arcsoft.v1,hybridhdr.arcsoft.v1,single_bokeh.samsung.v2,super_night.mpi.v2,swuwdc.arcsoft.v1,event_detection.samsung.v2,selfie_correction.samsung.v1,dual_bokeh.samsung.v1_1,image_codec.samsung.v2,pro_single_rgb.mpi.v1,image_enhance.arcsoft.v1,localtm.samsung.v1_1,stereo_photo.samsung.v1,compressed_raw_decoder.samsung.v1
+
+SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO=de_flicker.arcsoft.v1,de_flicker_hdr.arcsoft.v1,food.samsung.v1,face_landmark.arcsoft.v2_1,beauty.samsung.v4,facial_restoration.arcsoft.v1,facial_attribute.samsung.v1,human_tracking_hand.arcsoft.v4,fr_tracking.arcsoft.v1,smart_scan.samsung.v2,aimode.samsung.v2,aimfisp.samsung.v1,ai_clear_zoom.arcsoft.v1,macro_raw_sr.arcsoft.v1,super_resolution_raw.arcsoft.v2,aebhdr.arcsoft.v1,hybridhdr.arcsoft.v1,single_bokeh.samsung.v2,super_night.mpi.v2,swuwdc.arcsoft.v1,event_detection.samsung.v2,selfie_correction.samsung.v1,dual_bokeh.samsung.v1_1,image_codec.samsung.v2,pro_single_rgb.mpi.v1,image_enhance.arcsoft.v1,localtm.samsung.v1_1
