@@ -1,0 +1,8 @@
+system 0 0 755 capabilities=0x0
+system/priv-app 0 0 755 capabilities=0x0
+system/priv-app/Collection 0 0 755 capabilities=0x0
+system/priv-app/Collection/Collection.apk 0 0 644 capabilities=0x0
+system/priv-app/SocialComposer 0 0 755 capabilities=0x0
+system/priv-app/SocialComposer/SocialComposer.apk 0 0 644 capabilities=0x0
+system/priv-app/Voicecaptioning 0 0 755 capabilities=0x0
+system/priv-app/Voicecaptioning/Voicecaptioning.apk 0 0 644 capabilities=0x0

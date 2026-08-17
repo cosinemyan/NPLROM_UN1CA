@@ -3,5 +3,11 @@
         <privapp-permissions package="com.samsung.android.app.moments">
             <permission name="android.permission.REAL_GET_TASKS"/>
 			<permission name="android.permission.SCHEDULE_EXACT_ALARM"/>
+			<permission name="com.samsung.permission.ACCESS_KEEP_STORAGE"/>
+			<permission name="com.samsung.android.permission.GENAI_RECLAIM"/>
+			<permission name="com.samsung.android.app.moments.permission.START_ACTIVITY"/>
+			<permission name="com.samsung.android.app.moments.ACCESS_MOMENTS"/>
+			<permission name="com.samsung.android.app.moments.GENERATE_MOMENTS"/>
+			<permission name="com.samsung.android.app.moments.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"/>
         </privapp-permissions>
 </permissions>

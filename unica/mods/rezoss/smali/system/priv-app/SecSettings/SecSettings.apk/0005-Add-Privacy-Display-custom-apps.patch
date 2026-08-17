@@ -1,0 +1,25 @@
+From d8840496f5e7935cc56777c5e3fc6a4fb2a6df5c Mon Sep 17 00:00:00 2001
+From: Rezoss <rezoss@local>
+Date: Thu, 2 Jul 2026 00:00:00 +0200
+Subject: [PATCH] Add Privacy Display custom apps
+
+diff --git a/res/values/strings.xml b/res/values/strings.xml
+index ed87e1b..ac23910 100644
+--- a/res/values/strings.xml
++++ b/res/values/strings.xml
+@@ -8087,3 +8087,5 @@
++    <string name="rezoss_pd_custom_apps_summary">Choose notification apps that use Privacy display.</string>
++    <string name="rezoss_pd_custom_apps_title">Apps</string>
+     <string name="rezoss_pd_extra_dim_summary">Make the screen even more difficult to view when Privacy display is on. This may affect normal viewing in addition to viewing from side angles.</string>
+     <string name="rezoss_pd_extra_dim_title">Maximum privacy protection</string>
+     <string name="rezoss_pd_fixed_description">Protect your privacy by making the screen less visible when viewed from a side angle.</string>
+diff --git a/res/xml/sec_pd_main_settings.xml b/res/xml/sec_pd_main_settings.xml
+index a4f9e6c..ad86c30 100644
+--- a/res/xml/sec_pd_main_settings.xml
++++ b/res/xml/sec_pd_main_settings.xml
+@@ -3,4 +3,5 @@
+   xmlns:android="http://schemas.android.com/apk/res/android">
+     <SecSwitchPreference android:title="@string/rezoss_pd_turn_on_title" android:key="pd_activation" android:summary="@string/rezoss_pd_fixed_description" android:persistent="false" />
+     <SecSwitchPreference android:title="@string/rezoss_pd_extra_dim_title" android:key="pd_extra_dim" android:summary="@string/rezoss_pd_extra_dim_summary" android:persistent="false" />
++    <SecPreferenceScreen android:title="@string/rezoss_pd_custom_apps_title" android:key="pd_custom_apps" android:summary="@string/rezoss_pd_custom_apps_summary" android:fragment="com.samsung.android.settings.bpd.PdCustomAppsSettings" />
+ </PreferenceScreen>

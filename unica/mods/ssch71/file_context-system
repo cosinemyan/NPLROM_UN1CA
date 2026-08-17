@@ -1,0 +1,8 @@
+/system u:object_r:system_file:s0
+/system/priv-app u:object_r:system_file:s0
+/system/priv-app/Collection u:object_r:system_file:s0
+/system/priv-app/Collection/Collection\.apk u:object_r:system_file:s0
+/system/priv-app/SocialComposer u:object_r:system_file:s0
+/system/priv-app/SocialComposer/SocialComposer\.apk u:object_r:system_file:s0
+/system/priv-app/Voicecaptioning u:object_r:system_file:s0
+/system/priv-app/Voicecaptioning/Voicecaptioning\.apk u:object_r:system_file:s0

@@ -8,8 +8,8 @@ Subject: [PATCH] Allow all apps in Dual Messenger
  .../da/daagent/provider/DualAppProvider.smali |  60 ++----
  .../da/daagent/provider/WhiteListApps.smali   | 179 +++++++-----------
  .../receiver/DualAppIntentReceiver.smali      |  35 +++-
- .../android/da/daagent/utils/DAUtility.smali  |  50 +----
- 5 files changed, 123 insertions(+), 206 deletions(-)
+ .../android/da/daagent/utils/DAUtility.smali  |  52 +----
+ 5 files changed, 124 insertions(+), 207 deletions(-)
 
 diff --git a/AndroidManifest.xml b/AndroidManifest.xml
 index 445e42a..42547c3 100644
@@ -35,8 +35,8 @@ index bfaea01..f7d8b6b 100644
  
      const/16 p4, 0x11
  
--    if-ne p2, p3, :cond_f
-+    if-ne p2, p3, :cond_d
+-    if-ne p3, p1, :cond_f
++    if-ne p3, p1, :cond_d
  
      new-instance p0, Landroid/database/MatrixCursor;
  
@@ -52,12 +52,12 @@ index bfaea01..f7d8b6b 100644
 -
 -    array-length p4, p3
 -
--    move v0, p5
+-    move p5, v0
 -
 -    :goto_8
--    if-ge v0, p4, :cond_d
+-    if-ge p5, p4, :cond_d
 -
--    aget-object v1, p3, v0
+-    aget-object v1, p3, p5
 -
 -    invoke-virtual {v1, p2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 -
@@ -70,7 +70,7 @@ index bfaea01..f7d8b6b 100644
 -    goto :goto_9
 -
 -    :cond_c
--    add-int/lit8 v0, v0, 0x1
+-    add-int/lit8 p5, p5, 0x1
 -
 -    goto :goto_8
 -
@@ -79,15 +79,15 @@ index bfaea01..f7d8b6b 100644
      array-length p2, p1
  
 -    :goto_a
--    if-ge p5, p2, :cond_e
+-    if-ge v0, p2, :cond_e
 +    :goto_8
-+    if-ge p5, p2, :cond_c
++    if-ge v0, p2, :cond_c
  
-     aget-object p3, p1, p5
+     aget-object p3, p1, v0
  
 @@ -567,15 +535,15 @@
  
-     add-int/lit8 p5, p5, 0x1
+     add-int/lit8 v0, v0, 0x1
  
 -    goto :goto_a
 +    goto :goto_8
@@ -98,10 +98,10 @@ index bfaea01..f7d8b6b 100644
  
 -    :cond_f
 +    :cond_d
-     const/4 p3, 0x4
+     const/4 p1, 0x4
  
--    if-ne p2, p3, :cond_10
-+    if-ne p2, p3, :cond_e
+-    if-ne p3, p1, :cond_10
++    if-ne p3, p1, :cond_e
  
      invoke-virtual {p0}, Landroid/content/ContentProvider;->getContext()Landroid/content/Context;
  
@@ -113,27 +113,23 @@ index bfaea01..f7d8b6b 100644
 +    :cond_e
      const/4 p0, 0x5
  
--    if-ne p2, p0, :cond_12
-+    if-ne p2, p0, :cond_10
+-    if-ne p3, p0, :cond_12
++    if-ne p3, p0, :cond_10
  
      invoke-static {}, Lcom/samsung/android/da/daagent/fwwrapper/UtilsWrapper;->isChinaModel()Z
  
-@@ -626,10 +594,10 @@
- 
-     sget-object p1, Lcom/samsung/android/da/daagent/DAConstants;->defaultPkgNames:[Ljava/lang/String;
+@@ -626,6 +594,6 @@
  
 -    :goto_b
 +    :goto_9
-     const/16 p2, 0x1b
+     const/16 p1, 0x1b
  
--    if-ge p5, p2, :cond_11
-+    if-ge p5, p2, :cond_f
- 
-     aget-object p2, p1, p5
+-    if-ge v0, p1, :cond_11
++    if-ge v0, p1, :cond_f
  
 @@ -641,12 +609,12 @@
  
-     add-int/lit8 p5, p5, 0x1
+     add-int/lit8 v0, v0, 0x1
  
 -    goto :goto_b
 +    goto :goto_9
@@ -144,7 +140,7 @@ index bfaea01..f7d8b6b 100644
  
 -    :cond_12
 +    :cond_10
-     return-object v3
+     return-object v4
  .end method
  
 diff --git a/smali/com/samsung/android/da/daagent/provider/WhiteListApps.smali b/smali/com/samsung/android/da/daagent/provider/WhiteListApps.smali
@@ -342,10 +338,10 @@ index 49c1881..81a0f7a 100644
 +    :goto_1
 +    iget-object v5, v1, Landroid/content/pm/ApplicationInfo;->metaData:Landroid/os/Bundle;
  
--    const-string v3, "CBK"
+-    const-string v5, "CHU"
 +    if-eqz v5, :cond_3
  
--    const-string v4, "CTC"
+-    const-string v6, "CHC"
 +    const-string v6, "com.samsung.android.multiuser.install_only_owner"
  
 -    const-string v1, "CHN"
@@ -354,10 +350,10 @@ index 49c1881..81a0f7a 100644
 -    const-string v2, "CHM"
 +    move-result v5
  
--    const-string v5, "CHU"
+-    const-string v3, "CBK"
 +    if-eqz v5, :cond_3
  
--    const-string v6, "CHC"
+-    const-string v4, "CTC"
 +    move v2, v4
  
 -    filled-new-array/range {v1 .. v6}, [Ljava/lang/String;
@@ -448,12 +444,12 @@ index 730cc8d..671f176 100644
      move v5, v8
  
      :goto_12
-     array-length v7, v1
+     array-length v6, v1
  
--    if-ge v5, v7, :cond_23
-+    if-ge v5, v7, :cond_24
+-    if-ge v5, v6, :cond_23
++    if-ge v5, v6, :cond_24
  
-     aget-object v7, v1, v5
+     aget-object v6, v1, v5
  
 @@ -1254,15 +1254,32 @@
  
@@ -502,25 +498,26 @@ index 67af4f2..4a9de41 100644
 -    sget-object v2, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->DUAL_APP_WHITELIST_PACKAGES:[Ljava/lang/String;
 +    invoke-static {p0}, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->refreshWhiteList(Landroid/content/Context;)V
  
--    sget-object v3, Lcom/samsung/android/da/daagent/utils/DAUtility;->mSalesCode:Ljava/lang/String;
 +    sget-object v2, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->DUAL_APP_WHITELIST_PACKAGES:[Ljava/lang/String;
++
+     const/4 v3, 0x0
  
-     const/4 v4, 0x0
- 
--    if-eqz v3, :cond_1
+-    sget-object v4, Lcom/samsung/android/da/daagent/utils/DAUtility;->mSalesCode:Ljava/lang/String;
+-
+-    if-eqz v4, :cond_1
 -
 -    sget-object v5, Lcom/samsung/android/da/daagent/provider/WhiteListApps;->CHINA_SALES_CODES:[Ljava/lang/String;
 -
 -    array-length v6, v5
 -
--    move v7, v4
+-    move v7, v3
 -
 -    :goto_0
 -    if-ge v7, v6, :cond_1
 -
 -    aget-object v8, v5, v7
 -
--    invoke-virtual {v8, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-    invoke-virtual {v8, v4}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 -
 -    move-result v8
 -
@@ -537,16 +534,16 @@ index 67af4f2..4a9de41 100644
 -
 -    :cond_1
 -    :goto_1
-     array-length v3, v2
+     array-length v4, v2
  
-     move v5, v4
+     move v5, v3
  
 -    :goto_2
 +    :goto_0
      const-string v6, "DA_DAUtility"
  
--    if-ge v5, v3, :cond_2
-+    if-ge v5, v3, :cond_0
+-    if-ge v5, v4, :cond_2
++    if-ge v5, v4, :cond_0
  
      aget-object v7, v2, v5
  
@@ -594,4 +591,3 @@ index 67af4f2..4a9de41 100644
  .end method
 -- 
 2.51.2
-

@@ -83,7 +83,7 @@ system/etc/permissions/privapp-permissions-com.samsung.android.game.gamehome.xml
 system/priv-app/GameHome
 "
 
-ADD_TO_WORK_DIR "pa2qxxx" "system" \
+ADD_TO_WORK_DIR "m3qxxx" "system" \
     "system/etc/permissions/signature-permissions-com.samsung.android.game.gamehome.xml" \
     0 0 644 "u:object_r:system_file:s0"
 
@@ -97,24 +97,9 @@ PRODUCT_DEBLOAT+="
 app/Gmail2
 "
 
-# Google Assistant shortcut
-PRODUCT_DEBLOAT+="
-app/AssistantShell
-"
-
-# Google Chrome
-PRODUCT_DEBLOAT+="
-app/Chrome
-"
-
 # Google Duo
 PRODUCT_DEBLOAT+="
 app/DuoStub
-"
-
-# Google Maps
-PRODUCT_DEBLOAT+="
-app/Maps
 "
 
 # Google PAI (Play Autoinstall)
@@ -151,9 +136,7 @@ SYSTEM_DEBLOAT+="
 system/priv-app/YourPhone_P1_5
 "
 
-ADD_TO_WORK_DIR "gta9pxxx" "system" "system/priv-app/YourPhone_Stub/YourPhone_Stub.apk" 0 0 644 "u:object_r:system_file:s0"
-
-# Live Transcribe
+# # Live Transcribe
 SYSTEM_DEBLOAT+="
 system/app/LiveTranscribe
 system/etc/sysconfig/feature-a11y-preload.xml
@@ -205,12 +188,12 @@ system/priv-app/AREmojiEditor
 system/priv-app/AvatarEmojiSticker
 "
 
-# Samsung Calendar
+# # Samsung Calendar
 SYSTEM_DEBLOAT+="
 system/app/SamsungCalendar
 "
 
-# Samsung Clock
+# # Samsung Clock
 SYSTEM_DEBLOAT+="
 system/app/ClockPackage
 "
@@ -220,18 +203,11 @@ SYSTEM_DEBLOAT+="
 system/app/MinusOnePage
 "
 
-# Samsung Language Core
-SYSTEM_DEBLOAT+="
-system/etc/permissions/signature-permissions-com.samsung.android.offline.languagemodel.xml
-system/priv-app/OfflineLanguageModel_stub
-"
-
-# Samsung Messages
-SYSTEM_DEBLOAT+="
-system/etc/default-permissions/default-permissions-com.samsung.android.messaging.xml
-system/etc/permissions/privapp-permissions-com.samsung.android.messaging.xml
-system/priv-app/SamsungMessages
-"
+# # Samsung Language Core
+# SYSTEM_DEBLOAT+="
+# system/etc/permissions/signature-permissions-com.samsung.android.offline.languagemodel.xml
+# system/priv-app/OfflineLanguageModel_stub
+# "
 
 # Samsung Pass
 SYSTEM_DEBLOAT+="
@@ -255,7 +231,6 @@ system/app/SmartReminder
 
 # Samsung Visit In
 SYSTEM_DEBLOAT+="
-system/etc/permissions/com.samsung.feature.ipsgeofence.xml
 system/etc/permissions/privapp-permissions-com.samsung.android.ipsgeofence.xml
 system/priv-app/IpsGeofence
 "
@@ -332,7 +307,13 @@ system/app/VoiceAccess
 system/etc/sysconfig/feature-a11y-preload-voacc.xml
 "
 
-# YouTube
+# Google
 PRODUCT_DEBLOAT+="
+app/Chrome
+app/Maps
 app/YouTube
+priv-app/AndroidGlassesCore
+priv-app/AiWallpaper
+priv-app/AndroidAutoStub
+priv-app/Turbo
 "

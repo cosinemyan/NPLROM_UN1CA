@@ -36,6 +36,7 @@
 /system/lib64/libtlc_blockchain_keystore\.so u:object_r:system_lib_file:s0
 /system/lib64/libtlc_payment_spay\.so u:object_r:system_lib_file:s0
 /system/lib64/service\.incremental\.so u:object_r:system_lib_file:s0
+/system/lib64/apexd_flags_c_lib\.so u:object_r:system_lib_file:s0
 /system/priv-app u:object_r:system_file:s0
 /system/priv-app/SingleTakeService u:object_r:system_file:s0
 /system/priv-app/SingleTakeService/SingleTakeService\.apk u:object_r:system_file:s0

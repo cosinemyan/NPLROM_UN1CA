@@ -1225,7 +1225,7 @@ index e485ea3c6..95a8d498b 100644
      iget-boolean v0, p0, Lcom/samsung/android/settings/display/SecAdaptiveDisplaySettings;->mIsSupportAdvancedWhiteBalance:Z
  
      if-eqz v0, :cond_1
-@@ -1949,6 +1959,22 @@
+@@ -1949,6 +1959,24 @@
  
      sget-object v0, Lcom/samsung/android/settings/Rune;->COMMON_CONFIG_PACKAGE_NAME_SMART_MANAGER:Ljava/lang/String;
  
@@ -1241,9 +1241,11 @@ index e485ea3c6..95a8d498b 100644
 +
 +    move-result-object v1
 +
-+    iget-object v2, p0, Lcom/samsung/android/settings/display/SecAdaptiveDisplaySettings;->mEadObserver:Lcom/samsung/android/settings/display/SecAdaptiveDisplaySettings$3;
++    const/4 v2, 0x0
 +
-+    invoke-virtual {v0, v1, v3, v2}, Landroid/content/ContentResolver;->registerContentObserver(Landroid/net/Uri;ZLandroid/database/ContentObserver;)V
++    iget-object v3, p0, Lcom/samsung/android/settings/display/SecAdaptiveDisplaySettings;->mEadObserver:Lcom/samsung/android/settings/display/SecAdaptiveDisplaySettings$3;
++
++    invoke-virtual {v0, v1, v2, v3}, Landroid/content/ContentResolver;->registerContentObserver(Landroid/net/Uri;ZLandroid/database/ContentObserver;)V
 +
      iget-boolean v0, p0, Lcom/samsung/android/settings/display/SecAdaptiveDisplaySettings;->mIsSupportAdvancedWhiteBalance:Z
  
@@ -1956,4 +1958,3 @@ index 5fc0376b4..4ddcae736 100644
          -0x7fd88b6c -> :sswitch_22
 -- 
 2.53.0
-

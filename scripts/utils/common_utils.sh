@@ -176,6 +176,61 @@ _HANDLE_SPECIAL_CHARS()
 
     echo "$STRING"
 }
+
+_REBUILD_SPLIT_FILES_IN_WORK_DIR()
+{
+    local SOURCE_DIR="${1%/.}"
+    local TARGET_DIR="${2%/.}"
+    local SPLIT_FILE
+    local SPLIT_REL
+    local TARGET_SPLIT
+    local TARGET_FILE
+
+    while IFS= read -r SPLIT_FILE; do
+        [ "$SPLIT_FILE" ] || continue
+        [ -e "${SPLIT_FILE%.*}.01" ] || continue
+
+        SPLIT_REL="${SPLIT_FILE#"$SOURCE_DIR"/}"
+        TARGET_SPLIT="$TARGET_DIR/$SPLIT_REL"
+        TARGET_FILE="${TARGET_SPLIT%.*}"
+
+        if [ -e "${SPLIT_FILE%.*}" ]; then
+            LOG "- Removing copied split chunks for $(sed -e "s|$WORK_DIR||" -e "s|/\.||" <<< "$TARGET_FILE")"
+            EVAL "rm -f \"$TARGET_FILE.\"[0-9][0-9]" || return 1
+            continue
+        fi
+
+        LOG "- Rebuilding split file $(sed -e "s|$WORK_DIR||" -e "s|/\.||" <<< "$TARGET_FILE")"
+        EVAL "cat \"$TARGET_FILE.\"[0-9][0-9] > \"$TARGET_FILE\"" || return 1
+        EVAL "rm -f \"$TARGET_FILE.\"[0-9][0-9]" || return 1
+    done < <(find "$SOURCE_DIR" -type f -name "*.00" 2> /dev/null)
+}
+
+_FILTER_SPLIT_FILE_ENTRIES()
+{
+    local FILES="$1"
+    local FILTERED_FILES=""
+    local FILE
+    local BASE
+
+    while IFS= read -r FILE; do
+        [ "$FILE" ] || continue
+
+        if [[ "$FILE" == *.[0-9][0-9] ]]; then
+            BASE="${FILE%.*}"
+            if grep -q -x -F "$BASE.00" <<< "$FILES" && grep -q -x -F "$BASE.01" <<< "$FILES"; then
+                if [[ "$FILE" == *".00" ]] && ! grep -q -x -F "$BASE" <<< "$FILES"; then
+                    FILTERED_FILES+="$BASE"$'\n'
+                fi
+                continue
+            fi
+        fi
+
+        FILTERED_FILES+="$FILE"$'\n'
+    done <<< "$FILES"
+
+    printf "%s" "$FILTERED_FILES" | LC_ALL=C sort -u
+}
 # ]
 
 # ADD_TO_WORK_DIR <source> <partition> <file/dir> <user> <group> <mode> <label>
@@ -271,6 +326,9 @@ ADD_TO_WORK_DIR()
             mkdir -p "$TARGET_FILE"
         fi
         EVAL "cp -a -T \"$SOURCE_FILE\" \"$TARGET_FILE\"" || exit 1
+        if [ -d "$SOURCE_FILE" ]; then
+            _REBUILD_SPLIT_FILES_IN_WORK_DIR "$SOURCE_FILE" "$TARGET_FILE" || exit 1
+        fi
     fi
 
     local ENTRY="${TARGET_FILE//$WORK_DIR\//}"
@@ -317,6 +375,7 @@ ADD_TO_WORK_DIR()
         FILES="${FILES//$SOURCE\//}"
         [[ "$PARTITION" == "system" ]] && FILES="${FILES//system\/system\//system/}"
         $TARGET_OS_BUILD_SYSTEM_EXT_PARTITION || FILES="${FILES//system_ext\//system/system_ext/}"
+        FILES="$(_FILTER_SPLIT_FILE_ENTRIES "$FILES")"
 
         while IFS= read -r f; do
             IS_VALID_PARTITION_NAME "$f" && continue

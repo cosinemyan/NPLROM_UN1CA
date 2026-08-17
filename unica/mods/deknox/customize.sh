@@ -1,26 +1,31 @@
 SET_PROP_IF_DIFF "vendor" "ro.security.fips.ux" "Disabled"
 
-if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
-    DONOR="a73xqxx"
-elif [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "essi" ]]; then
-    DONOR="a54xnsxx"
-else
-    ABORT "Unknown SSI: $TARGET_OS_SINGLE_SYSTEM_IMAGE"
-fi
+DEKNOX_HEX_PATCH()
+{
+    local FILE="$1"
+    local FROM="$2"
+    local TO="$3"
+
+    if [ ! -f "$FILE" ]; then
+        LOGW "File not found: ${FILE//$WORK_DIR/}"
+        return 0
+    fi
+
+    HEX_PATCH "$FILE" "$FROM" "$TO"
+}
 
 DELETE_FROM_WORK_DIR "system" "system/app/BlockchainBasicKit"
-ADD_TO_WORK_DIR "$DONOR" "system" "system/bin/installd" 0 2000 755 "u:object_r:installd_exec:s0"
-ADD_TO_WORK_DIR "$DONOR" "system" "system/bin/vdc" 0 2000 755 "u:object_r:vdc_exec:s0"
-ADD_TO_WORK_DIR "$DONOR" "system" "system/bin/vold" 0 2000 755 "u:object_r:vold_exec:s0"
 # Support legacy sdFAT kernel drivers (pre-API 35)
 # Check unica/patches/legacy/customize.sh for more info.
 if [ "$TARGET_PLATFORM_SDK_VERSION" -lt "35" ] && \
         grep -q "SDFAT" "$WORK_DIR/kernel/boot.img" && \
         ! grep -q "bogus directory:" "$WORK_DIR/kernel/boot.img"; then
-    LOG_STEP_IN
-    # ",time_offset=%d" -> "NUL"
-    HEX_PATCH "$WORK_DIR/system/system/bin/vold" "2c74696d655f6f66667365743d2564" "000000000000000000000000000000"
-    LOG_STEP_OUT
+    if xxd -p -c 0 "$WORK_DIR/system/system/bin/vold" | grep -q "2c74696d655f6f66667365743d2564"; then
+        LOG_STEP_IN
+        # ",time_offset=%d" -> "NUL"
+        HEX_PATCH "$WORK_DIR/system/system/bin/vold" "2c74696d655f6f66667365743d2564" "000000000000000000000000000000"
+        LOG_STEP_OUT
+    fi
 fi
 DELETE_FROM_WORK_DIR "system" "system/bin/dualdard"
 DELETE_FROM_WORK_DIR "system" "system/bin/sdp_cryptod"
@@ -38,34 +43,20 @@ DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.sa
 DELETE_FROM_WORK_DIR "system" "system/etc/permissions/privapp-permissions-com.samsung.android.knox.zt.framework.xml"
 DELETE_FROM_WORK_DIR "system" "system/etc/permissions/signature-permissions-com.samsung.android.kgclient.xml"
 DELETE_FROM_WORK_DIR "system" "system/etc/sysconfig/preinstalled-packages-com.samsung.android.coldwalletservice.xml"
-DELETE_FROM_WORK_DIR "system" "system/lib/android.hardware.weaver@1.0.so"
-DELETE_FROM_WORK_DIR "system" "system/lib/hidl_comm_ddar_client.so"
-ADD_TO_WORK_DIR "$DONOR" "system" "system/lib/libandroid_servers.so" 0 0 644 "u:object_r:system_lib_file:s0"
 DELETE_FROM_WORK_DIR "system" "system/lib/libdualdar.so"
 DELETE_FROM_WORK_DIR "system" "system/lib/libepm.so"
 DELETE_FROM_WORK_DIR "system" "system/lib/libhermes_cred.so"
 DELETE_FROM_WORK_DIR "system" "system/lib/libkeyutils.so"
 DELETE_FROM_WORK_DIR "system" "system/lib/libknox_filemanager.so"
-ADD_TO_WORK_DIR "$DONOR" "system" "system/lib/libmdf.so" 0 0 644 "u:object_r:system_lib_file:s0"
 DELETE_FROM_WORK_DIR "system" "system/lib/libmdfpp_req.so"
 DELETE_FROM_WORK_DIR "system" "system/lib/libpersona.so"
 DELETE_FROM_WORK_DIR "system" "system/lib/libsdp_crypto.so"
 DELETE_FROM_WORK_DIR "system" "system/lib/libsdp_kekm.so"
 DELETE_FROM_WORK_DIR "system" "system/lib/libsdp_sdk.so"
-ADD_TO_WORK_DIR "$DONOR" "system" "system/lib/libsqlite.so" 0 0 644 "u:object_r:system_lib_file:s0"
-DELETE_FROM_WORK_DIR "system" "system/lib/vendor.samsung.hardware.tlc.ddar@1.0.so"
-DELETE_FROM_WORK_DIR "system" "system/lib64/android.hardware.weaver@1.0.so"
-DELETE_FROM_WORK_DIR "system" "system/lib64/hidl_comm_ddar_client.so"
-ADD_TO_WORK_DIR "$DONOR" "system" "system/lib64/libandroid_servers.so" 0 0 644 "u:object_r:system_lib_file:s0"
-DELETE_FROM_WORK_DIR "system" "system/lib64/libdualdar.so"
-ADD_TO_WORK_DIR "$DONOR" "system" "system/lib64/libepm.so" 0 0 644 "u:object_r:system_lib_file:s0"
-ADD_TO_WORK_DIR "$DONOR" "system" "system/lib64/libmdf.so" 0 0 644 "u:object_r:system_lib_file:s0"
 DELETE_FROM_WORK_DIR "system" "system/lib64/libmdfpp_req.so"
 DELETE_FROM_WORK_DIR "system" "system/lib64/libsdp_crypto.so"
 DELETE_FROM_WORK_DIR "system" "system/lib64/libsdp_kekm.so"
 DELETE_FROM_WORK_DIR "system" "system/lib64/libsdp_sdk.so"
-ADD_TO_WORK_DIR "$DONOR" "system" "system/lib64/libsqlite.so" 0 0 644 "u:object_r:system_lib_file:s0"
-DELETE_FROM_WORK_DIR "system" "system/lib64/vendor.samsung.hardware.tlc.ddar@1.0.so"
 DELETE_FROM_WORK_DIR "system" "system/priv-app/HdmApk"
 DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxFrameBufferProvider"
 DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxGuard"
@@ -75,21 +66,139 @@ DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxPushManager"
 DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxSandbox"
 DELETE_FROM_WORK_DIR "system" "system/priv-app/KnoxZtFramework"
 
-if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
-    ADD_TO_WORK_DIR "$DONOR" "system" "system/bin/apexd" 0 2000 755 "u:object_r:apexd_exec:s0"
-    ADD_TO_WORK_DIR "$DONOR" "system" "system/bin/gsid" 0 2000 755 "u:object_r:gsid_exec:s0"
-    ADD_TO_WORK_DIR "$DONOR" "system" "system/lib/service.incremental.so" 0 0 644 "u:object_r:system_lib_file:s0"
-    ADD_TO_WORK_DIR "$DONOR" "system" "system/lib64/service.incremental.so" 0 0 644 "u:object_r:system_lib_file:s0"
-fi
+# OneUI 8.5: old a73xqxx donor swaps are unsafe because they replace core
+# executables/libs from a different platform build. Keep current 8.5 binaries
+# and stub the DDAR/MDF native entry points that the donor blobs removed.
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libepm.so" \
+    "3f2303d5fe0f1df8f65701a9f44f02a928004039290840f9f30301aa" \
+    "5f2403d5e0031f2ac0035fd61f2003d51f2003d51f2003d51f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libepm.so" \
+    "3f2303d5fe4fbfa9842e0094892e0094" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libepm.so" \
+    "3f2303d5fe0f1ef8f44f01a948008052" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libepm.so" \
+    "3f2303d5ffc301d1fd7b01a9fc6f02a9" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libepm.so" \
+    "3f2303d5fd7bbaa9fc6f01a9fa6702a9f85f03a9f65704a9f44f05a9ff0740d1ff0305d100e4006f" \
+    "5f2403d5e0031f2ac0035fd61f2003d51f2003d51f2003d51f2003d51f2003d51f2003d51f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libepm.so" \
+    "3f2303d5ff8301d1fe2300f9f44f05a9" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libepm.so" \
+    "3f2303d5fe0f1df8f65701a9f44f02a928004039290840f9f40302aa" \
+    "5f2403d5e0031f2ac0035fd61f2003d51f2003d51f2003d51f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libepm.so" \
+    "3f2303d5fd7bbaa9fc6f01a9fa6702a9f85f03a9f65704a9f44f05a9ff0740d1ff8304d100e4006f" \
+    "5f2403d5e0031f2ac0035fd61f2003d51f2003d51f2003d51f2003d51f2003d51f2003d51f2003d5"
 
-if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
-    APPLY_PATCH "system" "system/framework/framework.jar" \
-        "$MODPATH/vold/framework.jar/0001-Add-token-argument-in-unlockCeStorage.patch"
-    APPLY_PATCH "system" "system/framework/services.jar" \
-        "$MODPATH/vold/services.jar/0001-Add-token-argument-in-unlockCeStorage.patch"
-fi
+# Some Knox-era shared objects are kept only as loader shims because
+# libandroid_servers.so has direct/transitive DT_NEEDED entries:
+# - hidl_comm_ddar_client.so
+# - vendor.samsung.hardware.tlc.ddar@1.0.so
+# - android.hardware.weaver@1.0.so through libhermes_cred.so
+# lib64/libdualdar.so is also kept for libepm's 8.5 BIND_NOW dependency chain.
+# The libepm entry points above prevent DDAR use.
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "5f2403d5c00100b43f2303d5fd7bbfa9" \
+    "5f2403d520008012c0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5ffc300d1fd7b02a9fd83009100e4006fe0ffffb000781691" \
+    "5f2403d520008012c0035fd61f2003d51f2003d51f2003d51f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5fd7bbea9f30b00f9fd030091" \
+    "5f2403d520008012c0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5ffc300d1fd7b02a9fd83009100e4006fe0ffffb000b40b91" \
+    "5f2403d5e0031f2ac0035fd61f2003d51f2003d51f2003d51f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5fd7bbfa9fd0300917e040094" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5fd7bbfa9fd03009175040094" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5fd7bbfa9fd0300916c040094" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5fd7bbfa9fd03009163040094" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5fd7bbfa9fd0300915a040094" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5fd7bbfa9fd030091e5000094" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5ff0302d1fd7b06a9f33b00f9" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5fd7bbfa9fd03009142000094" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5fd7bbfa9fd03009139000094" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5fd7bbfa9fd03009130000094" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5fd7bbfa9fd03009127000094" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5fd7bbfa9fd03009122000094" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib64/libmdf.so" \
+    "3f2303d5fd7bbfa9fd03009117000094" \
+    "5f2403d5e0031f2ac0035fd61f2003d5"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b558b101460748" "6ff00100704700bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b58ab02648c0ef" "6ff00100704700bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "10b5002002f09ce9" "6ff00100704700bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b58ab01348c0ef" "0020704700bf00bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b502f0b0e90021" "0020704700bf00bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b502f0a6e90238" "0020704700bf00bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b502f09ee90021" "0020704700bf00bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b502f096e90438" "0020704700bf00bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b502f08ee90138" "0020704700bf00bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b501f0b8eb0128" "0020704700bf00bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "10b598b004461648" "0020704700bf00bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b501f0a6eac0b2" "0020704700bf00bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b501f088eac0b2" "0020704700bf00bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b501f08ceac0b2" "0020704700bf00bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b501f08eeac0b2" "0020704700bf00bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b501f06aeac0b2" "0020704700bf00bf"
+DEKNOX_HEX_PATCH "$WORK_DIR/system/system/lib/libmdf.so" \
+    "80b501f06ceac0b2" "0020704700bf00bf"
 
-unset DONOR
+if [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "mssi" ]] || [[ "$TARGET_OS_SINGLE_SYSTEM_IMAGE" == "qssi" ]]; then
+    DECODE_APK "system" "system/framework/framework.jar"
+    if grep -R -F -q 'unlockCeStorage(ILjava/lang/String;[B)V' \
+            "$APKTOOL_DIR/system/framework/framework.jar"/smali_classes*/android/os/IVold.smali 2> /dev/null; then
+        LOG "- Skipping unlockCeStorage token patch; framework.jar already uses token argument"
+    else
+        APPLY_PATCH "system" "system/framework/framework.jar" \
+            "$MODPATH/vold/framework.jar/0001-Add-token-argument-in-unlockCeStorage.patch"
+        APPLY_PATCH "system" "system/framework/services.jar" \
+            "$MODPATH/vold/services.jar/0001-Add-token-argument-in-unlockCeStorage.patch"
+    fi
+fi
 
 DECODE_APK "system" "system/framework/services.jar"
 SOURCE_FILE_ATTR="$(grep -F ".source" "$APKTOOL_DIR/system/framework/services.jar/smali/android/gsi/GsiProgress.smali")"
@@ -182,7 +291,7 @@ if [[ "$SOURCE_PRODUCT_SHIPPING_API_LEVEL" != "$TARGET_PRODUCT_SHIPPING_API_LEVE
         "$SOURCE_PRODUCT_SHIPPING_API_LEVEL" \
         > /dev/null
 fi
-# TODO nuke HdmVendorController.smali
+# Nuke HDM service and vendor controller
 APPLY_PATCH "system" "system/framework/services.jar" \
     "$MODPATH/hdm/services.jar/0001-Nuke-Knox-HDM.patch"
 SMALI_PATCH "system" "system/priv-app/DeviceDiagnostics/DeviceDiagnostics.apk" \
@@ -248,7 +357,7 @@ APPLY_PATCH "system_ext" "priv-app/StorageManager/StorageManager.apk" \
 
 unset HDM_VERSION HDM_POLICY_TYPE
 
-# SEC_PRODUCT_FEATURE_KNOX_SUPPORT_BLDP
+#SEC_PRODUCT_FEATURE_KNOX_SUPPORT_BLDP
 SMALI_PATCH "system" "system/app/Traceur/Traceur.apk" \
     "smali/com/samsung/android/knox/integrity/EnhancedAttestationPolicy.smali" "return" \
     'isBldpEventSupported()Z' 'false'
@@ -301,7 +410,7 @@ SMALI_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
     "smali_classes4/com/samsung/android/knox/integrity/EnhancedAttestationPolicy.smali" "return" \
     'isMposSupported()Z' 'false'
 
-# SEC_PRODUCT_FEATURE_KNOX_SUPPORT_KNOXGUARD
+#SEC_PRODUCT_FEATURE_KNOX_SUPPORT_KNOXGUARD
 APPLY_PATCH "system" "system/framework/services.jar" \
     "$MODPATH/knoxguard/services.jar/0001-Disable-KnoxGuard.patch"
 
@@ -309,7 +418,7 @@ APPLY_PATCH "system" "system/framework/services.jar" \
 APPLY_PATCH "system" "system/framework/framework.jar" \
     "$MODPATH/kmxai/framework.jar/0001-Nuke-Knox-Matrix-AI-Privacy.patch"
 
-# SEC_PRODUCT_FEATURE_FRAMEWORK_SUPPORT_BLOCKCHAIN_SERVICE
+#SEC_PRODUCT_FEATURE_FRAMEWORK_SUPPORT_BLOCKCHAIN_SERVICE
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_BLOCKCHAIN_SERVICE" --delete
 SMALI_PATCH "system" "system/framework/framework.jar" \
     "smali_classes6/com/samsung/android/ProductPackagesRune.smali" "replaceall" \

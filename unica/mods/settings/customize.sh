@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Load NPL version config
-source "$SRC_DIR/npl/configs/version.sh" || true
+source "$SRC_DIR/unica/configs/version.sh" || true
 
 # Set NPL ROM identity properties (shown in NPL Settings menu)
 SET_PROP "system" "ro.npl.version"    "${NPL_VERSION:-1.0-STABLE}"
@@ -9,8 +9,7 @@ SET_PROP "system" "ro.npl.maintainer" "${NPL_MAINTAINER:-Cosine}"
 SET_PROP "system" "ro.npl.build.date" "$(date +%Y-%m-%d)"
 
 # Keep ro.unica.version compatible so the existing smali reads it
-SET_PROP "system" "ro.unica.version" "${NPL_VERSION:-1.0-STABLE}"
-
+SET_PROP "system" "ro.unica.version" "${ROM_VERSION:-${NPL_VERSION:-1.0-STABLE}}"
 
 # Instrumentation.smali 패치 (One UI 8.x / 최신 안드로이드 시그니처 고려)
 SMALI_PATCH "system" "system/framework/framework.jar" \

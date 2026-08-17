@@ -25,7 +25,7 @@ index be7fe1989..52db7ceb5 100644
  
      invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
  
--    const-string/jumbo v0, "ro.vendor.hdm.hdm_supported_subsystem"
+-    const-string v0, "ro.vendor.hdm.hdm_supported_subsystem"
 -
 -    const-string v1, "none"
 -
@@ -413,7 +413,7 @@ index be7fe1989..52db7ceb5 100644
  
 -    sget-object v0, Lcom/samsung/android/knox/hdm/HdmManager;->TAG:Ljava/lang/String;
 -
--    const-string/jumbo v1, "removeRevocationInfo() on HdmManager.java"
+-    const-string v1, "removeRevocationInfo() on HdmManager.java"
 -
 -    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 -
@@ -461,7 +461,7 @@ index be7fe1989..52db7ceb5 100644
  
 -    sget-object v0, Lcom/samsung/android/knox/hdm/HdmManager;->TAG:Ljava/lang/String;
 -
--    const-string/jumbo v1, "setHdmPolicy() on HdmManager.java"
+-    const-string v1, "setHdmPolicy() on HdmManager.java"
 -
 -    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 -
@@ -509,7 +509,7 @@ index be7fe1989..52db7ceb5 100644
  
 -    sget-object v0, Lcom/samsung/android/knox/hdm/HdmManager;->TAG:Ljava/lang/String;
 -
--    const-string/jumbo v1, "setHdmTaCmd() on HdmManager.java"
+-    const-string v1, "setHdmTaCmd() on HdmManager.java"
 -
 -    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 -
@@ -557,7 +557,7 @@ index be7fe1989..52db7ceb5 100644
  
 -    sget-object v0, Lcom/samsung/android/knox/hdm/HdmManager;->TAG:Ljava/lang/String;
 -
--    const-string/jumbo v1, "setSwBlock() on HdmManager.java"
+-    const-string v1, "setSwBlock() on HdmManager.java"
 -
 -    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 -
@@ -605,7 +605,7 @@ index be7fe1989..52db7ceb5 100644
  
 -    sget-object v0, Lcom/samsung/android/knox/hdm/HdmManager;->TAG:Ljava/lang/String;
 -
--    const-string/jumbo v1, "syncRevocationInfo() on HdmManager.java"
+-    const-string v1, "syncRevocationInfo() on HdmManager.java"
 -
 -    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 -
@@ -653,7 +653,7 @@ index be7fe1989..52db7ceb5 100644
  
 -    sget-object v0, Lcom/samsung/android/knox/hdm/HdmManager;->TAG:Ljava/lang/String;
 -
--    const-string/jumbo v1, "syncSwBlockFromBoot() on HdmManager.java"
+-    const-string v1, "syncSwBlockFromBoot() on HdmManager.java"
 -
 -    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 -
@@ -687,4 +687,3 @@ index be7fe1989..52db7ceb5 100644
  
 -- 
 2.51.1
-

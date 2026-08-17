@@ -46,10 +46,22 @@ GET_DEVICE_FROM_MOUNTPOINT()
         echo -n "map_partition(\"${MOUNTPOINT/\//}\")"
     else
         local DEVICE
-        DEVICE="$(grep -w "$MOUNTPOINT" "$FSTAB_FILE")"
-        DEVICE="$(sed "/^#/d" <<< "$DEVICE")"
-        DEVICE="$(head -n 1 <<< "$DEVICE")"
-        DEVICE="$(cut -f 1 <<< "$DEVICE" | cut -d " " -f 1)"
+        DEVICE="$(awk -v MOUNTPOINT="$MOUNTPOINT" '
+            $0 ~ /^[[:space:]]*#/ {
+                next
+            }
+            NF < 3 {
+                next
+            }
+            $2 == MOUNTPOINT {
+                print $1
+                exit
+            }
+            $1 == MOUNTPOINT {
+                print $3
+                exit
+            }
+        ' "$FSTAB_FILE")"
 
         if [ ! "$DEVICE" ]; then
             if [[ "$MOUNTPOINT" == "/dt" ]]; then

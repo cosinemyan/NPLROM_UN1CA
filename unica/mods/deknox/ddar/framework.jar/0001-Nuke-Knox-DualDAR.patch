@@ -205,28 +205,28 @@ index 85ab4e7f..b1ae8edc 100644
  
 -    :cond_1
 +    :cond_0
-     invoke-virtual {p0}, Lcom/android/internal/widget/VerifyCredentialResponse;->getResponseCode()I
- 
+     invoke-virtual {p0}, Lcom/android/internal/widget/VerifyCredentialResponse;->isMatched()Z
+
      move-result p1
- 
-     const/4 p2, 0x1
- 
--    if-nez p1, :cond_2
-+    if-nez p1, :cond_1
- 
-     return p2
- 
+
+-    if-eqz p1, :cond_2
++    if-eqz p1, :cond_1
+
+     const/4 p0, 0x1
+
+     return p0
+
 -    :cond_2
 +    :cond_1
-     invoke-virtual {p0}, Lcom/android/internal/widget/VerifyCredentialResponse;->getResponseCode()I
- 
+     invoke-virtual {p0}, Lcom/android/internal/widget/VerifyCredentialResponse;->hasTimeout()Z
+
      move-result p1
- 
--    if-eq p1, p2, :cond_3
-+    if-eq p1, p2, :cond_2
- 
+
+-    if-nez p1, :cond_3
++    if-nez p1, :cond_2
+
      return v1
- 
+
 -    :cond_3
 +    :cond_2
      new-instance p1, Lcom/android/internal/widget/LockPatternUtils$RequestThrottledException;
@@ -561,7 +561,7 @@ index 85ab4e7f..b1ae8edc 100644
 -    if-nez p0, :cond_1
 +    if-nez p0, :cond_0
  
-     sget-object p0, Lcom/android/internal/widget/VerifyCredentialResponse;->ERROR:Lcom/android/internal/widget/VerifyCredentialResponse;
+     sget-object p0, Lcom/android/internal/widget/VerifyCredentialResponse;->OTHER_ERROR:Lcom/android/internal/widget/VerifyCredentialResponse;
      :try_end_0
      .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
  
@@ -686,7 +686,7 @@ index 31adc63a..eabe83ae 100644
 -
 -    sget-object v0, Lcom/samsung/android/knox/SemPersonaManager;->TAG:Ljava/lang/String;
 -
--    const-string v1, "getDualDARProfile"
+-    const-string/jumbo v1, "getDualDARProfile"
 -
 -    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 -
@@ -854,4 +854,3 @@ index 5f48b370..3a3b422b 100644
  
 -- 
 2.51.1
-

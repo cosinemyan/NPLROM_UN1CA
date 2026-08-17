@@ -1,0 +1,321 @@
+{
+    "version": "1.0.15",
+    "device_types": "flagships, innovative",
+    "description": "Configurations file for Midas EnhanceScan IPs",
+    "comment": "Updated config with model fetching based on chipset ids instead of device ids",
+    "dnn_models_path": "/vendor/etc/midas_enhancedocumentscan/models/",
+    "device_property": "ro.product.device",
+    "device_manufacturer": "ro.soc.manufacturer",
+    "device_soc": "ro.soc.model",
+    "enhancements": [
+        {
+            "type": "deblur",
+            "inference_dim": [
+                512,
+                512
+            ],
+            "nChannel": 3,
+            "dnn_model_info": [
+                {
+                    "version": "500",
+                    "input_node": ["X"],
+                    "output_node": ["DepthToSpace_4"],
+                    "compatible_models": [
+                    {
+                        "id": "adreno,amd",
+                        "model_file": [
+                             "SRIBEnhScan_aiDEBLUR_V500_FP16_SM8750.dlc"
+                        ],
+                        "models_list": [
+                        ]
+                    } 
+                ],
+                    "compute_unit": ["DSP"],
+                    "model_format": ["SNPE"],
+                    "exec_type": ["FLOAT16"]
+                },
+                {
+                    "version": "400",
+                    "input_node": ["X"],
+                    "output_node": ["DepthToSpace_4"],
+                    "compatible_models": [
+                    {
+                        "id": "2.14.1",
+                        "model_file": [
+                             "SRIBEnhScan_aiDEBLUR_V400_FP16_SM8650_qnn2143.tvm.so"
+                        ]
+                    } 
+                ],
+                    "compute_unit": ["DSP"],
+                    "model_format": ["TVM"],
+                    "exec_type": ["FLOAT16"]
+                },
+                {
+                    "version": "400",
+                    "input_node": ["X"],
+                    "output_node": ["DepthToSpace_4"],
+                    "compatible_models": [
+                        {
+                        "id": "6.10.17",
+                        "model_file": [
+                            "SRIBEnhScan_aiDEBLUR_V400_FP16.dla"
+                        ],
+                        "models_list": [
+                            "gts10p", "gts10pwifi", "gts10u", "gts10uwifi"
+                        ]
+                    }
+                ],
+                    "compute_unit": ["NPU"],
+                    "model_format": ["MNP"],
+                    "exec_type": ["FLOAT16"]
+                },
+                {
+                    "version": "400",
+                    "input_node": ["X"],
+                    "output_node": ["DepthToSpace_4"],
+                    "compatible_models": [
+                        {
+                        "id": "6.10.17",
+                        "model_file": [
+                             "SRIBEnhScan_aiDEBLUR_V400_FP16_S5E9945.nnc"
+                        ]
+                    }
+                ],
+                    "compute_unit": ["NPU"],
+                    "model_format": ["EDEN"],
+                    "exec_type": ["FLOAT16"]
+                },
+                {
+                    "version": "300",
+                    "input_node": ["X"],
+                    "output_node": ["DepthToSpace_4"],
+                    "compatible_models": [
+                        {
+                            "id": "2.3.1",
+                            "model_file": [
+                                 "SRIBEnhScan_aiDEBLUR_V300_FP16_SM8550_snpe231.dlc"
+                            ]
+                        }
+                ],
+                    "compute_unit": ["DSP"],
+                    "model_format": ["SNPE"],
+                    "exec_type": ["FLOAT16"]
+                },
+                {
+                    "version": "default",
+                    "input_node": ["X"],
+                    "output_node": ["DepthToSpace_4"],
+                    "compatible_models": [
+                        {
+                        "id": "adreno,amd",
+                        "model_file": [
+                            "SRIBEnhScan_aiDEBLUR_V400_FP16.tflite"
+                        ]
+                    }
+                ],
+                    "compute_unit": ["GPU"],
+                    "model_format": ["TENSORFLOWLITE"],
+                    "exec_type": ["FLOAT16"]
+                }
+            ]
+        },
+        {
+            "type": "for",
+            "inference_dim": [
+                512,
+                512
+            ],
+            "nChannel": 3,
+            "dnn_model_info": [
+                {
+                    "version": "610",
+                    "input_node": ["input_layer", "input_layer"],
+                    "output_node": ["output_layer", "output_layer"],
+                    "compatible_models": [
+                    {
+                        "id": "adreno,amd",
+                        "model_file": [
+                             "SRIBEnhScan_aiOBJECTSEGMENT_V610_FP16_SM8750.dlc",
+                             "SRIBEnhScan_aiOBJECTINPAINT_V300_FP16_SM8750.dlc"
+                        ]
+                    } 
+                ],
+                    "compute_unit": ["DSP"],
+                    "model_format": ["SNPE"],
+                    "exec_type": ["FLOAT16"]
+                },
+                {
+                    "version": "610",
+                    "input_node": ["input_layer", "input_layer"],
+                    "output_node": ["output_layer", "output_layer"],
+                    "compatible_models": [
+                    {
+                        "id": "2.14.1",
+                        "model_file": [
+                            "SRIBEnhScan_aiOBJECTSEGMENT_V610_FP16_SM8650_qnn2143.tvm.so",
+                            "SRIBEnhScan_aiOBJECTINPAINT_V300_FP16_SM8650_qnn2143.tvm.so"
+                        ]
+                    }
+                ],
+                    "compute_unit": ["DSP"],
+                    "model_format": ["TVM"],
+                    "exec_type": ["FLOAT16"]
+                },
+                {
+                    "version": "610",
+                    "input_node": ["input_layer", "input_layer"],
+                    "output_node": ["output_layer", "output_layer"],
+                    "compatible_models": [
+                    {
+                        "id": "6.11.11.1",
+                        "model_file": [
+                            "SRIBEnhScan_aiOBJECTSEGMENT_V610_FP16_S5E9955.nnc",
+                            "SRIBEnhScan_aiOBJECTINPAINT_V300_FP16_S5E9955.nnc"
+                        ]
+                    }
+                ],
+                    "compute_unit": ["NPU"],
+                    "model_format": ["EDEN"],
+                    "exec_type": ["FLOAT16"]
+                },
+                {
+                    "version": "610",
+                    "input_node": ["input_layer", "input_layer"],
+                    "output_node": ["output_layer", "output_layer"],
+                    "compatible_models": [
+                    {
+                        "id": "6.11.11.1",
+                        "model_file": [
+                            "SRIBEnhScan_aiOBJECTSEGMENT_V610_FP16_S5E9945.nnc",
+                            "SRIBEnhScan_aiOBJECTINPAINT_V300_FP16_S5E9945.nnc"
+                        ]
+                    }
+                ],
+                    "compute_unit": ["NPU"],
+                    "model_format": ["EDEN"],
+                    "exec_type": ["FLOAT16"]
+                },
+                {
+                    "version": "610",
+                    "input_node": ["input_layer", "input_layer"],
+                    "output_node": ["output_layer", "output_layer"],
+                    "compatible_models": [
+                    {
+                        "id": "6.11.11.1",
+                        "model_file": [
+                            "SRIBEnhScan_aiOBJECTSEGMENT_V610_FP16.dla",
+                            "SRIBEnhScan_aiOBJECTINPAINT_V300_FP16.dla"
+                        ],
+                        "models_list": [
+                            "gts10p", "gts10pwifi", "gts10u", "gts10uwifi"
+                        ]
+                    }
+                ],
+                    "compute_unit": ["NPU"],
+                    "model_format": ["MNP"],
+                    "exec_type": ["FLOAT16"]
+                },
+                {
+                    "version": "500",
+                    "input_node": ["input_layer", "input_layer"],
+                    "output_node": ["output_layer", "output_layer"],
+                    "compatible_models": [
+                        {
+                            "id": "2.3.1",
+                            "model_file": [
+                                "SRIBEnhScan_aiOBJECTSEGMENT_V610_FP16_SM8550_snpe231.dlc",
+                                "SRIBEnhScan_aiOBJECTINPAINT_V300_FP16_SM8550_snpe231.dlc"
+                            ]
+                        }
+                ],
+                    "compute_unit": ["DSP"],
+                    "model_format": ["SNPE"],
+                    "exec_type": ["FLOAT16"]
+                },
+                {
+                    "version": "default",
+                    "input_node": ["input_layer", "input_layer"],
+                    "output_node": ["output_layer", "output_layer"],
+                    "compatible_models": [
+                        {
+                        "id": "adreno,amd",
+                        "model_file": [
+                            "SRIBEnhScan_aiOBJECTSEGMENT_V610_FP16.onnx",
+                            "SRIBEnhScan_aiOBJECTINPAINT_V300_FP16.onnx"
+                        ]
+                    }
+                ],
+                    "compute_unit": ["GPU"],
+                    "model_format": ["ONNX"],
+                    "exec_type": ["FLOAT16"]
+                }
+            ]
+        },
+        {
+            "type": "hdr",
+            "inference_dim": [
+              512,
+              512
+            ],
+            "nChannel": 12,
+            "dnn_model_info": [
+                {
+                    "version": "580",
+                    "input_node": ["input","input","input"],
+                    "output_node": ["output","output","output"],
+                    "compatible_models": [  
+                      {
+                      "id": "adreno,amd",
+                      "model_file": [
+                         "SRIBEnhScan_aiIC_GLOBAL_V580_FP16_SM8750.dlc",
+                         "SRIBEnhScan_aiIC_MASK_V580_FP16_SM8750.dlc",
+                         "SRIBEnhScan_aiIC_LOCAL_V580_FP16_SM8750.dlc"
+                      ],
+                      "models_list": []
+                    }
+                ],
+                    "compute_unit": ["DSP"],
+                    "model_format": ["SNPE"],
+                    "exec_type": ["FLOAT16"]
+                },
+                {
+                    "version": "580",
+                    "input_node": ["input","input","input"],
+                    "output_node": ["output","output","output"],
+                    "compatible_models": [
+                    {
+                    "id": "adreno,amd",
+                    "model_file": [
+                        "SRIBEnhScan_aiIC_GLOBAL_V580_FP16_SM8650_snpe214.dlc",
+                        "SRIBEnhScan_aiIC_MASK_V580_FP16_SM8650_snpe214.dlc",
+                        "SRIBEnhScan_aiIC_LOCAL_V580_FP16_SM8650_snpe214.dlc"
+                    ]
+                    }
+                ],
+                    "compute_unit": ["DSP"],
+                    "model_format": ["SNPE"],
+                    "exec_type": ["FLOAT16"]
+                },
+                {
+                    "version": "580",
+                    "input_node": ["input","input","input"],
+                    "output_node": ["output","output","output"],
+                    "compatible_models": [
+                    {
+                    "id": "adreno,amd",
+                    "model_file": [
+                        "SRIBEnhScan_aiIC_GLOBAL_V580_FP16_S5E9945.nnc",
+                        "SRIBEnhScan_aiIC_MASK_V580_FP16_S5E9945.nnc",
+                        "SRIBEnhScan_aiIC_LOCAL_V580_FP16_S5E9945.nnc"
+                    ]
+                    }
+                ],
+                    "compute_unit": ["NPU"],
+                    "model_format": ["EDEN"],
+                    "exec_type": ["FLOAT16"]
+                }
+            ]
+        }
+    ]
+  }
+  

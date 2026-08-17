@@ -1,0 +1,8 @@
+{
+   "version_id": "v1",
+   "pcmodel": "v1.2.0",
+   "compiler": "snpe-2.39.0",
+   "model_type" : "dsp",
+   "precision" : "float16",
+   "model_path" : "/vendor/etc/saiv/image_understanding/db/ss_magnet/06-10_DocumentScan_LineDetection_v1.dlc"
+}

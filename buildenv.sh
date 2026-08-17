@@ -61,7 +61,7 @@ run_cmd()
         shift
         mkdir -p "$(dirname "$WORK_DIR")"
         (set -o pipefail; "$SRC_DIR/scripts/$CMD.sh" "$@" |& tee \
-            >(sed -r -e "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2};?)?)?[mGK]//g" -e "/#/d" > "$(dirname "$WORK_DIR")/$CMD-$(date +%Y%m%d_%H%M%S).log"))
+            >(sed -r -e "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2};?)?)?[mGK]//g" -e "/#/d" > "$(dirname "$OUT_DIR")/$CMD-$(date +%Y%m%d_%H%M%S).log"))
         return $?
     else
         local CMDS=()

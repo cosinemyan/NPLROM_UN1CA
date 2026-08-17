@@ -87,15 +87,15 @@ index 93c961ac..cc440bb9 100644
 -
 -    const-string v6, "edu"
 -
--    const-string v7, "go"
+-    const-string/jumbo v7, "go"
 -
--    const-string v8, "gouv"
+-    const-string/jumbo v8, "gouv"
 -
--    const-string v9, "gov"
+-    const-string/jumbo v9, "gov"
 -
--    const-string v10, "info"
+-    const-string/jumbo v10, "info"
 -
--    const-string v11, "lg"
+-    const-string/jumbo v11, "lg"
 -
 -    const-string/jumbo v12, "ne"
 -
@@ -290,7 +290,7 @@ index 93c961ac..cc440bb9 100644
 -    .catch Ljava/security/cert/CertificateParsingException; {:try_start_0 .. :try_end_0} :catch_0
 -
 -    :catch_0
--    const-string p0, "list of subject alternative names is not available"
+-    const-string/jumbo p0, "list of subject alternative names is not available"
 -
 -    invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 -
@@ -1503,7 +1503,7 @@ index 93c961ac..cc440bb9 100644
 -
 -    move-result-object p1
 -
--    const-string p2, "logPrivileged"
+-    const-string/jumbo p2, "logPrivileged"
 -
 -    invoke-virtual {p0, p2, v0}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
 -
@@ -1639,4 +1639,3 @@ index 93c961ac..cc440bb9 100644
  .end method
 -- 
 2.51.1
-

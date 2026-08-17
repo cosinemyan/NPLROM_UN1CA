@@ -76,13 +76,13 @@ EXTRACT_OS_PARTITIONS()
 
         # shellcheck disable=SC2013
         for p in $(grep "partition_list" "$FW_DIR/${MODEL}_${CSC}/os_partitions_metadata.txt" | cut -d "=" -f 2 -s); do
-            if grep -q "virtual_ab" "$FW_DIR/${MODEL}_${CSC}/os_partitions_metadata.txt"; then
+            # if grep -q "virtual_ab" "$FW_DIR/${MODEL}_${CSC}/os_partitions_metadata.txt"; then
                 # In Virtual A/B devices only the A slot is filled
-                EVAL "lpunpack -p \"${p}_a\" \"$FW_DIR/${MODEL}_${CSC}/super.img\" \"$FW_DIR/${MODEL}_${CSC}\"" || exit 1
-                mv -f "$FW_DIR/${MODEL}_${CSC}/${p}_a.img" "$FW_DIR/${MODEL}_${CSC}/${p}.img"
-            else
+                # EVAL "lpunpack -p \"${p}_a\" \"$FW_DIR/${MODEL}_${CSC}/super.img\" \"$FW_DIR/${MODEL}_${CSC}\"" || exit 1
+                # mv -f "$FW_DIR/${MODEL}_${CSC}/${p}_a.img" "$FW_DIR/${MODEL}_${CSC}/${p}.img"
+            # else
                 EVAL "lpunpack -p \"${p}\" \"$FW_DIR/${MODEL}_${CSC}/super.img\" \"$FW_DIR/${MODEL}_${CSC}\"" || exit 1
-            fi
+            # fi
         done
 
         rm -f "$FW_DIR/${MODEL}_${CSC}/super.img"
@@ -328,9 +328,9 @@ STORE_OS_PARTITION_METADATA()
 
         {
             echo "use_dynamic_partitions=true"
-            if grep -q -w "virtual_ab_device" <<< "$LPDUMP"; then
-                echo "virtual_ab=true"
-            fi
+            # if grep -q -w "virtual_ab_device" <<< "$LPDUMP"; then
+                # echo "virtual_ab=true"
+            # fi
             echo "super_partition_size=$PARTITION_SIZE"
             echo "super_partition_group=$GROUP_NAME"
             echo -n "super_${GROUP_NAME}_group_size="

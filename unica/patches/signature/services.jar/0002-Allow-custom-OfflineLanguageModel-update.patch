@@ -1,0 +1,116 @@
+From 2b60bd9ced76a96f7cf66f1e85b7f17c20372663 Mon Sep 17 00:00:00 2001
+From: UN1CA <unica@localhost>
+Date: Tue, 14 Jul 2026 22:09:00 +0200
+Subject: [PATCH] Allow custom Samsung AI package updates
+
+Normalize trusted custom-platform-signed Samsung AI package updates to
+the existing system package signing identity before PackageManager
+performs its normal update signature verification.
+
+Keep the exception scoped to exact package names because AOSP test keys are
+public and must not be accepted as updates for arbitrary packages.
+---
+ .../android/server/pm/InstallPackageHelper.smali  | 81 +++++++++++++++++++
+ 1 file changed, 81 insertions(+)
+
+diff --git a/smali_classes2/com/android/server/pm/InstallPackageHelper.smali b/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
+index 0afae29a..9ad07e34 100644
+--- a/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
++++ b/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
+@@ -325,6 +325,85 @@
+     return-object v1
+ .end method
+ 
++.method public final setCustomSignaturesForInstall(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;Lcom/android/server/pm/PackageSetting;)V
++    .locals 3
++
++    invoke-interface {p1}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->getPackageName()Ljava/lang/String;
++
++    move-result-object v0
++
++    const-string v1, "com.samsung.android.offline.languagemodel"
++
++    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-nez v1, :cond_1
++
++    const-string v1, "com.samsung.android.smartsuggestions"
++
++    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-nez v1, :cond_1
++
++    const-string v1, "com.samsung.android.aioskernelservice"
++
++    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-nez v1, :cond_1
++
++    const-string v1, "com.samsung.android.ssco"
++
++    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-nez v1, :cond_1
++
++    const-string v1, "com.samsung.android.aicore"
++
++    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-nez v1, :cond_1
++
++    const-string v1, "com.samsung.android.intellivoiceservice"
++
++    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_0
++
++    :cond_1
++
++    if-eqz p2, :cond_0
++
++    invoke-interface {p1}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->getSigningDetails()Landroid/content/pm/SigningDetails;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Landroid/content/pm/SigningDetails;->getSignatures()[Landroid/content/pm/Signature;
++
++    move-result-object v0
++
++    invoke-virtual {p2}, Lcom/android/server/pm/PackageSetting;->getPkg()Lcom/android/internal/pm/parsing/pkg/AndroidPackageInternal;
++
++    move-result-object v1
++
++    iget-object v2, p0, Lcom/android/server/pm/InstallPackageHelper;->mCustomPlatformSignatures:[Landroid/content/pm/Signature;
++
++    invoke-static {p1, v1, v2, v0}, Lcom/android/server/pm/ScanPackageUtils;->setCustomSignatures(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;Lcom/android/server/pm/pkg/AndroidPackage;[Landroid/content/pm/Signature;[Landroid/content/pm/Signature;)V
++
++    :cond_0
++    return-void
++.end method
++
+ .method public static isAdminApplication(Lcom/android/server/pm/pkg/AndroidPackage;)Z
+     .locals 5
+ 
+@@ -17160,6 +17239,8 @@
+ 
+     move-result v22
+ 
++    invoke-virtual {v1, v3, v6}, Lcom/android/server/pm/InstallPackageHelper;->setCustomSignaturesForInstall(Lcom/android/internal/pm/parsing/pkg/ParsedPackage;Lcom/android/server/pm/PackageSetting;)V
++
+     invoke-interface {v3}, Lcom/android/internal/pm/parsing/pkg/ParsedPackage;->getSigningDetails()Landroid/content/pm/SigningDetails;
+ 
+     move-result-object v20
+-- 
+2.51.0

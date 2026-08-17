@@ -5,6 +5,7 @@
 
 # Common file extensions
 *.apk binary
+*.apk.[0-9][0-9] binary
 *.apex binary
 *.bin binary
 *.so binary
@@ -16,11 +17,15 @@
 *.png binary
 *.qmg binary
 *.webp binary
+*.bcube binary
+*.cube binary
+*.dlc binary
 
 # ROM-specific prebuilt blobs
 prebuilts/bootable/deprecated-ota/updater binary
 prebuilts/*/*/*/** binary
 unica/mods/prophide/system/bin/rezetprop binary
+unica/mods/rezoss/system_ext/bin/mosey_server binary
 
 # Device-specific prebuilt blobs
 target/a52sxq/patches/wpss/vendor/firmware/** binary

@@ -56,7 +56,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: ${{ fromJSON(needs.generate-matrix.outputs.matrix) }}
+        target: [dm1q]
 
     steps:
       - name: Checkout repo
@@ -133,3 +133,28 @@ jobs:
 
       - name: Build ROM
         run: ./scripts/make_rom.sh
+
+      - name: Upload to GoFile
+        run: |
+          ZIP_FILE=$(find out -type f -name "*sign_FZG1.zip" | head -n 1)
+
+          if [ -z "$ZIP_FILE" ]; then
+            echo "Error: No ZIP file found in out/ directory!"
+            exit 1
+          fi
+
+          sleep 2
+
+          echo "Found file: $ZIP_FILE"
+
+          echo "MD5:"
+          md5sum "$ZIP_FILE"
+
+          echo "SHA256:"
+          sha256sum "$ZIP_FILE"
+
+          echo "Starting upload to GoFile..."
+          RESPONSE=$(curl -s -F "file=@$ZIP_FILE" -F "token=${{ secrets.GOFILE_TOKEN }}" -F "folderId=${{ secrets.GOFILE_FOLDER_ID }}" "https://upload-eu-par.gofile.io/uploadFile")
+
+          echo "Uploaded successfully! Download link:"
+          echo "$RESPONSE" | jq -r '.data.downloadPage'

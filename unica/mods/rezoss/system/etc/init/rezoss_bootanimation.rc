@@ -1,0 +1,20 @@
+on post-fs-data
+    mkdir /data/misc/bootanim 0755 system system
+    restorecon /data/misc/bootanim
+    exec_background -- /system/bin/sh /system/etc/unica/rezoss_bootanimation.sh --apply
+
+on boot
+    exec_background -- /system/bin/sh /system/etc/unica/rezoss_bootanimation.sh --apply
+    exec_background -- /system/bin/sh /system/etc/unica/rezoss_bootanimation.sh --wait-stage
+
+on property:sys.user.0.ce_available=true
+    exec_background -- /system/bin/sh /system/etc/unica/rezoss_bootanimation.sh --stage-only
+
+on property:sys.boot_completed=1
+    exec_background -- /system/bin/sh /system/etc/unica/rezoss_bootanimation.sh --stage-only
+
+on property:dev.bootcomplete=1
+    exec_background -- /system/bin/sh /system/etc/unica/rezoss_bootanimation.sh --stage-only
+
+on shutdown
+    exec -- /system/bin/sh /system/etc/unica/rezoss_bootanimation.sh --stage-now

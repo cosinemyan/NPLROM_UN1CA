@@ -1,0 +1,9 @@
+{
+	"version_id": "v2",
+	"pcmodel" : "2.5",
+	"compiler": "snpe-2.39.0",
+	"model_type" : "dsp",
+	"precision" : "float16",
+	"model_path" : "/vendor/etc/saiv/image_understanding/db/doc_rectifier/06-1_DocumentScan_DocDewarping_v2.dlc"
+}
+

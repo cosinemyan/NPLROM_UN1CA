@@ -60,7 +60,8 @@ PREPARE_SCRIPT()
         OUTPUT_FILE="$OUT_DIR/NPL_"
         OUTPUT_FILE+="$(grep "^version" <<< "$TARGET_BUILD_INFO" | cut -d "=" -f 2 -s)"
         OUTPUT_FILE+="_"
-        OUTPUT_FILE+="$(date -d "@$(grep "^timestamp" <<< "$TARGET_BUILD_INFO" | cut -d "=" -f 2 -s)" "+%Y%m%d")"
+        #OUTPUT_FILE+="$(date -d "@$(grep "^timestamp" <<< "$TARGET_BUILD_INFO" | cut -d "=" -f 2 -s)" "+%d%m%y-%H%M%S")"
+        OUTPUT_FILE+="$(date +%d%m%y-%H%M%S)"
         OUTPUT_FILE+="_"
         OUTPUT_FILE+="$(grep "^device" <<< "$TARGET_BUILD_INFO" | cut -d "=" -f 2 -s)"
         if $INCREMENTAL; then
@@ -75,7 +76,9 @@ PREPARE_SCRIPT()
         if ! $DEBUG || $ROM_IS_OFFICIAL; then
             OUTPUT_FILE+="-sign"
         fi
-        OUTPUT_FILE+=".zip"
+		suffix="$(GET_PROP "system" "ro.build.PDA")"
+        suffix="${suffix: -4}"
+        OUTPUT_FILE+="_${suffix}.zip"
     fi
 }
 

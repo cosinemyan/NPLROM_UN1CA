@@ -44,7 +44,11 @@ APPLY_PATCH()
     DECODE_APK "$PARTITION" "$FILE" || return 1
 
     LOG "- Applying \"$(grep "^Subject:" "$PATCH" | sed "s/.*PATCH] //")\" to /$PARTITION/$FILE"
-    EVAL "LC_ALL=C git apply --directory=\"$APKTOOL_DIR/$PARTITION/${FILE//system\//}\" --verbose --unsafe-paths \"$PATCH\"" || return 1
+	EVAL "LC_ALL=C patch -p1 \
+	-d \"$APKTOOL_DIR/$PARTITION/${FILE//system\//}\" \
+	-N --forward -l \
+	< \"$PATCH\"" || return 1
+    # EVAL "LC_ALL=C git apply --directory=\"$APKTOOL_DIR/$PARTITION/${FILE//system\//}\" --verbose --unsafe-paths \"$PATCH\"" || return 1
 }
 
 # DECODE_APK <partition> <apk/jar>
@@ -74,9 +78,9 @@ GET_GALAXY_STORE_DOWNLOAD_URL()
     local ONEUI
     local PROTOCOL
 
-    # Galaxy S25 Ultra EUR_OPENX
-    # Galaxy S22 Ultra GBL_OPENX
-    DEVICES=("SM-S938B" "SM-S901E")
+    # Galaxy S26 Ultra EUR_OPENX
+    # Galaxy S23 Ultra GBL_OPENX
+    DEVICES=("SM-S948B" "SM-S938B")
 
     OS="$(GET_PROP "system" "ro.build.version.sdk")"
     ONEUI="$(GET_PROP "system" "ro.build.version.oneui")"
@@ -87,7 +91,7 @@ GET_GALAXY_STORE_DOWNLOAD_URL()
     fi
     if [ ! "$ONEUI" ]; then
         # Fallback to One UI 8.0
-        ONEUI="80000"
+        ONEUI="80500"
     fi
 
     PROTOCOL+="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>"

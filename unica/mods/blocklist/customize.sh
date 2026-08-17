@@ -1,3 +1,5 @@
+ADD_TO_WORK_DIR "$MODPATH" "system" "system/etc/unica_blocklist.xml" 0 0 644 "u:object_r:system_file:s0"
+
 DELETE_FROM_WORK_DIR "system" "system/etc/ldu_blocklist.xml"
 
 APPLY_PATCH "system" "system/framework/services.jar" \

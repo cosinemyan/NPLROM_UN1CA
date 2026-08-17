@@ -1,0 +1,11 @@
+<permissions>
+  <privapp-permissions package="com.samsung.android.aicore">
+    <permission name="android.permission.READ_SECURE_SETTINGS"/>
+    <permission name="android.permission.REAL_GET_TASKS"/>
+    <permission name="android.permission.SET_ACTIVITY_WATCHER"/>
+    <permission name="android.permission.WRITE_SETTINGS"/>
+    <permission name="android.permission.WRITE_SECURE_SETTINGS"/>
+    <permission name="com.samsung.android.aioskernelservice.EXECUTE_GENAI"/>
+    <permission name="mediatek.permission.ACCESS_APU_SYS"/>
+  </privapp-permissions>
+</permissions>
