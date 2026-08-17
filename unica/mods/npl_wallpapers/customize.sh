@@ -128,7 +128,7 @@ for src in "${ASSET_FILES[@]}"; do
     esac
 
     CATALOG_NAMES+=("$catalog_name")
-    NPL_ENSURE_APKTOOL_ENTRY "$APK_DIR/apktool.yml" "res/${DRAWABLE_DIR#"$APK_DIR"/}/${stem}.webp"
+    NPL_ENSURE_APKTOOL_ENTRY "$APK_DIR/apktool.yml" "${DRAWABLE_DIR#"$APK_DIR"/}/${stem}.webp"
 done
 
 if [ "${#CATALOG_NAMES[@]}" -eq 0 ]; then

@@ -75,6 +75,13 @@ BUILD()
             SHORTEN_RESOURCE_PATHS=false
             PREPARE_SMARTSUGGESTIONS_PACKAGING
             ;;
+        "system:system/priv-app/wallpaper-res/wallpaper-res.apk")
+            # Samsung wallpaper-res looks up drawables by original filename
+            # (Wallpaper_001.webp, resources_info.json). -srp renames them to
+            # res/Xx.webp and SystemUI fails to set the boot wallpaper.
+            SHORTEN_RESOURCE_PATHS=false
+            LOG "- Building wallpaper-res.apk without resource path shortening"
+            ;;
     esac
 
     LOG "- Building ${INPUT_FILE//$WORK_DIR/}"

@@ -243,6 +243,12 @@ print_steps() {
   echo -e "  $(step_status $STEP_FW_EXTRACTED)    ${BOLD}Step 3${RESET}  Extract firmware"
   echo -e "  $(step_status $STEP_ROM_BUILT)    ${BOLD}Step 4${RESET}  Build ROM ZIP"
   echo ""
+  if npl_wallpapers_enabled; then
+    echo -e "  ${GREEN}NPL wallpapers:${RESET} ${CYAN}ON${RESET}  ${DIM}unica/mods/npl_wallpapers/assets/${RESET}"
+  else
+    echo -e "  ${YELLOW}NPL wallpapers:${RESET} ${DIM}OFF (stock S23 pack only)${RESET}"
+  fi
+  echo ""
 }
 
 press_enter() {
@@ -823,6 +829,58 @@ step_build_rom() {
 }
 
 
+NPL_WP_MOD="$SRC_DIR/unica/mods/npl_wallpapers"
+NPL_WP_ASSETS="$NPL_WP_MOD/assets"
+NPL_WP_DISABLE="$NPL_WP_MOD/disable"
+
+npl_wallpapers_enabled() {
+  [ -d "$NPL_WP_MOD" ] && [ ! -f "$NPL_WP_DISABLE" ]
+}
+
+npl_wallpaper_count() {
+  find "$NPL_WP_ASSETS" -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null | wc -l
+}
+
+step_npl_wallpapers() {
+  clear_screen
+  print_header
+  echo -e "  ${BOLD}NPL wallpapers${RESET}"
+  echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
+  echo ""
+  echo -e "  Images go in: ${CYAN}unica/mods/npl_wallpapers/assets/${RESET}"
+  echo -e "  ${DIM}Do not overlay wallpaper-res.apk with KSU.${RESET}"
+  echo ""
+
+  local count
+  count="$(npl_wallpaper_count)"
+  if npl_wallpapers_enabled; then
+    echo -e "  Status: ${GREEN}ON${RESET}  ${DIM}($count image(s) will be injected)${RESET}"
+  else
+    echo -e "  Status: ${YELLOW}OFF${RESET}  ${DIM}(stock S23 wallpapers only — safer first boot)${RESET}"
+  fi
+  echo ""
+  echo -e "  ${BOLD}[1]${RESET}  Enable NPL wallpapers"
+  echo -e "  ${BOLD}[2]${RESET}  Disable  ${DIM}(recommended until a clean boot is confirmed)${RESET}"
+  echo -e "  ${BOLD}[0]${RESET}  Back"
+  echo ""
+  echo -e -n "  ${BOLD}Choice:${RESET} "
+  read -r wp_choice
+
+  case "$wp_choice" in
+    1)
+      rm -f "$NPL_WP_DISABLE"
+      echo -e "\n  ${GREEN}✔ NPL wallpapers ON.${RESET} Force-rebuild Step 4 to bake them in."
+      press_enter
+      ;;
+    2)
+      mkdir -p "$NPL_WP_MOD"
+      printf '%s\n' "# Skip NPL wallpaper injection (stock S23 wallpaper-res.apk)." > "$NPL_WP_DISABLE"
+      echo -e "\n  ${YELLOW}✔ NPL wallpapers OFF.${RESET} Force-rebuild Step 4 for a boot-safe ZIP."
+      press_enter
+      ;;
+  esac
+}
+
 step_reset() {
   echo -e "\n  ${YELLOW}Reset build state? This won't delete downloaded firmware. [y/N]:${RESET} "
   read -r confirm
@@ -855,6 +913,7 @@ main_menu() {
     echo -e "  ${BOLD}[4]${RESET}  Build ROM ZIP"
     echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
     echo -e "  ${BOLD}[5]${RESET}  Run all steps  ${DIM}(0→1→2→3→4)${RESET}"
+    echo -e "  ${BOLD}[w]${RESET}  NPL wallpapers  ${DIM}(on/off — drop images in assets/)${RESET}"
     echo -e "  ${BOLD}[r]${RESET}  Reset build state"
     echo -e "  ${BOLD}[q]${RESET}  Quit"
     echo ""
@@ -875,6 +934,7 @@ main_menu() {
         step_extract_fw
         step_build_rom
         ;;
+      w|W) step_npl_wallpapers ;;
       r|R) step_reset ;;
       q|Q)
         echo -e "\n  ${DIM}Goodbye.${RESET}\n"
