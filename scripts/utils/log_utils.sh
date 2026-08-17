@@ -84,3 +84,11 @@ LOG_STEP_OUT()
         export INDENT_LEVEL=$((INDENT - 2))
     fi
 }
+
+# LOGI <message>
+# Alias for LOG — kept for NPL skin modules that use Magisk-style LOGI.
+LOGI()
+{
+    LOG "$@"
+}
+

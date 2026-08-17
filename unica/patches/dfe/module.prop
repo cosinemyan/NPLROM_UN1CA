@@ -1,0 +1,4 @@
+id=dfe
+name=Disable Force Encryption
+author=Cosine
+description=Patches fstab to disable force encryption.

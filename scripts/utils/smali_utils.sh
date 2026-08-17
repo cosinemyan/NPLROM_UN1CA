@@ -90,7 +90,7 @@ SMALI_PATCH()
         return 1
     elif [[ "$OPERATION" == "remove" ]]; then
         local USED
-        USED="$(find "$FILE_PATH" ! -path "*$SMALI" -type f -exec grep -r -n -- "$(cut -d "." -f "1" <<< "${SMALI#*/}");" {} \+ || true)"
+        USED="$(find "$FILE_PATH" -type f -name "*.smali" ! -name "*.orig" ! -name "*.rej" ! -path "*$SMALI" -type f -exec grep -r -n -- "$(cut -d "." -f "1" <<< "${SMALI#*/}");" {} \+ || true)"
         USED="$(cut -d ":" -f 1-2 <<< "$USED")"
 
         if [ "$USED" ]; then
@@ -108,22 +108,25 @@ SMALI_PATCH()
         return 0
     fi
 
-    # Check if provided method is method and exists inside smali
-    if ! grep "^\.method.*" "$FILE_PATH/$SMALI" | grep -q -F -- "$METHOD" "$FILE_PATH/$SMALI"; then
-        LOGE "Method \"$METHOD\" not found in /$PARTITION/$FILE/$SMALI"
+    # replaceall has no METHOD; skip existence check. grep must read the pipe
+    # (do not pass $SMALI again — that ignores stdin and breaks under pipefail).
+    if [[ "$OPERATION" != "replaceall" ]]; then
+        if ! grep "^\.method.*" "$FILE_PATH/$SMALI" | grep -q -F -- "$METHOD"; then
+            LOGE "Method \"$METHOD\" not found in /$PARTITION/$FILE/$SMALI"
 
-        local MATCHES
-        MATCHES="$(grep -r "^\.method.*$METHOD" "$FILE_PATH")"
+            local MATCHES
+            MATCHES="$(grep -r "^\.method.*$METHOD" "$FILE_PATH")"
 
-        if [ "$MATCHES" ]; then
-            echo -e "\n\033[0;31mPossible matches?" >&2
-            echo -e "$(head -n 10 <<< "${MATCHES//$FILE_PATH\//    - }")" >&2
-            [ "$(wc -l <<< "$MATCHES")" -gt 10 ] && \
-                echo -n "    ...and other $(($(wc -l <<< "$MATCHES") - 10)) matches" >&2
-            echo -e "\033[0m" >&2
+            if [ "$MATCHES" ]; then
+                echo -e "\n\033[0;31mPossible matches?" >&2
+                echo -e "$(head -n 10 <<< "${MATCHES//$FILE_PATH\//    - }")" >&2
+                [ "$(wc -l <<< "$MATCHES")" -gt 10 ] && \
+                    echo -n "    ...and other $(($(wc -l <<< "$MATCHES") - 10)) matches" >&2
+                echo -e "\033[0m" >&2
+            fi
+
+            return 1
         fi
-
-        return 1
     fi
 
     local BEFORE

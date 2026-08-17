@@ -4,9 +4,9 @@ Date: Fri, 24 Oct 2025 15:49:28 +0200
 Subject: [PATCH] Allow disable screen capture detection
 
 ---
- .../ScreenRecordingCallbackController.smali   | 37 +++++++++---
- .../server/wm/WindowManagerService.smali      | 56 ++++++++++++++++---
- 2 files changed, 77 insertions(+), 16 deletions(-)
+ .../ScreenRecordingCallbackController.smali   | 37 ++++++++++---
+ .../server/wm/WindowManagerService.smali      | 58 +++++++++++++++++---
+ 2 files changed, 79 insertions(+), 16 deletions(-)
 
 diff --git a/smali_classes2/com/android/server/wm/ScreenRecordingCallbackController.smali b/smali_classes2/com/android/server/wm/ScreenRecordingCallbackController.smali
 index 7055b020f..9a82633e6 100644
@@ -106,7 +106,7 @@ diff --git a/smali_classes2/com/android/server/wm/WindowManagerService.smali b/s
 index 17739fae0..c59858ab9 100644
 --- a/smali_classes2/com/android/server/wm/WindowManagerService.smali
 +++ b/smali_classes2/com/android/server/wm/WindowManagerService.smali
-@@ -22663,8 +22663,31 @@
+@@ -22826,8 +22826,31 @@
  
      move-result v0
  
@@ -139,7 +139,7 @@ index 17739fae0..c59858ab9 100644
      iget-object v0, p0, Lcom/android/server/wm/WindowManagerService;->mGlobalLock:Lcom/android/server/wm/WindowManagerGlobalLock;
  
      invoke-static {}, Lcom/android/server/wm/WindowManagerService;->boostPriorityForLockedSection()V
-@@ -22678,7 +22701,7 @@
+@@ -22841,7 +22864,7 @@
  
      move-result-object p0
  
@@ -148,7 +148,7 @@ index 17739fae0..c59858ab9 100644
  
      new-instance p0, Ljava/util/ArrayList;
  
-@@ -22697,7 +22720,7 @@
+@@ -22860,7 +22883,7 @@
  
      goto :goto_0
  
@@ -157,7 +157,7 @@ index 17739fae0..c59858ab9 100644
      :try_start_1
      new-instance p1, Landroid/util/ArraySet;
  
-@@ -22733,7 +22756,7 @@
+@@ -22900,7 +22923,7 @@
  
      throw p0
  
@@ -166,62 +166,63 @@ index 17739fae0..c59858ab9 100644
      new-instance p0, Ljava/lang/SecurityException;
  
      const-string/jumbo p1, "Requires STATUS_BAR_SERVICE permission"
-@@ -26262,6 +26285,23 @@
+@@ -26735,6 +26758,25 @@
  
      invoke-virtual {p0}, Landroid/view/IWindowManager$Stub;->registerScreenRecordingCallback_enforcePermission()V
  
-+    iget-object v2, p0, Lcom/android/server/wm/WindowManagerService;->mContext:Landroid/content/Context;
++    const/4 v0, 0x0
 +
-+    invoke-virtual {v2}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++    iget-object v1, p0, Lcom/android/server/wm/WindowManagerService;->mContext:Landroid/content/Context;
 +
-+    move-result-object v2
++    invoke-virtual {v1}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 +
-+    const-string v3, "unica_ss_detection"
++    move-result-object v1
 +
-+    invoke-static {v2, v3, v1}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++    const-string v2, "unica_ss_detection"
 +
-+    move-result v2
++    invoke-static {v1, v2, v0}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
 +
-+    if-eqz v2, :cond_0
++    move-result v1
 +
-+    return v1
++    if-eqz v1, :cond_0
++
++    return v0
 +
 +    :cond_0
      iget-object p0, p0, Lcom/android/server/wm/WindowManagerService;->mScreenRecordingCallbackController:Lcom/android/server/wm/ScreenRecordingCallbackController;
  
-     iget-object v2, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mWms:Lcom/android/server/wm/WindowManagerService;
-@@ -26289,7 +26329,7 @@
+     iget-object v0, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mWms:Lcom/android/server/wm/WindowManagerService;
+@@ -26762,7 +26805,7 @@
  
-     move-result v5
+     move-result v3
  
--    if-eqz v5, :cond_0
-+    if-eqz v5, :cond_1
+-    if-eqz v3, :cond_0
++    if-eqz v3, :cond_1
  
      iget-object p0, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mLastInvokedStateByUid:Landroid/util/ArrayMap;
  
-@@ -26320,7 +26360,7 @@
+@@ -26793,7 +26836,7 @@
  
      goto :goto_1
  
 -    :cond_0
 +    :cond_1
      :try_start_1
-     new-instance v5, Lcom/android/server/wm/ScreenRecordingCallbackController$Callback;
+     new-instance v3, Lcom/android/server/wm/ScreenRecordingCallbackController$Callback;
  
-@@ -26337,11 +26377,11 @@
+@@ -26820,11 +26863,11 @@
      :try_start_3
-     iget-object p1, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mRecordedWC:Lcom/android/server/wm/WindowContainer;
+     iget-object v4, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mRecordedWC:Lcom/android/server/wm/WindowContainer;
  
--    if-nez p1, :cond_1
-+    if-nez p1, :cond_2
+-    if-nez v4, :cond_1
++    if-nez v4, :cond_2
  
      goto :goto_0
  
 -    :cond_1
 +    :cond_2
-     new-array v6, v0, [Z
+     const/4 v5, 0x1
  
-     aput-boolean v1, v6, v1
+     new-array v6, v5, [Z
 -- 
 2.51.1
-

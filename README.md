@@ -1,4 +1,10 @@
-<h1 align="center">
+# NPL ROM — UN1CA fork
+
+NPL is a branded fork of UN1CA (engine unchanged in layout). See **[NPL.md](NPL.md)** for how to build and how to stay in sync with upstream.
+
+---
+
+
   <img loading="lazy" src="readme-res/banner.png"/>
 </h1>
 <p align="center">

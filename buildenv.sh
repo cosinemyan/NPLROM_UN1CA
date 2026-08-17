@@ -89,6 +89,7 @@ run_cmd()
 }
 
 alias unica=run_cmd
+alias npl=run_cmd
 # ]
 
 SRC_DIR="$(_GET_SRC_DIR)"

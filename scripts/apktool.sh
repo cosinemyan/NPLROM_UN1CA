@@ -2,11 +2,14 @@
 # Copyright (c) 2025 Salvo Giangreco
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+set -e
+
 # [
 source "$SRC_DIR/scripts/utils/build_utils.sh" || exit 1
 
 FRAMEWORK_DIR="$TOOLS_DIR/apktool/framework"
 FRAMEWORK_TAG="$(GET_PROP "system" "ro.build.version.incremental")"
+
 
 FORCE=false
 PARTITION=""
@@ -22,6 +25,32 @@ THREAD_COUNT=$(awk -v max="$(nproc)" '/MemTotal/ {
 
 [ -n "$GITHUB_ACTIONS" ] && THREAD_COUNT=1
 
+PREPARE_SMARTSUGGESTIONS_PACKAGING()
+{
+    local YML="$OUTPUT_PATH/apktool.yml"
+    local RES_DIR="$OUTPUT_PATH/res"
+    local ENTRY
+    local ADDED=0
+
+    [ -f "$YML" ] || return 0
+    [ -d "$RES_DIR" ] || return 0
+
+    if ! grep -q "^doNotCompress:" "$YML"; then
+        printf "\n%s\n" "doNotCompress:" >> "$YML"
+    fi
+
+    while IFS= read -r ENTRY; do
+        if ! grep -q -F -- "- $ENTRY" "$YML"; then
+            printf "%s\n" "- $ENTRY" >> "$YML"
+            ADDED=$((ADDED + 1))
+        fi
+    done < <(find "$RES_DIR" -type f -path "*/raw*/alias_index.7z" -printf "res/%P\n" | sort)
+
+    if (( ADDED > 0 )); then
+        LOG "- Keeping $ADDED SmartSuggestions alias_index.7z resources uncompressed"
+    fi
+}
+
 BUILD()
 {
     if [ ! -d "$OUTPUT_PATH" ]; then
@@ -29,14 +58,38 @@ BUILD()
         exit 1
     fi
 
+    local SHORTEN_RESOURCE_PATHS=true
+
+    case "$PARTITION:$FILE" in
+        "system:system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk")
+            if (( THREAD_COUNT > 4 )); then
+                LOG "- Limiting apktool threads for ${INPUT_FILE//$WORK_DIR/} to 4 to avoid JVM heap exhaustion"
+                THREAD_COUNT=4
+            fi
+            SHORTEN_RESOURCE_PATHS=false
+            PREPARE_SMARTSUGGESTIONS_PACKAGING
+            ;;
+    esac
+
     LOG "- Building ${INPUT_FILE//$WORK_DIR/}"
 
     # Copy original META-INF
     mkdir -p "$OUTPUT_PATH/build/apk"
     cp -a "$OUTPUT_PATH/original/META-INF" "$OUTPUT_PATH/build/apk/META-INF"
 
-    # Build APK with --shorten-resource-paths (https://developer.android.com/tools/aapt2#optimize_options)
-    EVAL "apktool b -j \"$THREAD_COUNT\" -p \"$FRAMEWORK_DIR\" -srp \"$OUTPUT_PATH\"" || exit 1
+    # Most APKs are rebuilt with shortened resource paths. SmartSuggestions is
+    # kept expanded because its known working CHN build uses expanded res paths.
+    find "$OUTPUT_PATH" -type f \( -name "*.orig" -o -name "*.rej" \) -delete
+    REBALANCE_DEX
+    if $SHORTEN_RESOURCE_PATHS; then
+        # -srp needs UN1CA's apktool patch; stock apktool 3.x falls back without it.
+        if ! EVAL "apktool b -j \"$THREAD_COUNT\" -p \"$FRAMEWORK_DIR\" -srp \"$OUTPUT_PATH\""; then
+            LOGW "apktool -srp unsupported; rebuilding without resource path shortening"
+            EVAL "apktool b -j \"$THREAD_COUNT\" -p \"$FRAMEWORK_DIR\" \"$OUTPUT_PATH\"" || exit 1
+        fi
+    else
+        EVAL "apktool b -j \"$THREAD_COUNT\" -p \"$FRAMEWORK_DIR\" \"$OUTPUT_PATH\"" || exit 1
+    fi
 
     local FILE_NAME
     FILE_NAME="$(basename "$INPUT_FILE")"
@@ -67,6 +120,31 @@ BUILD()
     if [ -f "${INPUT_FILE%/*}/$FILE_NAME.bprof" ]; then
         DELETE_FROM_WORK_DIR "$PARTITION" "${FILE%/*}/$FILE_NAME.bprof"
     fi
+}
+
+REBALANCE_DEX()
+{
+    case "$PARTITION:$FILE" in
+        "system:system/framework/framework.jar")
+            local FROM="$OUTPUT_PATH/smali/android/drm"
+            local TO="$OUTPUT_PATH/smali_classes8/android/drm"
+            if [ -d "$FROM" ] && [ ! -d "$TO" ]; then
+                LOG "- Moving android/drm to classes8.dex to keep framework.jar below the dex method limit"
+                mkdir -p "$(dirname "$TO")"
+                mv -f "$FROM" "$TO"
+            fi
+            ;;
+        "system_ext:priv-app/SystemUI/SystemUI.apk")
+            local FROM_DIR="$OUTPUT_PATH/smali_classes3/com/android/systemui/settings/brightness"
+            local TO_DIR="$OUTPUT_PATH/smali_classes6/com/android/systemui/settings/brightness"
+            if [ -d "$FROM_DIR" ]; then
+                LOG "- Moving brightness settings package to classes6.dex to keep SystemUI classes3 below the dex method limit"
+                mkdir -p "$TO_DIR"
+                find "$FROM_DIR" -mindepth 1 -maxdepth 1 -exec mv -f -t "$TO_DIR" {} +
+                rmdir "$FROM_DIR" 2>/dev/null || true
+            fi
+            ;;
+    esac
 }
 
 DECODE()
