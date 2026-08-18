@@ -10,6 +10,7 @@ SET_PROP "system" "ro.npl.build.date" "$(date +%Y-%m-%d)"
 
 # Keep ro.unica.version compatible so the existing smali reads it
 SET_PROP "system" "ro.unica.version" "${ROM_VERSION:-${NPL_VERSION:-1.0-STABLE}}"
+SET_PROP "system" "ro.unica.codename" "${NPL_CODENAME:-Sagarmatha}"
 
 # Instrumentation.smali 패치 (One UI 8.x / 최신 안드로이드 시그니처 고려)
 SMALI_PATCH "system" "system/framework/framework.jar" \

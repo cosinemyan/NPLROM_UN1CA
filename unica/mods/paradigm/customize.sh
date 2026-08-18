@@ -1,6 +1,9 @@
 if [ ! "$(GET_PROP "system" "ro.unica.codename")" ]; then
-    # Match latest Samsung's flagship device codename
-    ROM_CODENAME="$(basename "$MODPATH")"
+    # NPL release codename from version.sh (not the paradigm module folder name)
+    if [ -z "${NPL_CODENAME:-}" ] && [ -f "$SRC_DIR/unica/configs/version.sh" ]; then
+        source "$SRC_DIR/unica/configs/version.sh" || true
+    fi
+    ROM_CODENAME="${NPL_CODENAME:-$(basename "$MODPATH")}"
     SET_PROP "system" "ro.unica.codename" "${ROM_CODENAME^}"
     unset ROM_CODENAME
 fi
