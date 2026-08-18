@@ -10,3 +10,4 @@ system/etc/unica/now_nudge_defaults.sh 0 2000 755 capabilities=0x0
 system/etc/unica/now_nudge_reply_fallbacks.json 0 0 644 capabilities=0x0
 system/etc/unica/notification_ai_scpm_policies.json 0 0 644 capabilities=0x0
 system/etc/unica/scpm_allowlist_apply.sh 0 2000 755 capabilities=0x0
+system/etc/unica/nepal_facts.txt 0 0 644 capabilities=0x0

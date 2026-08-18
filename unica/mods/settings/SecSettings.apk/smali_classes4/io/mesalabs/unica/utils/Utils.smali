@@ -196,3 +196,174 @@
 
     throw v0
 .end method
+
+.method public static getNplMaintainers()Ljava/lang/String;
+    .locals 3
+
+    const-string v0, "ro.npl.maintainers"
+
+    const-string v1, ""
+
+    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+
+    move-result v2
+
+    if-eqz v2, :cond_0
+
+    const-string v0, "ro.npl.maintainer"
+
+    const-string v1, "Unknown"
+
+    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    :cond_0
+    const-string v1, ", "
+
+    const-string v2, "\n"
+
+    invoke-virtual {v0, v1, v2}, Ljava/lang/String;->replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method public static getRandomNepalFact(Landroid/content/Context;)Ljava/lang/String;
+    .locals 8
+
+    new-instance v0, Ljava/util/ArrayList;
+
+    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+
+    :try_start_0
+    new-instance v1, Ljava/io/File;
+
+    const-string v2, "/system/etc/unica/nepal_facts.txt"
+
+    invoke-direct {v1, v2}, Ljava/io/File;-><init>(Ljava/lang/String;)V
+
+    invoke-virtual {v1}, Ljava/io/File;->exists()Z
+
+    move-result v2
+
+    if-eqz v2, :cond_2
+
+    new-instance v2, Ljava/io/BufferedReader;
+
+    new-instance v3, Ljava/io/FileReader;
+
+    invoke-direct {v3, v1}, Ljava/io/FileReader;-><init>(Ljava/io/File;)V
+
+    invoke-direct {v2, v3}, Ljava/io/BufferedReader;-><init>(Ljava/io/Reader;)V
+
+    :goto_0
+    invoke-virtual {v2}, Ljava/io/BufferedReader;->readLine()Ljava/lang/String;
+
+    move-result-object v1
+
+    if-eqz v1, :cond_1
+
+    invoke-virtual {v1}, Ljava/lang/String;->trim()Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-static {v1}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+
+    move-result v3
+
+    if-nez v3, :goto_0
+
+    const-string v3, "#"
+
+    invoke-virtual {v1, v3}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
+
+    move-result v3
+
+    if-nez v3, :goto_0
+
+    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    goto :goto_0
+
+    :cond_1
+    invoke-virtual {v2}, Ljava/io/BufferedReader;->close()V
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+
+    :catch_0
+    :cond_2
+    invoke-virtual {v0}, Ljava/util/ArrayList;->isEmpty()Z
+
+    move-result v1
+
+    if-eqz v1, :cond_3
+
+    const-string v1, "array"
+
+    const-string v2, "npl_nepal_facts"
+
+    invoke-static {v1, v2}, Lio/mesalabs/unica/utils/Utils;->getResourceId(Ljava/lang/String;Ljava/lang/String;)I
+
+    move-result v1
+
+    invoke-virtual {p0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
+
+    move-result-object p0
+
+    invoke-virtual {p0, v1}, Landroid/content/res/Resources;->getStringArray(I)[Ljava/lang/String;
+
+    move-result-object p0
+
+    array-length v1, p0
+
+    const/4 v2, 0x0
+
+    :goto_1
+    if-ge v2, v1, :cond_3
+
+    aget-object v3, p0, v2
+
+    invoke-virtual {v0, v3}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+    add-int/lit8 v2, v2, 0x1
+
+    goto :goto_1
+
+    :cond_3
+    invoke-virtual {v0}, Ljava/util/ArrayList;->isEmpty()Z
+
+    move-result p0
+
+    if-eqz p0, :cond_4
+
+    const-string p0, "Nepal is home to Mount Sagarmatha (Everest)."
+
+    return-object p0
+
+    :cond_4
+    new-instance p0, Ljava/util/Random;
+
+    invoke-direct {p0}, Ljava/util/Random;-><init>()V
+
+    invoke-virtual {v0}, Ljava/util/ArrayList;->size()I
+
+    move-result v1
+
+    invoke-virtual {p0, v1}, Ljava/util/Random;->nextInt(I)I
+
+    move-result p0
+
+    invoke-virtual {v0, p0}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
+
+    move-result-object p0
+
+    check-cast p0, Ljava/lang/String;
+
+    return-object p0
+.end method

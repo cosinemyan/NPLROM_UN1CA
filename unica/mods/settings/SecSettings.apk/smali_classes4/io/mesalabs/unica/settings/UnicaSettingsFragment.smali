@@ -239,6 +239,25 @@
 
     invoke-super {p0}, Lcom/android/settings/dashboard/DashboardFragment;->onResume()V
 
+    const-string v0, "npl_nepal_fact"
+
+    invoke-virtual {p0, v0}, Lcom/android/settings/core/InstrumentedPreferenceFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
+
+    move-result-object v0
+
+    if-eqz v0, :cond_npl_fact
+
+    invoke-virtual {p0}, Landroidx/fragment/app/Fragment;->getContext()Landroid/content/Context;
+
+    move-result-object v1
+
+    invoke-static {v1}, Lio/mesalabs/unica/utils/Utils;->getRandomNepalFact(Landroid/content/Context;)Ljava/lang/String;
+
+    move-result-object v1
+
+    invoke-virtual {v0, v1}, Landroidx/preference/Preference;->setSummary(Ljava/lang/CharSequence;)V
+
+    :cond_npl_fact
     invoke-virtual {p0}, Landroidx/fragment/app/Fragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
 
     invoke-static {}, Lcom/samsung/android/settings/Rune;->supportRelativeLink()Z

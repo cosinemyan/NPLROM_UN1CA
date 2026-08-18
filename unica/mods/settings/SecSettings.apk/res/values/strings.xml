@@ -104,7 +104,9 @@
     <string name="unica_pif_update_title">Update Play Integrity Fix</string>
     <string name="unica_rom_version_title">ROM version</string>
     <string name="unica_rom_maintainer_title">Maintainer</string>
+    <string name="unica_rom_maintainers_title">Maintainers</string>
     <string name="unica_rom_build_date_title">Build date</string>
+    <string name="npl_nepal_fact_title">Did you know?</string>
     <string name="unica_secure_ss_title">Allow secure screenshot</string>
     <string name="unica_settings_title">NPL Settings</string>
     <string name="unica_ss_detection_title">Disable screen capture detection</string>

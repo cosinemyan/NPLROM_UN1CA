@@ -6,6 +6,7 @@ export NPL_VERSION="1.0-STABLE"
 export NPL_BUILD_TYPE="Official"
 export NPL_CODENAME="Sagarmatha"
 export NPL_MAINTAINER="Cosine"
+export NPL_MAINTAINERS="Cosine, Nitesh"
 
 # Only the below variable(s) need to be changed!
 VERSION_MAJOR=3

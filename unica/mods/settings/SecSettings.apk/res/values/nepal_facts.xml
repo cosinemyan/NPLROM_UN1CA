@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="npl_nepal_facts">
+        <item>Mount Everest is known in Nepal as Sagarmatha.</item>
+        <item>Nepal has 8 of the world\'s 14 peaks above 8,000 metres.</item>
+        <item>Nepal\'s flag is the only non-rectangular national flag.</item>
+        <item>Lumbini in Nepal is the birthplace of Gautama Buddha.</item>
+        <item>Kathmandu Valley has seven UNESCO World Heritage sites.</item>
+        <item>Nepal was never colonized by a foreign power.</item>
+        <item>The Gurkhas are world-renowned soldiers from Nepal.</item>
+        <item>Chitwan National Park protects rhinos, tigers, and elephants.</item>
+        <item>Nepal spans subtropical plains to alpine Himalayas in under 200 km.</item>
+        <item>Dodhara Chadani bridge crosses the Mahakali river in far western Nepal.</item>
+        <item>Badimalika Temple in Bajura is a sacred hilltop shrine of Goddess Bhagwati.</item>
+        <item>Khaptad National Park in Sudurpashchim is a high plateau of meadows and lakes.</item>
+        <item>Api Himal is one of the highest peaks in Sudurpashchim Province.</item>
+        <item>The Mahakali river forms Nepal\'s western border with India.</item>
+    </string-array>
+</resources>
