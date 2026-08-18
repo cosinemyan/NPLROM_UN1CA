@@ -79,8 +79,9 @@ GET_GALAXY_STORE_DOWNLOAD_URL()
     local PROTOCOL
 
     # Galaxy S26 Ultra EUR_OPENX
+    # Galaxy S25 Ultra EUR_OPENX / KOR_SINGLEX
     # Galaxy S23 Ultra GBL_OPENX
-    DEVICES=("SM-S948B" "SM-S938B")
+    DEVICES=("SM-S948B" "SM-S938B" "SM-S938N")
 
     OS="$(GET_PROP "system" "ro.build.version.sdk")"
     ONEUI="$(GET_PROP "system" "ro.build.version.oneui")"
