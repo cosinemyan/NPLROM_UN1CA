@@ -781,14 +781,14 @@ step_build_rom() {
       0|q|Q|b|B) return ;;
     esac
 
-    local flags=("-z")
+    local flags=("-r")
     case "$build_choice" in
-      2) flags=("-f" "-z") ;;
+      2) flags=("-f" "-r") ;;
       3)
         echo -e "\n  ${CYAN}▶ rm -rf out/target/${SELECTED_TARGET}/apktool …/.completed${RESET}"
         rm -rf "$OUT_DIR/target/$SELECTED_TARGET/apktool"
         rm -f "$OUT_DIR/target/$SELECTED_TARGET/work_dir/.completed"
-        flags=("-f" "-z")
+        flags=("-f" "-r")
         ;;
     esac
 
