@@ -258,7 +258,7 @@ press_enter() {
 }
 
 latest_flashable_zip() {
-  find "$OUT_DIR" -maxdepth 1 -type f -name 'NPL_*-sign_*.zip' ! -name '*target_files*' \
+  find "$OUT_DIR" -maxdepth 1 -type f \( -name 'NPL_*.zip' -o -name 'UN1CA_*.zip' \) ! -name '*target_files*' \
     -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2-
 }
 
@@ -781,14 +781,14 @@ step_build_rom() {
       0|q|Q|b|B) return ;;
     esac
 
-    local flags=("-r")
+    local flags=("-z")
     case "$build_choice" in
-      2) flags=("-f" "-r") ;;
+      2) flags=("-f" "-z") ;;
       3)
         echo -e "\n  ${CYAN}▶ rm -rf out/target/${SELECTED_TARGET}/apktool …/.completed${RESET}"
         rm -rf "$OUT_DIR/target/$SELECTED_TARGET/apktool"
         rm -f "$OUT_DIR/target/$SELECTED_TARGET/work_dir/.completed"
-        flags=("-f" "-r")
+        flags=("-f" "-z")
         ;;
     esac
 
