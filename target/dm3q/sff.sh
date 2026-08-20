@@ -49,24 +49,38 @@
 # SEC_FLOATING_FEATURE_SETTINGS_CONFIG_FCC_ID=A3LSMS918B
 # SEC_FLOATING_FEATURE_SETTINGS_CONFIG_SPEN_FCC_ID=A3LEJPS918
 
-# Rezoss dm3q-only overrides.
-# Exact S26U matches and Rezoss-owned entries live in unica/mods/rezoss/customize.sh.
-
-# Audio values intentionally differ from S26U.
+# Rezoss Add
 SEC_FLOATING_FEATURE_AUDIO_CONFIG_EFFECTS_VIDEOCALL=TRUE
 SEC_FLOATING_FEATURE_AUDIO_CONFIG_SOUNDALIVE_VERSION=eq_custom,uhq_onoff,karaoke,adapt,spk_stereo,dvfs_20_percent,dvfs_max_45_percent,voice_boost,dolby_game_spk_off
-
-# Camera values intentionally differ from S26U or need dm3q camera IDs.
+SEC_FLOATING_FEATURE_CAMERA_CONFIG_AUTOFRAMING=uhd
+SEC_FLOATING_FEATURE_CAMERA_CONFIG_LOG_VIDEO=V1.0
+SEC_FLOATING_FEATURE_CAMERA_CONFIG_MOTIONPHOTO_CAPTURE_MODE=[[3,1],[3,0.5]]
 SEC_FLOATING_FEATURE_CAMERA_CONFIG_SDK_FEATURE_INFO=version2,super_night,preview_dis,video_hdr,smooth_zoom,logical_rear_camera:camera_id=20,exposure_table_control,selfie_tone,physical_camera_tele:camera_id=52,physical_camera_tele2:camera_id=54
+SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO=food.samsung.v1,face_landmark.arcsoft.v2_1,beauty.samsung.v4,scene_detection.samsung.v1,facial_restoration.arcsoft.v1,facial_attribute.samsung.v1,human_tracking_hand.arcsoft.v4,fr_tracking.arcsoft.v1,smart_scan.samsung.v2,aimode.samsung.v2,aimfisp.samsung.v1,ai_clear_zoom.arcsoft.v1,macro_raw_sr.arcsoft.v1,super_resolution_raw.arcsoft.v2,aebhdr.arcsoft.v1,hybridhdr.arcsoft.v1,single_bokeh.samsung.v2,super_night.mpi.v2,swuwdc.arcsoft.v1,event_detection.samsung.v2,selfie_correction.samsung.v1,dual_bokeh.samsung.v1_1,image_codec.samsung.v1,pro_single_rgb.mpi.v1,image_enhance.arcsoft.v1,localtm.samsung.v1_1,stereo_photo.samsung.v1
 SEC_FLOATING_FEATURE_CAMERA_CONFIG_WINE_DETECTOR=V1_SNAP_CPU
-
-# Framework/UI values are S23U-specific or intentionally different from S26U.
+SEC_FLOATING_FEATURE_CAMERA_DOCUMENTSCAN_SOLUTIONS=AI_DEWARPING,SHADOW_REMOVAL,DEBLUR,OBJECT_REMOVAL,COLOR_ENHANCE
+SEC_FLOATING_FEATURE_CAMERA_SUPPORT_DUAL_PORTRAITVIDEO=TRUE
+SEC_FLOATING_FEATURE_CAMERA_SUPPORT_EDITABLE_PORTRAITVIDEO=TRUE
+SEC_FLOATING_FEATURE_CAMERA_SUPPORT_PORTRAIT_INTELLIGENT_OPTIMIZATION_AI_ISP=TRUE
+SEC_FLOATING_FEATURE_CAMERA_SUPPORT_SEAMLESS_PORTRAITVIDEO=TRUE
+SEC_FLOATING_FEATURE_CAMERA_SUPPORT_SUPER_NIGHT_DRAFT_RAW=FALSE
+SEC_FLOATING_FEATURE_CAMERA_SUPPORT_VDIS_ON_MOTIONPHOTO=FALSE
 SEC_FLOATING_FEATURE_COMMON_CONFIG_DEX_MODE=dual,wireless,dexforpc
 SEC_FLOATING_FEATURE_COMMON_CONFIG_EDGE=people,task,circle,panel,-edgefeeds,debug,search,phonecolor
+SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_PROVIDE_TSP_RAWDATA=TRUE
+SEC_FLOATING_FEATURE_GALLERY_CONFIG_AI_EXPANSION=AI_Timelapse,singletake.hidt.support.on,singletake.capture.support.off,singletake.video_res.config.fhd,singletake.video.previous_record
+SEC_FLOATING_FEATURE_GALLERY_SUPPORT_LOG_CORRECT_COLOR=TRUE
+SEC_FLOATING_FEATURE_GENAI_SUPPORT_OFFLINE_LANGUAGEMODEL=TRUE
+SEC_FLOATING_FEATURE_GENAI_SUPPORT_TIME_WEATHER_WALLPAPER=v2
+SEC_FLOATING_FEATURE_GRAPHICS_SUPPORT_TOUCH_FAST_RESPONSE=TRUE
+SEC_FLOATING_FEATURE_LCD_CONFIG_AOD_BRIGHTNESS_ANIMATION=1
+SEC_FLOATING_FEATURE_LCD_CONFIG_AOD_FULLSCREEN=1
 SEC_FLOATING_FEATURE_LCD_CONFIG_AOD_REFRESH_RATE=10
+SEC_FLOATING_FEATURE_LCD_CONFIG_CONTROL_AUTO_BRIGHTNESS=5
 SEC_FLOATING_FEATURE_LCD_CONFIG_REPLACE_COLOR_FOR_DARKMODE=#FF000000
 SEC_FLOATING_FEATURE_LOCKSCREEN_CONFIG_WALLPAPER_STYLE=VIDEO,COVER_MP4,GENWEATHER
-
-# SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO=de_flicker.arcsoft.v1,de_flicker_hdr.arcsoft.v1,food.samsung.v1,face_landmark.arcsoft.v2_1,beauty.samsung.v4,facial_restoration.arcsoft.v1,facial_attribute.samsung.v1,human_tracking_hand.arcsoft.v4,fr_tracking.arcsoft.v1,smart_scan.samsung.v2,aimode.samsung.v2,aimfisp.samsung.v1,ai_clear_zoom.arcsoft.v1,macro_raw_sr.arcsoft.v1,super_resolution_raw.arcsoft.v2,aebhdr.arcsoft.v1,hybridhdr.arcsoft.v1,single_bokeh.samsung.v2,super_night.mpi.v2,swuwdc.arcsoft.v1,event_detection.samsung.v2,selfie_correction.samsung.v1,dual_bokeh.samsung.v1_1,image_codec.samsung.v2,pro_single_rgb.mpi.v1,image_enhance.arcsoft.v1,localtm.samsung.v1_1,stereo_photo.samsung.v1,compressed_raw_decoder.samsung.v1
-
-SEC_FLOATING_FEATURE_CAMERA_CONFIG_VENDOR_LIB_INFO=de_flicker.arcsoft.v1,de_flicker_hdr.arcsoft.v1,food.samsung.v1,face_landmark.arcsoft.v2_1,beauty.samsung.v4,facial_restoration.arcsoft.v1,facial_attribute.samsung.v1,human_tracking_hand.arcsoft.v4,fr_tracking.arcsoft.v1,smart_scan.samsung.v2,aimode.samsung.v2,aimfisp.samsung.v1,ai_clear_zoom.arcsoft.v1,macro_raw_sr.arcsoft.v1,super_resolution_raw.arcsoft.v2,aebhdr.arcsoft.v1,hybridhdr.arcsoft.v1,single_bokeh.samsung.v2,super_night.mpi.v2,swuwdc.arcsoft.v1,event_detection.samsung.v2,selfie_correction.samsung.v1,dual_bokeh.samsung.v1_1,image_codec.samsung.v2,pro_single_rgb.mpi.v1,image_enhance.arcsoft.v1,localtm.samsung.v1_1
+SEC_FLOATING_FEATURE_MMFW_SUPPORT_HDR2SDR_MAX_8K=TRUE
+SEC_FLOATING_FEATURE_MMFW_SUPPORT_HIERARCHICAL_B_ENCODING=TRUE
+SEC_FLOATING_FEATURE_MMFW_SUPPORT_LONGEXPOSURE_EFFECT_10BIT=TRUE
+SEC_FLOATING_FEATURE_COMMON_SUPPORT_NAL_PRELOADAPP_REGULATION=TRUE
+SEC_FLOATING_FEATURE_MMFW_SUPPORT_PHOTOHDR=TRUE

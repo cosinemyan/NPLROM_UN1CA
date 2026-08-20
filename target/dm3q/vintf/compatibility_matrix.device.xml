@@ -9,7 +9,7 @@
         vendor/samsung/interfaces/security/vaultkeeper/2.0/framework_compatibility_matrix.xml
         vendor/samsung/interfaces/security/hdcp/wifidisplay/aidl/framework_compatibility_matrix.xml
         vendor/samsung/interfaces/sysinput/aidl/framework_compatibility_matrix.xml
-        vendor/samsung/interfaces/security/widevine/keyprov/1.0/framework_compatibility_matrix.xml
+        vendor/samsung/interfaces/security/widevine/keyprov/aidl/framework_compatibility_matrix.xml
         vendor/samsung/interfaces/tlc/ddar/1.0/vendor.samsung.hardware.tlc.ddar@1.0-matrix.xml
         vendor/samsung/interfaces/wifi/aidl/framework_compatibility_matrix.xml
         vendor/samsung/interfaces/wifi/nan/aidl/framework_compatibility_matrix.xml
@@ -21,7 +21,7 @@
         vendor/samsung/interfaces/tlc/iccc/1.0/vendor.samsung.hardware.tlc.iccc@1.0-matrix.xml
         vendor/samsung/interfaces/tlc/mpos_tui/1.0/vendor.samsung.hardware.tlc.mpos_tui@1.0-matrix.xml
         vendor/samsung/interfaces/tlc/blockchain/1.0/tlc_blockchain_compatibility_matrix.xml
-        vendor/samsung/interfaces/tlc/kg/2.0/aidl/vendor.samsung.hardware.tlc.kg-matrix.xml
+        vendor/samsung/interfaces/tlc/kg/aidl/vendor.samsung.hardware.tlc.kg-matrix.xml
         vendor/samsung/interfaces/audio/aidl/framework_compatibility_matrix.xml
         vendor/samsung/system/security/drk/drk_hidl_framework_compatibility_matrix.xml
         vendor/samsung/system/security/drk/drk_aidl_framework_compatibility_matrix.xml
@@ -35,7 +35,6 @@
         vendor/samsung/external/fingerprint/fingerprint_nontz_compatibility_matrix.xml
         vendor/samsung/interfaces/frcmc/aidl/vendor.samsung.hardware.frcmc-matrix.xml
         vendor/samsung/interfaces/security/hermes/aidl/hermes_framework_compatibility_matrix.xml
-        vendor/samsung/interfaces/security/widevine/keyprov/1.0/framework_compatibility_matrix.xml
         vendor/samsung/interfaces/security/wsm/service/aidl/framework_compatibility_matrix.xml
         vendor/samsung/interfaces/security/fkeymaster/aidl/fkeymaster_framework_compatibility_matrix.xml
         vendor/samsung/interfaces/security/ssu/aidl/framework_compatibility_matrix.xml
@@ -520,6 +519,13 @@
         </interface>
     </hal>
     <hal format="aidl">
+        <name>vendor.qti.hardware.bluetooth.btavsprovider</name>
+        <interface>
+            <name>IBtAVsProvider</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl">
         <name>vendor.qti.hardware.bluetooth.xpanprovider</name>
         <interface>
             <name>IXpanProvider</name>
@@ -760,7 +766,7 @@
     </hal>
     <hal format="aidl">
         <name>vendor.qti.hardware.display.config</name>
-        <version>1-13</version>
+        <version>1-12</version>
         <interface>
             <name>IDisplayConfig</name>
             <instance>default</instance>
@@ -1237,7 +1243,7 @@
     </hal>
     <hal format="aidl">
         <name>vendor.qti.hardware.radio.qtiradioconfig</name>
-        <version>1-7</version>
+        <version>1-6</version>
         <interface>
             <name>IQtiRadioConfig</name>
             <instance>default</instance>
@@ -1319,6 +1325,21 @@
         <version>1.0</version>
         <interface>
             <name>ISecCam</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.qti.hardware.sensorscalibrate</name>
+        <version>1.0</version>
+        <interface>
+            <name>ISensorsCalibrate</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="aidl">
+        <name>vendor.qti.hardware.sensorscalibrate</name>
+        <interface>
+            <name>ISensorsCalibrate</name>
             <instance>default</instance>
         </interface>
     </hal>
@@ -1429,13 +1450,6 @@
         <version>1.0</version>
         <interface>
             <name>ITuiComm</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="aidl">
-        <name>vendor.qti.hardware.uwbtpi</name>
-        <interface>
-            <name>IUwbTpi</name>
             <instance>default</instance>
         </interface>
     </hal>
@@ -1665,7 +1679,6 @@
     </hal>
     <hal format="aidl">
         <name>vendor.qti.snapdragonServices</name>
-        <version>1-2</version>
         <interface>
             <name>ISnapdragonServices</name>
             <instance>default</instance>
@@ -1877,7 +1890,6 @@
     </hal>
     <hal format="aidl">
         <name>vendor.samsung.hardware.radio.data</name>
-        <version>1-2</version>
         <interface>
             <name>ISehRadioData</name>
             <instance>slot1</instance>
@@ -2006,19 +2018,10 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="hidl">
+    <hal format="aidl">
         <name>vendor.samsung.hardware.security.widevine.keyprov</name>
-        <version>1.0</version>
         <interface>
-            <name>ISehWidevineKeyProvisioning</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
-        <name>vendor.samsung.hardware.security.widevine.keyprov</name>
-        <version>1.0</version>
-        <interface>
-            <name>ISehWidevineKeyProvisioning</name>
+            <name>ISehWidevineKeyProv</name>
             <instance>default</instance>
         </interface>
     </hal>
@@ -2130,7 +2133,6 @@
     </hal>
     <hal format="aidl">
         <name>vendor.samsung.hardware.wifi</name>
-        <version>1-2</version>
         <interface>
             <name>ISehWifi</name>
             <instance>default</instance>
