@@ -881,6 +881,148 @@ step_npl_wallpapers() {
   esac
 }
 
+step_patch_vendor() {
+  clear_screen
+  print_header
+  echo -e "  ${BOLD}Patch vendor in an existing working ZIP${RESET}"
+  echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
+  echo ""
+  echo -e "  Does ${BOLD}not${RESET} rebuild the ROM. Unpacks vendor, edits ${CYAN}build.prop${RESET},"
+  echo -e "  then writes replacement files you drop back into the working ZIP."
+  echo ""
+  echo -e "  ${DIM}vendor.patch.dat is normally empty on a full ZIP — ignore it.${RESET}"
+  echo ""
+
+  mkdir -p "$OUT_DIR/vendor_in" "$OUT_DIR/vendor_patch" "$OUT_DIR/tmp"
+
+  local latest zip_choice input=""
+  latest="$(latest_flashable_zip)"
+
+  echo -e "  ${BOLD}[1]${RESET}  A flashable ZIP  ${DIM}(NPL_*.zip — only vendor.* is read)${RESET}"
+  echo -e "  ${BOLD}[2]${RESET}  Folder of vendor files  ${DIM}(vendor.new.dat.br + vendor.transfer.list)${RESET}"
+  if [ -n "$latest" ]; then
+    echo -e "  ${BOLD}[3]${RESET}  Latest zip in out/  ${DIM}${latest#$SRC_DIR/}${RESET}"
+  fi
+  if [ -f "$OUT_DIR/vendor_in/vendor.new.dat.br" ] || [ -f "$OUT_DIR/vendor_in/vendor.transfer.list" ]; then
+    echo -e "  ${BOLD}[4]${RESET}  Drop folder  ${DIM}out/vendor_in/${RESET}"
+  fi
+  echo ""
+  echo -e -n "  ${BOLD}Choice [1]:${RESET} "
+  read -r zip_choice
+  zip_choice="${zip_choice:-1}"
+
+  case "$zip_choice" in
+    3)
+      [ -n "$latest" ] || { echo -e "  ${RED}No NPL_*.zip in out/${RESET}"; press_enter; return; }
+      input="$latest"
+      ;;
+    4)
+      input="$OUT_DIR/vendor_in"
+      ;;
+    2)
+      echo -e -n "  ${BOLD}Folder path:${RESET} "
+      read -r input
+      input="${input/#\~/$HOME}"
+      ;;
+    *)
+      echo -e -n "  ${BOLD}ZIP path:${RESET} "
+      read -r input
+      input="${input/#\~/$HOME}"
+      ;;
+  esac
+
+  if [ -z "$input" ] || [ ! -e "$input" ]; then
+    echo -e "\n  ${RED}Not found: ${input:-empty}${RESET}"
+    echo -e "  ${DIM}Copy vendor.new.dat.br + vendor.transfer.list into out/vendor_in/ and pick [4].${RESET}"
+    press_enter
+    return
+  fi
+
+  echo ""
+  echo -e "  ${BOLD}What to write into vendor/build.prop${RESET}"
+  local def_prop=""
+  if [ -n "${SELECTED_TARGET:-}" ] && [ -f "$SRC_DIR/target/$SELECTED_TARGET/patches/displayconfig/vendor.prop" ]; then
+    def_prop="$SRC_DIR/target/$SELECTED_TARGET/patches/displayconfig/vendor.prop"
+    echo -e "  ${BOLD}[1]${RESET}  Apply $SELECTED_TARGET displayconfig  ${DIM}${def_prop#$SRC_DIR/}${RESET}"
+  else
+    echo -e "  ${BOLD}[1]${RESET}  Apply a vendor.prop file  ${DIM}(you will be asked for the path)${RESET}"
+  fi
+  echo -e "  ${BOLD}[2]${RESET}  Edit build.prop in \$EDITOR  ${DIM}(${EDITOR:-nano})${RESET}"
+  echo -e "  ${BOLD}[3]${RESET}  Apply props, then edit"
+  echo ""
+  echo -e -n "  ${BOLD}Choice [2]:${RESET} "
+  read -r mode
+  mode="${mode:-2}"
+
+  local args=()
+  case "$mode" in
+    1)
+      if [ -z "$def_prop" ]; then
+        echo -e -n "  ${BOLD}vendor.prop path:${RESET} "
+        read -r def_prop
+        def_prop="${def_prop/#\~/$HOME}"
+      fi
+      [ -f "$def_prop" ] || { echo -e "  ${RED}No such file${RESET}"; press_enter; return; }
+      args+=(--prop "$def_prop")
+      ;;
+    3)
+      if [ -z "$def_prop" ]; then
+        echo -e -n "  ${BOLD}vendor.prop path:${RESET} "
+        read -r def_prop
+        def_prop="${def_prop/#\~/$HOME}"
+      fi
+      [ -f "$def_prop" ] || { echo -e "  ${RED}No such file${RESET}"; press_enter; return; }
+      args+=(--prop "$def_prop" --edit)
+      ;;
+    *)
+      args+=(--edit)
+      ;;
+  esac
+
+  local default_fstab="$SRC_DIR/fstab/fstab.qcom"
+  if [ -f "$default_fstab" ]; then
+    echo ""
+    echo -e "  Replace ${BOLD}vendor/etc/fstab.qcom${RESET} with ${CYAN}fstab/fstab.qcom${RESET}?"
+    echo -e "  ${DIM}Your file mounts /data as encryptable (helps recovery decrypt).${RESET}"
+    echo -e -n "  ${BOLD}Replace fstab? [Y/n]:${RESET} "
+    read -r fstab_choice
+    if [[ ! "$fstab_choice" =~ ^[Nn]$ ]]; then
+      args+=(--fstab "$default_fstab")
+    fi
+  fi
+
+  if [[ "$input" == *.zip ]]; then
+    echo ""
+    echo -e "  ${BOLD}Automatically write a new flashable ZIP?${RESET}  ${DIM}(replaces vendor.* inside a copy)${RESET}"
+    echo -e -n "  ${BOLD}[Y/n]:${RESET} "
+    read -r inj
+    [[ ! "$inj" =~ ^[Nn]$ ]] && args+=(--inject)
+  elif [ -d "$input" ] && [ -d "$input/META-INF" ]; then
+    echo ""
+    echo -e "  ${BOLD}Automatically zip this folder after patching?${RESET}"
+    echo -e "  ${DIM}Copies patched vendor.* into the folder, then zips the contents${RESET}"
+    echo -e "  ${DIM}(zip root = META-INF + images, not a nested directory).${RESET}"
+    echo -e -n "  ${BOLD}[Y/n]:${RESET} "
+    read -r inj
+    [[ ! "$inj" =~ ^[Nn]$ ]] && args+=(--repack)
+  fi
+
+  echo ""
+  chmod +x "$SRC_DIR/scripts/patch_zip_vendor.sh" "$SRC_DIR/scripts/utils/sdat2img.py" "$SRC_DIR/scripts/utils/zip_replace_root.py" 2>/dev/null || true
+  if "$SRC_DIR/scripts/patch_zip_vendor.sh" "$input" "${args[@]}"; then
+    if [[ " ${args[*]} " == *" --inject "* ]] || [[ " ${args[*]} " == *" --repack "* ]]; then
+      echo -e "\n  ${GREEN}✔ Flash this zip:${RESET} ${CYAN}out/vendor_patch/*_vendorpatch.zip${RESET}"
+      echo -e "  ${DIM}Do not replace files by hand.${RESET}"
+    else
+      echo -e "\n  ${GREEN}✔ Replacement files:${RESET} ${CYAN}out/vendor_patch/${RESET}"
+      echo -e "  In 7-Zip / unzip, replace those three names at the ${BOLD}zip root${RESET} of the working ROM."
+    fi
+  else
+    echo -e "\n  ${RED}Patch failed.${RESET} Need vendor.new.dat.br + vendor.transfer.list (and brotli / erofs tools from Step 0)."
+  fi
+  press_enter
+}
+
 step_reset() {
   echo -e "\n  ${YELLOW}Reset build state? This won't delete downloaded firmware. [y/N]:${RESET} "
   read -r confirm
@@ -914,6 +1056,7 @@ main_menu() {
     echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
     echo -e "  ${BOLD}[5]${RESET}  Run all steps  ${DIM}(0→1→2→3→4)${RESET}"
     echo -e "  ${BOLD}[w]${RESET}  NPL wallpapers  ${DIM}(on/off — drop images in assets/)${RESET}"
+    echo -e "  ${BOLD}[p]${RESET}  Patch vendor in existing ZIP  ${DIM}(display / build.prop — no ROM rebuild)${RESET}"
     echo -e "  ${BOLD}[r]${RESET}  Reset build state"
     echo -e "  ${BOLD}[q]${RESET}  Quit"
     echo ""
@@ -935,6 +1078,7 @@ main_menu() {
         step_build_rom
         ;;
       w|W) step_npl_wallpapers ;;
+      p|P) step_patch_vendor ;;
       r|R) step_reset ;;
       q|Q)
         echo -e "\n  ${DIM}Goodbye.${RESET}\n"
