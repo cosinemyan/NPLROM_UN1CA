@@ -848,15 +848,17 @@ step_npl_wallpapers() {
   echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
   echo ""
   echo -e "  Images go in: ${CYAN}unica/mods/npl_wallpapers/assets/${RESET}"
-  echo -e "  ${DIM}Do not overlay wallpaper-res.apk with KSU.${RESET}"
+  echo -e "  Featured row: ${CYAN}assets/featured.txt${RESET}  ${DIM}(JSON only — Wallpaper_001 is never replaced)${RESET}"
+  echo -e "  ${DIM}Do not overlay wallpaper-res.apk with KSU. Use menu [p] to patch an existing ZIP.${RESET}"
   echo ""
 
-  local count
+  local count featured_n
   count="$(npl_wallpaper_count)"
+  featured_n="$(grep -c '^npl:' "$NPL_WP_ASSETS/featured.txt" 2>/dev/null || echo 0)"
   if npl_wallpapers_enabled; then
-    echo -e "  Status: ${GREEN}ON${RESET}  ${DIM}($count image(s) will be injected)${RESET}"
+    echo -e "  Status: ${GREEN}ON${RESET}  ${DIM}($count image(s), $featured_n featured — baked by Step 4)${RESET}"
   else
-    echo -e "  Status: ${YELLOW}OFF${RESET}  ${DIM}(stock S23 wallpapers only — safer first boot)${RESET}"
+    echo -e "  Status: ${YELLOW}OFF${RESET}  ${DIM}(Step 4 skips injection; menu [p] can still patch a ZIP)${RESET}"
   fi
   echo ""
   echo -e "  ${BOLD}[1]${RESET}  Enable NPL wallpapers"
@@ -884,22 +886,36 @@ step_npl_wallpapers() {
 step_patch_vendor() {
   clear_screen
   print_header
-  echo -e "  ${BOLD}Patch vendor in an existing working ZIP${RESET}"
+  echo -e "  ${BOLD}Patch an existing working ZIP${RESET}"
   echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
   echo ""
-  echo -e "  Does ${BOLD}not${RESET} rebuild the ROM. Unpacks vendor, edits ${CYAN}build.prop${RESET},"
-  echo -e "  then writes replacement files you drop back into the working ZIP."
+  echo -e "  Does ${BOLD}not${RESET} rebuild the ROM. Source must be the original working ZIP"
+  echo -e "  ${DIM}(not a Fedora-packed image).${RESET}"
   echo ""
-  echo -e "  ${DIM}vendor.patch.dat is normally empty on a full ZIP — ignore it.${RESET}"
+  echo -e "  ${BOLD}[1]${RESET}  Vendor only  ${DIM}(build.prop / fstab)${RESET}"
+  echo -e "  ${BOLD}[2]${RESET}  Wallpapers only  ${DIM}(featured JSON in system — slow, several GB)${RESET}"
+  echo -e "  ${BOLD}[3]${RESET}  Both"
+  echo ""
+  echo -e -n "  ${BOLD}Choice [3]:${RESET} "
+  read -r patch_what
+  patch_what="${patch_what:-3}"
+  local do_vendor=true do_wallpaper=true
+  case "$patch_what" in
+    1) do_wallpaper=false ;;
+    2) do_vendor=false ;;
+  esac
+
+  echo ""
+  echo -e "  ${DIM}vendor.patch.dat / system.patch.dat are normally empty on a full ZIP — keep them.${RESET}"
   echo ""
 
-  mkdir -p "$OUT_DIR/vendor_in" "$OUT_DIR/vendor_patch" "$OUT_DIR/tmp"
+  mkdir -p "$OUT_DIR/vendor_in" "$OUT_DIR/vendor_patch" "$OUT_DIR/wallpaper_patch" "$OUT_DIR/tmp"
 
   local latest zip_choice input=""
   latest="$(latest_flashable_zip)"
 
-  echo -e "  ${BOLD}[1]${RESET}  A flashable ZIP  ${DIM}(NPL_*.zip — only vendor.* is read)${RESET}"
-  echo -e "  ${BOLD}[2]${RESET}  Folder of vendor files  ${DIM}(vendor.new.dat.br + vendor.transfer.list)${RESET}"
+  echo -e "  ${BOLD}[1]${RESET}  A flashable ZIP  ${DIM}(NPL_*.zip)${RESET}"
+  echo -e "  ${BOLD}[2]${RESET}  Folder of DAT files  ${DIM}(vendor.* and/or system.*)${RESET}"
   if [ -n "$latest" ]; then
     echo -e "  ${BOLD}[3]${RESET}  Latest zip in out/  ${DIM}${latest#$SRC_DIR/}${RESET}"
   fi
@@ -938,46 +954,47 @@ step_patch_vendor() {
     return
   fi
 
-  echo ""
-  echo -e "  ${BOLD}What to write into vendor/build.prop${RESET}"
-  local def_prop=""
-  if [ -n "${SELECTED_TARGET:-}" ] && [ -f "$SRC_DIR/target/$SELECTED_TARGET/patches/displayconfig/vendor.prop" ]; then
-    def_prop="$SRC_DIR/target/$SELECTED_TARGET/patches/displayconfig/vendor.prop"
-    echo -e "  ${BOLD}[1]${RESET}  Apply $SELECTED_TARGET displayconfig  ${DIM}${def_prop#$SRC_DIR/}${RESET}"
-  else
-    echo -e "  ${BOLD}[1]${RESET}  Apply a vendor.prop file  ${DIM}(you will be asked for the path)${RESET}"
-  fi
-  echo -e "  ${BOLD}[2]${RESET}  Edit build.prop in \$EDITOR  ${DIM}(${EDITOR:-nano})${RESET}"
-  echo -e "  ${BOLD}[3]${RESET}  Apply props, then edit"
-  echo ""
-  echo -e -n "  ${BOLD}Choice [2]:${RESET} "
-  read -r mode
-  mode="${mode:-2}"
+  local args=() want_inject=false want_repack=false
+  if $do_vendor; then
+    echo ""
+    echo -e "  ${BOLD}What to write into vendor/build.prop${RESET}"
+    local def_prop=""
+    if [ -n "${SELECTED_TARGET:-}" ] && [ -f "$SRC_DIR/target/$SELECTED_TARGET/patches/displayconfig/vendor.prop" ]; then
+      def_prop="$SRC_DIR/target/$SELECTED_TARGET/patches/displayconfig/vendor.prop"
+      echo -e "  ${BOLD}[1]${RESET}  Apply $SELECTED_TARGET displayconfig  ${DIM}${def_prop#$SRC_DIR/}${RESET}"
+    else
+      echo -e "  ${BOLD}[1]${RESET}  Apply a vendor.prop file  ${DIM}(you will be asked for the path)${RESET}"
+    fi
+    echo -e "  ${BOLD}[2]${RESET}  Edit build.prop in \$EDITOR  ${DIM}(${EDITOR:-nano})${RESET}"
+    echo -e "  ${BOLD}[3]${RESET}  Apply props, then edit"
+    echo ""
+    echo -e -n "  ${BOLD}Choice [2]:${RESET} "
+    read -r mode
+    mode="${mode:-2}"
 
-  local args=()
-  case "$mode" in
-    1)
-      if [ -z "$def_prop" ]; then
-        echo -e -n "  ${BOLD}vendor.prop path:${RESET} "
-        read -r def_prop
-        def_prop="${def_prop/#\~/$HOME}"
-      fi
-      [ -f "$def_prop" ] || { echo -e "  ${RED}No such file${RESET}"; press_enter; return; }
-      args+=(--prop "$def_prop")
-      ;;
-    3)
-      if [ -z "$def_prop" ]; then
-        echo -e -n "  ${BOLD}vendor.prop path:${RESET} "
-        read -r def_prop
-        def_prop="${def_prop/#\~/$HOME}"
-      fi
-      [ -f "$def_prop" ] || { echo -e "  ${RED}No such file${RESET}"; press_enter; return; }
-      args+=(--prop "$def_prop" --edit)
-      ;;
-    *)
-      args+=(--edit)
-      ;;
-  esac
+    case "$mode" in
+      1)
+        if [ -z "$def_prop" ]; then
+          echo -e -n "  ${BOLD}vendor.prop path:${RESET} "
+          read -r def_prop
+          def_prop="${def_prop/#\~/$HOME}"
+        fi
+        [ -f "$def_prop" ] || { echo -e "  ${RED}No such file${RESET}"; press_enter; return; }
+        args+=(--prop "$def_prop")
+        ;;
+      3)
+        if [ -z "$def_prop" ]; then
+          echo -e -n "  ${BOLD}vendor.prop path:${RESET} "
+          read -r def_prop
+          def_prop="${def_prop/#\~/$HOME}"
+        fi
+        [ -f "$def_prop" ] || { echo -e "  ${RED}No such file${RESET}"; press_enter; return; }
+        args+=(--prop "$def_prop" --edit)
+        ;;
+      *)
+        args+=(--edit)
+        ;;
+    esac
 
     local default_fstab=""
     if [ -n "${SELECTED_TARGET:-}" ] && [ -f "$SRC_DIR/target/$SELECTED_TARGET/patches/dfe/vendor/etc/fstab.qcom" ]; then
@@ -995,35 +1012,80 @@ step_patch_vendor() {
         args+=(--fstab "$default_fstab")
       fi
     fi
+  fi
 
   if [[ "$input" == *.zip ]]; then
     echo ""
-    echo -e "  ${BOLD}Automatically write a new flashable ZIP?${RESET}  ${DIM}(replaces vendor.* inside a copy)${RESET}"
+    echo -e "  ${BOLD}Automatically write a new flashable ZIP?${RESET}  ${DIM}(Zip64 rewrite of a copy)${RESET}"
     echo -e -n "  ${BOLD}[Y/n]:${RESET} "
     read -r inj
-    [[ ! "$inj" =~ ^[Nn]$ ]] && args+=(--inject)
+    [[ ! "$inj" =~ ^[Nn]$ ]] && want_inject=true
   elif [ -d "$input" ] && [ -d "$input/META-INF" ]; then
     echo ""
     echo -e "  ${BOLD}Automatically zip this folder after patching?${RESET}"
-    echo -e "  ${DIM}Copies patched vendor.* into the folder, then zips the contents${RESET}"
-    echo -e "  ${DIM}(zip root = META-INF + images, not a nested directory).${RESET}"
     echo -e -n "  ${BOLD}[Y/n]:${RESET} "
     read -r inj
-    [[ ! "$inj" =~ ^[Nn]$ ]] && args+=(--repack)
+    [[ ! "$inj" =~ ^[Nn]$ ]] && want_repack=true
+  fi
+
+  if $do_wallpaper && [[ "$input" == *.zip ]]; then
+    echo ""
+    echo -e "  ${YELLOW}Wallpapers unpack system.new.dat.br (several GB, 20–60+ min).${RESET}"
+    echo -e "  ${DIM}Featured JSON only — Wallpaper_001.webp is not replaced.${RESET}"
   fi
 
   echo ""
-  chmod +x "$SRC_DIR/scripts/patch_zip_vendor.sh" "$SRC_DIR/scripts/utils/sdat2img.py" "$SRC_DIR/scripts/utils/zip_replace_root.py" 2>/dev/null || true
-  if "$SRC_DIR/scripts/patch_zip_vendor.sh" "$input" "${args[@]}"; then
-    if [[ " ${args[*]} " == *" --inject "* ]] || [[ " ${args[*]} " == *" --repack "* ]]; then
-      echo -e "\n  ${GREEN}✔ Flash this zip:${RESET} ${CYAN}out/vendor_patch/*_vendorpatch.zip${RESET}"
-      echo -e "  ${DIM}Do not replace files by hand.${RESET}"
-    else
-      echo -e "\n  ${GREEN}✔ Replacement files:${RESET} ${CYAN}out/vendor_patch/${RESET}"
-      echo -e "  In 7-Zip / unzip, replace those three names at the ${BOLD}zip root${RESET} of the working ROM."
+  chmod +x "$SRC_DIR/scripts/patch_zip_vendor.sh" "$SRC_DIR/scripts/patch_zip_wallpaper.sh" \
+    "$SRC_DIR/scripts/utils/sdat2img.py" "$SRC_DIR/scripts/utils/zip_replace_root.py" \
+    "$SRC_DIR/unica/mods/npl_wallpapers/apply_to_decoded.sh" \
+    "$SRC_DIR/unica/mods/npl_wallpapers/inject_catalog.py" \
+    "$SRC_DIR/unica/mods/npl_wallpapers/inject_feature.py" 2>/dev/null || true
+
+  local vendor_ok=true
+  if $do_vendor; then
+    local vargs=("${args[@]}")
+    if $want_inject && $do_wallpaper; then
+      : # inject once at the end, with vendor.* + system.* together
+    elif $want_inject; then
+      vargs+=(--inject)
+    elif $want_repack; then
+      vargs+=(--repack)
     fi
-  else
-    echo -e "\n  ${RED}Patch failed.${RESET} Need vendor.new.dat.br + vendor.transfer.list (and brotli / erofs tools from Step 0)."
+    if "$SRC_DIR/scripts/patch_zip_vendor.sh" "$input" "${vargs[@]}"; then
+      if $want_inject && ! $do_wallpaper; then
+        echo -e "\n  ${GREEN}✔ Flash this zip:${RESET} ${CYAN}out/vendor_patch/*_vendorpatch.zip${RESET}"
+      elif $want_repack && ! $do_wallpaper; then
+        echo -e "\n  ${GREEN}✔ Flashable zip written next to the folder.${RESET}"
+      elif ! $want_inject && ! $want_repack; then
+        echo -e "\n  ${GREEN}✔ Vendor files:${RESET} ${CYAN}out/vendor_patch/${RESET}"
+      fi
+    else
+      vendor_ok=false
+      echo -e "\n  ${RED}Vendor patch failed.${RESET} Need vendor.new.dat.br + vendor.transfer.list (and brotli / erofs tools from Step 0)."
+    fi
+  fi
+
+  if $do_wallpaper && $vendor_ok; then
+    local wargs=() extra
+    if $want_inject && [[ "$input" == *.zip ]]; then
+      wargs+=(--inject)
+      if $do_vendor; then
+        for extra in vendor.new.dat.br vendor.transfer.list vendor.patch.dat; do
+          [ -f "$OUT_DIR/vendor_patch/$extra" ] && wargs+=(--extra "$OUT_DIR/vendor_patch/$extra")
+        done
+      fi
+    fi
+    if "$SRC_DIR/scripts/patch_zip_wallpaper.sh" "$input" "${wargs[@]}"; then
+      if $want_inject; then
+        echo -e "\n  ${GREEN}✔ Flash this zip:${RESET} ${CYAN}out/wallpaper_patch/*_wallpaper.zip${RESET}"
+        echo -e "  ${DIM}Do not zip the folder again by hand.${RESET}"
+      else
+        echo -e "\n  ${GREEN}✔ System files:${RESET} ${CYAN}out/wallpaper_patch/${RESET}"
+        echo -e "  Replace ${BOLD}system.new.dat.br${RESET} + transfer.list + patch.dat at the zip root."
+      fi
+    else
+      echo -e "\n  ${RED}Wallpaper patch failed.${RESET} Need system.new.dat.br + system.transfer.list, apktool, cwebp, and erofs tools from Step 0."
+    fi
   fi
   press_enter
 }
@@ -1061,7 +1123,7 @@ main_menu() {
     echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
     echo -e "  ${BOLD}[5]${RESET}  Run all steps  ${DIM}(0→1→2→3→4)${RESET}"
     echo -e "  ${BOLD}[w]${RESET}  NPL wallpapers  ${DIM}(on/off — drop images in assets/)${RESET}"
-    echo -e "  ${BOLD}[p]${RESET}  Patch vendor in existing ZIP  ${DIM}(display / build.prop — no ROM rebuild)${RESET}"
+    echo -e "  ${BOLD}[p]${RESET}  Patch existing ZIP  ${DIM}(vendor / featured wallpapers — no ROM rebuild)${RESET}"
     echo -e "  ${BOLD}[r]${RESET}  Reset build state"
     echo -e "  ${BOLD}[q]${RESET}  Quit"
     echo ""
