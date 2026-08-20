@@ -1,0 +1,4 @@
+id=dfe
+name=Disable force encryption (fstab)
+author=cosine
+description=Replace vendor/etc/fstab.qcom so /data is encryptable (no fileencryption=). Helps recovery decrypt.

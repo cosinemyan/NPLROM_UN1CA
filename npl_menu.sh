@@ -979,17 +979,22 @@ step_patch_vendor() {
       ;;
   esac
 
-  local default_fstab="$SRC_DIR/fstab/fstab.qcom"
-  if [ -f "$default_fstab" ]; then
-    echo ""
-    echo -e "  Replace ${BOLD}vendor/etc/fstab.qcom${RESET} with ${CYAN}fstab/fstab.qcom${RESET}?"
-    echo -e "  ${DIM}Your file mounts /data as encryptable (helps recovery decrypt).${RESET}"
-    echo -e -n "  ${BOLD}Replace fstab? [Y/n]:${RESET} "
-    read -r fstab_choice
-    if [[ ! "$fstab_choice" =~ ^[Nn]$ ]]; then
-      args+=(--fstab "$default_fstab")
+    local default_fstab=""
+    if [ -n "${SELECTED_TARGET:-}" ] && [ -f "$SRC_DIR/target/$SELECTED_TARGET/patches/dfe/vendor/etc/fstab.qcom" ]; then
+      default_fstab="$SRC_DIR/target/$SELECTED_TARGET/patches/dfe/vendor/etc/fstab.qcom"
+    elif [ -f "$SRC_DIR/target/dm1q/patches/dfe/vendor/etc/fstab.qcom" ]; then
+      default_fstab="$SRC_DIR/target/dm1q/patches/dfe/vendor/etc/fstab.qcom"
     fi
-  fi
+    if [ -n "$default_fstab" ]; then
+      echo ""
+      echo -e "  Replace ${BOLD}vendor/etc/fstab.qcom${RESET} with ${CYAN}${default_fstab#$SRC_DIR/}${RESET}?"
+      echo -e "  ${DIM}Same DFE module as a full ROM build (/data encryptable for recovery decrypt).${RESET}"
+      echo -e -n "  ${BOLD}Replace fstab? [Y/n]:${RESET} "
+      read -r fstab_choice
+      if [[ ! "$fstab_choice" =~ ^[Nn]$ ]]; then
+        args+=(--fstab "$default_fstab")
+      fi
+    fi
 
   if [[ "$input" == *.zip ]]; then
     echo ""
