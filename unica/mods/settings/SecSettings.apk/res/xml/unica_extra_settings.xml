@@ -12,6 +12,8 @@
     <SecSwitchPreference android:title="@string/unica_gphotos_title" android:key="unica_gphotos" settings:controller="io.mesalabs.unica.settings.extra.GooglePhotosPreferenceController" />
     <SecSwitchPreference android:title="@string/unica_games_spoof_title" android:key="unica_games_spoof" settings:controller="io.mesalabs.unica.settings.extra.GamesPropsPreferenceController" />
     <SecSwitchPreference android:title="@string/unica_galaxy_store_spoof_title" android:key="unica_galaxy_store_spoof" settings:controller="io.mesalabs.unica.settings.extra.GalaxyStoreSpoofPreferenceController" />
+    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
+    <SecSwitchPreference android:title="@string/unica_theme_trial_title" android:key="unica_theme_trial" android:summary="@string/unica_theme_trial_summary" settings:controller="io.mesalabs.unica.settings.extra.ThemeTrialPreferenceController" />
     <SecSwitchPreference android:title="@string/unica_now_nudge_experimental_title" android:key="unica_now_nudge_experimental" android:summary="@string/unica_now_nudge_experimental_summary" settings:controller="io.mesalabs.unica.settings.extra.NowNudgeExperimentalPreferenceController" />
     <Preference android:title="@string/unica_now_nudge_replies_title" android:key="unica_now_nudge_replies" android:summary="@string/unica_now_nudge_replies_summary" android:fragment="io.mesalabs.unica.settings.extra.NowNudgeReplyFallbacksFragment" />
     <Preference android:title="@string/unica_scpm_allowlist_title" android:key="unica_scpm_allowlist" android:summary="@string/unica_scpm_allowlist_summary" android:fragment="io.mesalabs.unica.settings.extra.ScpmAllowlistFragment" />

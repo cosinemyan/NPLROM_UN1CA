@@ -59,15 +59,15 @@ LOGW()
 # Increments the output indentation, additionally prints a log message if supplied.
 LOG_STEP_IN()
 {
-    local BOLD
+    local BOLD=""
     local RESET="\033[0m"
 
-    if [[ "$1" == "true" ]]; then
+    if [[ "${1-}" == "true" ]]; then
         BOLD="\033[1;37m"
         shift
     fi
 
-    if [ "$1" ]; then
+    if [ -n "${1-}" ]; then
         LOG "${BOLD}${1}${RESET}"
     fi
 

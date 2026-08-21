@@ -6,7 +6,12 @@
 #
 # Usage:
 #   scripts/patch_zip_wallpaper.sh <zip|dir> [options]
+#   scripts/patch_zip_wallpaper.sh --apk-only --apk wallpaper-res.apk --framework framework-res.apk
 #   --inject           write a new ZIP with system.* replaced
+#   --apk-only         stop after wallpaper-res.apk (no system.img / ZIP rewrite)
+#   --apk FILE         patch this wallpaper-res.apk (skips system unpack)
+#   --framework FILE   framework-res.apk for apktool (required with --apk)
+#   --build-prop FILE  optional build.prop (apktool tag)
 #   --extra FILE       also replace this zip-root file (repeatable; vendor.* from a prior patch)
 #   --output DIR       default: $OUT_DIR/wallpaper_patch
 
@@ -29,16 +34,25 @@ RESET='\033[0m'
 INPUT=""
 SOURCE_DIR=""
 DO_INJECT=false
+DO_APK_ONLY=false
+APK_IN=""
+FW_IN=""
+PROP_IN=""
 OUTPUT_DIR="$OUT_DIR/wallpaper_patch"
 EXTRA_FILES=()
 SDAT2IMG="$SRC_DIR/scripts/utils/sdat2img.py"
 ZIP_REPLACE="$SRC_DIR/scripts/utils/zip_replace_root.py"
-WP_MOD="$SRC_DIR/unica/mods/npl_wallpapers"
+WP_MOD="$SRC_DIR/unica/mods/cosine/npl_wallpapers"
 BLOCK_SIZE=4096
 
 usage() {
   echo "Usage: $(basename "$0") <NPL.zip | folder> [options]" >&2
+  echo "       $(basename "$0") --apk-only --apk wallpaper-res.apk --framework framework-res.apk" >&2
   echo "  --inject       write a new zip with system files replaced (Zip64-safe)" >&2
+  echo "  --apk-only     write wallpaper-res.apk only (skip system.img / ZIP rewrite)" >&2
+  echo "  --apk FILE     patch this wallpaper-res.apk (no system unpack)" >&2
+  echo "  --framework FILE  framework-res.apk for apktool (with --apk)" >&2
+  echo "  --build-prop FILE optional build.prop for apktool tag" >&2
   echo "  --extra FILE   also inject this zip-root file (repeatable)" >&2
   echo "  --output DIR   replacement files (default: out/wallpaper_patch)" >&2
   exit 1
@@ -47,6 +61,23 @@ usage() {
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --inject) DO_INJECT=true ;;
+    --apk-only) DO_APK_ONLY=true ;;
+    --apk)
+      shift
+      [ -n "${1:-}" ] || usage
+      APK_IN="$1"
+      DO_APK_ONLY=true
+      ;;
+    --framework)
+      shift
+      [ -n "${1:-}" ] || usage
+      FW_IN="$1"
+      ;;
+    --build-prop)
+      shift
+      [ -n "${1:-}" ] || usage
+      PROP_IN="$1"
+      ;;
     --extra)
       shift
       [ -n "${1:-}" ] || usage
@@ -74,10 +105,17 @@ while [ "$#" -gt 0 ]; do
   shift
 done
 
-[ -n "$INPUT" ] || usage
-[ -e "$INPUT" ] || { echo -e "${RED}Not found: $INPUT${RESET}" >&2; exit 1; }
-if [ -d "$INPUT" ]; then
-  SOURCE_DIR="$(cd "$INPUT" && pwd)"
+if [ -n "$APK_IN" ]; then
+  [ -f "$APK_IN" ] || { echo -e "${RED}Not found: $APK_IN${RESET}" >&2; exit 1; }
+  [ -n "$FW_IN" ] && [ -f "$FW_IN" ] || { echo -e "${RED}--apk needs --framework framework-res.apk${RESET}" >&2; exit 1; }
+  [ -z "$PROP_IN" ] || [ -f "$PROP_IN" ] || { echo -e "${RED}Not found: $PROP_IN${RESET}" >&2; exit 1; }
+elif [ -n "$INPUT" ]; then
+  [ -e "$INPUT" ] || { echo -e "${RED}Not found: $INPUT${RESET}" >&2; exit 1; }
+  if [ -d "$INPUT" ]; then
+    SOURCE_DIR="$(cd "$INPUT" && pwd)"
+  fi
+else
+  usage
 fi
 
 if [ -n "${SELECTED_TARGET:-}" ] && [ -f "$SRC_DIR/target/$SELECTED_TARGET/config.sh" ]; then
@@ -89,14 +127,18 @@ fi
 export TARGET_COMMON_SUPPORT_DYN_RESOLUTION_CONTROL TARGET_PRODUCT_SHIPPING_API_LEVEL
 
 command -v python3 >/dev/null || { echo -e "${RED}python3 required${RESET}" >&2; exit 1; }
-command -v brotli >/dev/null || { echo -e "${RED}brotli required${RESET}" >&2; exit 1; }
 command -v apktool >/dev/null || { echo -e "${RED}apktool required (menu Step 0)${RESET}" >&2; exit 1; }
 command -v cwebp >/dev/null || { echo -e "${RED}cwebp required${RESET}" >&2; exit 1; }
-command -v extract.erofs >/dev/null || { echo -e "${RED}extract.erofs required (menu Step 0)${RESET}" >&2; exit 1; }
-command -v mkfs.erofs >/dev/null || { echo -e "${RED}mkfs.erofs required (menu Step 0)${RESET}" >&2; exit 1; }
-[ -f "$SDAT2IMG" ] || { echo -e "${RED}Missing $SDAT2IMG${RESET}" >&2; exit 1; }
-[ -f "$ZIP_REPLACE" ] || { echo -e "${RED}Missing $ZIP_REPLACE${RESET}" >&2; exit 1; }
 [ -x "$WP_MOD/apply_to_decoded.sh" ] || chmod +x "$WP_MOD/apply_to_decoded.sh" "$WP_MOD/inject_catalog.py" "$WP_MOD/inject_feature.py" 2>/dev/null || true
+if [ -z "$APK_IN" ]; then
+  command -v brotli >/dev/null || { echo -e "${RED}brotli required${RESET}" >&2; exit 1; }
+  command -v extract.erofs >/dev/null || { echo -e "${RED}extract.erofs required (menu Step 0)${RESET}" >&2; exit 1; }
+  [ -f "$SDAT2IMG" ] || { echo -e "${RED}Missing $SDAT2IMG${RESET}" >&2; exit 1; }
+  if ! $DO_APK_ONLY; then
+    command -v mkfs.erofs >/dev/null || { echo -e "${RED}mkfs.erofs required (menu Step 0)${RESET}" >&2; exit 1; }
+    [ -f "$ZIP_REPLACE" ] || { echo -e "${RED}Missing $ZIP_REPLACE${RESET}" >&2; exit 1; }
+  fi
+fi
 
 mkdir -p "$OUT_DIR/tmp" "$OUTPUT_DIR"
 WORK=""
@@ -114,9 +156,11 @@ ok() { echo -e "  ${GREEN}✔${RESET} $*"; }
 warn() { echo -e "  ${YELLOW}⚠${RESET} $*"; }
 die() { echo -e "  ${RED}✘ $*${RESET}" >&2; exit 1; }
 
-free_gb="$(df -BG --output=avail "$OUT_DIR" | tail -1 | tr -dc '0-9')"
-if [ -n "$free_gb" ] && [ "$free_gb" -lt 25 ]; then
-  warn "Only ${free_gb}G free on the out/ filesystem — system unpack needs ~25G+"
+if [ -z "$APK_IN" ]; then
+  free_gb="$(df -BG --output=avail "$OUT_DIR" | tail -1 | tr -dc '0-9')"
+  if [ -n "$free_gb" ] && [ "$free_gb" -lt 25 ]; then
+    warn "Only ${free_gb}G free on the out/ filesystem — system unpack needs ~25G+"
+  fi
 fi
 
 find_extract_cfg() {
@@ -289,7 +333,10 @@ patch_wallpaper_apk() {
   fi
   apktool b -j "$threads" -p "$fwdir" "$decoded" || die "apktool build failed"
   local built="$decoded/dist/wallpaper-res.apk"
-  [ -f "$built" ] || die "apktool did not produce dist/wallpaper-res.apk"
+  if [ ! -f "$built" ]; then
+    built="$(find "$decoded/dist" -maxdepth 1 -type f -name '*.apk' | head -1 || true)"
+  fi
+  [ -n "$built" ] && [ -f "$built" ] || die "apktool did not produce dist/*.apk"
 
   local pem="$SRC_DIR/security/aosp_platform.x509.pem"
   local pk8="$SRC_DIR/security/aosp_platform.pk8"
@@ -302,10 +349,12 @@ patch_wallpaper_apk() {
     warn "platform signapk keys missing — installing unsigned APK (may be rejected)"
   fi
 
-  log "Writing patched APK back into the system tree"
-  cat "$built" > "$apk"
+  if [ -n "${apk:-}" ] && [ -f "$apk" ] && [ -z "$APK_IN" ]; then
+    log "Writing patched APK back into the system tree"
+    cat "$built" > "$apk"
+  fi
   cp -a "$built" "$OUTPUT_DIR/wallpaper-res.apk"
-  ok "Patched $(du -h "$apk" | awk '{print $1}') wallpaper-res.apk"
+  ok "Patched $(du -h "$OUTPUT_DIR/wallpaper-res.apk" | awk '{print $1}') → $OUTPUT_DIR/wallpaper-res.apk"
 }
 
 repack_system() {
@@ -423,12 +472,31 @@ ANDROID_FC=""
 ANDROID_FSC=""
 
 echo ""
-echo -e "  ${BOLD}Patch wallpaper-res in existing ZIP${RESET}"
+if $DO_APK_ONLY; then
+  echo -e "  ${BOLD}Patch wallpaper-res.apk only${RESET}"
+else
+  echo -e "  ${BOLD}Patch wallpaper-res in existing ZIP${RESET}"
+fi
 echo -e "  ${DIM}Featured JSON only — Wallpaper_001.webp is not replaced.${RESET}"
 echo ""
 
-extract_system_dat "$INPUT"
-unpack_system_tree
+if [ -n "$APK_IN" ]; then
+  APK_PATH="$WORK/wallpaper-res.apk"
+  FRAMEWORK_RES="$WORK/framework-res.apk"
+  cp -a "$APK_IN" "$APK_PATH"
+  cp -a "$FW_IN" "$FRAMEWORK_RES"
+  if [ -n "$PROP_IN" ]; then
+    BUILD_PROP="$WORK/build.prop"
+    cp -a "$PROP_IN" "$BUILD_PROP"
+  else
+    BUILD_PROP="$WORK/build.prop"
+    printf 'ro.build.version.incremental=npl\n' > "$BUILD_PROP"
+  fi
+else
+  extract_system_dat "$INPUT"
+  unpack_system_tree
+fi
+
 patch_wallpaper_apk
 
 echo ""
@@ -440,6 +508,12 @@ else
 fi
 echo -e "  ${DIM}JSON: $OUTPUT_DIR/resources_info_feature.after.json${RESET}"
 echo ""
+
+if $DO_APK_ONLY; then
+  echo -e "  ${BOLD}Patched APK:${RESET} ${CYAN}$OUTPUT_DIR/wallpaper-res.apk${RESET}"
+  echo ""
+  exit 0
+fi
 
 repack_system
 

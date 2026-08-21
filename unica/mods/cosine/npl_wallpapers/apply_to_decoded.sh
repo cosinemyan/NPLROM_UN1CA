@@ -104,7 +104,7 @@ done
 ASSET_FILES=("${FILTERED[@]}")
 
 if [ "${#ASSET_FILES[@]}" -eq 0 ]; then
-  LOGW "No images in unica/mods/npl_wallpapers/assets/"
+  LOGW "No images in unica/mods/cosine/npl_wallpapers/assets/"
   exit 0
 fi
 

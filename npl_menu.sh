@@ -243,18 +243,27 @@ print_steps() {
   echo -e "  $(step_status $STEP_FW_EXTRACTED)    ${BOLD}Step 3${RESET}  Extract firmware"
   echo -e "  $(step_status $STEP_ROM_BUILT)    ${BOLD}Step 4${RESET}  Build ROM ZIP"
   echo ""
+  local wp_count
+  wp_count="$(npl_wallpaper_count 2>/dev/null || echo 0)"
   if npl_wallpapers_enabled; then
-    echo -e "  ${GREEN}NPL wallpapers:${RESET} ${CYAN}ON${RESET}  ${DIM}unica/mods/npl_wallpapers/assets/${RESET}"
+    echo -e "  ${GREEN}APK patch:${RESET} wallpapers ${CYAN}ON${RESET}  ${DIM}($wp_count image(s) in assets/)${RESET}"
   else
-    echo -e "  ${YELLOW}NPL wallpapers:${RESET} ${DIM}OFF (stock S23 pack only)${RESET}"
+    echo -e "  ${YELLOW}APK patch:${RESET} wallpapers ${DIM}OFF (stock pack)${RESET}"
   fi
   echo ""
+}
+
+# Extra ENTER / keys typed during a long download would otherwise become the next menu choice.
+drain_stdin() {
+  local _junk
+  while IFS= read -r -t 0.05 -n 1024 _junk; do :; done || true
 }
 
 press_enter() {
   echo ""
   echo -e "  ${DIM}Press ENTER to continue...${RESET}"
-  read -r
+  read -r || true
+  drain_stdin
 }
 
 latest_flashable_zip() {
@@ -829,107 +838,81 @@ step_build_rom() {
 }
 
 
-NPL_WP_MOD="$SRC_DIR/unica/mods/npl_wallpapers"
+NPL_COSINE_MOD="$SRC_DIR/unica/mods/cosine"
+NPL_WP_MOD="$NPL_COSINE_MOD/npl_wallpapers"
 NPL_WP_ASSETS="$NPL_WP_MOD/assets"
 NPL_WP_DISABLE="$NPL_WP_MOD/disable"
+NPL_WP_FEATURED="$NPL_WP_ASSETS/featured.txt"
 
 npl_wallpapers_enabled() {
-  [ -d "$NPL_WP_MOD" ] && [ ! -f "$NPL_WP_DISABLE" ]
+  [ -d "$NPL_WP_MOD" ] && [ ! -f "$NPL_WP_DISABLE" ] && [ ! -f "$NPL_COSINE_MOD/disable" ]
 }
 
 npl_wallpaper_count() {
   find "$NPL_WP_ASSETS" -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) 2>/dev/null | wc -l
 }
 
-step_npl_wallpapers() {
-  clear_screen
-  print_header
-  echo -e "  ${BOLD}NPL wallpapers${RESET}"
-  echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
-  echo ""
-  echo -e "  Images go in: ${CYAN}unica/mods/npl_wallpapers/assets/${RESET}"
-  echo -e "  Featured row: ${CYAN}assets/featured.txt${RESET}  ${DIM}(JSON only — Wallpaper_001 is never replaced)${RESET}"
-  echo -e "  ${DIM}Do not overlay wallpaper-res.apk with KSU. Use menu [p] to patch an existing ZIP.${RESET}"
-  echo ""
-
-  local count featured_n
-  count="$(npl_wallpaper_count)"
-  featured_n="$(grep -c '^npl:' "$NPL_WP_ASSETS/featured.txt" 2>/dev/null || echo 0)"
-  if npl_wallpapers_enabled; then
-    echo -e "  Status: ${GREEN}ON${RESET}  ${DIM}($count image(s), $featured_n featured — baked by Step 4)${RESET}"
-  else
-    echo -e "  Status: ${YELLOW}OFF${RESET}  ${DIM}(Step 4 skips injection; menu [p] can still patch a ZIP)${RESET}"
+# Basenames in picker order (order.txt first, then leftover images).
+npl_wallpaper_list() {
+  local f base seen=""
+  if [ -f "$NPL_WP_ASSETS/order.txt" ]; then
+    while IFS= read -r line || [ -n "$line" ]; do
+      line="${line#"${line%%[![:space:]]*}"}"
+      line="${line%"${line##*[![:space:]]}"}"
+      [ -z "$line" ] || [[ "$line" == \#* ]] && continue
+      [ -f "$NPL_WP_ASSETS/$line" ] || continue
+      printf '%s\n' "$line"
+      seen="$seen|$line|"
+    done < "$NPL_WP_ASSETS/order.txt"
   fi
-  echo ""
-  echo -e "  ${BOLD}[1]${RESET}  Enable NPL wallpapers"
-  echo -e "  ${BOLD}[2]${RESET}  Disable  ${DIM}(recommended until a clean boot is confirmed)${RESET}"
-  echo -e "  ${BOLD}[0]${RESET}  Back"
-  echo ""
-  echo -e -n "  ${BOLD}Choice:${RESET} "
-  read -r wp_choice
-
-  case "$wp_choice" in
-    1)
-      rm -f "$NPL_WP_DISABLE"
-      echo -e "\n  ${GREEN}✔ NPL wallpapers ON.${RESET} Force-rebuild Step 4 to bake them in."
-      press_enter
-      ;;
-    2)
-      mkdir -p "$NPL_WP_MOD"
-      printf '%s\n' "# Skip NPL wallpaper injection (stock S23 wallpaper-res.apk)." > "$NPL_WP_DISABLE"
-      echo -e "\n  ${YELLOW}✔ NPL wallpapers OFF.${RESET} Force-rebuild Step 4 for a boot-safe ZIP."
-      press_enter
-      ;;
-  esac
+  shopt -s nullglob nocaseglob
+  for f in "$NPL_WP_ASSETS"/*.jpg "$NPL_WP_ASSETS"/*.jpeg "$NPL_WP_ASSETS"/*.png "$NPL_WP_ASSETS"/*.webp; do
+    [ -f "$f" ] || continue
+    base="$(basename "$f")"
+    [[ "$seen" == *"|$base|"* ]] && continue
+    printf '%s\n' "$base"
+  done
+  shopt -u nocaseglob
 }
 
-step_patch_vendor() {
-  clear_screen
-  print_header
-  echo -e "  ${BOLD}Patch an existing working ZIP${RESET}"
-  echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
-  echo ""
-  echo -e "  Does ${BOLD}not${RESET} rebuild the ROM. Source must be the original working ZIP"
-  echo -e "  ${DIM}(not a Fedora-packed image).${RESET}"
-  echo ""
-  echo -e "  ${BOLD}[1]${RESET}  Vendor only  ${DIM}(build.prop / fstab)${RESET}"
-  echo -e "  ${BOLD}[2]${RESET}  Wallpapers only  ${DIM}(featured JSON in system — slow, several GB)${RESET}"
-  echo -e "  ${BOLD}[3]${RESET}  Both"
-  echo ""
-  echo -e -n "  ${BOLD}Choice [3]:${RESET} "
-  read -r patch_what
-  patch_what="${patch_what:-3}"
-  local do_vendor=true do_wallpaper=true
-  case "$patch_what" in
-    1) do_wallpaper=false ;;
-    2) do_vendor=false ;;
-  esac
+npl_featured_count() {
+  local n
+  n="$(grep -c '^npl:' "$NPL_WP_FEATURED" 2>/dev/null || true)"
+  echo "${n:-0}"
+}
 
-  echo ""
-  echo -e "  ${DIM}vendor.patch.dat / system.patch.dat are normally empty on a full ZIP — keep them.${RESET}"
-  echo ""
+# Shared ZIP/folder picker for vendor and wallpaper APK patches.
+# Sets PATCH_INPUT, PATCH_WANT_INJECT, PATCH_WANT_REPACK. Returns 1 on cancel.
+# Pass "apk-only" to skip the rewrite-zip / repack prompt.
+ask_patch_source() {
+  local mode="${1:-}"
+  PATCH_INPUT=""
+  PATCH_WANT_INJECT=false
+  PATCH_WANT_REPACK=false
+  mkdir -p "$OUT_DIR/vendor_in" "$OUT_DIR/vendor_patch" "$OUT_DIR/wallpaper_patch" "$OUT_DIR/apk_inject" "$OUT_DIR/tmp"
 
-  mkdir -p "$OUT_DIR/vendor_in" "$OUT_DIR/vendor_patch" "$OUT_DIR/wallpaper_patch" "$OUT_DIR/tmp"
-
-  local latest zip_choice input=""
+  local latest zip_choice input="" def_zip="1"
   latest="$(latest_flashable_zip)"
 
+  echo -e "  ${DIM}vendor.patch.dat / system.patch.dat are normally empty on a full ZIP — keep them.${RESET}"
+  echo ""
   echo -e "  ${BOLD}[1]${RESET}  A flashable ZIP  ${DIM}(NPL_*.zip)${RESET}"
   echo -e "  ${BOLD}[2]${RESET}  Folder of DAT files  ${DIM}(vendor.* and/or system.*)${RESET}"
   if [ -n "$latest" ]; then
     echo -e "  ${BOLD}[3]${RESET}  Latest zip in out/  ${DIM}${latest#$SRC_DIR/}${RESET}"
+    def_zip="3"
   fi
   if [ -f "$OUT_DIR/vendor_in/vendor.new.dat.br" ] || [ -f "$OUT_DIR/vendor_in/vendor.transfer.list" ]; then
     echo -e "  ${BOLD}[4]${RESET}  Drop folder  ${DIM}out/vendor_in/${RESET}"
   fi
   echo ""
-  echo -e -n "  ${BOLD}Choice [1]:${RESET} "
+  echo -e -n "  ${BOLD}Choice [$def_zip]:${RESET} "
   read -r zip_choice
-  zip_choice="${zip_choice:-1}"
+  zip_choice="${zip_choice:-$def_zip}"
 
   case "$zip_choice" in
     3)
-      [ -n "$latest" ] || { echo -e "  ${RED}No NPL_*.zip in out/${RESET}"; press_enter; return; }
+      [ -n "$latest" ] || { echo -e "  ${RED}No NPL_*.zip in out/${RESET}"; return 1; }
       input="$latest"
       ;;
     4)
@@ -949,143 +932,662 @@ step_patch_vendor() {
 
   if [ -z "$input" ] || [ ! -e "$input" ]; then
     echo -e "\n  ${RED}Not found: ${input:-empty}${RESET}"
-    echo -e "  ${DIM}Copy vendor.new.dat.br + vendor.transfer.list into out/vendor_in/ and pick [4].${RESET}"
-    press_enter
-    return
+    return 1
   fi
 
-  local args=() want_inject=false want_repack=false
-  if $do_vendor; then
-    echo ""
-    echo -e "  ${BOLD}What to write into vendor/build.prop${RESET}"
-    local def_prop=""
-    if [ -n "${SELECTED_TARGET:-}" ] && [ -f "$SRC_DIR/target/$SELECTED_TARGET/patches/displayconfig/vendor.prop" ]; then
-      def_prop="$SRC_DIR/target/$SELECTED_TARGET/patches/displayconfig/vendor.prop"
-      echo -e "  ${BOLD}[1]${RESET}  Apply $SELECTED_TARGET displayconfig  ${DIM}${def_prop#$SRC_DIR/}${RESET}"
-    else
-      echo -e "  ${BOLD}[1]${RESET}  Apply a vendor.prop file  ${DIM}(you will be asked for the path)${RESET}"
-    fi
-    echo -e "  ${BOLD}[2]${RESET}  Edit build.prop in \$EDITOR  ${DIM}(${EDITOR:-nano})${RESET}"
-    echo -e "  ${BOLD}[3]${RESET}  Apply props, then edit"
-    echo ""
-    echo -e -n "  ${BOLD}Choice [2]:${RESET} "
-    read -r mode
-    mode="${mode:-2}"
-
-    case "$mode" in
-      1)
-        if [ -z "$def_prop" ]; then
-          echo -e -n "  ${BOLD}vendor.prop path:${RESET} "
-          read -r def_prop
-          def_prop="${def_prop/#\~/$HOME}"
-        fi
-        [ -f "$def_prop" ] || { echo -e "  ${RED}No such file${RESET}"; press_enter; return; }
-        args+=(--prop "$def_prop")
-        ;;
-      3)
-        if [ -z "$def_prop" ]; then
-          echo -e -n "  ${BOLD}vendor.prop path:${RESET} "
-          read -r def_prop
-          def_prop="${def_prop/#\~/$HOME}"
-        fi
-        [ -f "$def_prop" ] || { echo -e "  ${RED}No such file${RESET}"; press_enter; return; }
-        args+=(--prop "$def_prop" --edit)
-        ;;
-      *)
-        args+=(--edit)
-        ;;
-    esac
-
-    local default_fstab=""
-    if [ -n "${SELECTED_TARGET:-}" ] && [ -f "$SRC_DIR/target/$SELECTED_TARGET/patches/dfe/vendor/etc/fstab.qcom" ]; then
-      default_fstab="$SRC_DIR/target/$SELECTED_TARGET/patches/dfe/vendor/etc/fstab.qcom"
-    elif [ -f "$SRC_DIR/target/dm1q/patches/dfe/vendor/etc/fstab.qcom" ]; then
-      default_fstab="$SRC_DIR/target/dm1q/patches/dfe/vendor/etc/fstab.qcom"
-    fi
-    if [ -n "$default_fstab" ]; then
-      echo ""
-      echo -e "  Replace ${BOLD}vendor/etc/fstab.qcom${RESET} with ${CYAN}${default_fstab#$SRC_DIR/}${RESET}?"
-      echo -e "  ${DIM}Same DFE module as a full ROM build (/data encryptable for recovery decrypt).${RESET}"
-      echo -e -n "  ${BOLD}Replace fstab? [Y/n]:${RESET} "
-      read -r fstab_choice
-      if [[ ! "$fstab_choice" =~ ^[Nn]$ ]]; then
-        args+=(--fstab "$default_fstab")
-      fi
-    fi
+  PATCH_INPUT="$input"
+  if [[ "$mode" == "apk-only" ]]; then
+    return 0
   fi
-
   if [[ "$input" == *.zip ]]; then
     echo ""
     echo -e "  ${BOLD}Automatically write a new flashable ZIP?${RESET}  ${DIM}(Zip64 rewrite of a copy)${RESET}"
     echo -e -n "  ${BOLD}[Y/n]:${RESET} "
     read -r inj
-    [[ ! "$inj" =~ ^[Nn]$ ]] && want_inject=true
+    [[ ! "$inj" =~ ^[Nn]$ ]] && PATCH_WANT_INJECT=true
   elif [ -d "$input" ] && [ -d "$input/META-INF" ]; then
     echo ""
     echo -e "  ${BOLD}Automatically zip this folder after patching?${RESET}"
     echo -e -n "  ${BOLD}[Y/n]:${RESET} "
     read -r inj
-    [[ ! "$inj" =~ ^[Nn]$ ]] && want_repack=true
+    [[ ! "$inj" =~ ^[Nn]$ ]] && PATCH_WANT_REPACK=true
+  fi
+  return 0
+}
+
+step_apk_patch() {
+  while true; do
+    clear_screen
+    print_header
+    echo -e "  ${BOLD}APK patch${RESET}"
+    echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
+    echo ""
+    echo -e "  Decode / inject into system APKs from Step 3 extract, or swap patched"
+    echo -e "  APKs into an existing flashable ZIP."
+    echo ""
+    echo -e "  ${BOLD}[1]${RESET}  Wallpaper  ${DIM}(wallpaper-res.apk — catalog, featured row)${RESET}"
+    echo -e "  ${BOLD}[2]${RESET}  Settings   ${DIM}(SecSettings — UN1CA + Theme Trial toggle)${RESET}"
+    echo -e "  ${BOLD}[3]${RESET}  Theme      ${DIM}(ThemeCenter — trial expiry gate)${RESET}"
+    echo -e "  ${BOLD}[4]${RESET}  Inject into existing ZIP  ${DIM}(replace patched APKs only)${RESET}"
+    echo -e "  ${BOLD}[0]${RESET}  Back"
+    echo ""
+    echo -e -n "  ${BOLD}Choice:${RESET} "
+    read -r apk_choice
+    case "$apk_choice" in
+      1) step_apk_wallpaper ;;
+      2) step_apk_settings ;;
+      3) step_apk_theme ;;
+      4) step_apk_inject_zip ;;
+      0|"") return ;;
+    esac
+  done
+}
+
+step_apk_inject_zip() {
+  clear_screen
+  print_header
+  echo -e "  ${BOLD}Inject patched APKs into an existing ZIP${RESET}"
+  echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
+  echo ""
+  echo -e "  Does ${BOLD}not${RESET} rebuild the ROM. Unpacks ${CYAN}system.new.dat.br${RESET}, replaces"
+  echo -e "  selected APKs, writes a new flashable ZIP. Source must be the original"
+  echo -e "  working ZIP."
+  echo ""
+  echo -e "  ${YELLOW}Several GB and 20–60+ min.${RESET}"
+  echo ""
+
+  local -a labels=() files=() rels=() mark=()
+  local i n tok choice file rel label rest
+  for spec in \
+    "$OUT_DIR/wallpaper_patch/wallpaper-res.apk|priv-app/wallpaper-res/wallpaper-res.apk|wallpaper-res.apk" \
+    "$OUT_DIR/settings_patch/SecSettings.apk|priv-app/SecSettings/SecSettings.apk|SecSettings.apk" \
+    "$OUT_DIR/settings_patch/SecSettingsIntelligence.apk|priv-app/SecSettingsIntelligence/SecSettingsIntelligence.apk|SecSettingsIntelligence.apk" \
+    "$OUT_DIR/theme_patch/ThemeCenter.apk|priv-app/ThemeCenter/ThemeCenter.apk|ThemeCenter.apk"
+  do
+    file="${spec%%|*}"
+    rest="${spec#*|}"
+    rel="${rest%%|*}"
+    label="${rest#*|}"
+    [ -f "$file" ] || continue
+    labels+=("$label")
+    files+=("$file")
+    rels+=("$rel")
+    mark+=("1")
+  done
+  n="${#files[@]}"
+  if [ "$n" -eq 0 ]; then
+    echo -e "  ${YELLOW}No patched APKs yet.${RESET} Use Wallpaper / Settings / Theme first."
+    press_enter
+    return
   fi
 
-  if $do_wallpaper && [[ "$input" == *.zip ]]; then
+  while true; do
+    clear_screen
+    print_header
+    echo -e "  ${BOLD}Inject patched APKs into an existing ZIP${RESET}"
+    echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
     echo ""
-    echo -e "  ${YELLOW}Wallpapers unpack system.new.dat.br (several GB, 20–60+ min).${RESET}"
-    echo -e "  ${DIM}Featured JSON only — Wallpaper_001.webp is not replaced.${RESET}"
+    echo -e "  Toggle numbers (space-separated). Selected APKs replace the copies in the ZIP."
+    echo ""
+    for i in "${!files[@]}"; do
+      if [ "${mark[$i]}" = 1 ]; then
+        echo -e "  ${GREEN}[x]${RESET}  ${BOLD}$((i + 1))${RESET}  ${labels[$i]}"
+      else
+        echo -e "  ${DIM}[ ]${RESET}  ${BOLD}$((i + 1))${RESET}  ${labels[$i]}"
+      fi
+      echo -e "      ${DIM}${files[$i]#$SRC_DIR/}${RESET}"
+    done
+    echo ""
+    echo -e "  ${BOLD}[a]${RESET} All   ${BOLD}[n]${RESET} None   ${BOLD}[s]${RESET} Continue   ${BOLD}[0]${RESET} Cancel"
+    echo ""
+    echo -e -n "  ${BOLD}Toggle / command:${RESET} "
+    read -r choice
+    case "$choice" in
+      0|"") return ;;
+      a|A)
+        for i in "${!files[@]}"; do mark[$i]=1; done
+        ;;
+      n|N)
+        for i in "${!files[@]}"; do mark[$i]=0; done
+        ;;
+      s|S) break ;;
+      *)
+        for tok in $choice; do
+          [[ "$tok" =~ ^[0-9]+$ ]] || continue
+          i=$((tok - 1))
+          [ "$i" -ge 0 ] && [ "$i" -lt "$n" ] || continue
+          if [ "${mark[$i]}" = 1 ]; then
+            mark[$i]=0
+          else
+            mark[$i]=1
+          fi
+        done
+        ;;
+    esac
+  done
+
+  local selected=0
+  for i in "${!files[@]}"; do
+    [ "${mark[$i]}" = 1 ] && selected=$((selected + 1))
+  done
+  if [ "$selected" -eq 0 ]; then
+    echo -e "\n  ${YELLOW}Nothing selected.${RESET}"
+    press_enter
+    return
   fi
 
   echo ""
-  chmod +x "$SRC_DIR/scripts/patch_zip_vendor.sh" "$SRC_DIR/scripts/patch_zip_wallpaper.sh" \
-    "$SRC_DIR/scripts/utils/sdat2img.py" "$SRC_DIR/scripts/utils/zip_replace_root.py" \
-    "$SRC_DIR/unica/mods/npl_wallpapers/apply_to_decoded.sh" \
-    "$SRC_DIR/unica/mods/npl_wallpapers/inject_catalog.py" \
-    "$SRC_DIR/unica/mods/npl_wallpapers/inject_feature.py" 2>/dev/null || true
+  if ! ask_patch_source; then
+    press_enter
+    return
+  fi
 
-  local vendor_ok=true
-  if $do_vendor; then
-    local vargs=("${args[@]}")
-    if $want_inject && $do_wallpaper; then
-      : # inject once at the end, with vendor.* + system.* together
-    elif $want_inject; then
-      vargs+=(--inject)
-    elif $want_repack; then
-      vargs+=(--repack)
-    fi
-    if "$SRC_DIR/scripts/patch_zip_vendor.sh" "$input" "${vargs[@]}"; then
-      if $want_inject && ! $do_wallpaper; then
-        echo -e "\n  ${GREEN}✔ Flash this zip:${RESET} ${CYAN}out/vendor_patch/*_vendorpatch.zip${RESET}"
-      elif $want_repack && ! $do_wallpaper; then
-        echo -e "\n  ${GREEN}✔ Flashable zip written next to the folder.${RESET}"
-      elif ! $want_inject && ! $want_repack; then
-        echo -e "\n  ${GREEN}✔ Vendor files:${RESET} ${CYAN}out/vendor_patch/${RESET}"
-      fi
+  chmod +x "$SRC_DIR/scripts/patch_zip_apks.sh" \
+    "$SRC_DIR/scripts/utils/sdat2img.py" "$SRC_DIR/scripts/utils/zip_replace_root.py" 2>/dev/null || true
+
+  local args=()
+  for i in "${!files[@]}"; do
+    [ "${mark[$i]}" = 1 ] || continue
+    args+=(--apk "${files[$i]}:${rels[$i]}")
+  done
+  if $PATCH_WANT_INJECT && [[ "$PATCH_INPUT" == *.zip ]]; then
+    args+=(--inject)
+  fi
+
+  echo ""
+  if "$SRC_DIR/scripts/patch_zip_apks.sh" "$PATCH_INPUT" "${args[@]}"; then
+    if $PATCH_WANT_INJECT; then
+      echo -e "\n  ${GREEN}✔ Flash this zip:${RESET} ${CYAN}out/apk_inject/*_apks.zip${RESET}"
     else
-      vendor_ok=false
-      echo -e "\n  ${RED}Vendor patch failed.${RESET} Need vendor.new.dat.br + vendor.transfer.list (and brotli / erofs tools from Step 0)."
+      echo -e "\n  ${GREEN}✔ System files:${RESET} ${CYAN}out/apk_inject/${RESET}"
+      echo -e "  Replace ${BOLD}system.new.dat.br${RESET} + transfer.list + patch.dat at the zip root."
+    fi
+  else
+    echo -e "\n  ${RED}APK inject failed.${RESET} Need system.new.dat.br + transfer.list, and erofs tools from Step 0."
+  fi
+  press_enter
+}
+
+step_apk_settings() {
+  clear_screen
+  print_header
+  echo -e "  ${BOLD}APK patch — Settings${RESET}"
+  echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
+  echo ""
+  echo -e "  Overlay: ${CYAN}unica/mods/settings/${RESET}  ${DIM}(UN1CA Settings + Theme Trial toggle)${RESET}"
+  echo -e "  Writes ${CYAN}out/settings_patch/SecSettings.apk${RESET}."
+  echo ""
+
+  local work_apk work_fw work_intel prop
+  work_apk="$(npl_find_work_apk "priv-app/SecSettings/SecSettings.apk" || true)"
+  work_fw="$(npl_find_work_framework_apk || true)"
+  work_intel="$(npl_find_work_apk "priv-app/SecSettingsIntelligence/SecSettingsIntelligence.apk" || true)"
+
+  if [ -z "$work_apk" ] || [ -z "$work_fw" ]; then
+    echo -e "  ${YELLOW}No extracted firmware SecSettings.apk.${RESET} Run Step 3 first."
+    press_enter
+    return
+  fi
+
+  echo -e "  Using extracted firmware:"
+  echo -e "    ${DIM}${work_apk#$SRC_DIR/}${RESET}"
+  [ -n "$work_intel" ] && echo -e "    ${DIM}${work_intel#$SRC_DIR/}${RESET}"
+  echo ""
+  echo -e -n "  ${BOLD}Patch now? [Y/n]:${RESET} "
+  read -r go
+  [[ "$go" =~ ^[Nn]$ ]] && return
+
+  chmod +x "$SRC_DIR/scripts/patch_system_apk.sh" 2>/dev/null || true
+  local args=(settings --apk "$work_apk" --framework "$work_fw")
+  prop="$(npl_find_work_build_prop || true)"
+  [ -n "$prop" ] && args+=(--build-prop "$prop")
+  [ -n "$work_intel" ] && args+=(--intelligence "$work_intel")
+  echo ""
+  if "$SRC_DIR/scripts/patch_system_apk.sh" "${args[@]}"; then
+    echo -e "\n  ${GREEN}✔ Patched APK:${RESET} ${CYAN}out/settings_patch/SecSettings.apk${RESET}"
+    [ -f "$OUT_DIR/settings_patch/SecSettingsIntelligence.apk" ] && \
+      echo -e "  ${GREEN}✔ Intelligence:${RESET} ${CYAN}out/settings_patch/SecSettingsIntelligence.apk${RESET}"
+    echo -e "  ${DIM}Theme Trial also needs ThemeCenter from APK patch → Theme.${RESET}"
+  else
+    echo -e "\n  ${RED}Settings APK patch failed.${RESET} Need apktool (Step 0)."
+  fi
+  press_enter
+}
+
+step_apk_theme() {
+  clear_screen
+  print_header
+  echo -e "  ${BOLD}APK patch — Theme${RESET}"
+  echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
+  echo ""
+  echo -e "  Inject: ${CYAN}unica/mods/cosine/theme_trial/${RESET}"
+  echo -e "  Writes ${CYAN}out/theme_patch/ThemeCenter.apk${RESET}."
+  echo -e "  Gate is off until Extra settings → ${BOLD}Theme Trial${RESET} is on"
+  echo -e "  ${DIM}(needs patched SecSettings from APK patch → Settings, or Step 4).${RESET}"
+  echo ""
+
+  local work_apk work_fw prop
+  work_apk="$(npl_find_work_apk "priv-app/ThemeCenter/ThemeCenter.apk" || true)"
+  work_fw="$(npl_find_work_framework_apk || true)"
+
+  if [ -z "$work_apk" ] || [ -z "$work_fw" ]; then
+    echo -e "  ${YELLOW}No extracted firmware ThemeCenter.apk.${RESET} Run Step 3 first."
+    press_enter
+    return
+  fi
+
+  echo -e "  Using extracted firmware:"
+  echo -e "    ${DIM}${work_apk#$SRC_DIR/}${RESET}"
+  echo ""
+  echo -e -n "  ${BOLD}Patch now? [Y/n]:${RESET} "
+  read -r go
+  [[ "$go" =~ ^[Nn]$ ]] && return
+
+  chmod +x "$SRC_DIR/scripts/patch_system_apk.sh" \
+    "$SRC_DIR/unica/mods/cosine/theme_trial/inject_trial_gate.py" 2>/dev/null || true
+  local args=(theme --apk "$work_apk" --framework "$work_fw")
+  prop="$(npl_find_work_build_prop || true)"
+  [ -n "$prop" ] && args+=(--build-prop "$prop")
+  echo ""
+  if "$SRC_DIR/scripts/patch_system_apk.sh" "${args[@]}"; then
+    echo -e "\n  ${GREEN}✔ Patched APK:${RESET} ${CYAN}out/theme_patch/ThemeCenter.apk${RESET}"
+  else
+    echo -e "\n  ${RED}Theme APK patch failed.${RESET} Need apktool (Step 0)."
+  fi
+  press_enter
+}
+
+step_apk_wallpaper() {
+  while true; do
+    clear_screen
+    print_header
+    echo -e "  ${BOLD}APK patch — Wallpaper${RESET}"
+    echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
+    echo ""
+    echo -e "  Images: ${CYAN}unica/mods/cosine/npl_wallpapers/assets/${RESET}"
+    echo -e "  Featured row is JSON only — ${BOLD}Wallpaper_001.webp is never replaced${RESET}."
+    echo ""
+
+    local count featured_n
+    count="$(npl_wallpaper_count)"
+    featured_n="$(npl_featured_count)"
+    if npl_wallpapers_enabled; then
+      echo -e "  Step 4 inject: ${GREEN}ON${RESET}  ${DIM}($count image(s), $featured_n featured)${RESET}"
+    else
+      echo -e "  Step 4 inject: ${YELLOW}OFF${RESET}  ${DIM}(stock pack; [4] still patches an APK)${RESET}"
+    fi
+    if [ -f "$NPL_WP_FEATURED" ]; then
+      echo -e "  Featured:"
+      grep '^npl:' "$NPL_WP_FEATURED" 2>/dev/null | sed 's/^npl:/    /' || echo -e "    ${DIM}(none)${RESET}"
+    fi
+    echo ""
+    local work_apk
+    work_apk="$(npl_find_work_wallpaper_apk || true)"
+    if [ -n "$work_apk" ]; then
+      echo -e "  Patch source: ${GREEN}extracted firmware${RESET}"
+      echo -e "    ${DIM}${work_apk#$SRC_DIR/}${RESET}"
+    else
+      echo -e "  Patch source: ${YELLOW}no extract yet${RESET}  ${DIM}run Step 3, or a ZIP is used${RESET}"
+    fi
+    echo ""
+    echo -e "  ${BOLD}[1]${RESET}  Enable  ${DIM}(bake into ROM on Step 4)${RESET}"
+    echo -e "  ${BOLD}[2]${RESET}  Disable ${DIM}(stock wallpaper-res until you turn it on)${RESET}"
+    echo -e "  ${BOLD}[3]${RESET}  Select featured images  ${DIM}(multi-select)${RESET}"
+    if [ -n "$work_apk" ]; then
+      echo -e "  ${BOLD}[4]${RESET}  Patch wallpaper-res  ${DIM}(from extract → out/wallpaper_patch/)${RESET}"
+    else
+      echo -e "  ${BOLD}[4]${RESET}  Patch wallpaper-res  ${DIM}(ZIP — unpacks system)${RESET}"
+    fi
+    echo -e "  ${BOLD}[0]${RESET}  Back"
+    echo ""
+    echo -e -n "  ${BOLD}Choice:${RESET} "
+    read -r wp_choice
+    case "$wp_choice" in
+      1)
+        rm -f "$NPL_WP_DISABLE"
+        echo -e "\n  ${GREEN}✔ Wallpaper inject ON.${RESET} Force-rebuild Step 4 to bake images + featured JSON."
+        press_enter
+        ;;
+      2)
+        mkdir -p "$NPL_WP_MOD"
+        printf '%s\n' "# Skip NPL wallpaper injection (stock wallpaper-res.apk)." > "$NPL_WP_DISABLE"
+        echo -e "\n  ${YELLOW}✔ Wallpaper inject OFF.${RESET} Force-rebuild Step 4 for a stock wallpaper pack."
+        press_enter
+        ;;
+      3) step_apk_wallpaper_featured ;;
+      4|5) step_apk_wallpaper_patch ;;
+      0|"") return ;;
+    esac
+  done
+}
+
+step_apk_wallpaper_featured() {
+  local files=() i n choice tok
+  mapfile -t files < <(npl_wallpaper_list)
+  n="${#files[@]}"
+  if [ "$n" -eq 0 ]; then
+    echo -e "\n  ${YELLOW}No images in assets/.${RESET} Drop JPG/PNG/WebP first."
+    press_enter
+    return
+  fi
+
+  local -a mark=()
+  for i in "${!files[@]}"; do
+    mark[$i]=0
+    if [ -f "$NPL_WP_FEATURED" ] && grep -qx "npl:${files[$i]}" "$NPL_WP_FEATURED" 2>/dev/null; then
+      mark[$i]=1
+    fi
+  done
+
+  while true; do
+    clear_screen
+    print_header
+    echo -e "  ${BOLD}Featured wallpaper row${RESET}"
+    echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
+    echo ""
+    echo -e "  Toggle numbers (space-separated), left → right in the picker."
+    echo -e "  ${DIM}Catalog JSON only — does not replace Wallpaper_001.webp.${RESET}"
+    echo ""
+    for i in "${!files[@]}"; do
+      if [ "${mark[$i]}" = 1 ]; then
+        echo -e "  ${GREEN}[x]${RESET}  ${BOLD}$((i + 1))${RESET}  ${files[$i]}"
+      else
+        echo -e "  ${DIM}[ ]${RESET}  ${BOLD}$((i + 1))${RESET}  ${files[$i]}"
+      fi
+    done
+    echo ""
+    echo -e "  ${BOLD}[a]${RESET} All   ${BOLD}[n]${RESET} None   ${BOLD}[s]${RESET} Save   ${BOLD}[0]${RESET} Cancel"
+    echo ""
+    echo -e -n "  ${BOLD}Toggle / command:${RESET} "
+    read -r choice
+    case "$choice" in
+      0|"") return ;;
+      a|A)
+        for i in "${!files[@]}"; do mark[$i]=1; done
+        ;;
+      n|N)
+        for i in "${!files[@]}"; do mark[$i]=0; done
+        ;;
+      s|S)
+        mkdir -p "$NPL_WP_ASSETS"
+        {
+          echo "# Featured row in the Samsung wallpaper picker (left to right)."
+          echo "# Catalog-only — Wallpaper_001.webp is never replaced (that bootloops)."
+          for i in "${!files[@]}"; do
+            [ "${mark[$i]}" = 1 ] && printf 'npl:%s\n' "${files[$i]}"
+          done
+        } > "$NPL_WP_FEATURED"
+        echo -e "\n  ${GREEN}✔ Saved ${NPL_WP_FEATURED#$SRC_DIR/}${RESET}"
+        echo -e "  ${DIM}Rebuild Step 4, or Wallpaper → [4] Patch wallpaper-res.${RESET}"
+        press_enter
+        return
+        ;;
+      *)
+        for tok in $choice; do
+          [[ "$tok" =~ ^[0-9]+$ ]] || continue
+          i=$((tok - 1))
+          [ "$i" -ge 0 ] && [ "$i" -lt "$n" ] || continue
+          if [ "${mark[$i]}" = 1 ]; then
+            mark[$i]=0
+          else
+            mark[$i]=1
+          fi
+        done
+        ;;
+    esac
+  done
+}
+
+step_apk_wallpaper_patch_zip() {
+  clear_screen
+  print_header
+  echo -e "  ${BOLD}Patch wallpaper-res in an existing ZIP${RESET}"
+  echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
+  echo ""
+  echo -e "  Does ${BOLD}not${RESET} rebuild the ROM. Unpacks ${CYAN}system.new.dat.br${RESET} and injects"
+  echo -e "  assets + featured JSON. Source must be the original working ZIP."
+  echo ""
+  echo -e "  ${YELLOW}Several GB and 20–60+ min.${RESET} Wallpaper_001.webp is not replaced."
+  echo ""
+
+  if ! ask_patch_source; then
+    press_enter
+    return
+  fi
+
+  echo ""
+  chmod +x "$SRC_DIR/scripts/patch_zip_wallpaper.sh" \
+    "$SRC_DIR/scripts/utils/sdat2img.py" "$SRC_DIR/scripts/utils/zip_replace_root.py" \
+    "$NPL_WP_MOD/apply_to_decoded.sh" "$NPL_WP_MOD/inject_catalog.py" \
+    "$NPL_WP_MOD/inject_feature.py" 2>/dev/null || true
+
+  local wargs=()
+  if $PATCH_WANT_INJECT && [[ "$PATCH_INPUT" == *.zip ]]; then
+    wargs+=(--inject)
+  fi
+  if "$SRC_DIR/scripts/patch_zip_wallpaper.sh" "$PATCH_INPUT" "${wargs[@]}"; then
+    if $PATCH_WANT_INJECT; then
+      echo -e "\n  ${GREEN}✔ Flash this zip:${RESET} ${CYAN}out/wallpaper_patch/*_wallpaper.zip${RESET}"
+      echo -e "  ${DIM}Do not zip the folder again by hand.${RESET}"
+    else
+      echo -e "\n  ${GREEN}✔ System files:${RESET} ${CYAN}out/wallpaper_patch/${RESET}"
+      echo -e "  Replace ${BOLD}system.new.dat.br${RESET} + transfer.list + patch.dat at the zip root."
+    fi
+  else
+    echo -e "\n  ${RED}Wallpaper patch failed.${RESET} Need system.new.dat.br + system.transfer.list, apktool, cwebp, and erofs tools from Step 0."
+  fi
+  press_enter
+}
+
+# Prefer Step 3 extracted firmware (out/fw/MODEL_CSC), then Step 4 work_dir.
+npl_apk_source_roots() {
+  local d spec seen="|"
+  _npl_emit_root() {
+    [ -d "$1" ] || return 0
+    [[ "$seen" == *"|$1|"* ]] && return 0
+    seen="${seen}${1}|"
+    printf '%s\n' "$1"
+  }
+  for spec in "${SOURCE_FIRMWARE:-}" "${TARGET_FIRMWARE:-}"; do
+    [ -n "$spec" ] || continue
+    _npl_emit_root "$FW_DIR/$(cut -d/ -f1 <<< "$spec")_$(cut -d/ -f2 <<< "$spec")"
+  done
+  if [ -d "$FW_DIR" ]; then
+    for d in "$FW_DIR"/*; do
+      [ -d "$d/system" ] && _npl_emit_root "$d"
+    done
+  fi
+  [ -n "${WORK_DIR:-}" ] && _npl_emit_root "$WORK_DIR"
+  if [ -n "${SELECTED_TARGET:-}" ]; then
+    _npl_emit_root "$OUT_DIR/target/$SELECTED_TARGET/work_dir"
+  fi
+  if [ -d "$OUT_DIR/target" ]; then
+    for d in "$OUT_DIR/target"/*/work_dir; do
+      _npl_emit_root "$d"
+    done
+  fi
+}
+
+npl_find_work_apk() {
+  local rel="$1" root p
+  while IFS= read -r root; do
+    [ -n "$root" ] || continue
+    for p in "$root/system/system/$rel" "$root/system/$rel"; do
+      [ -f "$p" ] && echo "$p" && return 0
+    done
+  done < <(npl_apk_source_roots)
+  return 1
+}
+
+npl_find_work_wallpaper_apk() {
+  npl_find_work_apk "priv-app/wallpaper-res/wallpaper-res.apk"
+}
+
+npl_find_work_framework_apk() {
+  npl_find_work_apk "framework/framework-res.apk"
+}
+
+npl_find_work_build_prop() {
+  local root p
+  while IFS= read -r root; do
+    [ -n "$root" ] || continue
+    for p in \
+      "$root/system/system/build.prop" \
+      "$root/system/build.prop"; do
+      [ -f "$p" ] && echo "$p" && return 0
+    done
+  done < <(npl_apk_source_roots)
+  return 1
+}
+
+step_apk_wallpaper_patch() {
+  clear_screen
+  print_header
+  echo -e "  ${BOLD}Patch wallpaper-res.apk${RESET}"
+  echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
+  echo ""
+  echo -e "  Writes ${CYAN}out/wallpaper_patch/wallpaper-res.apk${RESET}."
+  echo -e "  Uses Step 3 extract when present — no ZIP unpack."
+  echo -e "  Wallpaper_001.webp is not replaced."
+  echo ""
+
+  chmod +x "$SRC_DIR/scripts/patch_zip_wallpaper.sh" \
+    "$SRC_DIR/scripts/utils/sdat2img.py" \
+    "$NPL_WP_MOD/apply_to_decoded.sh" "$NPL_WP_MOD/inject_catalog.py" \
+    "$NPL_WP_MOD/inject_feature.py" 2>/dev/null || true
+
+  local work_apk work_fw prop
+  work_apk="$(npl_find_work_wallpaper_apk || true)"
+  work_fw="$(npl_find_work_framework_apk || true)"
+
+  if [ -n "$work_apk" ] && [ -n "$work_fw" ]; then
+    echo -e "  Using extracted firmware (framework-res is decode-only, not patched):"
+    echo -e "    ${DIM}${work_apk#$SRC_DIR/}${RESET}"
+    echo ""
+    local apk_args=(--apk-only --apk "$work_apk" --framework "$work_fw")
+    prop="$(npl_find_work_build_prop || true)"
+    [ -n "$prop" ] && apk_args+=(--build-prop "$prop")
+    if "$SRC_DIR/scripts/patch_zip_wallpaper.sh" "${apk_args[@]}"; then
+      echo -e "\n  ${GREEN}✔ Patched APK:${RESET} ${CYAN}out/wallpaper_patch/wallpaper-res.apk${RESET}"
+    else
+      echo -e "\n  ${RED}APK patch failed.${RESET} Need apktool and cwebp."
+    fi
+    press_enter
+    return
+  fi
+
+  echo -e "  No extracted firmware. Using a flashable ZIP / system DAT instead."
+  echo -e "  ${YELLOW}Unpacks system (several GB); only the APK is kept.${RESET}"
+  echo ""
+  if ! ask_patch_source apk-only; then
+    press_enter
+    return
+  fi
+  echo ""
+  if "$SRC_DIR/scripts/patch_zip_wallpaper.sh" "$PATCH_INPUT" --apk-only; then
+    echo -e "\n  ${GREEN}✔ Patched APK:${RESET} ${CYAN}out/wallpaper_patch/wallpaper-res.apk${RESET}"
+  else
+    echo -e "\n  ${RED}APK patch failed.${RESET} Need system.new.dat.br + transfer.list, apktool, cwebp, extract.erofs."
+  fi
+  press_enter
+}
+
+step_patch_vendor() {
+  clear_screen
+  print_header
+  echo -e "  ${BOLD}Patch vendor in an existing ZIP${RESET}"
+  echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
+  echo ""
+  echo -e "  Does ${BOLD}not${RESET} rebuild the ROM. Unpacks vendor, edits ${CYAN}build.prop${RESET} / fstab."
+  echo -e "  ${DIM}Wallpaper ZIP patch lives under APK patch → Wallpaper.${RESET}"
+  echo -e "  Source must be the original working ZIP ${DIM}(not a Fedora-packed image).${RESET}"
+  echo ""
+
+  if ! ask_patch_source; then
+    echo -e "  ${DIM}Copy vendor.new.dat.br + vendor.transfer.list into out/vendor_in/ and pick [4].${RESET}"
+    press_enter
+    return
+  fi
+
+  local args=()
+  local input="$PATCH_INPUT"
+
+  echo ""
+  echo -e "  ${BOLD}What to write into vendor/build.prop${RESET}"
+  local def_prop=""
+  if [ -n "${SELECTED_TARGET:-}" ] && [ -f "$SRC_DIR/target/$SELECTED_TARGET/patches/displayconfig/vendor.prop" ]; then
+    def_prop="$SRC_DIR/target/$SELECTED_TARGET/patches/displayconfig/vendor.prop"
+    echo -e "  ${BOLD}[1]${RESET}  Apply $SELECTED_TARGET displayconfig  ${DIM}${def_prop#$SRC_DIR/}${RESET}"
+  else
+    echo -e "  ${BOLD}[1]${RESET}  Apply a vendor.prop file  ${DIM}(you will be asked for the path)${RESET}"
+  fi
+  echo -e "  ${BOLD}[2]${RESET}  Edit build.prop in \$EDITOR  ${DIM}(${EDITOR:-nano})${RESET}"
+  echo -e "  ${BOLD}[3]${RESET}  Apply props, then edit"
+  echo ""
+  echo -e -n "  ${BOLD}Choice [2]:${RESET} "
+  read -r mode
+  mode="${mode:-2}"
+
+  case "$mode" in
+    1)
+      if [ -z "$def_prop" ]; then
+        echo -e -n "  ${BOLD}vendor.prop path:${RESET} "
+        read -r def_prop
+        def_prop="${def_prop/#\~/$HOME}"
+      fi
+      [ -f "$def_prop" ] || { echo -e "  ${RED}No such file${RESET}"; press_enter; return; }
+      args+=(--prop "$def_prop")
+      ;;
+    3)
+      if [ -z "$def_prop" ]; then
+        echo -e -n "  ${BOLD}vendor.prop path:${RESET} "
+        read -r def_prop
+        def_prop="${def_prop/#\~/$HOME}"
+      fi
+      [ -f "$def_prop" ] || { echo -e "  ${RED}No such file${RESET}"; press_enter; return; }
+      args+=(--prop "$def_prop" --edit)
+      ;;
+    *)
+      args+=(--edit)
+      ;;
+  esac
+
+  local default_fstab=""
+  if [ -n "${SELECTED_TARGET:-}" ] && [ -f "$SRC_DIR/target/$SELECTED_TARGET/patches/dfe/vendor/etc/fstab.qcom" ]; then
+    default_fstab="$SRC_DIR/target/$SELECTED_TARGET/patches/dfe/vendor/etc/fstab.qcom"
+  elif [ -f "$SRC_DIR/target/dm1q/patches/dfe/vendor/etc/fstab.qcom" ]; then
+    default_fstab="$SRC_DIR/target/dm1q/patches/dfe/vendor/etc/fstab.qcom"
+  fi
+  if [ -n "$default_fstab" ]; then
+    echo ""
+    echo -e "  Replace ${BOLD}vendor/etc/fstab.qcom${RESET} with ${CYAN}${default_fstab#$SRC_DIR/}${RESET}?"
+    echo -e "  ${DIM}Same DFE module as a full ROM build (/data encryptable for recovery decrypt).${RESET}"
+    echo -e -n "  ${BOLD}Replace fstab? [Y/n]:${RESET} "
+    read -r fstab_choice
+    if [[ ! "$fstab_choice" =~ ^[Nn]$ ]]; then
+      args+=(--fstab "$default_fstab")
     fi
   fi
 
-  if $do_wallpaper && $vendor_ok; then
-    local wargs=() extra
-    if $want_inject && [[ "$input" == *.zip ]]; then
-      wargs+=(--inject)
-      if $do_vendor; then
-        for extra in vendor.new.dat.br vendor.transfer.list vendor.patch.dat; do
-          [ -f "$OUT_DIR/vendor_patch/$extra" ] && wargs+=(--extra "$OUT_DIR/vendor_patch/$extra")
-        done
-      fi
-    fi
-    if "$SRC_DIR/scripts/patch_zip_wallpaper.sh" "$input" "${wargs[@]}"; then
-      if $want_inject; then
-        echo -e "\n  ${GREEN}✔ Flash this zip:${RESET} ${CYAN}out/wallpaper_patch/*_wallpaper.zip${RESET}"
-        echo -e "  ${DIM}Do not zip the folder again by hand.${RESET}"
-      else
-        echo -e "\n  ${GREEN}✔ System files:${RESET} ${CYAN}out/wallpaper_patch/${RESET}"
-        echo -e "  Replace ${BOLD}system.new.dat.br${RESET} + transfer.list + patch.dat at the zip root."
-      fi
+  echo ""
+  chmod +x "$SRC_DIR/scripts/patch_zip_vendor.sh" \
+    "$SRC_DIR/scripts/utils/sdat2img.py" "$SRC_DIR/scripts/utils/zip_replace_root.py" 2>/dev/null || true
+
+  if $PATCH_WANT_INJECT; then
+    args+=(--inject)
+  elif $PATCH_WANT_REPACK; then
+    args+=(--repack)
+  fi
+  if "$SRC_DIR/scripts/patch_zip_vendor.sh" "$input" "${args[@]}"; then
+    if $PATCH_WANT_INJECT; then
+      echo -e "\n  ${GREEN}✔ Flash this zip:${RESET} ${CYAN}out/vendor_patch/*_vendorpatch.zip${RESET}"
+    elif $PATCH_WANT_REPACK; then
+      echo -e "\n  ${GREEN}✔ Flashable zip written next to the folder.${RESET}"
     else
-      echo -e "\n  ${RED}Wallpaper patch failed.${RESET} Need system.new.dat.br + system.transfer.list, apktool, cwebp, and erofs tools from Step 0."
+      echo -e "\n  ${GREEN}✔ Vendor files:${RESET} ${CYAN}out/vendor_patch/${RESET}"
     fi
+  else
+    echo -e "\n  ${RED}Vendor patch failed.${RESET} Need vendor.new.dat.br + vendor.transfer.list (and brotli / erofs tools from Step 0)."
   fi
   press_enter
 }
@@ -1110,6 +1612,7 @@ step_reset() {
 main_menu() {
   load_state
   while true; do
+    drain_stdin
     clear_screen
     print_header
     print_steps
@@ -1122,14 +1625,17 @@ main_menu() {
     echo -e "  ${BOLD}[4]${RESET}  Build ROM ZIP"
     echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
     echo -e "  ${BOLD}[5]${RESET}  Run all steps  ${DIM}(0→1→2→3→4)${RESET}"
-    echo -e "  ${BOLD}[w]${RESET}  NPL wallpapers  ${DIM}(on/off — drop images in assets/)${RESET}"
-    echo -e "  ${BOLD}[p]${RESET}  Patch existing ZIP  ${DIM}(vendor / featured wallpapers — no ROM rebuild)${RESET}"
+    echo -e "  ${BOLD}[a]${RESET}  APK patch  ${DIM}(wallpaper / settings / theme)${RESET}"
+    echo -e "  ${BOLD}[p]${RESET}  Patch vendor in existing ZIP  ${DIM}(build.prop / fstab — no ROM rebuild)${RESET}"
     echo -e "  ${BOLD}[r]${RESET}  Reset build state"
     echo -e "  ${BOLD}[q]${RESET}  Quit"
     echo ""
     echo -e -n "  ${BOLD}Choose:${RESET} "
     read -r choice || exit 0
-
+    choice="${choice//$'\r'/}"
+    choice="${choice#"${choice%%[![:space:]]*}"}"
+    choice="${choice%"${choice##*[![:space:]]}"}"
+    [ -z "$choice" ] && continue
 
     case "$choice" in
       0) step_check_deps ;;
@@ -1144,7 +1650,8 @@ main_menu() {
         step_extract_fw
         step_build_rom
         ;;
-      w|W) step_npl_wallpapers ;;
+      a|A) step_apk_patch ;;
+      w|W) step_apk_wallpaper ;;
       p|P) step_patch_vendor ;;
       r|R) step_reset ;;
       q|Q)
