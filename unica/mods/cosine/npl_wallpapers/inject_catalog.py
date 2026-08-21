@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Append NPL static wallpaper entries to Samsung resources_info.json.
 
-Featured names (NPL_FEATURED_CATALOG) get home + lock slots (which=1 and 2).
+One catalog tile per image. Featured names only change the featured-row JSON
+(inject_feature.py) — do not add a second home/lock copy here (that duplicates
+the same photo in the picker).
 isDefault is always false — a custom default boot wallpaper bootloops on Samsung.
 """
 from __future__ import annotations
 
 import json
-import os
 import sys
 from pathlib import Path
 
@@ -19,7 +20,6 @@ def main() -> int:
 
     json_path = Path(sys.argv[1])
     names = sys.argv[2:]
-    featured = {name for name in os.environ.get("NPL_FEATURED_CATALOG", "").split() if name}
 
     data = json.loads(json_path.read_text(encoding="utf-8"))
     phone = data.setdefault("phone", [])
@@ -34,36 +34,20 @@ def main() -> int:
 
     which = 1
     for catalog_name in names:
-        if catalog_name in featured:
-            for slot in (1, 2):
-                max_index += 1
-                phone.append(
-                    {
-                        "isDefault": False,
-                        "index": max_index,
-                        "which": slot,
-                        "screen": 0,
-                        "type": 0,
-                        "filename": catalog_name,
-                        "frame_no": -1,
-                        "cmf_info": cmf_info,
-                    }
-                )
-        else:
-            max_index += 1
-            phone.append(
-                {
-                    "isDefault": False,
-                    "index": max_index,
-                    "which": which,
-                    "screen": 0,
-                    "type": 0,
-                    "filename": catalog_name,
-                    "frame_no": -1,
-                    "cmf_info": cmf_info,
-                }
-            )
-            which = 2 if which == 1 else 1
+        max_index += 1
+        phone.append(
+            {
+                "isDefault": False,
+                "index": max_index,
+                "which": which,
+                "screen": 0,
+                "type": 0,
+                "filename": catalog_name,
+                "frame_no": -1,
+                "cmf_info": cmf_info,
+            }
+        )
+        which = 2 if which == 1 else 1
 
     json_path.write_text(json.dumps(data, indent=4) + "\n", encoding="utf-8")
     return 0
