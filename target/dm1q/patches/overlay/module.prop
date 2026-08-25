@@ -1,0 +1,4 @@
+id=overlay
+name=framework-res product RRO
+author=cosine
+description=Replace product/overlay/framework-res__dm1qxxx__auto_generated_rro_product.apk with the packed overlay APK.
