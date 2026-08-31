@@ -1,15 +1,30 @@
 LOG_STEP_IN "- Processing SM8550-Common Kernel by @GoRhanHee"
 
-BOOT_IMG_URL="https://github.com/GoRhanHee/android_kernel_samsung_sm8550_common/releases/download/5.15.207/boot.img"
-KERNELSU_MANAGER_APK="https://github.com/GoRhanHee/android_kernel_samsung_sm8550_common/releases/download/5.15.206/KernelSU_Next_v3.2.0-21-g5a4a7187_33150-release.apk"
+KERNEL_ZIP_URL="https://github.com/GoRhanHee/android_kernel_samsung_sm8550/releases/download/v2026.08.27/GoRhanHee_Kernel-kalama-dm1q-fastboot.zip"
+KERNELSU_MANAGER_APK="https://github.com/KernelSU-Next/KernelSU-Next/releases/download/v3.3.0/KernelSU_Next_v3.3.0-spoofed_33214-release.apk"
 
 REPLACE_KERNEL_BINARIES()
 {
-    echo "Downloading prebuilt boot.img..."
+    echo "Downloading GoRhanHee Kernel..."
     mkdir -p "$WORK_DIR/kernel"
 
-    # Download GoRhanHee Kernel
-    DOWNLOAD_FILE "$BOOT_IMG_URL" "$WORK_DIR/kernel/boot.img"
+    local KERNEL_ZIP="$TMP_DIR/gorhanhee-kernel.zip"
+    rm -f "$WORK_DIR/kernel/boot.img" "$KERNEL_ZIP"
+    mkdir -p "$TMP_DIR"
+    if ! DOWNLOAD_FILE "$KERNEL_ZIP_URL" "$KERNEL_ZIP"; then
+        rm -f "$KERNEL_ZIP"
+        ABORT "Failed to download the kernel archive from $KERNEL_ZIP_URL"
+    fi
+    if ! unzip -j -o "$KERNEL_ZIP" "boot.img" -d "$WORK_DIR/kernel" > /dev/null; then
+        rm -f "$KERNEL_ZIP"
+        ABORT "Failed to extract boot.img from $KERNEL_ZIP_URL"
+    fi
+    rm -f "$KERNEL_ZIP"
+    if [ ! -f "$WORK_DIR/kernel/boot.img" ] || \
+            [[ "$(xxd -p -l 8 "$WORK_DIR/kernel/boot.img")" != "414e44524f494421" ]]; then
+        rm -f "$WORK_DIR/kernel/boot.img"
+        ABORT "Extracted kernel boot image is invalid: $KERNEL_ZIP_URL"
+    fi
 }
 
 ADD_MANAGER_APK_TO_PRELOAD()
@@ -17,9 +32,16 @@ ADD_MANAGER_APK_TO_PRELOAD()
     # https://github.com/tiann/KernelSU/issues/886
     local APK_PATH="system/preload/KernelSU-Next/com.rifsxd.ksunext-mesa==/base.apk"
 
-    echo "Adding KernelSU-Next.apk to preload apps"
+    echo "Adding KernelSU-Next.apk to preload apps if available"
     mkdir -p "$WORK_DIR/system/$(dirname "$APK_PATH")"
-    curl -L -s -o "$WORK_DIR/system/$APK_PATH" -z "$WORK_DIR/system/$APK_PATH" "$KERNELSU_MANAGER_APK"
+    rm -f "$WORK_DIR/system/$APK_PATH"
+    if ! curl -L --fail --silent --show-error -o "$WORK_DIR/system/$APK_PATH" "$KERNELSU_MANAGER_APK"; then
+        rm -f "$WORK_DIR/system/$APK_PATH"
+        LOGW "KernelSU-Next manager unavailable; continuing without it"
+    elif ! unzip -tq "$WORK_DIR/system/$APK_PATH" > /dev/null; then
+        rm -f "$WORK_DIR/system/$APK_PATH"
+        LOGW "KernelSU-Next manager is invalid; continuing without it"
+    fi
 
     sed -i "/system\/preload/d" "$WORK_DIR/configs/fs_config-system" \
         && sed -i "/system\/preload/d" "$WORK_DIR/configs/file_context-system"
@@ -41,4 +63,4 @@ ADD_MANAGER_APK_TO_PRELOAD()
 REPLACE_KERNEL_BINARIES
 ADD_MANAGER_APK_TO_PRELOAD
 
-unset BOOT_IMG_URL KERNELSU_MANAGER_APK
+unset KERNEL_ZIP_URL KERNELSU_MANAGER_APK
