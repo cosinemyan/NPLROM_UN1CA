@@ -1,30 +1,26 @@
-LOG_STEP_IN "- Processing SM8550-Common Kernel by @GoRhanHee"
+LOG_STEP_IN "- Processing local KernelSU boot image"
 
-KERNEL_ZIP_URL="https://github.com/GoRhanHee/android_kernel_samsung_sm8550/releases/download/v2026.08.27/GoRhanHee_Kernel-kalama-dm1q-fastboot.zip"
 KERNELSU_MANAGER_APK="https://github.com/KernelSU-Next/KernelSU-Next/releases/download/v3.3.0/KernelSU_Next_v3.3.0-spoofed_33214-release.apk"
+LOCAL_BOOT_IMG="${KERNEL_BOOT_IMG:-$MODPATH/boot.img}"
+
+IS_ANDROID_BOOT_IMAGE()
+{
+    [ -f "$1" ] && [[ "$(xxd -p -l 8 "$1")" == "414e44524f494421" ]]
+}
 
 REPLACE_KERNEL_BINARIES()
 {
-    echo "Downloading GoRhanHee Kernel..."
+    echo "Installing local boot.img..."
     mkdir -p "$WORK_DIR/kernel"
 
-    local KERNEL_ZIP="$TMP_DIR/gorhanhee-kernel.zip"
-    rm -f "$WORK_DIR/kernel/boot.img" "$KERNEL_ZIP"
-    mkdir -p "$TMP_DIR"
-    if ! DOWNLOAD_FILE "$KERNEL_ZIP_URL" "$KERNEL_ZIP"; then
-        rm -f "$KERNEL_ZIP"
-        ABORT "Failed to download the kernel archive from $KERNEL_ZIP_URL"
+    if [ ! -f "$LOCAL_BOOT_IMG" ]; then
+        ABORT "Kernel boot image not found: $LOCAL_BOOT_IMG"
     fi
-    if ! unzip -j -o "$KERNEL_ZIP" "boot.img" -d "$WORK_DIR/kernel" > /dev/null; then
-        rm -f "$KERNEL_ZIP"
-        ABORT "Failed to extract boot.img from $KERNEL_ZIP_URL"
+    if ! IS_ANDROID_BOOT_IMAGE "$LOCAL_BOOT_IMG"; then
+        ABORT "Kernel boot image is invalid: $LOCAL_BOOT_IMG"
     fi
-    rm -f "$KERNEL_ZIP"
-    if [ ! -f "$WORK_DIR/kernel/boot.img" ] || \
-            [[ "$(xxd -p -l 8 "$WORK_DIR/kernel/boot.img")" != "414e44524f494421" ]]; then
-        rm -f "$WORK_DIR/kernel/boot.img"
-        ABORT "Extracted kernel boot image is invalid: $KERNEL_ZIP_URL"
-    fi
+
+    cp -a "$LOCAL_BOOT_IMG" "$WORK_DIR/kernel/boot.img"
 }
 
 ADD_MANAGER_APK_TO_PRELOAD()
@@ -63,4 +59,4 @@ ADD_MANAGER_APK_TO_PRELOAD()
 REPLACE_KERNEL_BINARIES
 ADD_MANAGER_APK_TO_PRELOAD
 
-unset KERNEL_ZIP_URL KERNELSU_MANAGER_APK
+unset KERNELSU_MANAGER_APK LOCAL_BOOT_IMG
