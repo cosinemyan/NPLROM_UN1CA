@@ -1,15 +1,26 @@
-LOG_STEP_IN "- Processing SM8550-Common Kernel by @GoRhanHee"
+LOG_STEP_IN "- Processing local KernelSU boot image"
 
-BOOT_IMG_URL="https://github.com/GoRhanHee/android_kernel_samsung_sm8550_common/releases/download/5.15.207/boot.img"
-KERNELSU_MANAGER_APK="https://github.com/GoRhanHee/android_kernel_samsung_sm8550_common/releases/download/5.15.206/KernelSU_Next_v3.2.0-21-g5a4a7187_33150-release.apk"
+KERNELSU_MANAGER_APK="https://github.com/KernelSU-Next/KernelSU-Next/releases/download/v3.3.0/KernelSU_Next_v3.3.0-spoofed_33214-release.apk"
+LOCAL_BOOT_IMG="${KERNEL_BOOT_IMG:-$MODPATH/boot.img}"
+
+IS_ANDROID_BOOT_IMAGE()
+{
+    [ -f "$1" ] && [[ "$(xxd -p -l 8 "$1")" == "414e44524f494421" ]]
+}
 
 REPLACE_KERNEL_BINARIES()
 {
-    echo "Downloading prebuilt boot.img..."
+    echo "Installing local boot.img..."
     mkdir -p "$WORK_DIR/kernel"
 
-    # Download GoRhanHee Kernel
-    DOWNLOAD_FILE "$BOOT_IMG_URL" "$WORK_DIR/kernel/boot.img"
+    if [ ! -f "$LOCAL_BOOT_IMG" ]; then
+        ABORT "Kernel boot image not found: $LOCAL_BOOT_IMG"
+    fi
+    if ! IS_ANDROID_BOOT_IMAGE "$LOCAL_BOOT_IMG"; then
+        ABORT "Kernel boot image is invalid: $LOCAL_BOOT_IMG"
+    fi
+
+    cp -a "$LOCAL_BOOT_IMG" "$WORK_DIR/kernel/boot.img"
 }
 
 ADD_MANAGER_APK_TO_PRELOAD()
@@ -17,9 +28,16 @@ ADD_MANAGER_APK_TO_PRELOAD()
     # https://github.com/tiann/KernelSU/issues/886
     local APK_PATH="system/preload/KernelSU-Next/com.rifsxd.ksunext-mesa==/base.apk"
 
-    echo "Adding KernelSU-Next.apk to preload apps"
+    echo "Adding KernelSU-Next.apk to preload apps if available"
     mkdir -p "$WORK_DIR/system/$(dirname "$APK_PATH")"
-    curl -L -s -o "$WORK_DIR/system/$APK_PATH" -z "$WORK_DIR/system/$APK_PATH" "$KERNELSU_MANAGER_APK"
+    rm -f "$WORK_DIR/system/$APK_PATH"
+    if ! curl -L --fail --silent --show-error -o "$WORK_DIR/system/$APK_PATH" "$KERNELSU_MANAGER_APK"; then
+        rm -f "$WORK_DIR/system/$APK_PATH"
+        LOGW "KernelSU-Next manager unavailable; continuing without it"
+    elif ! unzip -tq "$WORK_DIR/system/$APK_PATH" > /dev/null; then
+        rm -f "$WORK_DIR/system/$APK_PATH"
+        LOGW "KernelSU-Next manager is invalid; continuing without it"
+    fi
 
     sed -i "/system\/preload/d" "$WORK_DIR/configs/fs_config-system" \
         && sed -i "/system\/preload/d" "$WORK_DIR/configs/file_context-system"
@@ -41,4 +59,4 @@ ADD_MANAGER_APK_TO_PRELOAD()
 REPLACE_KERNEL_BINARIES
 ADD_MANAGER_APK_TO_PRELOAD
 
-unset BOOT_IMG_URL KERNELSU_MANAGER_APK
+unset KERNELSU_MANAGER_APK LOCAL_BOOT_IMG
