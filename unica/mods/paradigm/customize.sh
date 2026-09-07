@@ -192,7 +192,8 @@ ADD_TO_WORK_DIR "m3qxxx" "system" \
 ADD_TO_WORK_DIR "m3qxxx" "system" \
     "system/etc/sysconfig/moments.xml" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/priv-app/Moments/Moments.apk" 0 0 644 "u:object_r:system_file:s0"
-# SmartSuggestions APK (7.1.05.0 pin + versionCode fake) lives in unica/mods/rezoss.
+# SmartSuggestions APK comes from unica/mods/rezoss (7.3.20.17 + elevated versionCode).
+# Matches Rezoss: paradigm pin is overwritten by rezoss/system APK that the dex patches require.
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_PERSONALIZED_DATA_CORE" "TRUE"
 LOG "- Forcing Now Nudge availability in SecSettings.apk"
 APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \

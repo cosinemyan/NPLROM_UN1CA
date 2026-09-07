@@ -17,12 +17,15 @@ ADD_TO_WORK_DIR "m3qxxx" "system" \
 ADD_TO_WORK_DIR "m3qxxx" "system" \
     "system/etc/permissions/privapp-permissions-com.samsung.android.smartsuggestions.xml" 0 0 644 "u:object_r:system_file:s0"
 # HACK [
-# Pin SamsungSmartSuggestions to 7.1.05.0 (full-global-release) for patch compatibility.
-# Samsung's "basic-global-release" flavor uses a different versioning scheme so PM will
-# treat it as an upgrade on unsupported devices. Fake versionCode to block that replace.
+# Keep a high versionCode so Galaxy Store cannot replace this full-AI APK with the
+# lower-versioned "basic-global-release" flavor on unsupported devices.
 DECODE_APK "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk"
-LOG "- Patching versionCode in SamsungSmartSuggestions.apk (7.1.05.0 pin)"
-EVAL "sed -i \"s/710500000/711100100/g\" \"$APKTOOL_DIR/system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk/apktool.yml\""
+LOG "- Ensuring elevated versionCode in SamsungSmartSuggestions.apk"
+# 7.1.05.0 pin path (if ever restored) and current 7.3.20.17 both get bumped.
+EVAL "sed -i \
+    -e \"s/versionCode: '710500000'/versionCode: '799999999'/g\" \
+    -e \"s/versionCode: '732017000'/versionCode: '799999999'/g\" \
+    \"$APKTOOL_DIR/system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk/apktool.yml\""
 # ]
 LOG "- Adding Samsung Messages for Now Nudge in-app support"
 ADD_TO_WORK_DIR "m3qxxx" "system" \
