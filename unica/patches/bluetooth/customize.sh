@@ -273,6 +273,10 @@ elif xxd -p -c 0 "$TMP_DIR/unknown/apex_payload/lib64/libbluetooth_jni.so" | gre
     LOG "- Patching \"76743948050037330080\" to \"7674392a000014330080\" in apex_payload/lib64/libbluetooth_jni.so"
     HEX_PATCH "$TMP_DIR/unknown/apex_payload/lib64/libbluetooth_jni.so" \
         "76743948050037330080" "7674392a000014330080" > /dev/null
+elif xxd -p -c 0 "$TMP_DIR/unknown/apex_payload/lib64/libbluetooth_jni.so" | grep -q "88d6743948050037"; then
+    LOG "- Patching \"88d6743948050037\" to \"88d674392a000014\" in apex_payload/lib64/libbluetooth_jni.so"
+    HEX_PATCH "$TMP_DIR/unknown/apex_payload/lib64/libbluetooth_jni.so" \
+        "88d6743948050037" "88d674392a000014" > /dev/null
 else
     ABORT "No known patch available for the supplied libbluetooth_jni.so"
 fi
