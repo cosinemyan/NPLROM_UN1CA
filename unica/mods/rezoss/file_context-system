@@ -23,6 +23,8 @@
 /system/priv-app/Firewall/Firewall\.apk u:object_r:system_file:s0
 /system/priv-app/SAppLock u:object_r:system_file:s0
 /system/priv-app/SAppLock/SAppLock\.apk u:object_r:system_file:s0
+/system/priv-app/SamsungSmartSuggestions u:object_r:system_file:s0
+/system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions\.apk u:object_r:system_file:s0
 /system/priv-app/SmartManagerCN u:object_r:system_file:s0
 /system/priv-app/SmartManagerCN/SmartManagerCN\.apk u:object_r:system_file:s0
 /system/cameradata/stereo_data u:object_r:system_file:s0

@@ -192,30 +192,11 @@ ADD_TO_WORK_DIR "m3qxxx" "system" \
 ADD_TO_WORK_DIR "m3qxxx" "system" \
     "system/etc/sysconfig/moments.xml" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/priv-app/Moments/Moments.apk" 0 0 644 "u:object_r:system_file:s0"
-# SmartSuggestions APK and permission XMLs are consolidated in unica/mods/rezoss.
-# ADD_TO_WORK_DIR "$SRC_DIR/unica/mods/rezoss" "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" 0 0 644 "u:object_r:system_file:s0"
-# ADD_TO_WORK_DIR "m3qxxx" "system" \
-#     "system/etc/default-permissions/default-permissions-com.samsung.android.smartsuggestions.xml" 0 0 644 "u:object_r:system_file:s0"
-# ADD_TO_WORK_DIR "m3qxxx" "system" \
-#     "system/etc/permissions/privapp-permissions-com.samsung.android.smartsuggestions.xml" 0 0 644 "u:object_r:system_file:s0"
+# SmartSuggestions APK (7.1.05.0 pin + versionCode fake) lives in unica/mods/rezoss.
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_PERSONALIZED_DATA_CORE" "TRUE"
 LOG "- Forcing Now Nudge availability in SecSettings.apk"
 APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
     "$MODPATH/now-nudge/SecSettings.apk/0001-Force-Now-Nudge-Galaxy-AI-availability.patch"
-# LOG "- Downloading Smart suggestions app with full-global-release flavor"
-# DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.samsung.android.smartsuggestions")" \
-    # "$WORK_DIR/system/system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk"
-# HACK [
-# Samsung has released an update for the Smart suggestions app in March 2026.
-# The versioning of the "basic-global-release" flavor differs from the "full-global-release" one.
-# This is done on purpose: Samsung uses a lower version number to avoid installing this variant
-# on unsupported devices by triggering the downgrade check in PM. To avoid users updating to the
-# "non-AI" app, let's fake the versionCode so that it matches the latest available version.
-# DECODE_APK "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk"
-# LOG "- Patching versionCode in SamsungSmartSuggestions.apk"
-# EVAL "sed -i \"s/710500000/711100100/g\" \"$APKTOOL_DIR/system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk/apktool.yml\""
-# # ]
-# SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_SUPPORT_PERSONALIZED_DATA_CORE" "TRUE"
 LOG_STEP_OUT
 
 # Semantic search
