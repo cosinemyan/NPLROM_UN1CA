@@ -823,20 +823,78 @@ unset -f _REZOSS_ENSURE_LOG_VIDEO_FILTER_SELINUX _REZOSS_ENSURE_BOOTANIMATION_SE
 # =============================================================================
 # Local System App Overlays
 # =============================================================================
-ADD_TO_WORK_DIR "dm3qxxx" "system" "system/app/SamsungSans/SamsungSans.apk" 0 0 644 "u:object_r:system_file:s0"
+# The legacy SamsungSans overlay bundles over 1k asset fonts. One UI 9 Studio
+# loads installed decoration fonts into a 512 MB heap and can OOM on this APK.
+# Keep the stock Monotype preload set and expose SamsungSans only as a source
+# bank for the UN1CA Font Selector.
+DELETE_FROM_WORK_DIR "system" "system/app/SamsungSans"
+SAMSUNGSANS_SOURCE_APK="$SRC_DIR/prebuilts/samsung/dm3qxxx/system/app/SamsungSans/SamsungSans.apk"
+SAMSUNGSANS_BANK_APK="$WORK_DIR/system/system/etc/unica/font_selector/SamsungSans.apk"
+if [ -f "$SAMSUNGSANS_SOURCE_APK" ] || [ -f "$SAMSUNGSANS_SOURCE_APK.00" ]; then
+    LOG "- Adding SamsungSans source bank for UN1CA Font Selector"
+    EVAL "mkdir -p \"$(dirname "$SAMSUNGSANS_BANK_APK")\""
+    if [ -f "$SAMSUNGSANS_SOURCE_APK" ]; then
+        EVAL "cp -a \"$SAMSUNGSANS_SOURCE_APK\" \"$SAMSUNGSANS_BANK_APK\""
+    else
+        EVAL "cat \"$SAMSUNGSANS_SOURCE_APK.\"[0-9][0-9] > \"$SAMSUNGSANS_BANK_APK\""
+    fi
+    SET_METADATA "system" "system/etc/unica" 0 0 755 "u:object_r:system_file:s0"
+    SET_METADATA "system" "system/etc/unica/font_selector" 0 0 755 "u:object_r:system_file:s0"
+    SET_METADATA "system" "system/etc/unica/font_selector/SamsungSans.apk" 0 0 644 "u:object_r:system_file:s0"
+else
+    LOGW "SamsungSans source bank not found; UN1CA Font Selector will show a missing-source message"
+fi
+unset SAMSUNGSANS_SOURCE_APK SAMSUNGSANS_BANK_APK
 ADD_TO_WORK_DIR "dm3qxxx" "system" "system/app/VisionModel-Stub/VisionModel-Stub.apk" 0 0 644 "u:object_r:system_file:s0"
 
 # =============================================================================
 # Ambient Weather Wallpaper / VisualCloudCore Patches
 # =============================================================================
-# Enable built-in spoof to use Ambient Weather Wallpaper
-LOG "- Patch DressRoom Weather wallpaper AICore gate"
-#APPLY_PATCH "system" "system/priv-app/DressRoom/DressRoom.apk" \
-#    "$MODPATH/dressroom/DressRoom.apk/0001-Bypass-AICore-weather-feature-check.patch"
+LOG "- Patch stock DressRoom Ambient Weather feature gate"
+APPLY_PATCH "system" "system/priv-app/DressRoom/DressRoom.apk" \
+    "$MODPATH/dressroom/DressRoom.apk/0001-Bypass-AICore-weather-feature-check.patch"
+
+LOG "- Patch DressRoom UN1CA lockscreen font picker integration"
+APPLY_PATCH "system" "system/priv-app/DressRoom/DressRoom.apk" \
+    "$MODPATH/dressroom/DressRoom.apk/0002-Expose-UN1CA-selected-fonts-to-lockscreen-picker.patch"
+
+LOG "- Downloading latest Samsung Always On Display app"
+DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.samsung.android.app.aodservice")" \
+    "$WORK_DIR/system/system/priv-app/AODService_v80/AODService_v80.apk"
+
+LOG "- Patch AODService UN1CA clock font list integration"
+APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
+    "$MODPATH/aodservice/AODService_v80.apk/0001-Expose-UN1CA-Font-Selector-fonts-to-clock-picker.patch"
+
+LOG "- Patch AODService stretch clock font type sync"
+APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
+    "$MODPATH/aodservice/AODService_v80.apk/0002-Mirror-stretch-clock-font-type-to-AOD.patch"
+
+LOG "- Patch AODService stretch clock font type startup backfill"
+APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
+    "$MODPATH/aodservice/AODService_v80.apk/0003-Backfill-AOD-stretch-font-type-on-startup.patch"
+
+LOG "- Patch AODService stretch clock font render normalization"
+APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
+    "$MODPATH/aodservice/AODService_v80.apk/0004-Normalize-stretch-font-data-before-AOD-render.patch"
+
+LOG "- Patch AODService AOD stretch font heights"
+APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
+    "$MODPATH/aodservice/AODService_v80.apk/0005-Preserve-AOD-stretch-font-heights.patch"
+
+LOG "- Patch AODService AOD stretch renderer gate"
+APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
+    "$MODPATH/aodservice/AODService_v80.apk/0006-Allow-AOD-stretch-render-when-font-heights-exist.patch"
 
 LOG "- Patch VisualCloudCore Galaxy Store model check"
 APPLY_PATCH "system" "system/app/VisualCloudCore/VisualCloudCore.apk" \
     "$MODPATH/visualcloudcore/VisualCloudCore.apk/0001-Use-S25-Ultra-model-for-stub-update-check.patch"
+
+LOG "- Patch product framework overlay doze auto-brightness (dm3q / S23 Ultra only)"
+if [ -f "$WORK_DIR/product/overlay/framework-res__dm3qxxx__auto_generated_rro_product.apk" ]; then
+    APPLY_PATCH "product" "overlay/framework-res__dm3qxxx__auto_generated_rro_product.apk" \
+        "$MODPATH/rro/framework-res__dm3qxxx__auto_generated_rro_product.apk/0001-Add-doze-auto-brightness-arrays.patch"
+fi
 
 # =============================================================================
 # Notification Highlights / Galaxy AI Stack
