@@ -512,18 +512,24 @@ step_select_target() {
   local chosen="${targets[$idx]}"
 
   echo ""
-  echo -e "  ${BOLD}Firmware mode${RESET} (UN1CA-style SOURCE/TARGET overlay):"
-  echo -e "  ${BOLD}[1]${RESET}  QSSI base  ${DIM}— shared system from unica/configs/qssi.sh (SM-S911B); TARGET = this device${RESET}"
-  echo -e "      ${DIM}Best for multi-model ROM (S23 / S23+ / Ultra share one system base)${RESET}"
-  echo -e "  ${BOLD}[2]${RESET}  Native / separate  ${DIM}— SOURCE = TARGET (this model's own firmware only)${RESET}"
-  echo -e "      ${DIM}Max per-device compatibility; no cross-model base overlay${RESET}"
-  echo ""
-  echo -e -n "  ${BOLD}Mode [1]:${RESET} "
-  read -r mode_choice
-  case "$mode_choice" in
-    2) FW_MODE="native" ;;
-    *) FW_MODE="qssi" ;;
-  esac
+  if [[ "$chosen" == "dm1q" ]]; then
+    echo -e "  ${BOLD}Firmware mode${RESET} (UN1CA-style SOURCE/TARGET overlay):"
+    echo -e "  ${BOLD}[1]${RESET}  QSSI base  ${DIM}— shared system from unica/configs/qssi.sh (SM-S911B / dm1q); TARGET = this device${RESET}"
+    echo -e "      ${DIM}QSSI is dm1q-only in this tree${RESET}"
+    echo -e "  ${BOLD}[2]${RESET}  Native / separate  ${DIM}— SOURCE = TARGET (this model's own firmware only)${RESET}"
+    echo -e "      ${DIM}Max per-device compatibility; no cross-model base overlay${RESET}"
+    echo ""
+    echo -e -n "  ${BOLD}Mode [1]:${RESET} "
+    read -r mode_choice
+    case "$mode_choice" in
+      2) FW_MODE="native" ;;
+      *) FW_MODE="qssi" ;;
+    esac
+  else
+    # QSSI base is dm1q (S911B) only — other targets always use native SOURCE=TARGET
+    FW_MODE="native"
+    echo -e "  ${BOLD}Firmware mode:${RESET} ${GREEN}native${RESET} ${DIM}(QSSI is dm1q-only; ${chosen} uses SOURCE=TARGET)${RESET}"
+  fi
 
   if init_target "$chosen"; then
     STEP_ENV=true
