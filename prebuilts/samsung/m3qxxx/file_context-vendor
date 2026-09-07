@@ -31,9 +31,15 @@
 /vendor/etc/saiv/image_understanding/db u:object_r:vendor_configs_file:s0
 /vendor/etc/saiv/image_understanding/db/fm u:object_r:vendor_configs_file:s0
 /vendor/etc/saiv/image_understanding/db/fm/fm_prompt_encoder_4d\.tflite u:object_r:vendor_configs_file:s0
+/vendor/etc/saiv/image_understanding/db/fm/fm_seg\.info u:object_r:vendor_configs_file:s0
 /vendor/etc/saiv/image_understanding/db/fm/fm_segmentation_decoder_lasso\.dlc u:object_r:vendor_configs_file:s0
 /vendor/etc/saiv/image_understanding/db/fm/fm_segmentation_decoder_touch\.dlc u:object_r:vendor_configs_file:s0
 /vendor/etc/saiv/image_understanding/db/fm/fm_vision_encoder_base\.dlc u:object_r:vendor_configs_file:s0
+/vendor/etc/saiv/image_understanding/db/dvs u:object_r:vendor_configs_file:s0
+/vendor/etc/saiv/image_understanding/db/dvs/dis_refiner_cnn\.dlc u:object_r:vendor_configs_file:s0
+/vendor/etc/saiv/image_understanding/db/dvs/dvs\.info u:object_r:vendor_configs_file:s0
+/vendor/etc/saiv/image_understanding/db/dvs/dvs_od_cnn\.dlc u:object_r:vendor_configs_file:s0
+/vendor/etc/saiv/image_understanding/db/dvs/dvs_segmenter_cnn\.dlc u:object_r:vendor_configs_file:s0
 /vendor/lib64 u:object_r:vendor_file:s0
 /vendor/lib64/android\.media\.audio\.eraser\.types-V1-ndk\.so u:object_r:vendor_file:s0
 /vendor/lib64/lib_SoundAlive_3DPosition_ver202\.so u:object_r:vendor_file:s0
