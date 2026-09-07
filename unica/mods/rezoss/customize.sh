@@ -73,6 +73,8 @@ APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSugges
 APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
     "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0013-Allow-calendar-travel-custom-card-prompts.patch"
 APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
+    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0025-Remove-Custom-Card-category-limit.patch"
+APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
     "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0016-Use-data-backed-Now-Nudge-reply-fallbacks.patch"
 APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
     "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0018-Reuse-OfflineLanguageCore-Suggestion-metadata.patch"
@@ -88,6 +90,8 @@ APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSugges
     "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0022-Prefer-JSON-fallback-before-AIOS-chat-replies.patch"
 APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
     "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0023-Ignore-stale-Now-Nudge-fallback-data.patch"
+APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
+    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0024-Detect-Now-Nudge-fallback-language-from-message.patch"
 APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
     "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0014-Allow-Now-Brief-recall-calendar-reminder-fallback.patch"
 APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
@@ -196,10 +200,16 @@ SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_GALLERY_CONFIG_LIVEFOCUS_EFFEC
 #SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_GALLERY_CONFIG_AI_EXPANSION" "AI_Timelapse,singletake.hidt.support.on,singletake.capture.support.off,singletake.video_res.config.fhd,singletake.video.previous_record"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_GRAPHICS_SUPPORT_REDUCE_FLASH_LIGHT" "TRUE"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_GRAPHICS_SUPPORT_TOUCH_FAST_RESPONSE" "TRUE"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_LCD_CONFIG_AOD_BRIGHTNESS_ANIMATION" "1"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_LCD_CONFIG_AOD_FULLSCREEN" "1"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_HDR2SDR_MAX_8K" "TRUE"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_HIERARCHICAL_B_ENCODING" "TRUE"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_LONGEXPOSURE_EFFECT_10BIT" "TRUE"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_PHOTOHDR" "TRUE"
+# WARNING: The S26U FM/unified clipper route previously crashed PhotoEditor_AIFull
+# on the S23U SNAP/vendor stack during contour/lasso execution.
+# SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_VIDEO_CONFIG_VIDEO_CLIPPING_MODE" "NPU,unifiedclipper,foundational_segmentation"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_VIDEO_CONFIG_VIDEO_CLIPPING_MODE" "NPU"
 
 # =============================================================================
 # Floating Features - Galaxy AI / Framework / Search
@@ -251,6 +261,46 @@ _REZOSS_APPEND_UNIQUE_LINE()
     fi
 }
 
+_REZOSS_ENSURE_FOUNDATIONAL_SEGMENTATION_SYSTEM_CONFIGS()
+{
+    local PUBLIC_LIBS_FILE="$WORK_DIR/system/system/etc/public.libraries-camera.samsung.txt"
+    local IRREMOVABLE_FILE="$WORK_DIR/system/system/etc/irremovable_list.txt"
+
+    if [ -f "$PUBLIC_LIBS_FILE" ]; then
+        LOG "- Ensuring foundational segmentation camera public library"
+        _REZOSS_APPEND_UNIQUE_LINE "$PUBLIC_LIBS_FILE" "libfoundational_segmentation.camera.samsung.so"
+    else
+        LOGW "File not found: ${PUBLIC_LIBS_FILE//$WORK_DIR/}"
+    fi
+
+    if [ -f "$IRREMOVABLE_FILE" ]; then
+        LOG "- Ensuring foundational segmentation irremovable entry"
+        _REZOSS_APPEND_UNIQUE_LINE "$IRREMOVABLE_FILE" "/system/lib64/libfoundational_segmentation.camera.samsung.so"
+    else
+        LOGW "File not found: ${IRREMOVABLE_FILE//$WORK_DIR/}"
+    fi
+}
+
+_REZOSS_ENSURE_DVS_SYSTEM_CONFIGS()
+{
+    local PUBLIC_LIBS_FILE="$WORK_DIR/system/system/etc/public.libraries-camera.samsung.txt"
+    local IRREMOVABLE_FILE="$WORK_DIR/system/system/etc/irremovable_list.txt"
+
+    if [ -f "$PUBLIC_LIBS_FILE" ]; then
+        LOG "- Ensuring DVS camera public library"
+        _REZOSS_APPEND_UNIQUE_LINE "$PUBLIC_LIBS_FILE" "libdvs.camera.samsung.so"
+    else
+        LOGW "File not found: ${PUBLIC_LIBS_FILE//$WORK_DIR/}"
+    fi
+
+    if [ -f "$IRREMOVABLE_FILE" ]; then
+        LOG "- Ensuring DVS irremovable entry"
+        _REZOSS_APPEND_UNIQUE_LINE "$IRREMOVABLE_FILE" "/system/lib64/libdvs.camera.samsung.so"
+    else
+        LOGW "File not found: ${IRREMOVABLE_FILE//$WORK_DIR/}"
+    fi
+}
+
 _REZOSS_ENSURE_VENDOR_CONFIG_FILE_CONTEXTS()
 {
     local FC_FILE="$WORK_DIR/vendor/etc/selinux/vendor_file_contexts"
@@ -262,6 +312,7 @@ _REZOSS_ENSURE_VENDOR_CONFIG_FILE_CONTEXTS()
 
     LOG "- Ensuring S26U vendor config/model file contexts"
     _REZOSS_APPEND_UNIQUE_LINE "$FC_FILE" "/vendor/etc/saiv/image_understanding/db/doc_rectifier(/.*)? u:object_r:vendor_configs_file:s0"
+    _REZOSS_APPEND_UNIQUE_LINE "$FC_FILE" "/vendor/etc/saiv/image_understanding/db/dvs(/.*)? u:object_r:vendor_configs_file:s0"
     _REZOSS_APPEND_UNIQUE_LINE "$FC_FILE" "/vendor/etc/saiv/image_understanding/db/fm(/.*)? u:object_r:vendor_configs_file:s0"
     _REZOSS_APPEND_UNIQUE_LINE "$FC_FILE" "/vendor/etc/saiv/image_understanding/db/ss_magnet(/.*)? u:object_r:vendor_configs_file:s0"
     _REZOSS_APPEND_UNIQUE_LINE "$FC_FILE" "/vendor/etc/midas_enhancedocumentscan(/.*)? u:object_r:vendor_configs_file:s0"
@@ -580,8 +631,12 @@ ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libDeflickerHDR.camera.samsung.s
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libsnapshotdebanding.arcsoft.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libStereoSolution.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libSR_StereoCapture.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
-# Disabled after Photo Editor native crash in FoundationalSegmentationImpl.
-# ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libfoundational_segmentation.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
+# Keep clipping mode at NPU-only (see VIDEO_CONFIG_VIDEO_CLIPPING_MODE above); full
+# unifiedclipper+foundational_segmentation route previously crashed PhotoEditor_AIFull.
+ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libfoundational_segmentation.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libdvs.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
+_REZOSS_ENSURE_FOUNDATIONAL_SEGMENTATION_SYSTEM_CONFIGS
+_REZOSS_ENSURE_DVS_SYSTEM_CONFIGS
 # S26U replacements previously carried by the rezoss static lib64 overlay.
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/DualOutFocusViewer_B.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libArtifactDetector_v1.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
@@ -659,6 +714,8 @@ for f in \
     "libDocMagnetEngine.camera.samsung.so" \
     "libDocScannerFilterV2.camera.samsung.so" \
     "libDocShadowRemoval.camera.samsung.so" \
+    "libdvs.camera.samsung.so" \
+    "libfoundational_segmentation.camera.samsung.so" \
     "libGenSR_saicc_core.camera.samsung.so" \
     "libMoireFilterV2.camera.samsung.so" \
     "libSR_DynamicRectifier.camera.samsung.so" \
@@ -682,12 +739,17 @@ done
 LOG "- Adding S26U video clipping and document-scan model files"
 _REZOSS_ENSURE_VENDOR_CONFIG_FILE_CONTEXTS
 ADD_TO_WORK_DIR "m3qxxx" "vendor" "etc/saiv/image_understanding/db/fm" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+ADD_TO_WORK_DIR "m3qxxx" "vendor" "etc/saiv/image_understanding/db/dvs" 0 2000 755 "u:object_r:vendor_configs_file:s0"
 # S26U enhanced document-scan configs/models.
 # WARNING: Might cause crash.
 ADD_TO_WORK_DIR "m3qxxx" "vendor" "etc/saiv/image_understanding/db/doc_rectifier" 0 2000 755 "u:object_r:vendor_configs_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "vendor" "etc/saiv/image_understanding/db/ss_magnet" 0 2000 755 "u:object_r:vendor_configs_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "vendor" "etc/midas_enhancedocumentscan" 0 2000 755 "u:object_r:vendor_configs_file:s0"
-_REZOSS_SET_VENDOR_CONFIG_DIR_METADATA "etc/saiv/image_understanding/db/fm"
+for f in \
+    "etc/saiv/image_understanding/db/dvs" \
+    "etc/saiv/image_understanding/db/fm"; do
+    _REZOSS_SET_VENDOR_CONFIG_DIR_METADATA "$f"
+done
 
 # Do not install the S26U compressed-RAW stack on dm3q. These libraries execute
 # inside the S23U camera-provider process and can stall its Night capture graph.
@@ -753,6 +815,7 @@ _REZOSS_SET_VENDOR_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_
 _REZOSS_ENSURE_LOG_VIDEO_FILTER_SELINUX
 
 unset -f _REZOSS_SET_VENDOR_FLOATING_FEATURE_CONFIG _REZOSS_APPEND_UNIQUE_LINE
+unset -f _REZOSS_ENSURE_FOUNDATIONAL_SEGMENTATION_SYSTEM_CONFIGS _REZOSS_ENSURE_DVS_SYSTEM_CONFIGS
 unset -f _REZOSS_ENSURE_MOSEY_VENDOR_SELINUX _REZOSS_GET_MOSEY_APP_DOMAIN
 unset -f _REZOSS_DROP_MOSEY_APP_VENDOR_RULES _REZOSS_CIL_HAS_SYMBOL _REZOSS_GET_SEPOLICY_API_SUFFIX
 unset -f _REZOSS_ENSURE_LOG_VIDEO_FILTER_SELINUX _REZOSS_ENSURE_BOOTANIMATION_SELINUX
@@ -884,6 +947,9 @@ APPLY_PATCH "system" "system/priv-app/AIOSKernelService/AIOSKernelService.apk" \
 LOG "- Spoofing AIOSKernelService build flavor for SM8550"
 APPLY_PATCH "system" "system/priv-app/AIOSKernelService/AIOSKernelService.apk" \
     "$MODPATH/aioskernel/AIOSKernelService.apk/0003-Spoof-SM8550-build-flavor.patch"
+LOG "- Refusing AIOSKernelService LLM/LLMV before QNN execution on SM8550"
+APPLY_PATCH "system" "system/priv-app/AIOSKernelService/AIOSKernelService.apk" \
+    "$MODPATH/aioskernel/AIOSKernelService.apk/0004-Refuse-LLM-LLMV-before-QNN-execution.patch"
 # Replace the S26U V81 HTP binaries inside AIOSKernelService.apk with the S23U Hexagon V73 pair.
 AIOS_DECODED_APK="$APKTOOL_DIR/system/priv-app/AIOSKernelService/AIOSKernelService.apk"
 AIOS_DECODED_LIB="$AIOS_DECODED_APK/lib/arm64-v8a"
