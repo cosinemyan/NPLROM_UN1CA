@@ -1,4 +1,0 @@
-id=local-kernelsu
-name=Local KernelSU boot image
-author=cosine
-description=Bundles the local KernelSU boot.img with the ROM.
