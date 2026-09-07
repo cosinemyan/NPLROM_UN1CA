@@ -137,6 +137,30 @@ DOWNLOAD_FIRMWARE_BUNDLE()
 
 PREPARE_SCRIPT "$@"
 
+# SOURCE==TARGET (native/qssi-on-dm1q) and overlapping extras share one Odin dir —
+# without this, --force downloads the same ~15GB package twice.
+DEDUPED=()
+SEEN_KEYS=()
+for i in "${FIRMWARES[@]}"; do
+    PARSE_FIRMWARE_STRING "$i" || exit 1
+    KEY="${MODEL}_${CSC}"
+    SKIP=false
+    for s in "${SEEN_KEYS[@]}"; do
+        if [[ "$s" == "$KEY" ]]; then
+            SKIP=true
+            break
+        fi
+    done
+    if $SKIP; then
+        LOG "- Skipping duplicate download request for $KEY"
+        continue
+    fi
+    SEEN_KEYS+=("$KEY")
+    DEDUPED+=("$i")
+done
+FIRMWARES=("${DEDUPED[@]}")
+unset DEDUPED SEEN_KEYS KEY SKIP
+
 for i in "${FIRMWARES[@]}"; do
     PARSE_FIRMWARE_STRING "$i" || exit 1
 
