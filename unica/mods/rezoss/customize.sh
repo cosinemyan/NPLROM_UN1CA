@@ -1125,3 +1125,423 @@ python3 "$MODPATH/firewall/patch_region_strings.py" \
     || ABORT "Failed to sanitize Firewall province/country strings"
 
 LOG_STEP_OUT
+
+# Kernel fallback helpers
+# =============================================================================
+REZOSS_ARCHIVED_KERNEL_DIR="$SRC_DIR/out/archived/kernel"
+REZOSS_KERNEL_CACHE_DIR="$SRC_DIR/out/cache/kernel"
+REZOSS_EDGARS_REPO="Rezoss-Reza/s23-ksu-next"
+REZOSS_CURL_UA="NPLROM-UN1CA"
+
+_REZOSS_GITHUB_API()
+{
+  local URL="$1"
+  local TOKEN="${GITHUB_TOKEN:-${GH_TOKEN:-}}"
+  local CURL_ARGS=(-fsSL -A "$REZOSS_CURL_UA" -H "Accept: application/vnd.github+json")
+
+  if [ "$TOKEN" ]; then
+    CURL_ARGS+=(-H "Authorization: Bearer $TOKEN")
+  fi
+  curl "${CURL_ARGS[@]}" "$URL"
+}
+
+_REZOSS_ARCHIVE_KERNEL_IMAGES()
+{
+  local IMAGE_NAME
+
+  mkdir -p "$REZOSS_ARCHIVED_KERNEL_DIR" || return 1
+  for IMAGE_NAME in boot.img init_boot.img; do
+    if [ -f "$WORK_DIR/kernel/$IMAGE_NAME" ] && [ ! -f "$REZOSS_ARCHIVED_KERNEL_DIR/$IMAGE_NAME" ]; then
+      LOG "- Archiving stock $IMAGE_NAME for fallback"
+      cp -f "$WORK_DIR/kernel/$IMAGE_NAME" "$REZOSS_ARCHIVED_KERNEL_DIR/$IMAGE_NAME" || return 1
+    fi
+  done
+}
+
+_REZOSS_RESTORE_ARCHIVED_KERNEL_IMAGE()
+{
+  local IMAGE_NAME="$1"
+  local ARCHIVED_IMAGE="$REZOSS_ARCHIVED_KERNEL_DIR/$IMAGE_NAME"
+  local TARGET_IMAGE="$WORK_DIR/kernel/$IMAGE_NAME"
+
+  if [ ! -f "$ARCHIVED_IMAGE" ]; then
+    LOGW "Archived kernel image not found: ${ARCHIVED_IMAGE//$SRC_DIR\//}; keeping current $IMAGE_NAME"
+    return 0
+  fi
+
+  LOG "- Restoring $IMAGE_NAME from ${ARCHIVED_IMAGE//$SRC_DIR\//}"
+  cp -f "$ARCHIVED_IMAGE" "$TARGET_IMAGE" \
+    || {
+      LOGW "Failed to restore $IMAGE_NAME from archived kernel; keeping current image"
+      return 0
+    }
+}
+
+_REZOSS_RESTORE_ARCHIVED_KERNEL()
+{
+  local RESTORE_BOOT="$1"
+  local RESTORE_INIT_BOOT="$2"
+
+  if [ "$RESTORE_BOOT" = "true" ]; then
+    _REZOSS_RESTORE_ARCHIVED_KERNEL_IMAGE "boot.img" || return 1
+  fi
+  if [ "$RESTORE_INIT_BOOT" = "true" ]; then
+    _REZOSS_RESTORE_ARCHIVED_KERNEL_IMAGE "init_boot.img" || return 1
+  fi
+}
+
+_REZOSS_RESOLVE_EDGARS_ZIP_URL()
+{
+  local RELEASE_JSON ZIP_URL TAG ASSETS_HTML REL_PATH
+
+  # Prefer GitHub API when available (authenticated avoids anonymous rate limits).
+  RELEASE_JSON="$(_REZOSS_GITHUB_API "https://api.github.com/repos/$REZOSS_EDGARS_REPO/releases?per_page=5")" \
+    && ZIP_URL="$(echo "$RELEASE_JSON" | jq -r '
+      [.[] | select(.draft | not) | .assets[]? | select(.name | test("\\.zip$"))]
+      | first
+      | .browser_download_url // empty
+    ')" \
+    && [ "$ZIP_URL" ] && [ "$ZIP_URL" != "null" ] \
+    && {
+      echo "$ZIP_URL"
+      return 0
+    }
+
+  LOGW "GitHub API unavailable for Edgars Kernel; resolving via releases HTML"
+  TAG="$(curl -fsSL -A "$REZOSS_CURL_UA" "https://github.com/$REZOSS_EDGARS_REPO/releases" \
+    | grep -oE "$REZOSS_EDGARS_REPO/releases/tag/[^\"?#]+" \
+    | head -n1 \
+    | sed "s|.*/||")" || true
+  if [ ! "$TAG" ]; then
+    TAG="$(curl -fsSL -A "$REZOSS_CURL_UA" -o /dev/null -w "%{url_effective}" \
+      "https://github.com/$REZOSS_EDGARS_REPO/releases/latest" \
+      | sed "s|.*/||")" || true
+  fi
+  if [ ! "$TAG" ] || [ "$TAG" = "latest" ]; then
+    LOGE "Could not resolve Edgars Kernel release tag"
+    return 1
+  fi
+
+  ASSETS_HTML="$(curl -fsSL -A "$REZOSS_CURL_UA" \
+    "https://github.com/$REZOSS_EDGARS_REPO/releases/expanded_assets/$TAG")" || return 1
+  REL_PATH="$(echo "$ASSETS_HTML" \
+    | grep -oE "/$REZOSS_EDGARS_REPO/releases/download/$TAG/[^\"?#]+\\.zip" \
+    | grep -v '/archive/refs/' \
+    | head -n1)" || true
+  if [ ! "$REL_PATH" ]; then
+    LOGE "Edgars Kernel zip asset not found for tag $TAG"
+    return 1
+  fi
+
+  echo "https://github.com$REL_PATH"
+}
+
+_REZOSS_ENSURE_HOST_MAGISKBOOT()
+{
+  local DEST="$1"
+  local HOST_ARCH APK_ABI CACHED_APK CACHED_BOOT TAG ASSETS_HTML REL_PATH APK_URL
+
+  HOST_ARCH="$(uname -m)" || return 1
+  case "$HOST_ARCH" in
+    x86_64|amd64) APK_ABI="x86_64" ;;
+    aarch64|arm64) APK_ABI="arm64-v8a" ;;
+    i386|i686) APK_ABI="x86" ;;
+    armv7*|armhf) APK_ABI="armeabi-v7a" ;;
+    *)
+      LOGE "Unsupported host architecture for magiskboot: $HOST_ARCH"
+      return 1
+      ;;
+  esac
+
+  CACHED_BOOT="$REZOSS_KERNEL_CACHE_DIR/magiskboot-$APK_ABI"
+  # magiskboot exits non-zero when run with no args; only require a runnable host ELF.
+  if [ -x "$CACHED_BOOT" ] && "$CACHED_BOOT" 2>&1 | grep -q "MagiskBoot"; then
+    cp -f "$CACHED_BOOT" "$DEST" || return 1
+    chmod +x "$DEST" || return 1
+    return 0
+  fi
+
+  mkdir -p "$REZOSS_KERNEL_CACHE_DIR" || return 1
+  LOG "- Download host magiskboot ($APK_ABI) from Magisk release"
+  TAG="$(curl -fsSL -A "$REZOSS_CURL_UA" -o /dev/null -w "%{url_effective}" \
+    "https://github.com/topjohnwu/Magisk/releases/latest" \
+    | sed "s|.*/||")" || true
+  if [ ! "$TAG" ] || [ "$TAG" = "latest" ]; then
+    LOGE "Could not resolve Magisk release tag"
+    return 1
+  fi
+
+  ASSETS_HTML="$(curl -fsSL -A "$REZOSS_CURL_UA" \
+    "https://github.com/topjohnwu/Magisk/releases/expanded_assets/$TAG")" || return 1
+  REL_PATH="$(echo "$ASSETS_HTML" \
+    | grep -oE "/topjohnwu/Magisk/releases/download/$TAG/Magisk-v[^\"?#]+\\.apk" \
+    | head -n1)" || true
+  if [ ! "$REL_PATH" ]; then
+    LOGE "Magisk APK asset not found for tag $TAG"
+    return 1
+  fi
+
+  APK_URL="https://github.com$REL_PATH"
+  CACHED_APK="$REZOSS_KERNEL_CACHE_DIR/$(basename "$REL_PATH")"
+  if [ ! -f "$CACHED_APK" ]; then
+    curl -fL --retry 3 -A "$REZOSS_CURL_UA" -o "$CACHED_APK.partial" "$APK_URL" || return 1
+    mv -f "$CACHED_APK.partial" "$CACHED_APK" || return 1
+  fi
+
+  unzip -p "$CACHED_APK" "lib/$APK_ABI/libmagiskboot.so" > "$CACHED_BOOT.partial" 2>/dev/null || return 1
+  mv -f "$CACHED_BOOT.partial" "$CACHED_BOOT" || return 1
+  chmod +x "$CACHED_BOOT" || return 1
+  if ! "$CACHED_BOOT" 2>&1 | grep -q "MagiskBoot"; then
+    LOGE "Host magiskboot is not executable on this machine"
+    rm -f "$CACHED_BOOT"
+    return 1
+  fi
+
+  cp -f "$CACHED_BOOT" "$DEST" || return 1
+  chmod +x "$DEST" || return 1
+}
+
+_REZOSS_CHANGE_EDGARS_KERNEL_IMPL()
+{
+  local TMP_DIR="$MODPATH/tmp"
+  local ZIP_URL ZIP_NAME CACHED_ZIP IMAGE_GZ MAGISKBOOT
+
+  LOG "- Get latest release kernel"
+  rm -rf "$TMP_DIR" || return 1
+  mkdir -p "$TMP_DIR" "$REZOSS_KERNEL_CACHE_DIR" || return 1
+
+  ZIP_URL="$(_REZOSS_RESOLVE_EDGARS_ZIP_URL)" || return 1
+  ZIP_NAME="$(basename "$ZIP_URL")" || return 1
+  CACHED_ZIP="$REZOSS_KERNEL_CACHE_DIR/$ZIP_NAME"
+  LOG "- Using Edgars Kernel asset: $ZIP_NAME"
+
+  if [ ! -f "$CACHED_ZIP" ]; then
+    curl -fL --retry 3 -A "$REZOSS_CURL_UA" -o "$CACHED_ZIP.partial" "$ZIP_URL" || return 1
+    mv -f "$CACHED_ZIP.partial" "$CACHED_ZIP" || return 1
+  else
+    LOG "- Reusing cached kernel zip: ${CACHED_ZIP//$SRC_DIR\//}"
+  fi
+  cp -f "$CACHED_ZIP" "$TMP_DIR/$ZIP_NAME" || return 1
+
+  LOG "- Extracting Image.gz"
+  rm -rf "$TMP_DIR/zip_extract" || return 1
+  mkdir -p "$TMP_DIR/zip_extract" || return 1
+  unzip -o "$TMP_DIR/$ZIP_NAME" -d "$TMP_DIR/zip_extract" >/dev/null || return 1
+  IMAGE_GZ="$(find "$TMP_DIR/zip_extract" -type f -name 'Image.gz' | head -n1)"
+  if [ ! -f "$IMAGE_GZ" ]; then
+    LOGE "Image.gz not found in Edgars Kernel release zip"
+    return 1
+  fi
+
+  # AnyKernel ships an Android/ARM magiskboot; the build host needs a native binary.
+  MAGISKBOOT="$TMP_DIR/magiskboot"
+  _REZOSS_ENSURE_HOST_MAGISKBOOT "$MAGISKBOOT" || return 1
+  LOG "- Using host magiskboot"
+
+  if [ ! -f "$WORK_DIR/kernel/boot.img" ]; then
+    LOGE "File not found: ${WORK_DIR//$SRC_DIR\//}/kernel/boot.img"
+    return 1
+  fi
+
+  LOG "- Copying original boot image..."
+  cp -f "$WORK_DIR/kernel/boot.img" "$TMP_DIR/boot.img" || return 1
+  (
+    LOG "- Unpacking boot.img..."
+    cd "$TMP_DIR" || exit 1
+    "$MAGISKBOOT" unpack boot.img || exit 1
+
+    LOG "- Replacing kernel with decompressed Image (raw)..."
+    # Stock Samsung boot uses KERNEL_FMT=raw. Packing Image.gz leaves gzip format
+    if ! gzip -dc "$IMAGE_GZ" > "$TMP_DIR/kernel"; then
+      LOGE "Failed to decompress Image.gz"
+      exit 1
+    fi
+    if [[ "$(xxd -p -l 2 "$TMP_DIR/kernel")" != "4d5a" ]]; then
+      LOGE "Decompressed kernel does not look like an ARM64 Image"
+      exit 1
+    fi
+
+    LOG "- Repacking boot image..."
+    "$MAGISKBOOT" repack boot.img || exit 1
+
+    if [[ ! -f new-boot.img ]]; then
+      LOG "Repack failed: new-boot.img not generated."
+      exit 1
+    fi
+
+    cp -f new-boot.img "$WORK_DIR/kernel/boot.img" || exit 1
+  ) || return 1
+
+  cd "$SRC_DIR" || return 1
+}
+
+_REZOSS_CHANGE_EDGARS_KERNEL()
+{
+  local STATUS=0
+
+  LOG_STEP_IN "- Change Kernel with Edgars Kernel"
+  _REZOSS_CHANGE_EDGARS_KERNEL_IMPL || STATUS=$?
+  LOG_STEP_OUT
+
+  return "$STATUS"
+}
+
+_REZOSS_RESOLVE_KSU_NEXT_ASSETS()
+{
+  local KSU_KSUD_REGEX="$1"
+  local KSU_MODULE_NAME="$2"
+  local RELEASE_JSON TAG ASSETS_HTML REL_PATH
+
+  RELEASE_JSON="$(_REZOSS_GITHUB_API "https://api.github.com/repos/KernelSU-Next/KernelSU-Next/releases/latest")" \
+    && {
+      KSU_RELEASE_TAG="$(echo "$RELEASE_JSON" | jq -r '.tag_name // empty')"
+      KSU_KSUD_URL="$(echo "$RELEASE_JSON" | jq -r --arg regex "$KSU_KSUD_REGEX" '
+        .assets[]
+        | select(.name | test($regex))
+        | select(.name | test("android") | not)
+        | .browser_download_url
+      ' | head -n1)"
+      KSU_MODULE_URL="$(echo "$RELEASE_JSON" | jq -r --arg name "$KSU_MODULE_NAME" '
+        .assets[]
+        | select(.name == $name)
+        | .browser_download_url
+      ' | head -n1)"
+      if [ "$KSU_KSUD_URL" ] && [ "$KSU_KSUD_URL" != "null" ] \
+          && [ "$KSU_MODULE_URL" ] && [ "$KSU_MODULE_URL" != "null" ]; then
+        return 0
+      fi
+    }
+
+  LOGW "GitHub API unavailable for KernelSU-Next; resolving via releases HTML"
+  TAG="$(curl -fsSL -A "$REZOSS_CURL_UA" -o /dev/null -w "%{url_effective}" \
+    "https://github.com/KernelSU-Next/KernelSU-Next/releases/latest" \
+    | sed "s|.*/||")" || true
+  if [ ! "$TAG" ] || [ "$TAG" = "latest" ]; then
+    return 1
+  fi
+  KSU_RELEASE_TAG="$TAG"
+
+  ASSETS_HTML="$(curl -fsSL -A "$REZOSS_CURL_UA" \
+    "https://github.com/KernelSU-Next/KernelSU-Next/releases/expanded_assets/$TAG")" || return 1
+
+  REL_PATH="$(
+    echo "$ASSETS_HTML" \
+      | grep -oE "/KernelSU-Next/KernelSU-Next/releases/download/$TAG/[^\"?#]+" \
+      | sed 's|.*/||' \
+      | grep -E "$KSU_KSUD_REGEX" \
+      | grep -vi android \
+      | head -n1
+  )" || true
+  if [ ! "$REL_PATH" ]; then
+    return 1
+  fi
+  KSU_KSUD_URL="https://github.com/KernelSU-Next/KernelSU-Next/releases/download/$TAG/$REL_PATH"
+
+  if ! echo "$ASSETS_HTML" | grep -q "/releases/download/$TAG/$KSU_MODULE_NAME"; then
+    return 1
+  fi
+  KSU_MODULE_URL="https://github.com/KernelSU-Next/KernelSU-Next/releases/download/$TAG/$KSU_MODULE_NAME"
+}
+
+_REZOSS_PATCH_KSU_NEXT_INIT_BOOT_IMPL()
+{
+  local TMP_DIR="$MODPATH/tmp"
+  local KSU_KMI="android13-5.15"
+  local KSU_INIT_BOOT="$WORK_DIR/kernel/init_boot.img"
+  local KSU_HOST_ARCH KSU_KSUD_REGEX KSU_MODULE_NAME
+  local KSU_KSUD KSU_MODULE KSU_PATCHED_INIT_BOOT
+  local KSU_RELEASE_TAG="" KSU_KSUD_URL="" KSU_MODULE_URL=""
+  local CACHED_KSUD CACHED_MODULE
+
+  if [ ! -f "$KSU_INIT_BOOT" ]; then
+    LOGE "File not found: ${KSU_INIT_BOOT//$SRC_DIR\//}"
+    return 1
+  fi
+
+  mkdir -p "$TMP_DIR" "$REZOSS_KERNEL_CACHE_DIR" || return 1
+
+  KSU_HOST_ARCH="$(uname -m)" || return 1
+  case "$KSU_HOST_ARCH" in
+    x86_64|amd64)
+      KSU_KSUD_REGEX="^ksud-(x86_64|amd64).*linux"
+      ;;
+    aarch64|arm64)
+      KSU_KSUD_REGEX="^ksud-aarch64.*linux"
+      ;;
+    *)
+      LOGE "Unsupported host architecture for KernelSU-Next ksud: $KSU_HOST_ARCH"
+      return 1
+      ;;
+  esac
+
+  KSU_MODULE_NAME="${KSU_KMI}_kernelsu.ko"
+  LOG "- Get latest KernelSU-Next release"
+  _REZOSS_RESOLVE_KSU_NEXT_ASSETS "$KSU_KSUD_REGEX" "$KSU_MODULE_NAME" || return 1
+  LOG "- Using KernelSU-Next ${KSU_RELEASE_TAG:-latest}"
+
+  CACHED_KSUD="$REZOSS_KERNEL_CACHE_DIR/$(basename "$KSU_KSUD_URL")"
+  CACHED_MODULE="$REZOSS_KERNEL_CACHE_DIR/$KSU_MODULE_NAME"
+  KSU_KSUD="$TMP_DIR/ksud"
+  KSU_MODULE="$TMP_DIR/$KSU_MODULE_NAME"
+
+  if [ ! -f "$CACHED_KSUD" ]; then
+    LOG "- Download ksud"
+    curl -fL --retry 3 -A "$REZOSS_CURL_UA" -o "$CACHED_KSUD.partial" "$KSU_KSUD_URL" || return 1
+    mv -f "$CACHED_KSUD.partial" "$CACHED_KSUD" || return 1
+  else
+    LOG "- Reusing cached ksud: ${CACHED_KSUD//$SRC_DIR\//}"
+  fi
+  if [ ! -f "$CACHED_MODULE" ]; then
+    LOG "- Download $KSU_MODULE_NAME"
+    curl -fL --retry 3 -A "$REZOSS_CURL_UA" -o "$CACHED_MODULE.partial" "$KSU_MODULE_URL" || return 1
+    mv -f "$CACHED_MODULE.partial" "$CACHED_MODULE" || return 1
+  else
+    LOG "- Reusing cached module: ${CACHED_MODULE//$SRC_DIR\//}"
+  fi
+
+  cp -f "$CACHED_KSUD" "$KSU_KSUD" || return 1
+  chmod +x "$KSU_KSUD" || return 1
+  cp -f "$CACHED_MODULE" "$KSU_MODULE" || return 1
+
+  LOG "- Patching init_boot.img for KMI $KSU_KMI"
+  cp -f "$KSU_INIT_BOOT" "$TMP_DIR/init_boot.img" || return 1
+  (
+    cd "$TMP_DIR" || exit 1
+    "$KSU_KSUD" boot-patch -b init_boot.img --module "$KSU_MODULE" --kmi "$KSU_KMI"
+  ) || return 1
+
+  KSU_PATCHED_INIT_BOOT="$(find "$TMP_DIR" -maxdepth 1 -type f \( -name "*patched*.img" -o -name "new-boot.img" \) -printf "%T@ %p\n" | sort -nr | head -n1 | cut -d " " -f 2-)"
+  if [ ! -f "$KSU_PATCHED_INIT_BOOT" ]; then
+    KSU_PATCHED_INIT_BOOT="$(find "$TMP_DIR" -maxdepth 1 -type f -name "*.img" ! -name "init_boot.img" -printf "%T@ %p\n" | sort -nr | head -n1 | cut -d " " -f 2-)"
+  fi
+  if [ ! -f "$KSU_PATCHED_INIT_BOOT" ]; then
+    LOGE "KernelSU-Next patched init_boot image was not generated"
+    return 1
+  fi
+
+  cp -f "$KSU_PATCHED_INIT_BOOT" "$KSU_INIT_BOOT" || return 1
+  rm -rf "$TMP_DIR" || LOGW "Failed to remove temporary kernel directory: ${TMP_DIR//$SRC_DIR\//}"
+}
+
+_REZOSS_PATCH_KSU_NEXT_INIT_BOOT()
+{
+  local STATUS=0
+
+  LOG_STEP_IN "- Patch init_boot.img with KernelSU-Next LKM"
+  _REZOSS_PATCH_KSU_NEXT_INIT_BOOT_IMPL || STATUS=$?
+  LOG_STEP_OUT
+
+  return "$STATUS"
+}
+
+# =============================================================================
+# Kernel - Edgar Kernel Replacement and KernelSU-Next LKM
+# =============================================================================
+_REZOSS_ARCHIVE_KERNEL_IMAGES || LOGW "Failed to archive stock kernel images before replacement"
+if ! _REZOSS_CHANGE_EDGARS_KERNEL; then
+  LOGW "Edgars Kernel replacement failed; restoring archived boot.img and init_boot.img"
+  _REZOSS_RESTORE_ARCHIVED_KERNEL "true" "true"
+elif ! _REZOSS_PATCH_KSU_NEXT_INIT_BOOT; then
+  LOGW "KernelSU-Next init_boot patch failed; restoring archived init_boot.img"
+  _REZOSS_RESTORE_ARCHIVED_KERNEL "false" "true"
+fi
