@@ -97,13 +97,36 @@ FILE_EXISTS_IN_TAR()
 
 # GET_LATEST_FIRMWARE <model> <csc>
 # Returns the latest available firmware for the supplied model & CSC in the following format: PDA/CSC/MODEM
+# Akamai blocks curl's default User-Agent (HTTP 403); use a Samsung client UA.
+# Falls back to samloader checkupdate when the FOTA XML endpoint is unavailable.
 GET_LATEST_FIRMWARE()
 {
     _CHECK_NON_EMPTY_PARAM "MODEL" "$1" || return 1
     _CHECK_NON_EMPTY_PARAM "CSC" "$2" || return 1
 
-    curl -s --retry 3 -m 3 "https://fota-cloud-dn.ospserver.net/firmware/$2/$1/version.xml" \
-        | perl -nE 'say $1 if /<latest[^>]*>(.*?)<\/latest>/'
+    local MODEL="$1"
+    local CSC="$2"
+    local LATEST=""
+    local SAMLOADER_ARGS=()
+
+    LATEST="$(curl -s --retry 3 -m 15 -A "Kies" \
+        "https://fota-cloud-dn.ospserver.net/firmware/$CSC/$MODEL/version.xml" \
+        | perl -nE 'say $1 if /<latest[^>]*>(.*?)<\/latest>/')"
+
+    if [ ! "$LATEST" ] && command -v samloader >/dev/null 2>&1; then
+        # IMEI/SERIAL_NO are set by PARSE_FIRMWARE_STRING in download/extract callers
+        if [ "${IMEI:-}" ]; then
+            SAMLOADER_ARGS=(-m "$MODEL" -r "$CSC" -i "$IMEI")
+            [ "${SERIAL_NO:-}" ] && SAMLOADER_ARGS+=(-s "$SERIAL_NO")
+            LATEST="$(samloader "${SAMLOADER_ARGS[@]}" checkupdate 2>/dev/null | head -n1)"
+            # Normalize to PDA/CSC/MODEM (samloader may print a 4th field)
+            if [ "$LATEST" ]; then
+                LATEST="$(cut -d "/" -f 1-3 <<< "$LATEST")"
+            fi
+        fi
+    fi
+
+    echo "$LATEST"
 }
 
 # PARSE_FIRMWARE_STRING <string>

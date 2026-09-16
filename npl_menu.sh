@@ -355,7 +355,8 @@ download_until_done() {
     args=("${filtered[@]}")
 
     echo ""
-    echo -e "  ${YELLOW}Download interrupted (Samsung CDN reset). The menu is still running.${RESET}"
+    echo -e "  ${YELLOW}Firmware download/check failed. The menu is still running.${RESET}"
+    echo -e "  ${DIM}(FUS CDN drops, version lookup, or network — partial *.enc4 is kept when present.)${RESET}"
     local f
     f="$(find "$ODIN_DIR" -maxdepth 2 -type f -name '*.enc4' 2>/dev/null | head -1)"
     if [ -n "$f" ]; then
@@ -1598,6 +1599,61 @@ step_patch_vendor() {
   press_enter
 }
 
+step_patch_kernel_fastboot() {
+  clear_screen
+  print_header
+  echo -e "  ${BOLD}Kernel fastboot patch${RESET}  ${DIM}(no full ROM rebuild)${RESET}"
+  echo -e "  ${DIM}──────────────────────────────────────────${RESET}"
+  echo ""
+  echo -e "  Builds ${CYAN}boot.img${RESET} / ${CYAN}init_boot.img${RESET} only → ${CYAN}out/kernel_fastboot/${RESET}"
+  echo -e "  Flash with fastboot to test Edgars / KSU without waiting for make_rom."
+  echo -e "  ${DIM}Same method as Rezoss: s23-ksu-next-susfs + pack Image.gz as-is + KSU LKM.${RESET}"
+  echo -e "  ${DIM}Needs extracted firmware (Step 3) or work_dir.${RESET}"
+  echo ""
+
+  if [ -z "${SELECTED_TARGET:-}" ] && [ ! -f "$OUT_DIR/config.sh" ]; then
+    echo -e "  ${YELLOW}No target init yet.${RESET} Run Step 1 first (or continue if fw already extracted)."
+    echo ""
+  fi
+
+  echo -e "  ${BOLD}Patch mode${RESET}"
+  echo -e "  ${BOLD}[1]${RESET}  Edgars boot only"
+  echo -e "  ${BOLD}[2]${RESET}  Edgars boot + KernelSU-Next init_boot  ${DIM}(Rezoss / full ROM default; ROM also ships spoofed manager APK)${RESET}"
+  echo -e "  ${BOLD}[3]${RESET}  KernelSU-Next init_boot only"
+  echo ""
+  echo -e -n "  ${BOLD}Mode [2]:${RESET} "
+  read -r mode_choice
+  local mode="edgars+ksu"
+  case "${mode_choice:-2}" in
+    1) mode="edgars" ;;
+    3) mode="ksu" ;;
+    *) mode="edgars+ksu" ;;
+  esac
+
+  echo ""
+  echo -e "  ${BOLD}Source images${RESET}"
+  echo -e "  ${BOLD}[1]${RESET}  Extracted firmware  ${DIM}out/fw/.../kernel (stock)${RESET}"
+  echo -e "  ${BOLD}[2]${RESET}  Current work_dir  ${DIM}out/target/<device>/work_dir/kernel${RESET}"
+  echo ""
+  echo -e -n "  ${BOLD}Source [1]:${RESET} "
+  read -r src_choice
+  local source="fw"
+  case "${src_choice:-1}" in
+    2) source="work" ;;
+    *) source="fw" ;;
+  esac
+
+  echo ""
+  chmod +x "$SRC_DIR/scripts/patch_kernel_fastboot.sh" 2>/dev/null || true
+  if run_step "$SRC_DIR/scripts/patch_kernel_fastboot.sh" --mode "$mode" --source "$source"; then
+    echo -e "\n  ${GREEN}✔ Images ready:${RESET} ${CYAN}out/kernel_fastboot/${RESET}"
+    echo -e "  ${DIM}boot.stock.img / init_boot.stock.img kept for restore.${RESET}"
+  else
+    echo -e "\n  ${RED}Kernel fastboot patch failed.${RESET}"
+  fi
+  press_enter
+}
+
 step_reset() {
   echo -e "\n  ${YELLOW}Reset build state? This won't delete downloaded firmware. [y/N]:${RESET} "
   read -r confirm
@@ -1633,6 +1689,7 @@ main_menu() {
     echo -e "  ${BOLD}[5]${RESET}  Run all steps  ${DIM}(0→1→2→3→4)${RESET}"
     echo -e "  ${BOLD}[a]${RESET}  APK patch  ${DIM}(wallpaper / settings / theme)${RESET}"
     echo -e "  ${BOLD}[p]${RESET}  Patch vendor in existing ZIP  ${DIM}(build.prop / fstab — no ROM rebuild)${RESET}"
+    echo -e "  ${BOLD}[k]${RESET}  Kernel fastboot patch  ${DIM}(Edgars / KSU images only — no ROM rebuild)${RESET}"
     echo -e "  ${BOLD}[r]${RESET}  Reset build state"
     echo -e "  ${BOLD}[q]${RESET}  Quit"
     echo ""
@@ -1659,6 +1716,7 @@ main_menu() {
       a|A) step_apk_patch ;;
       w|W) step_apk_wallpaper ;;
       p|P) step_patch_vendor ;;
+      k|K) step_patch_kernel_fastboot ;;
       r|R) step_reset ;;
       q|Q)
         echo -e "\n  ${DIM}Goodbye.${RESET}\n"
