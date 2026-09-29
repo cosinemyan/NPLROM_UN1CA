@@ -11,7 +11,7 @@ diff --git a/smali/android/app/ApplicationPackageManager.smali b/smali/android/a
 index b3b5a4dd..57833ded 100644
 --- a/smali/android/app/ApplicationPackageManager.smali
 +++ b/smali/android/app/ApplicationPackageManager.smali
-@@ -30,6 +30,8 @@
+@@ -36,6 +36,8 @@
  
  .field private static final greylist-max-o DEFAULT_EPHEMERAL_COOKIE_MAX_SIZE_BYTES:I = 0x4000
  
@@ -19,7 +19,7 @@ index b3b5a4dd..57833ded 100644
 +
  .field private static final blacklist HAS_SYSTEM_FEATURE_API:Ljava/lang/String; = "has_system_feature"
  
- .field private static final blacklist LIVE_ICON_SUFFIX:Ljava/lang/String; = ".LiveIconLoader"
+ .field public static final blacklist PERMISSION_CONTROLLER_RESOURCE_PACKAGE:Ljava/lang/String; = "com.android.permissioncontroller"
 @@ -255,6 +257,22 @@
  
      sput-object v0, Landroid/app/ApplicationPackageManager;->mHasSystemFeatureCache:Landroid/app/PropertyInvalidatedCache;

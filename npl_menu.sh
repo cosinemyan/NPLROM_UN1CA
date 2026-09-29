@@ -222,7 +222,7 @@ print_steps() {
   if [[ "$FW_MODE" == "native" ]]; then
     mode_label="native (per-device SOURCE=TARGET)"
   else
-    mode_label="qssi (UN1CA shared S23 base)"
+    mode_label="qssi (One UI 9 / dm1q SM-S911B shared base)"
   fi
   echo -e "  ${BOLD}Current Target:${RESET} ${CYAN}${target_display}${RESET}"
   echo -e "  ${BOLD}Firmware mode:${RESET} ${CYAN}${mode_label}${RESET}"
@@ -515,8 +515,8 @@ step_select_target() {
   echo ""
   if [[ "$chosen" == "dm1q" ]]; then
     echo -e "  ${BOLD}Firmware mode${RESET} (UN1CA-style SOURCE/TARGET overlay):"
-    echo -e "  ${BOLD}[1]${RESET}  QSSI base  ${DIM}— shared system from unica/configs/qssi.sh (SM-S911B / dm1q); TARGET = this device${RESET}"
-    echo -e "      ${DIM}QSSI is dm1q-only in this tree${RESET}"
+    echo -e "  ${BOLD}[1]${RESET}  QSSI base  ${DIM}— shared system from unica/configs/qssi.sh (SM-S911B / dm1q, One UI 9); TARGET = this device${RESET}"
+    echo -e "      ${DIM}QSSI is dm1q-only in this tree (SDK 37)${RESET}"
     echo -e "  ${BOLD}[2]${RESET}  Native / separate  ${DIM}— SOURCE = TARGET (this model's own firmware only)${RESET}"
     echo -e "      ${DIM}Max per-device compatibility; no cross-model base overlay${RESET}"
     echo ""

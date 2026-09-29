@@ -1,0 +1,23 @@
+Android 17 / SDK 37 ARM64 bootanimation
+Source: https://developer.android.com/about/versions/17/gsi-release-notes
+Archive: https://dl.google.com/developers/android/cinnamonbun/images/gsi/aosp_arm64-exp-CP2A.260605.012-15430684-8e545e1e.zip
+Archive SHA-256: 8e545e1e1e977c3b43b4e54a3af463f3e7d1c3177b120e772138334e15f48f75
+
+Extracted with debugfs from system.img:
+  /system/bin/bootanimation
+  /system/lib64/libbootanimation_preapex.so
+
+Adaptations (NUL-padded string replacements, no instruction or symbol ABI changes):
+  libbootanimation_preapex.so -> libbootanimation.so (NEEDED and SONAME)
+  libjnigraphics_preapex.so -> libjnigraphics.so (Samsung system library)
+  /system/media/bootanimation.zip -> /data/misc/bootanim/rezoss.zip
+
+SHA-256:
+  bootanimation: 3b398bb620c54041fcc875e8f824ee0a54ce0d9e6f2239642e9cffa1a1f00ecf
+  libbootanimation_preapex.so: 45d2b88f96d0108b15a2499e1b12cc029685daf6d762724e7fbc632187029764
+  bootanimation_zip: d95392d15cb17b105386f6f1c0e61139d5e952d7ad8b9277ebb3ae826fc43743
+  libbootanimation.so: 70df449650eb3e3b84532082df66daf00c482b79131fe0a5a53a90cedd8795e0
+
+Validation: all direct strong dynamic imports, including symbol versions, resolve
+against dm3q work_dir system libraries and its com.android.runtime APEX.
+Actual boot animation playback must still be tested on device.

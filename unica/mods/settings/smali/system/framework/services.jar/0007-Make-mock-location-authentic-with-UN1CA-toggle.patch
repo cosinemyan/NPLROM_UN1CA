@@ -7,10 +7,10 @@ Subject: [PATCH] Make mock location authentic with UN1CA toggle
  .../location/provider/MockableLocationProvider.smali | 25 ++++++++++++++++++++++++-
  1 file changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/smali/com/android/server/location/provider/MockableLocationProvider.smali b/smali/com/android/server/location/provider/MockableLocationProvider.smali
+diff --git a/smali_classes2/com/android/server/location/provider/MockableLocationProvider.smali b/smali_classes2/com/android/server/location/provider/MockableLocationProvider.smali
 index aaa000001..bbb000001 100644
---- a/smali/com/android/server/location/provider/MockableLocationProvider.smali
-+++ b/smali/com/android/server/location/provider/MockableLocationProvider.smali
+--- a/smali_classes2/com/android/server/location/provider/MockableLocationProvider.smali
++++ b/smali_classes2/com/android/server/location/provider/MockableLocationProvider.smali
 @@ -444,7 +444,7 @@
 
  .method public final setMockProviderLocation(Landroid/location/Location;)V

@@ -1,0 +1,20 @@
+From: @rezoss_reza <rezoss@local>
+Subject: [PATCH] Guard missing Knox application policy in recent tasks
+
+Continue through normal visible-task removal when deknox leaves the local
+application policy service unavailable. Preserve its stop restriction check
+when the service exists instead of propagating a NullPointerException to
+SystemUI over removeAllVisibleRecentTasksExt.
+
+diff --git a/smali_classes2/com/android/server/wm/RecentTasks.smali b/smali_classes2/com/android/server/wm/RecentTasks.smali
+--- a/smali_classes2/com/android/server/wm/RecentTasks.smali
++++ b/smali_classes2/com/android/server/wm/RecentTasks.smali
+@@ -5562,6 +5562,8 @@
+
+     check-cast v5, Lcom/samsung/android/knox/localservice/ApplicationPolicyInternal;
+
++    if-eqz v5, :cond_5
++
+     iget v7, v2, Lcom/android/server/wm/Task;->mUserId:I
+
+     const/4 v10, 0x0

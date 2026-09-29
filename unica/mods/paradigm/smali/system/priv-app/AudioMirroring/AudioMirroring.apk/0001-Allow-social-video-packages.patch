@@ -8,27 +8,27 @@ com.spotify.music. Keep the stock SCPM flow intact, but also accept exact
 packages from Settings.System.unica_scpm_allowlist_packages at runtime.
 ---
  .../service/MediaRoute2MirroringProviderService.smali          |  2 ++
- smali/k1/b.smali                                               | 53 +++++++++++++++++
+ smali/j1/e.smali                                               | 53 +++++++++++++++++
  2 files changed, 55 insertions(+)
 
 diff --git a/smali/com/samsung/android/audiomirroring/service/MediaRoute2MirroringProviderService.smali b/smali/com/samsung/android/audiomirroring/service/MediaRoute2MirroringProviderService.smali
 index 1111111..2222222 100644
 --- a/smali/com/samsung/android/audiomirroring/service/MediaRoute2MirroringProviderService.smali
 +++ b/smali/com/samsung/android/audiomirroring/service/MediaRoute2MirroringProviderService.smali
-@@ -2445,6 +2445,8 @@
+@@ -2769,6 +2769,8 @@
 
-     iput-object v1, p0, Lcom/samsung/android/audiomirroring/service/MediaRoute2MirroringProviderService;->g:Landroid/content/Context;
+     iput-object v1, p0, Lcom/samsung/android/audiomirroring/service/MediaRoute2MirroringProviderService;->h:Landroid/content/Context;
 
-+    sput-object v1, Lk1/b;->h:Landroid/content/Context;
++    sput-object v1, Lj1/e;->h:Landroid/content/Context;
 +
-     invoke-static {}, LW/a;->m()Ljava/lang/String;
+     invoke-static {}, LV/a;->k()Ljava/lang/String;
 
      move-result-object v1
-diff --git a/smali/k1/b.smali b/smali/k1/b.smali
+diff --git a/smali/j1/e.smali b/smali/j1/e.smali
 index 3333333..4444444 100644
---- a/smali/k1/b.smali
-+++ b/smali/k1/b.smali
-@@ -19,6 +19,8 @@
+--- a/smali/j1/e.smali
++++ b/smali/j1/e.smali
+@@ -18,6 +18,8 @@
 
  .field public static g:I
 
@@ -39,9 +39,9 @@ index 3333333..4444444 100644
  .method static constructor <clinit>()V
 @@ -61,6 +63,57 @@
 
-     invoke-static {p0, v0}, LE1/k;->e(Ljava/lang/Object;Ljava/lang/String;)V
+     invoke-static {p0, v0}, LD1/k;->e(Ljava/lang/Object;Ljava/lang/String;)V
 
-+    sget-object v0, Lk1/b;->h:Landroid/content/Context;
++    sget-object v0, Lj1/e;->h:Landroid/content/Context;
 +
 +    if-eqz v0, :cond_unica_settings_done
 +
@@ -49,7 +49,7 @@ index 3333333..4444444 100644
 +
 +    move-result-object v0
 +
-+    const-string v1, "unica_scpm_allowlist_packages"
++    const-string/jumbo v1, "unica_scpm_allowlist_packages"
 +
 +    invoke-static {v0, v1}, Landroid/provider/Settings$System;->getString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;
 +
@@ -57,7 +57,7 @@ index 3333333..4444444 100644
 +
 +    if-eqz v0, :cond_unica_settings_done
 +
-+    const-string v1, "\\n"
++    const-string/jumbo v1, "\\n"
 +
 +    invoke-virtual {v0, v1}, Ljava/lang/String;->split(Ljava/lang/String;)[Ljava/lang/String;
 +
@@ -76,7 +76,7 @@ index 3333333..4444444 100644
 +
 +    move-result-object v2
 +
-+    invoke-static {v2, p0}, LE1/k;->a(Ljava/lang/Object;Ljava/lang/Object;)Z
++    invoke-static {v2, p0}, LD1/k;->a(Ljava/lang/Object;Ljava/lang/Object;)Z
 +
 +    move-result v2
 +
@@ -92,7 +92,7 @@ index 3333333..4444444 100644
 +    goto :goto_unica_settings_loop
 +
 +    :cond_unica_settings_done
-     sget-object v0, Lk1/b;->d:Ljava/util/ArrayList;
+     sget-object v0, Lj1/e;->d:Ljava/util/ArrayList;
 
      invoke-interface {v0}, Ljava/util/List;->size()I
 --

@@ -9,14 +9,17 @@ Subject: [PATCH] Allow disable screen capture detection
  2 files changed, 79 insertions(+), 16 deletions(-)
 
 diff --git a/smali_classes2/com/android/server/wm/ScreenRecordingCallbackController.smali b/smali_classes2/com/android/server/wm/ScreenRecordingCallbackController.smali
-index 7055b020f..9a82633e6 100644
 --- a/smali_classes2/com/android/server/wm/ScreenRecordingCallbackController.smali
 +++ b/smali_classes2/com/android/server/wm/ScreenRecordingCallbackController.smali
-@@ -47,15 +47,36 @@
+@@ -42,35 +42,56 @@
+     return-void
+ .end method
+
+
+ # virtual methods
  .method public final dispatchCallbacks(Landroid/util/ArraySet;Z)V
      .locals 5
- 
--    invoke-virtual {p1}, Landroid/util/ArraySet;->isEmpty()Z
+
 +    iget-object v0, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mWms:Lcom/android/server/wm/WindowManagerService;
 +
 +    iget-object v0, v0, Lcom/android/server/wm/WindowManagerService;->mContext:Landroid/content/Context;
@@ -30,91 +33,137 @@ index 7055b020f..9a82633e6 100644
 +    const/4 v2, 0x0
 +
 +    invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
- 
-     move-result v0
- 
-     if-eqz v0, :cond_0
- 
--    return-void
-+    const/4 p2, 0x0
- 
-     :cond_0
-+    invoke-virtual {p1}, Landroid/util/ArraySet;->isEmpty()Z
 +
 +    move-result v0
 +
++    if-eqz v0, :cond_0
++
++    const/4 p2, 0x0
++
++    :cond_0
+     invoke-virtual {p1}, Landroid/util/ArraySet;->isEmpty()Z
+
+     move-result v0
+
+-    if-eqz v0, :cond_0
+-
+-    return-void
+-
+-    :cond_0
 +    if-eqz v0, :cond_1
 +
 +    return-void
 +
 +    :cond_1
      const/4 v0, 0x0
- 
+
      move v1, v0
-@@ -65,7 +86,7 @@
- 
+
+     :goto_0
+     invoke-virtual {p1}, Landroid/util/ArraySet;->size()I
+
      move-result v2
- 
+
 -    if-ge v1, v2, :cond_1
 +    if-ge v1, v2, :cond_2
- 
+
      iget-object v2, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mLastInvokedStateByUid:Landroid/util/ArrayMap;
- 
-@@ -85,7 +106,7 @@
- 
+
+     invoke-virtual {p1, v1}, Landroid/util/ArraySet;->valueAt(I)Ljava/lang/Object;
+
+     move-result-object v3
+
+     check-cast v3, Ljava/lang/Integer;
+@@ -80,29 +101,29 @@
+     move-result-object v4
+
+     invoke-virtual {v2, v3, v4}, Landroid/util/ArrayMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+
+     add-int/lit8 v1, v1, 0x1
+
      goto :goto_0
- 
+
 -    :cond_1
 +    :cond_2
      new-instance v1, Ljava/util/ArrayList;
- 
+
      invoke-direct {v1}, Ljava/util/ArrayList;-><init>()V
-@@ -97,7 +118,7 @@
- 
+
+     :goto_1
+     iget-object v2, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mCallbacks:Landroid/util/ArrayMap;
+
+     invoke-virtual {v2}, Landroid/util/ArrayMap;->size()I
+
      move-result v2
- 
+
 -    if-ge v0, v2, :cond_3
 +    if-ge v0, v2, :cond_4
- 
+
      iget-object v2, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mCallbacks:Landroid/util/ArrayMap;
- 
-@@ -117,7 +138,7 @@
- 
+
+     invoke-virtual {v2, v0}, Landroid/util/ArrayMap;->valueAt(I)Ljava/lang/Object;
+
+     move-result-object v2
+
+     check-cast v2, Lcom/android/server/wm/ScreenRecordingCallbackController$Callback;
+@@ -112,36 +133,36 @@
+     invoke-static {v2}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+
+     move-result-object v2
+
+     invoke-virtual {p1, v2}, Landroid/util/ArraySet;->contains(Ljava/lang/Object;)Z
+
      move-result v2
- 
+
 -    if-eqz v2, :cond_2
 +    if-eqz v2, :cond_3
- 
+
      iget-object v2, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mCallbacks:Landroid/util/ArrayMap;
- 
-@@ -131,12 +152,12 @@
- 
+
+     invoke-virtual {v2, v0}, Landroid/util/ArrayMap;->valueAt(I)Ljava/lang/Object;
+
+     move-result-object v2
+
+     check-cast v2, Lcom/android/server/wm/ScreenRecordingCallbackController$Callback;
+
+     iget-object v2, v2, Lcom/android/server/wm/ScreenRecordingCallbackController$Callback;->mCallback:Landroid/window/IScreenRecordingCallback;
+
      invoke-virtual {v1, v2}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
- 
+
 -    :cond_2
 +    :cond_3
      add-int/lit8 v0, v0, 0x1
- 
+
      goto :goto_1
- 
+
 -    :cond_3
 +    :cond_4
      iget-object p0, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mWms:Lcom/android/server/wm/WindowManagerService;
- 
+
      iget-object p0, p0, Lcom/android/server/wm/WindowManagerService;->mH:Lcom/android/server/wm/WindowManagerService$H;
+
+     new-instance p1, Lcom/android/server/wm/ScreenRecordingCallbackController$$ExternalSyntheticLambda2;
+
+     invoke-direct {p1}, Ljava/lang/Object;-><init>()V
+
 diff --git a/smali_classes2/com/android/server/wm/WindowManagerService.smali b/smali_classes2/com/android/server/wm/WindowManagerService.smali
-index 17739fae0..c59858ab9 100644
 --- a/smali_classes2/com/android/server/wm/WindowManagerService.smali
 +++ b/smali_classes2/com/android/server/wm/WindowManagerService.smali
-@@ -22826,8 +22826,31 @@
- 
+@@ -28228,18 +28228,41 @@
+     const-string/jumbo v1, "notifyScreenshotListeners()"
+
+     const/4 v2, 0x1
+
+     invoke-virtual {p0, v0, v1, v2}, Lcom/android/server/wm/WindowManagerService;->checkCallingPermission$1(Ljava/lang/String;Ljava/lang/String;Z)Z
+
      move-result v0
- 
+
 -    if-eqz v0, :cond_1
+-
 +    if-eqz v0, :cond_2
 +
 +    iget-object v0, p0, Lcom/android/server/wm/WindowManagerService;->mContext:Landroid/content/Context;
- 
++
 +    invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 +
 +    move-result-object v0
@@ -137,39 +186,79 @@ index 17739fae0..c59858ab9 100644
 +
 +    :cond_0
      iget-object v0, p0, Lcom/android/server/wm/WindowManagerService;->mGlobalLock:Lcom/android/server/wm/WindowManagerGlobalLock;
- 
+
+     invoke-static {}, Lcom/android/server/wm/WindowManagerService;->traceBeforeWmsLock()V
+
      invoke-static {}, Lcom/android/server/wm/WindowManagerService;->boostPriorityForLockedSection()V
-@@ -22841,7 +22864,7 @@
- 
+
+     monitor-enter v0
+
+@@ -28247,17 +28270,17 @@
+     invoke-static {}, Lcom/android/server/wm/WindowManagerService;->traceAfterWmsLock()V
+
+     iget-object p0, p0, Lcom/android/server/wm/WindowManagerService;->mRoot:Lcom/android/server/wm/RootWindowContainer;
+
+     invoke-virtual {p0, p1}, Lcom/android/server/wm/RootWindowContainer;->getDisplayContent(I)Lcom/android/server/wm/DisplayContent;
+
      move-result-object p0
- 
+
 -    if-nez p0, :cond_0
 +    if-nez p0, :cond_1
- 
+
      new-instance p0, Ljava/util/ArrayList;
- 
-@@ -22860,7 +22883,7 @@
- 
+
+     invoke-direct {p0}, Ljava/util/ArrayList;-><init>()V
+
+     monitor-exit v0
+     :try_end_0
+     .catchall {:try_start_0 .. :try_end_0} :catchall_0
+@@ -28268,17 +28291,17 @@
+
+     return-object p0
+
+     :catchall_0
+     move-exception p0
+
      goto :goto_0
- 
+
 -    :cond_0
 +    :cond_1
      :try_start_1
      new-instance p1, Landroid/util/ArraySet;
- 
-@@ -22900,7 +22923,7 @@
- 
+
+     invoke-direct {p1}, Landroid/util/ArraySet;-><init>()V
+
+     new-instance v1, Lcom/android/server/wm/WindowManagerService$$ExternalSyntheticLambda8;
+
+     const/4 v3, 0x4
+@@ -28312,17 +28335,17 @@
+     .catchall {:try_start_2 .. :try_end_2} :catchall_0
+
+     invoke-static {}, Lcom/android/server/wm/WindowManagerService;->resetPriorityAfterLockedSection()V
+
+     invoke-static {}, Lcom/android/server/wm/WindowManagerService;->traceAfterWmsUnlock()V
+
      throw p0
- 
+
 -    :cond_1
 +    :cond_2
-     new-instance p0, Ljava/lang/SecurityException;
- 
-     const-string/jumbo p1, "Requires STATUS_BAR_SERVICE permission"
-@@ -26735,6 +26758,25 @@
- 
+     const-string/jumbo p0, "Requires STATUS_BAR_SERVICE permission"
+
+     invoke-static {p0}, Lcom/android/server/wm/Task$$ExternalSyntheticBUOutline0;->m(Ljava/lang/String;)V
+
+     const/4 p0, 0x0
+
+     return-object p0
+ .end method
+@@ -32343,16 +32366,35 @@
+     throw p0
+ .end method
+
+ .method public final registerScreenRecordingCallback(Landroid/window/IScreenRecordingCallback;)Z
+     .locals 8
+
      invoke-virtual {p0}, Landroid/view/IWindowManager$Stub;->registerScreenRecordingCallback_enforcePermission()V
- 
+
 +    const/4 v0, 0x0
 +
 +    iget-object v1, p0, Lcom/android/server/wm/WindowManagerService;->mContext:Landroid/content/Context;
@@ -190,39 +279,74 @@ index 17739fae0..c59858ab9 100644
 +
 +    :cond_0
      iget-object p0, p0, Lcom/android/server/wm/WindowManagerService;->mScreenRecordingCallbackController:Lcom/android/server/wm/ScreenRecordingCallbackController;
- 
+
      iget-object v0, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mWms:Lcom/android/server/wm/WindowManagerService;
-@@ -26762,7 +26805,7 @@
- 
+
+     iget-object v0, v0, Lcom/android/server/wm/WindowManagerService;->mGlobalLock:Lcom/android/server/wm/WindowManagerGlobalLock;
+
+     invoke-static {}, Lcom/android/server/wm/WindowManagerService;->traceBeforeWmsLock()V
+
+@@ -32374,17 +32416,17 @@
+     move-result v2
+
+     iget-object v3, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mCallbacks:Landroid/util/ArrayMap;
+
+     invoke-virtual {v3, v1}, Landroid/util/ArrayMap;->containsKey(Ljava/lang/Object;)Z
+
      move-result v3
- 
+
 -    if-eqz v3, :cond_0
 +    if-eqz v3, :cond_1
- 
+
      iget-object p0, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mLastInvokedStateByUid:Landroid/util/ArrayMap;
- 
-@@ -26793,7 +26836,7 @@
- 
+
+     invoke-static {v2}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+
+     move-result-object p1
+
+     invoke-virtual {p0, p1}, Landroid/util/ArrayMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
+@@ -32407,17 +32449,17 @@
+
+     return p0
+
+     :catchall_0
+     move-exception p0
+
      goto :goto_1
- 
+
 -    :cond_0
 +    :cond_1
      :try_start_1
      new-instance v3, Lcom/android/server/wm/ScreenRecordingCallbackController$Callback;
- 
-@@ -26820,11 +26863,11 @@
+
+     invoke-direct {v3}, Ljava/lang/Object;-><init>()V
+
+     iput-object p0, v3, Lcom/android/server/wm/ScreenRecordingCallbackController$Callback;->this$0:Lcom/android/server/wm/ScreenRecordingCallbackController;
+
+     iput-object p1, v3, Lcom/android/server/wm/ScreenRecordingCallbackController$Callback;->mCallback:Landroid/window/IScreenRecordingCallback;
+@@ -32434,21 +32476,21 @@
+     invoke-interface {v1, v3, p1}, Landroid/os/IBinder;->linkToDeath(Landroid/os/IBinder$DeathRecipient;I)V
+     :try_end_2
+     .catch Landroid/os/RemoteException; {:try_start_2 .. :try_end_2} :catch_0
+     .catchall {:try_start_2 .. :try_end_2} :catchall_0
+
      :try_start_3
      iget-object v4, p0, Lcom/android/server/wm/ScreenRecordingCallbackController;->mRecordedWC:Lcom/android/server/wm/WindowContainer;
- 
+
 -    if-nez v4, :cond_1
 +    if-nez v4, :cond_2
- 
+
      goto :goto_0
- 
+
 -    :cond_1
 +    :cond_2
      const/4 v5, 0x1
- 
+
      new-array v6, v5, [Z
+
+     aput-boolean p1, v6, p1
+
+     new-instance v7, Lcom/android/server/wm/ScreenRecordingCallbackController$$ExternalSyntheticLambda0;
+
 -- 
 2.51.1

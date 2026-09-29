@@ -1,0 +1,4 @@
+id=hermes_fzh3_compat
+name=FZH3 Hermes compatibility trial
+author=@rezoss_reza
+description=Use the working FZH3 Hermes backend on dm3q ZZHL with existing security firmware. Experimental; pattern unlock requires device validation.

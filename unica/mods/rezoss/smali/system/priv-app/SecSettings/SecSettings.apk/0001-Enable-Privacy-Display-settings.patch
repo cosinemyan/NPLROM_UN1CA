@@ -1,5 +1,5 @@
 From 2ec6b53f4d79d8428fcf6a1ddbc810eab88a6b25 Mon Sep 17 00:00:00 2001
-From: Rezoss <rezoss@local>
+From: @rezoss_reza <rezoss@local>
 Date: Thu, 28 May 2026 12:31:00 +0200
 Subject: [PATCH] Enable Privacy Display settings
 
@@ -17,10 +17,9 @@ index 6e918d3..e0b6258 100644
      <bool name="config_privatespace_account_login_enabled">false</bool>
      <bool name="config_psim_conversion_menu_enabled">false</bool>
 diff --git a/res/values/strings.xml b/res/values/strings.xml
-index dc08e27..ed87e1b 100644
 --- a/res/values/strings.xml
 +++ b/res/values/strings.xml
-@@ -8087,6 +8087,12 @@ This may take up to 1 minute."</string>
+@@ -9005,6 +9005,12 @@
      <string name="path_password_eye_mask_visible">M2,4.27 L2,4.27 L4.54,1.73 L4.54,1.73 L4.54,1 L23,1 L23,23 L1,23 L1,4.27 Z</string>
      <string name="path_password_strike_through">M3.27,4.27 L19.74,20.74</string>
      <string name="pause_animation">Pause animation</string>
@@ -30,26 +29,26 @@ index dc08e27..ed87e1b 100644
 +    <string name="rezoss_pd_main_summary">Limit screen visibility from side angles to protect your privacy.</string>
 +    <string name="rezoss_pd_main_title">Privacy display</string>
 +    <string name="rezoss_pd_turn_on_title">Turn on Privacy display</string>
-     <string name="pd_extra_dim_title">Unknown action</string>
-     <string name="pd_main_title">Unknown action</string>
-     <string name="peak_refresh_rate_summary">Automatically raises the refresh rate up to %1$d Hz for some content. Increases battery usage.</string>
+     <string name="pd_custom_apps_count_summary">%1$s and %2$d more</string>
+     <string name="pd_custom_apps_summary">Choose apps where you want to use Privacy display.</string>
+     <string name="pd_custom_apps_summary_dual_app">@string/dual_app_title</string>
 diff --git a/res/xml/sec_display_settings.xml b/res/xml/sec_display_settings.xml
-index c395f77..df4476c 100644
 --- a/res/xml/sec_display_settings.xml
 +++ b/res/xml/sec_display_settings.xml
-@@ -15,6 +15,7 @@
+@@ -14,7 +14,7 @@
+     <com.samsung.android.settings.widget.SecRestrictedSwitchPreference android:title="@string/outdoor_mode_title" android:key="outdoor_mode" />
+     <SeslPreferenceCaption android:title="@string/outdoor_mode_summary" android:key="outdoor_mode_caption" settings:searchable="false" />
+     <com.samsung.android.settings.widget.SecInsetCategoryPreference android:key="pd_inset" />
+-    <SecSwitchPreferenceScreen android:title="@string/pd_main_title" android:key="privacy_display" android:summary="@string/pd_main_summary" android:fragment="com.samsung.android.settings.bpd.PdMainSettings" settings:controller="com.samsung.android.settings.bpd.controller.PdMainPreferenceController" />
++    <SecPreferenceScreen android:title="@string/rezoss_pd_main_title" android:key="privacy_display" android:summary="@string/rezoss_pd_main_summary" android:fragment="com.samsung.android.settings.bpd.RezossPdMainSettings" />
+     <com.samsung.android.settings.widget.SecInsetCategoryPreference />
      <com.samsung.android.settings.display.DisplayDisabledAppearancePreference android:title="@string/sec_high_refresh_rate_title" android:key="sec_high_refresh_rate" android:fragment="com.samsung.android.settings.display.HighRefreshRateFragment" settings:controller="com.samsung.android.settings.display.controller.HighRefreshRatePreferenceController" settings:keywords="@string/keywords_sec_high_refresh_rate" />
      <com.samsung.android.settings.display.preferences.DisplayDisabledAppearanceSwitchPreference android:title="@string/sec_eye_comfort_title" android:key="blue_light_filter" android:fragment="com.samsung.android.settings.eyecomfort.EyeComfortSettings" settings:controller="com.samsung.android.settings.display.controller.EyeComfortPreferenceController" settings:keywords="@string/keywords_eye_comfort" />
-     <SecSwitchPreference android:title="@string/sec_ead" android:key="sec_ead" android:summary="@string/sec_ead_summary" settings:controller="com.samsung.android.settings.display.controller.SecEADPreferenceController" />
-+    <SecPreferenceScreen android:title="@string/rezoss_pd_main_title" android:key="privacy_display" android:summary="@string/rezoss_pd_main_summary" android:fragment="com.samsung.android.settings.bpd.PdMainSettings" />
-     <com.samsung.android.settings.display.DisplayDisabledAppearancePreference android:title="@string/sec_screen_mode_setting" android:key="screen_mode" android:summary="@string/sec_screen_mode_summary" android:fragment="com.samsung.android.settings.display.NewModePreview" settings:controller="com.samsung.android.settings.display.controller.ScreenModePreferenceController" settings:keywords="@string/keywords_screen_mode" />
-     <com.samsung.android.settings.widget.SecInsetCategoryPreference />
-     <Preference android:title="@string/sec_font_size_and_style_title" android:key="sec_font_size" android:fragment="com.samsung.android.settings.display.SecFontSizePreferenceFragment" settings:controller="com.samsung.android.settings.display.controller.SecFontSizeAndStylePreferenceController" settings:keywords="@string/sec_font_size_and_style_keyword" />
-diff --git a/res/xml/sec_pd_main_settings.xml b/res/xml/sec_pd_main_settings.xml
+diff --git a/res/xml/sec_rezoss_pd_main_settings.xml b/res/xml/sec_rezoss_pd_main_settings.xml
 new file mode 100644
 index 0000000..7d75a1b
 --- /dev/null
-+++ b/res/xml/sec_pd_main_settings.xml
++++ b/res/xml/sec_rezoss_pd_main_settings.xml
 @@ -0,0 +1,6 @@
 +<?xml version="1.0" encoding="utf-8"?>
 +<PreferenceScreen android:title="@string/rezoss_pd_main_title"
@@ -57,14 +56,31 @@ index 0000000..7d75a1b
 +    <SecSwitchPreference android:title="@string/rezoss_pd_turn_on_title" android:key="pd_activation" android:summary="@string/rezoss_pd_fixed_description" />
 +    <SecSwitchPreference android:title="@string/rezoss_pd_extra_dim_title" android:key="pd_extra_dim" android:summary="@string/rezoss_pd_extra_dim_summary" />
 +</PreferenceScreen>
-diff --git a/smali_classes5/com/samsung/android/settings/bpd/PdMainSettings.smali b/smali_classes5/com/samsung/android/settings/bpd/PdMainSettings.smali
-index 74a0a8d..a77f2fd 100644
---- a/smali_classes5/com/samsung/android/settings/bpd/PdMainSettings.smali
-+++ b/smali_classes5/com/samsung/android/settings/bpd/PdMainSettings.smali
-@@ -30,10 +30,39 @@
-
-
- # virtual methods
+diff --git a/smali_classes3/com/samsung/android/settings/bpd/RezossPdMainSettings.smali b/smali_classes3/com/samsung/android/settings/bpd/RezossPdMainSettings.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes3/com/samsung/android/settings/bpd/RezossPdMainSettings.smali
+@@ -0,0 +1,223 @@
++.class public Lcom/samsung/android/settings/bpd/RezossPdMainSettings;
++.super Lcom/android/settings/dashboard/DashboardFragment;
++.source "RezossPdMainSettings.java"
++
++
++# static fields
++.field public static final STATUS_LOGGING_PROVIDER:Lcom/samsung/android/settings/logging/status/StatusLogger$StatusLoggingProvider;
++
++
++# direct methods
++.method public constructor <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Lcom/android/settings/dashboard/DashboardFragment;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
 +.method public final getFragmentTitleResId(Landroid/content/Context;)I
 +    .locals 3
 +
@@ -94,26 +110,23 @@ index 74a0a8d..a77f2fd 100644
 +    return p0
 +.end method
 +
- .method public final getLogTag()Ljava/lang/String;
-     .locals 0
-
--    const-string p0, ""
-+    const-string p0, "PdMainSettings"
-
-     return-object p0
- .end method
-@@ -41,14 +70,39 @@
- .method public final getMetricsCategory()I
-     .locals 0
-
--    const/4 p0, 0x0
++.method public final getLogTag()Ljava/lang/String;
++    .locals 0
++
++    const-string p0, "RezossPdMainSettings"
++
++    return-object p0
++.end method
++
++.method public final getMetricsCategory()I
++    .locals 0
++
 +    const/16 p0, 0x1a4
-
-     return p0
- .end method
-
- .method public final getPreferenceScreenResId()I
--    .locals 0
++
++    return p0
++.end method
++
++.method public final getPreferenceScreenResId()I
 +    .locals 4
 +
 +    invoke-virtual {p0}, Landroidx/fragment/app/Fragment;->getContext()Landroid/content/Context;
@@ -123,10 +136,10 @@ index 74a0a8d..a77f2fd 100644
 +    if-eqz p0, :cond_0
 +
 +    invoke-virtual {p0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
-
++
 +    move-result-object v0
 +
-+    const-string/jumbo v1, "sec_pd_main_settings"
++    const-string/jumbo v1, "sec_rezoss_pd_main_settings"
 +
 +    const-string/jumbo v2, "xml"
 +
@@ -141,14 +154,16 @@ index 74a0a8d..a77f2fd 100644
 +    return p0
 +
 +    :cond_0
-     const/4 p0, 0x0
-
-     return p0
-@@ -59,7 +113,123 @@
-
-     invoke-super {p0, p1}, Lcom/android/settings/dashboard/DashboardFragment;->onCreate(Landroid/os/Bundle;)V
-
--    invoke-virtual {p0}, Lcom/android/settings/SettingsPreferenceFragment;->finish()V
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public final onCreate(Landroid/os/Bundle;)V
++    .locals 0
++
++    invoke-super {p0, p1}, Lcom/android/settings/dashboard/DashboardFragment;->onCreate(Landroid/os/Bundle;)V
++
 +    return-void
 +.end method
 +
@@ -177,7 +192,7 @@ index 74a0a8d..a77f2fd 100644
 +
 +    const-string p1, "com.android.settings"
 +
-+    invoke-static {p1, p0}, Lcom/samsung/android/settings/bpd/utils/PdUtils;->setPdMainEnabled(Ljava/lang/String;Z)V
++    invoke-static {p1, p0}, Lcom/samsung/android/settings/bpd/utils/RezossPdUtils;->setPdMainEnabled(Ljava/lang/String;Z)V
 +
 +    return v2
 +
@@ -202,7 +217,7 @@ index 74a0a8d..a77f2fd 100644
 +
 +    move-result p1
 +
-+    invoke-static {p0, p1}, Lcom/samsung/android/settings/bpd/utils/PdUtils;->setPdExtraDimEnabled(Landroid/content/Context;Z)V
++    invoke-static {p0, p1}, Lcom/samsung/android/settings/bpd/utils/RezossPdUtils;->setPdExtraDimEnabled(Landroid/content/Context;Z)V
 +
 +    :cond_1
 +    return v2
@@ -238,7 +253,7 @@ index 74a0a8d..a77f2fd 100644
 +
 +    check-cast v1, Landroidx/preference/TwoStatePreference;
 +
-+    invoke-static {v0}, Lcom/samsung/android/settings/bpd/utils/PdUtils;->isPdMainEnabled(Landroid/content/Context;)Z
++    invoke-static {v0}, Lcom/samsung/android/settings/bpd/utils/RezossPdUtils;->isPdMainEnabled(Landroid/content/Context;)Z
 +
 +    move-result v2
 +
@@ -257,7 +272,7 @@ index 74a0a8d..a77f2fd 100644
 +
 +    check-cast p0, Landroidx/preference/TwoStatePreference;
 +
-+    invoke-static {v0}, Lcom/samsung/android/settings/bpd/utils/PdUtils;->isPdExtraDimEnabled(Landroid/content/Context;)Z
++    invoke-static {v0}, Lcom/samsung/android/settings/bpd/utils/RezossPdUtils;->isPdExtraDimEnabled(Landroid/content/Context;)Z
 +
 +    move-result v0
 +
@@ -265,19 +280,19 @@ index 74a0a8d..a77f2fd 100644
 +
 +    :cond_1
 +    return-void
-
++
 +    :cond_2
-     return-void
- .end method
-diff --git a/smali_classes5/com/samsung/android/settings/bpd/utils/PdUtils.smali b/smali_classes5/com/samsung/android/settings/bpd/utils/PdUtils.smali
++    return-void
++.end method
+diff --git a/smali_classes3/com/samsung/android/settings/bpd/utils/RezossPdUtils.smali b/smali_classes3/com/samsung/android/settings/bpd/utils/RezossPdUtils.smali
 new file mode 100644
 index 0000000..0e45116
 --- /dev/null
-+++ b/smali_classes5/com/samsung/android/settings/bpd/utils/PdUtils.smali
++++ b/smali_classes3/com/samsung/android/settings/bpd/utils/RezossPdUtils.smali
 @@ -0,0 +1,115 @@
-+.class public abstract Lcom/samsung/android/settings/bpd/utils/PdUtils;
++.class public abstract Lcom/samsung/android/settings/bpd/utils/RezossPdUtils;
 +.super Ljava/lang/Object;
-+.source "PdUtils.java"
++.source "RezossPdUtils.java"
 +
 +
 +# direct methods
@@ -384,9 +399,35 @@ index 0000000..0e45116
 +
 +    move-result-object p0
 +
-+    const-string p1, "PdUtils"
++    const-string p1, "RezossPdUtils"
 +
 +    invoke-static {p1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
 +
 +    return-void
 +.end method
+diff --git a/smali/com/android/settings/SettingsActivity.smali b/smali/com/android/settings/SettingsActivity.smali
+--- a/smali/com/android/settings/SettingsActivity.smali
++++ b/smali/com/android/settings/SettingsActivity.smali
+@@ -920,7 +920,22 @@
+     goto :goto_1
+
+     :cond_3
++    const-string/jumbo v0, "com.samsung.android.settings.bpd.RezossPdMainSettings"
++
++    invoke-virtual {v0, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p0
++
++    if-nez p0, :rezoss_pd_valid
++
++    const-string/jumbo v0, "com.samsung.android.settings.bpd.RezossPdCustomAppsSettings"
++
++    invoke-virtual {v0, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p0
++
++    :rezoss_pd_valid
+     return p0
+ .end method
+
+ .method public launchSettingFragment(Ljava/lang/String;Landroid/content/Intent;)V

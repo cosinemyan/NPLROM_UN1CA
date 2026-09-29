@@ -258,6 +258,7 @@
     invoke-virtual {v0, v1}, Landroidx/preference/Preference;->setSummary(Ljava/lang/CharSequence;)V
 
     :cond_npl_fact
+
     invoke-virtual {p0}, Landroidx/fragment/app/Fragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
 
     invoke-static {}, Lcom/samsung/android/settings/Rune;->supportRelativeLink()Z

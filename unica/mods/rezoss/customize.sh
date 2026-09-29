@@ -1,3 +1,5 @@
+SKIPUNZIP=1
+
 LOG_STEP_IN "- Rezoss experimental mods"
 
 # =============================================================================
@@ -5,37 +7,28 @@ LOG_STEP_IN "- Rezoss experimental mods"
 # =============================================================================
 ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "$MODPATH" "system_ext" "." 0 0 755 "u:object_r:system_file:s0"
-LOG "- Adding optional AOSP zip boot animation support"
+LOG "- Adding mountless AOSP zip boot animation support"
 ADD_TO_WORK_DIR "$MODPATH/bootanimation_zip" "system" \
     "system/bin/bootanimation_zip" 0 2000 755 "u:object_r:bootanim_exec:s0"
 ADD_TO_WORK_DIR "$MODPATH/bootanimation_zip" "system" \
     "system/lib64/libbootanimation.so" 0 0 644 "u:object_r:system_lib_file:s0"
-ADD_TO_WORK_DIR "$MODPATH/bootanimation_zip" "system" \
-    "system/media/bootanimation.zip" 0 0 644 "u:object_r:bootanim_oem_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" \
     "system/etc/default-permissions/default-permissions-com.samsung.android.smartsuggestions.xml" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" \
     "system/etc/permissions/privapp-permissions-com.samsung.android.smartsuggestions.xml" 0 0 644 "u:object_r:system_file:s0"
-# HACK [
-# Keep a high versionCode so Galaxy Store cannot replace this full-AI APK with the
-# lower-versioned "basic-global-release" flavor on unsupported devices.
-DECODE_APK "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk"
-LOG "- Ensuring elevated versionCode in SamsungSmartSuggestions.apk"
-# 7.1.05.0 pin path (if ever restored) and current 7.3.20.17 both get bumped.
-EVAL "sed -i \
-    -e \"s/versionCode: '710500000'/versionCode: '799999999'/g\" \
-    -e \"s/versionCode: '732017000'/versionCode: '799999999'/g\" \
-    \"$APKTOOL_DIR/system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk/apktool.yml\""
-# ]
-LOG "- Adding Samsung Messages for Now Nudge in-app support"
-ADD_TO_WORK_DIR "m3qxxx" "system" \
-    "system/priv-app/SamsungMessages/SamsungMessages.apk" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "m3qxxx" "system" \
-    "system/etc/permissions/privapp-permissions-com.samsung.android.messaging.xml" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "m3qxxx" "system" \
-    "system/etc/default-permissions/default-permissions-com.samsung.android.messaging.xml" 0 0 644 "u:object_r:system_file:s0"
-APPLY_PATCH "system" "system/priv-app/SamsungMessages/SamsungMessages.apk" \
-    "$MODPATH/samsungmessages/SamsungMessages.apk/0001-Advertise-Now-Nudge-in-app-revision.patch"
+# Restore the stock S23U One UI 9 packages after debloat and local overlays.
+# Samsung Messages already advertises nownudge.inappnudge.revision=1.
+LOG "- Using S23U One UI 9 sharing, keyboard and messaging apps"
+for f in "app/AllShareAware" "app/HoneyBoard" "priv-app/ShareLive" "priv-app/SamsungMessages"; do
+    ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "system" "system/$f" 0 0 755 "u:object_r:system_file:s0"
+done
+# Debloat also removes Messages' permission XMLs; restore them with the APK.
+# The privileged allowlist grants MANAGE_USERS for its startup user query.
+for f in \
+    "default-permissions/default-permissions-com.samsung.android.messaging.xml" \
+    "permissions/privapp-permissions-com.samsung.android.messaging.xml"; do
+    ADD_TO_WORK_DIR "$SOURCE_FIRMWARE" "system" "system/etc/$f" 0 0 644 "u:object_r:system_file:s0"
+done
 LOG "- Patching SmartSuggestions Developer Mode access"
 REZOSS_SMARTSUGGESTIONS_APK="$WORK_DIR/system/system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk"
 REZOSS_SMARTSUGGESTIONS_TMP="$TMP_DIR/rezoss_smartsuggestions_dev_mode"
@@ -77,24 +70,6 @@ APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSugges
     "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0013-Allow-calendar-travel-custom-card-prompts.patch"
 APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
     "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0025-Remove-Custom-Card-category-limit.patch"
-APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
-    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0016-Use-data-backed-Now-Nudge-reply-fallbacks.patch"
-APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
-    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0018-Reuse-OfflineLanguageCore-Suggestion-metadata.patch"
-APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
-    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0019-Use-JSON-category-rules-for-Now-Nudge-fallbacks.patch"
-APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
-    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0017-Add-Telegram-ContentCapture-allowlist.patch"
-APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
-    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0020-Restore-CHN-Now-Nudge-conversation-bridge.patch"
-APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
-    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0021-Add-Telegram-class-text-parser-fallback.patch"
-APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
-    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0022-Prefer-JSON-fallback-before-AIOS-chat-replies.patch"
-APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
-    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0023-Ignore-stale-Now-Nudge-fallback-data.patch"
-APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
-    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0024-Detect-Now-Nudge-fallback-language-from-message.patch"
 APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
     "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0014-Allow-Now-Brief-recall-calendar-reminder-fallback.patch"
 APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
@@ -142,11 +117,8 @@ SMALI_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSugges
     'isNudgeAllowed(Landroid/content/ComponentName;)Z' \
     'true' \
     > /dev/null
-SMALI_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
-    "smali_classes15/com/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver.smali" "return" \
-    'getInAppNudgeRevisionFromMessageApp(Landroid/content/Context;)I' \
-    '1' \
-    > /dev/null
+# S23U One UI 9 Messages declares nownudge.inappnudge.revision=1.
+# Keep the stock metadata lookup and its missing-package fallback.
 unset REZOSS_SMARTSUGGESTIONS_APK REZOSS_SMARTSUGGESTIONS_TMP REZOSS_SMARTSUGGESTIONS_CERT_PREFIX
 
 # =============================================================================
@@ -334,7 +306,7 @@ _REZOSS_SET_VENDOR_CONFIG_DIR_METADATA()
     fi
 
     while IFS= read -r FILE; do
-        REL="${FILE#"$WORK_DIR"/vendor/}"
+        REL="${FILE#$WORK_DIR/vendor/}"
         if [ -d "$FILE" ]; then
             SET_METADATA "vendor" "$REL" 0 2000 755 "u:object_r:vendor_configs_file:s0"
         else
@@ -375,125 +347,6 @@ _REZOSS_CIL_HAS_SYMBOL()
     done
 
     return 1
-}
-
-_REZOSS_GET_MOSEY_APP_DOMAIN()
-{
-    local API_SUFFIX="$1"
-    local SYSTEM_EXT_SELINUX
-    local VERSIONED_DOMAIN="mosey_app_${API_SUFFIX}"
-    local VERSIONED_MAPPING="${API_SUFFIX/_/.}.cil"
-
-    if $TARGET_OS_BUILD_SYSTEM_EXT_PARTITION; then
-        SYSTEM_EXT_SELINUX="$WORK_DIR/system_ext/etc/selinux"
-    else
-        SYSTEM_EXT_SELINUX="$WORK_DIR/system/system/system_ext/etc/selinux"
-    fi
-
-    if _REZOSS_CIL_HAS_SYMBOL "$VERSIONED_DOMAIN" \
-        "$SYSTEM_EXT_SELINUX/mapping/$VERSIONED_MAPPING" \
-        "$WORK_DIR/vendor/etc/selinux/plat_pub_versioned.cil"; then
-        echo "$VERSIONED_DOMAIN"
-        return
-    fi
-
-    if _REZOSS_CIL_HAS_SYMBOL "mosey_app" \
-        "$SYSTEM_EXT_SELINUX/system_ext_sepolicy.cil" \
-        "$WORK_DIR/product/etc/selinux/product_sepolicy.cil"; then
-        echo "mosey_app"
-        return
-    fi
-
-    echo "priv_app_${API_SUFFIX}"
-}
-
-_REZOSS_DROP_MOSEY_APP_VENDOR_RULES()
-{
-    local CIL_FILE="$1"
-
-    sed -i -E \
-        -e '/^\(allow (mosey_app(_[0-9]+_[0-9]+)?|priv_app_[0-9]+_[0-9]+) mosey_(server|service) /d' \
-        -e '/^\(allow mosey_server (mosey_app(_[0-9]+_[0-9]+)?|priv_app_[0-9]+_[0-9]+) /d' \
-        "$CIL_FILE"
-}
-
-_REZOSS_ENSURE_MOSEY_VENDOR_SELINUX()
-{
-    local FC_FILE="$WORK_DIR/vendor/etc/selinux/vendor_file_contexts"
-    local SERVICE_FILE="$WORK_DIR/vendor/etc/selinux/vendor_service_contexts"
-    local CIL_FILE="$WORK_DIR/vendor/etc/selinux/vendor_sepolicy.cil"
-    local API_SUFFIX
-    local APP_DOMAIN
-
-    if [ -f "$FC_FILE" ]; then
-        LOG "- Ensuring S24U Mosey vendor file context"
-        _REZOSS_APPEND_UNIQUE_LINE "$FC_FILE" "/vendor/bin/mosey_server u:object_r:mosey_server_exec:s0"
-    else
-        LOGW "File not found: ${FC_FILE//$WORK_DIR/}"
-    fi
-
-    if [ -f "$SERVICE_FILE" ]; then
-        LOG "- Ensuring S24U Mosey service contexts"
-        _REZOSS_APPEND_UNIQUE_LINE "$SERVICE_FILE" "com.google.pixel.moseyservice.IMoseyService/default u:object_r:mosey_service:s0"
-        _REZOSS_APPEND_UNIQUE_LINE "$SERVICE_FILE" "com.google.android.moseyservice.IMoseyService/default u:object_r:mosey_service:s0"
-    else
-        LOGW "File not found: ${SERVICE_FILE//$WORK_DIR/}"
-    fi
-
-    if [ -f "$CIL_FILE" ]; then
-        API_SUFFIX="$(_REZOSS_GET_SEPOLICY_API_SUFFIX "$CIL_FILE")"
-        APP_DOMAIN="$(_REZOSS_GET_MOSEY_APP_DOMAIN "$API_SUFFIX")"
-        LOG "- Ensuring S24U Mosey vendor SELinux policy (${API_SUFFIX}, ${APP_DOMAIN})"
-        _REZOSS_DROP_MOSEY_APP_VENDOR_RULES "$CIL_FILE"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(type mosey_server)"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(roletype object_r mosey_server)"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(type mosey_server_exec)"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(roletype object_r mosey_server_exec)"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(type mosey_service)"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(roletype object_r mosey_service)"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(typeattributeset domain (mosey_server))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(typeattributeset file_type (mosey_server_exec))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(typeattributeset exec_type (mosey_server_exec))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(typeattributeset vendor_file_type (mosey_server_exec))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(typeattributeset service_manager_type (mosey_service))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(typeattributeset vendor_service (mosey_service))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(typeattributeset hal_service_type (mosey_service))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow ${APP_DOMAIN} mosey_server (binder (call transfer)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server ${APP_DOMAIN} (binder (transfer)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow ${APP_DOMAIN} mosey_server (fd (use)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow ${APP_DOMAIN} mosey_service (service_manager (find)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server servicemanager_${API_SUFFIX} (binder (call transfer)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow servicemanager_${API_SUFFIX} mosey_server (binder (call transfer)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow servicemanager_${API_SUFFIX} mosey_server (dir (search)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow servicemanager_${API_SUFFIX} mosey_server (file (read open)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow servicemanager_${API_SUFFIX} mosey_server (process (getattr)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow init_${API_SUFFIX} mosey_server_exec (file (read getattr map execute open)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow init_${API_SUFFIX} mosey_server (process (transition)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server mosey_server_exec (file (read getattr map execute open entrypoint)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(dontaudit init_${API_SUFFIX} mosey_server (process (noatsecure)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow init_${API_SUFFIX} mosey_server (process (siginh rlimitinh)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(typetransition init_${API_SUFFIX} mosey_server_exec process mosey_server)"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server mosey_service (service_manager (add find)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server self (capability (net_admin net_raw)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server sysfs_net_${API_SUFFIX} (dir (ioctl read getattr lock open watch watch_reads search)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server sysfs_net_${API_SUFFIX} (file (ioctl read getattr lock map open watch watch_reads)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server sysfs_net_${API_SUFFIX} (lnk_file (ioctl read getattr lock map open watch watch_reads)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server self (udp_socket (ioctl create)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allowx mosey_server self (ioctl udp_socket ((range 0x8913 0x8914) 0x8916 0x8922 0x8924 0x8936 0x8946 0x8994 0x89f1)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server self (unix_dgram_socket (ioctl)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allowx mosey_server self (ioctl unix_dgram_socket ((range 0x8913 0x8914) 0x8946 0x8994)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server self (packet_socket (ioctl read write create getattr setattr lock append map bind connect listen accept getopt setopt shutdown)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allowx mosey_server self (ioctl packet_socket (0x8913 0x8927 0x8933)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server self (netlink_route_socket (read write create nlmsg_read nlmsg_write nlmsg_readpriv nlmsg_getneigh)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server mosey_server (netlink_netfilter_socket (create)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server tun_device_${API_SUFFIX} (chr_file (ioctl read write getattr lock append map open watch watch_reads)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allowx mosey_server tun_device_${API_SUFFIX} (ioctl chr_file (0x54ca 0x54d2)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server self (tun_socket (create)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow mosey_server self (netlink_generic_socket (ioctl read write create getattr setattr lock append map bind connect getopt setopt shutdown)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allowx mosey_server self (ioctl netlink_generic_socket (0x8946)))"
-    else
-        LOGW "File not found: ${CIL_FILE//$WORK_DIR/}"
-    fi
 }
 
 _REZOSS_ENSURE_LOG_VIDEO_FILTER_SELINUX()
@@ -539,16 +392,24 @@ _REZOSS_ENSURE_BOOTANIMATION_SELINUX()
     CIL_FILE="$SYSTEM_EXT_SELINUX/system_ext_sepolicy.cil"
 
     if [ -f "$CIL_FILE" ]; then
-        LOG "- Ensuring optional AOSP bootanimation SELinux access"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "; Added by unica/mods/rezoss/customize.sh for optional AOSP zip boot animation"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell self (capability (dac_override dac_read_search sys_admin)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell bootanim_data_file (dir (ioctl read write create getattr setattr lock rename open watch watch_reads add_name remove_name search)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell bootanim_data_file (file (ioctl read write create getattr setattr lock append map unlink rename open watch watch_reads)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell media_rw_data_file (dir (ioctl read getattr lock open watch watch_reads search)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell media_rw_data_file (file (ioctl read getattr lock map open watch watch_reads)))"
+        LOG "- Ensuring mountless AOSP bootanimation SELinux access"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "; Added by unica/mods/rezoss/customize.sh for mountless AOSP zip boot animation"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell self (capability (dac_override dac_read_search)))"
         _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell bootanim_exec (file (ioctl read getattr lock map open watch watch_reads)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell bootanim_oem_file (file (ioctl read getattr lock map open watch watch_reads mounton)))"
-        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell bootanim_exec (file (mounton)))"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell bootanim_oem_file (file (ioctl read getattr lock map open watch watch_reads)))"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell system_data_root_file (dir (ioctl read getattr lock open watch watch_reads search)))"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell adb_data_file (dir (ioctl read getattr lock open watch watch_reads search)))"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell adb_data_file (file (ioctl read getattr lock map open watch watch_reads)))"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell bootanim_data_file (dir (ioctl read write create getattr setattr lock rename open watch watch_reads add_name remove_name search rmdir)))"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell bootanim_data_file (file (ioctl read write create getattr setattr lock map open watch watch_reads rename unlink)))"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell system_data_file (dir (ioctl read getattr lock open watch watch_reads search)))"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell system_data_file (file (ioctl read getattr lock map open watch watch_reads)))"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow bootanim bootanim_data_file (dir (ioctl read getattr lock open watch watch_reads search)))"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow bootanim bootanim_data_file (file (ioctl read getattr lock map open watch watch_reads)))"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell ctl_start_prop (property_service (set)))"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell ctl_start_prop (file (read getattr map open)))"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell ctl_stop_prop (property_service (set)))"
+        _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell ctl_stop_prop (file (read getattr map open)))"
         _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell ctl_restart_prop (property_service (set)))"
         _REZOSS_APPEND_UNIQUE_LINE "$CIL_FILE" "(allow sec_system_init_shell ctl_restart_prop (file (read getattr map open)))"
     else
@@ -559,26 +420,28 @@ _REZOSS_ENSURE_BOOTANIMATION_SELINUX()
 _REZOSS_ENSURE_BOOTANIMATION_SELINUX
 
 # =============================================================================
-# S24U OneUI 8.5 Quick Share Apple Devices Extension
+# S26U One UI 9 Quick Share Apple Devices Extension
 # =============================================================================
 REZOSS_ENABLE_MOSEY_APPLE_SHARING="${REZOSS_ENABLE_MOSEY_APPLE_SHARING:-true}"
 if [[ "$REZOSS_ENABLE_MOSEY_APPLE_SHARING" == "true" ]]; then
-    LOG "- Adding S24U OneUI 8.5 Mosey Quick Share extension"
-    ADD_TO_WORK_DIR "$MODPATH" "vendor" "bin/mosey_server" 0 2000 755 "u:object_r:mosey_server_exec:s0"
-    ADD_TO_WORK_DIR "$MODPATH" "vendor" "lib64/libmosey_daemon_ffi.so" 0 0 644 "u:object_r:vendor_file:s0"
-    ADD_TO_WORK_DIR "$MODPATH" "vendor" "etc/init/mosey.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
-    ADD_TO_WORK_DIR "$MODPATH" "vendor" "etc/vintf/manifest/manifest_mosey.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
-    _REZOSS_ENSURE_MOSEY_VENDOR_SELINUX
+    LOG "- Adding S26U One UI 9 Mosey system_ext service"
+    # S23U One UI 9 already provides mosey_app/server policy and file contexts.
+    ADD_TO_WORK_DIR "m3qxxx" "system_ext" "priv-app/MoseyApp" 0 0 755 "u:object_r:system_file:s0"
+    ADD_TO_WORK_DIR "m3qxxx" "system_ext" "bin/mosey_server" 0 1000 755 "u:object_r:mosey_server_exec:s0"
+    ADD_TO_WORK_DIR "m3qxxx" "system_ext" "lib64/libmosey_daemon_ffi.so" 0 0 644 "u:object_r:system_lib_file:s0"
+    for f in "init/mosey.rc" "vintf/manifest/manifest_mosey.xml" \
+        "default-permissions/default-permissions-com.google.android.mosey.xml" \
+        "permissions/privapp-permissions-com.google.android.mosey.xml" \
+        "sysconfig/preinstalled-packages-com.google.android.mosey.xml"; do
+        ADD_TO_WORK_DIR "m3qxxx" "system_ext" "etc/$f" 0 0 644 "u:object_r:system_file:s0"
+    done
 else
-    LOG "- Skipping S24U OneUI 8.5 Mosey Quick Share extension; REZOSS_ENABLE_MOSEY_APPLE_SHARING=false"
+    LOG "- Skipping Mosey Quick Share extension; REZOSS_ENABLE_MOSEY_APPLE_SHARING=false"
     DELETE_FROM_WORK_DIR "system" "system/etc/default-permissions/default-permissions-com.google.android.mosey.xml"
     DELETE_FROM_WORK_DIR "system" "system/etc/init/rezoss_mosey_permissions.rc"
     DELETE_FROM_WORK_DIR "system" "system/etc/unica/rezoss_mosey_permissions.sh"
     DELETE_FROM_WORK_DIR "system_ext" "priv-app/MoseyApp"
-    DELETE_FROM_WORK_DIR "system_ext" "etc/default-permissions/default-permissions-com.google.android.mosey.xml"
-    DELETE_FROM_WORK_DIR "system_ext" "etc/permissions/privapp-permissions-com.google.android.mosey.xml"
 fi
-unset REZOSS_ENABLE_MOSEY_APPLE_SHARING
 
 # =============================================================================
 # S26U Prebuilts - Gallery LOG / Camera LOG-LUT / Privacy Display
@@ -586,12 +449,10 @@ unset REZOSS_ENABLE_MOSEY_APPLE_SHARING
 LOG "- Adding S26U Privacy Display, Gallery LOG, Camera LOG/LUT, and Horizon Lock support files"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/cameradata/logCubefiles" 0 0 755 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libcontextanalyzer_jni.media.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
-ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/liblogProcessingEngine.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libmediacontextanalyzer.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libmpp.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libmpp_common.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libmppclient.so" 0 0 644 "u:object_r:system_lib_file:s0"
-ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libmppcolorgrade.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libmppfilter.so" 0 0 644 "u:object_r:system_lib_file:s0"
 
 # =============================================================================
@@ -634,8 +495,6 @@ ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libDeflickerHDR.camera.samsung.s
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libsnapshotdebanding.arcsoft.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libStereoSolution.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libSR_StereoCapture.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
-# Keep clipping mode at NPU-only (see VIDEO_CONFIG_VIDEO_CLIPPING_MODE above); full
-# unifiedclipper+foundational_segmentation route previously crashed PhotoEditor_AIFull.
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libfoundational_segmentation.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libdvs.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
 _REZOSS_ENSURE_FOUNDATIONAL_SEGMENTATION_SYSTEM_CONFIGS
@@ -656,8 +515,7 @@ ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libphotohdr.so" 0 0 644 "u:objec
 # =============================================================================
 # S26U Prebuilts - PhotoHDR Simba / HEIF Stack
 # =============================================================================
-# System-side test stack only. Keep the existing libphotohdr.so and imagecodec
-# APEX contents unchanged for this pass.
+# Use the One UI 9 system stack with the stock One UI 9 imagecodec APEX.
 LOG "- Adding S26U PhotoHDR Simba/HEIF system stack"
 for f in \
     "libsimba.media.samsung.so" \
@@ -665,15 +523,13 @@ for f in \
     "libsimba.cfa.media.samsung.so" \
     "libheifcapture.so" \
     "libheifcapture_jni.media.samsung.so" \
-    "libheif.so" \
     "libheifcodec_jni.so" \
     "libheifregiondec_jni.so" \
     "libsheif.so" \
-    "libsheifdecadapter.so" \
     "libsecultrahdr.so" \
     "libultrahdr.so" \
     "libjpegsq.media.samsung.so"; do
-    ADD_TO_WORK_DIR "$MODPATH" "system" "lib64/$f" 0 0 644 "u:object_r:system_lib_file:s0"
+    ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/$f" 0 0 644 "u:object_r:system_lib_file:s0"
     _REZOSS_SET_SYSTEM_LIB64_METADATA "$f"
 done
 
@@ -694,12 +550,10 @@ ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libDocShadowRemoval.camera.samsu
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libMoireFilterV2.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
 for f in \
     "libcontextanalyzer_jni.media.samsung.so" \
-    "liblogProcessingEngine.so" \
     "libmediacontextanalyzer.so" \
     "libmpp.so" \
     "libmpp_common.so" \
     "libmppclient.so" \
-    "libmppcolorgrade.so" \
     "libmppfilter.so" \
     "libppvdis_core.so" \
     "libppvdis_interface.so" \
@@ -794,15 +648,12 @@ done
 # =============================================================================
 # S26U Prebuilts - PhotoHDR Vendor Encoder Plugin
 # =============================================================================
-# Direct plugin stack only. Vendor Simba/HEIF/libphotohdr remains on the existing
-# target stack for this pass.
-LOG "- Adding S26U PhotoHDR vendor encoder plugin stack"
+# Keep dm3q UniHAL support libraries from the S23U vendor stack. Importing the
+# S26U copies here changes shared dependencies used by object-tracking AF.
+LOG "- Adding S26U PhotoHDR vendor encoder plugin"
 for f in \
-    "libSecPhotoHdrEncoder.uniplugin@1.0.so" \
-    "libUniPluginUtils.so" \
-    "libimgproc_sw.unifunc@common.so" \
-    "unihal_cutils.so"; do
-    ADD_TO_WORK_DIR "$MODPATH" "vendor" "lib64/$f" 0 0 644 "u:object_r:vendor_file:s0"
+    "libSecPhotoHdrEncoder.uniplugin@1.0.so"; do
+    ADD_TO_WORK_DIR "m3qxxx" "vendor" "lib64/$f" 0 0 644 "u:object_r:vendor_file:s0"
 done
 
 # =============================================================================
@@ -822,6 +673,14 @@ unset -f _REZOSS_ENSURE_FOUNDATIONAL_SEGMENTATION_SYSTEM_CONFIGS _REZOSS_ENSURE_
 unset -f _REZOSS_ENSURE_MOSEY_VENDOR_SELINUX _REZOSS_GET_MOSEY_APP_DOMAIN
 unset -f _REZOSS_DROP_MOSEY_APP_VENDOR_RULES _REZOSS_CIL_HAS_SYMBOL _REZOSS_GET_SEPOLICY_API_SUFFIX
 unset -f _REZOSS_ENSURE_LOG_VIDEO_FILTER_SELINUX _REZOSS_ENSURE_BOOTANIMATION_SELINUX
+
+
+# =============================================================================
+# Build Display Branding
+# =============================================================================
+NOW_BUILD="UN1CA-ROM built by Rezoss on $(GET_PROP "system" "ro.build.PDA")"
+SET_PROP "system" "ro.build.display.id" "${NOW_BUILD}"
+SET_PROP "product" "ro.build.display.id" "${NOW_BUILD}"
 
 # =============================================================================
 # Local System App Overlays
@@ -858,8 +717,25 @@ APPLY_PATCH "system" "system/priv-app/DressRoom/DressRoom.apk" \
     "$MODPATH/dressroom/DressRoom.apk/0001-Bypass-AICore-weather-feature-check.patch"
 
 LOG "- Patch DressRoom UN1CA lockscreen font picker integration"
-APPLY_PATCH "system" "system/priv-app/DressRoom/DressRoom.apk" \
-    "$MODPATH/dressroom/DressRoom.apk/0002-Expose-UN1CA-selected-fonts-to-lockscreen-picker.patch"
+# Firmware updates can rename the obfuscated callers. Resolve exact instruction
+# sequences and dry-run the whole patch before modifying the decoded APK.
+REZOSS_DRESSROOM_PATCH=$(mktemp /tmp/rezoss-dressroom-fonts.XXXXXX.patch) || return 1
+if ! EVAL "python3 \"$MODPATH/dressroom/resolve_font_patch.py\" \
+    \"$APKTOOL_DIR/system/priv-app/DressRoom/DressRoom.apk\" \
+    \"$MODPATH/dressroom/DressRoom.apk/0002-Expose-UN1CA-selected-fonts-to-lockscreen-picker.patch\" \
+    > \"$REZOSS_DRESSROOM_PATCH\""; then
+    rm -- "$REZOSS_DRESSROOM_PATCH"
+    unset REZOSS_DRESSROOM_PATCH
+    return 1
+fi
+if ! APPLY_PATCH "system" "system/priv-app/DressRoom/DressRoom.apk" \
+    "$REZOSS_DRESSROOM_PATCH"; then
+    rm -- "$REZOSS_DRESSROOM_PATCH"
+    unset REZOSS_DRESSROOM_PATCH
+    return 1
+fi
+rm -- "$REZOSS_DRESSROOM_PATCH"
+unset REZOSS_DRESSROOM_PATCH
 
 LOG "- Downloading latest Samsung Always On Display app"
 DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.samsung.android.app.aodservice")" \
@@ -893,23 +769,24 @@ LOG "- Patch VisualCloudCore Galaxy Store model check"
 APPLY_PATCH "system" "system/app/VisualCloudCore/VisualCloudCore.apk" \
     "$MODPATH/visualcloudcore/VisualCloudCore.apk/0001-Use-S25-Ultra-model-for-stub-update-check.patch"
 
-LOG "- Patch product framework overlay doze auto-brightness (dm3q / S23 Ultra only)"
-if [ -f "$WORK_DIR/product/overlay/framework-res__dm3qxxx__auto_generated_rro_product.apk" ]; then
-    APPLY_PATCH "product" "overlay/framework-res__dm3qxxx__auto_generated_rro_product.apk" \
-        "$MODPATH/rro/framework-res__dm3qxxx__auto_generated_rro_product.apk/0001-Add-doze-auto-brightness-arrays.patch"
-fi
+LOG "- Patch product framework overlay doze auto-brightness"
+APPLY_PATCH "product" "overlay/framework-res__dm3qxxx__auto_generated_rro_product.apk" \
+    "$MODPATH/rro/framework-res__dm3qxxx__auto_generated_rro_product.apk/0001-Add-doze-auto-brightness-arrays.patch"
 
 # =============================================================================
 # Notification Highlights / Galaxy AI Stack
 # =============================================================================
 # S26U Notification highlights requirements: expose the Galaxy AI common-AI gate, keep LLM/offline model metadata enabled for the backend, ensure the offline language model stub is present, remove the extra SecSettings LLM-version UI gate, allow dmxq devices in NmRune, and enable priority/summary defaults.
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_AI_VERSION" "20263"
-SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_NOW_NUDGE_VERSION" "1"
-SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_GENAI_CONFIG_LLM_VERSION" "0.70"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_NOW_NUDGE_VERSION" "2"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_GENAI_CONFIG_LLM_VERSION" "0.81"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_GENAI_SUPPORT_OFFLINE_LANGUAGEMODEL" "TRUE"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/app/SketchBook/SketchBook.apk" 0 0 644 "u:object_r:system_file:s0"
 LOG "- Overlay S26U Notification highlights AI APKs"
-ADD_TO_WORK_DIR "$MODPATH" "system" "system/priv-app/SamsungIntelliVoiceServices/SamsungIntelliVoiceServices.apk" 0 0 644 "u:object_r:system_file:s0"
+LOG "- Adding S26U One UI 9 Samsung Intelligence Voice Service"
+ADD_TO_WORK_DIR "m3qxxx" "system" "system/priv-app/SamsungIntelliVoiceServices/SamsungIntelliVoiceServices.apk" 0 0 644 "u:object_r:system_file:s0"
+SET_METADATA "system" "system/priv-app/SamsungIntelliVoiceServices" 0 0 755 "u:object_r:system_file:s0"
+SET_METADATA "system" "system/priv-app/SamsungIntelliVoiceServices/SamsungIntelliVoiceServices.apk" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/priv-app/SamsungAiCore/SamsungAiCore.apk" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/etc/permissions/privapp-permissions-com.samsung.android.aicore.xml" 0 0 644 "u:object_r:system_file:s0"
 DELETE_FROM_WORK_DIR "system" "system/app/AIOSKernelService"
@@ -918,19 +795,6 @@ ADD_TO_WORK_DIR "m3qxxx" "system" "system/etc/permissions/privapp-permissions-co
 ADD_TO_WORK_DIR "pa2qxxx" "system" "system/etc/sysconfig/aioskernelservice.xml" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/etc/permissions/signature-permissions-com.samsung.android.offline.languagemodel.xml" 0 0 644 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/priv-app/OfflineLanguageModel_stub/OfflineLanguageModel_stub.apk" 0 0 644 "u:object_r:system_file:s0"
-
-LOG "- Re-signing OfflineLanguageModel_stub.apk for custom Offline Language Core updates"
-OFFLINELM_STUB_APK="$WORK_DIR/system/system/priv-app/OfflineLanguageModel_stub/OfflineLanguageModel_stub.apk"
-OFFLINELM_STUB_TMP="$TMP_DIR/offline_language_model_stub"
-OFFLINELM_STUB_CERT_PREFIX="aosp"
-$ROM_IS_OFFICIAL && OFFLINELM_STUB_CERT_PREFIX="unica"
-EVAL "rm -rf \"$OFFLINELM_STUB_TMP\" && mkdir -p \"$OFFLINELM_STUB_TMP\""
-EVAL "signapk \"$SRC_DIR/security/${OFFLINELM_STUB_CERT_PREFIX}_platform.x509.pem\" \"$SRC_DIR/security/${OFFLINELM_STUB_CERT_PREFIX}_platform.pk8\" \"$OFFLINELM_STUB_APK\" \"$OFFLINELM_STUB_TMP/OfflineLanguageModel_stub.signed.apk\""
-EVAL "zipalign -c -p 4 \"$OFFLINELM_STUB_TMP/OfflineLanguageModel_stub.signed.apk\""
-EVAL "mv -f \"$OFFLINELM_STUB_TMP/OfflineLanguageModel_stub.signed.apk\" \"$OFFLINELM_STUB_APK\""
-SET_METADATA "system" "system/priv-app/OfflineLanguageModel_stub/OfflineLanguageModel_stub.apk" 0 0 644 "u:object_r:system_file:s0"
-EVAL "rm -rf \"$OFFLINELM_STUB_TMP\""
-unset OFFLINELM_STUB_APK OFFLINELM_STUB_TMP OFFLINELM_STUB_CERT_PREFIX
 
 LOG "- Adding S26U NMT languagepack preload metadata"
 S26U_NMT_TARGET_PRELOAD="$WORK_DIR/system/system/etc/removable_preload.txt"
@@ -999,6 +863,54 @@ LOG "- Patch SamsungAiCore Vision Model device mapping"
 APPLY_PATCH "system" "system/priv-app/SamsungAiCore/SamsungAiCore.apk" \
     "$MODPATH/aicore/SamsungAiCore.apk/0001-Map-dm-series-to-m3q-for-vision-model.patch"
 
+LOG "- Experimentally patch SamsungAiCore SM8550/V73 QNN profile"
+APPLY_PATCH "system" "system/priv-app/SamsungAiCore/SamsungAiCore.apk" \
+    "$MODPATH/aicore/SamsungAiCore.apk/0002-Experiment-enable-SM8550-V73-QNN-profile.patch"
+# Experimental: replace the S26U V81 HTP binaries inside SamsungAiCore.apk with
+# S23U Hexagon V73 binaries and patch AiCore's own QNN wrapper crash paths.
+local AICORE_DECODED_APK="$APKTOOL_DIR/system/priv-app/SamsungAiCore/SamsungAiCore.apk"
+local AICORE_DECODED_LIB="$AICORE_DECODED_APK/lib/arm64-v8a"
+local AICORE_DECODED_SSGEN_LIB="$AICORE_DECODED_APK/assets/ssgen/libs"
+local AICORE_SNAP_QNN_LIB="$AICORE_DECODED_LIB/libsnap_qnn.so"
+local AICORE_SNAP_QNN_PATCHED_LIB="$TMP_DIR/aicore_libsnap_qnn.so"
+local AICORE_S23U_FW_DIR="$FW_DIR/SM-S918B_EUX"
+local AICORE_QNN_MISSING=0
+if [ ! -d "$AICORE_DECODED_LIB" ] || [ ! -d "$AICORE_DECODED_SSGEN_LIB" ]; then
+    LOGE "SamsungAiCore.apk decoded QNN directories are missing"
+    return 1
+fi
+if [ ! -f "$AICORE_SNAP_QNN_LIB" ]; then
+    LOGE "SamsungAiCore.apk libsnap_qnn.so is missing"
+    return 1
+fi
+for f in \
+    "$AICORE_S23U_FW_DIR/vendor/lib64/snap/libQnnHtp.so" \
+    "$AICORE_S23U_FW_DIR/vendor/lib64/snap/libQnnSystem.so" \
+    "$AICORE_S23U_FW_DIR/vendor/lib64/snap/libQnnHtpV73Stub.so" \
+    "$AICORE_S23U_FW_DIR/vendor/lib/rfsa/adsp/snap/libQnnHtpV73Skel.so"; do
+    if [ ! -f "$f" ]; then
+        LOGE "File not found: ${f//$SRC_DIR\//}"
+        AICORE_QNN_MISSING=1
+    fi
+done
+if [ "$AICORE_QNN_MISSING" != "0" ]; then
+    return 1
+fi
+LOG "- Replacing SamsungAiCore.apk QNN HTP V81 binaries with S23U Hexagon V73 binaries"
+cp -f "$AICORE_S23U_FW_DIR/vendor/lib64/snap/libQnnHtp.so" "$AICORE_DECODED_LIB/libQnnHtp.so"
+cp -f "$AICORE_S23U_FW_DIR/vendor/lib64/snap/libQnnSystem.so" "$AICORE_DECODED_LIB/libQnnSystem.so"
+cp -f "$AICORE_S23U_FW_DIR/vendor/lib64/snap/libQnnHtpV73Stub.so" "$AICORE_DECODED_LIB/libQnnHtpV73Stub.so"
+cp -f "$AICORE_S23U_FW_DIR/vendor/lib64/snap/libQnnHtpV73Stub.so" "$AICORE_DECODED_LIB/libQnnHtpV81Stub.so"
+cp -f "$AICORE_S23U_FW_DIR/vendor/lib/rfsa/adsp/snap/libQnnHtpV73Skel.so" "$AICORE_DECODED_SSGEN_LIB/libQnnHtpV73Skel.so"
+cp -f "$AICORE_S23U_FW_DIR/vendor/lib/rfsa/adsp/snap/libQnnHtpV73Skel.so" "$AICORE_DECODED_SSGEN_LIB/libQnnHtpV81Skel.so"
+if [ -f "$AICORE_S23U_FW_DIR/vendor/lib64/libqnnengine.so" ]; then
+    cp -f "$AICORE_S23U_FW_DIR/vendor/lib64/libqnnengine.so" "$AICORE_DECODED_LIB/libqnnengine.so"
+fi
+LOG "- Patching SamsungAiCore QNN wrapper for SM8550/V73 experiment"
+EVAL "python3 \"$MODPATH/aicore/patch_samsung_aicore_qnn_v73_experiment.py\" \"$AICORE_SNAP_QNN_LIB\" \"$AICORE_SNAP_QNN_PATCHED_LIB\""
+EVAL "mv -f \"$AICORE_SNAP_QNN_PATCHED_LIB\" \"$AICORE_SNAP_QNN_LIB\""
+unset AICORE_DECODED_APK AICORE_DECODED_LIB AICORE_DECODED_SSGEN_LIB AICORE_SNAP_QNN_LIB AICORE_SNAP_QNN_PATCHED_LIB AICORE_S23U_FW_DIR AICORE_QNN_MISSING
+
 LOG "- Patching AIOSKernelService service config for SM8550"
 APPLY_PATCH "system" "system/priv-app/AIOSKernelService/AIOSKernelService.apk" \
     "$MODPATH/aioskernel/AIOSKernelService.apk/0001-Allow-SM8550-service-config.patch"
@@ -1012,15 +924,15 @@ LOG "- Refusing AIOSKernelService LLM/LLMV before QNN execution on SM8550"
 APPLY_PATCH "system" "system/priv-app/AIOSKernelService/AIOSKernelService.apk" \
     "$MODPATH/aioskernel/AIOSKernelService.apk/0004-Refuse-LLM-LLMV-before-QNN-execution.patch"
 # Replace the S26U V81 HTP binaries inside AIOSKernelService.apk with the S23U Hexagon V73 pair.
-AIOS_DECODED_APK="$APKTOOL_DIR/system/priv-app/AIOSKernelService/AIOSKernelService.apk"
-AIOS_DECODED_LIB="$AIOS_DECODED_APK/lib/arm64-v8a"
-AIOS_DECODED_SSGEN_LIB="$AIOS_DECODED_APK/assets/ssgen/libs"
-AIOS_SSN_LIB="$AIOS_DECODED_LIB/libssneural_vndk.so"
-AIOS_SSN_PATCHED_LIB="$TMP_DIR/aios_libssneural_vndk.so"
-AIOS_SNAP_QNN_LIB="$AIOS_DECODED_LIB/libsnap_qnn.so"
-AIOS_SNAP_QNN_PATCHED_LIB="$TMP_DIR/aios_libsnap_qnn.so"
-S23U_FW_DIR="$FW_DIR/SM-S911B_EUX"
-AIOS_QNN_MISSING=0
+local AIOS_DECODED_APK="$APKTOOL_DIR/system/priv-app/AIOSKernelService/AIOSKernelService.apk"
+local AIOS_DECODED_LIB="$AIOS_DECODED_APK/lib/arm64-v8a"
+local AIOS_DECODED_SSGEN_LIB="$AIOS_DECODED_APK/assets/ssgen/libs"
+local AIOS_SSN_LIB="$AIOS_DECODED_LIB/libssneural_vndk.so"
+local AIOS_SSN_PATCHED_LIB="$TMP_DIR/aios_libssneural_vndk.so"
+local AIOS_SNAP_QNN_LIB="$AIOS_DECODED_LIB/libsnap_qnn.so"
+local AIOS_SNAP_QNN_PATCHED_LIB="$TMP_DIR/aios_libsnap_qnn.so"
+local S23U_FW_DIR="$FW_DIR/SM-S918B_EUX"
+local AIOS_QNN_MISSING=0
 if [ ! -d "$AIOS_DECODED_LIB" ] || [ ! -d "$AIOS_DECODED_SSGEN_LIB" ]; then
     LOGE "AIOSKernelService.apk decoded QNN directories are missing"
     return 1
@@ -1126,6 +1038,7 @@ python3 "$MODPATH/firewall/patch_region_strings.py" \
 
 LOG_STEP_OUT
 
+# =============================================================================
 # Kernel - Edgars + KernelSU-Next LKM + spoofed manager APK (shared helpers)
 # =============================================================================
 # shellcheck source=unica/mods/rezoss/kernel.sh

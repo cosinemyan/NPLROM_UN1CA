@@ -1,0 +1,113 @@
+From 0a2b58f869c81460b2b0c0179c8e9e733e384a01 Mon Sep 17 00:00:00 2001
+From: CorePatch <https://github.com/LSPosed/CorePatch.git>
+Date: Tue, 1 Sep 2026 13:18:36 +0200
+Subject: [PATCH] Allow CorePatch-style SigningDetails bypass
+
+Port CorePatch's framework-side signature comparison bypass into
+SigningDetails. When the existing UN1CA runtime property is enabled,
+checkCapability returns success for non-PERMISSION/non-AUTH capabilities
+and signaturesMatchExactly returns success for exact signature checks.
+---
+ smali/android/content/pm/SigningDetails.smali | 65 +++++++++++++++++-
+ 1 file changed, 64 insertions(+), 1 deletion(-)
+
+diff --git a/smali/android/content/pm/SigningDetails.smali b/smali/android/content/pm/SigningDetails.smali
+index 3f840dd8..29c3fb27 100644
+--- a/smali/android/content/pm/SigningDetails.smali
++++ b/smali/android/content/pm/SigningDetails.smali
+@@ -76,6 +76,20 @@
+     return-void
+ .end method
+ 
++.method public static isUnicaSignatureVerificationDisabled()Z
++    .locals 2
++
++    const-string/jumbo v0, "persist.sys.unica.disable_signature_verification"
++
++    const/4 v1, 0x0
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++
++    move-result v0
++
++    return v0
++.end method
++
+ .method public constructor blacklist <init>(Landroid/content/pm/SigningDetails;)V
+     .locals 3
+ 
+@@ -878,6 +892,26 @@
+ .method public blacklist checkCapability(Landroid/content/pm/SigningDetails;I)Z
+     .locals 4
+ 
++    invoke-static {}, Landroid/content/pm/SigningDetails;->isUnicaSignatureVerificationDisabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_unica_check_capability_original
++
++    const/4 v0, 0x4
++
++    if-eq p2, v0, :cond_unica_check_capability_original
++
++    const/16 v0, 0x10
++
++    if-eq p2, v0, :cond_unica_check_capability_original
++
++    const/4 v0, 0x1
++
++    return v0
++
++    :cond_unica_check_capability_original
++
+     sget-object v0, Landroid/content/pm/SigningDetails;->UNKNOWN:Landroid/content/pm/SigningDetails;
+ 
+     const/4 v1, 0x0
+@@ -927,6 +961,26 @@
+ .method public blacklist checkCapability(Ljava/lang/String;I)Z
+     .locals 2
+ 
++    invoke-static {}, Landroid/content/pm/SigningDetails;->isUnicaSignatureVerificationDisabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_unica_check_digest_capability_original
++
++    const/4 v0, 0x4
++
++    if-eq p2, v0, :cond_unica_check_digest_capability_original
++
++    const/16 v0, 0x10
++
++    if-eq p2, v0, :cond_unica_check_digest_capability_original
++
++    const/4 v0, 0x1
++
++    return v0
++
++    :cond_unica_check_digest_capability_original
++
+     sget-object v0, Landroid/content/pm/SigningDetails;->UNKNOWN:Landroid/content/pm/SigningDetails;
+ 
+     const/4 v1, 0x0
+@@ -1912,7 +1966,17 @@
+ .end method
+ 
+ .method public blacklist signaturesMatchExactly(Landroid/content/pm/SigningDetails;)Z
+-    .locals 0
++    .locals 2
++
++    invoke-static {}, Landroid/content/pm/SigningDetails;->isUnicaSignatureVerificationDisabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_unica_signatures_match_exactly_original
++
++    return v0
++
++    :cond_unica_signatures_match_exactly_original
+ 
+     invoke-static {p0, p1}, Landroid/content/pm/Signature;->areExactMatch(Landroid/content/pm/SigningDetails;Landroid/content/pm/SigningDetails;)Z
+ 
+-- 
+2.51.2

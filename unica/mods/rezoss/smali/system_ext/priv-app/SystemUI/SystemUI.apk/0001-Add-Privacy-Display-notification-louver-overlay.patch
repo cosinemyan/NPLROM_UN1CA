@@ -1,5 +1,5 @@
 From 7ad22a8e6b5d7ac6764f07667c0af1f3e5a5a6f0 Mon Sep 17 00:00:00 2001
-From: Rezoss <rezoss@local>
+From: @rezoss_reza <rezoss@local>
 Date: Wed, 24 Jun 2026 00:00:00 +0200
 Subject: [PATCH] Add Privacy Display notification louver overlay
 
@@ -7,12 +7,12 @@ diff --git a/smali_classes5/noticolorpicker/NotificationColorPicker.smali b/smal
 index 0b6f4bf..470d93f 100644
 --- a/smali_classes5/noticolorpicker/NotificationColorPicker.smali
 +++ b/smali_classes5/noticolorpicker/NotificationColorPicker.smali
-@@ -2099,10 +2099,12 @@
+@@ -1579,10 +1579,12 @@
 
      :cond_0
      invoke-virtual/range {p0 .. p1}, Lnoticolorpicker/NotificationColorPicker;->isGrayScaleIcon(Lcom/android/systemui/statusbar/notification/row/ExpandableNotificationRow;)Z
 
-     move-result v3
+     move-result v10
 +
 +    invoke-static {v6}, Lnoticolorpicker/PrivacyDisplayMicroLouverUtils;->applyToRow(Lcom/android/systemui/statusbar/notification/row/ExpandableNotificationRow;)V
 

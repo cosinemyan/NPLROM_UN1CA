@@ -1,0 +1,20 @@
+FZH3 Hermes compatibility trial for dm3q S918BXXUAZZHL SDK 37.
+Donor: UN1CA_OneUI8.5_3.1.0_UnOfficial_by_Rezoss-de08d9f8_060926-094238_dm3q-sign_FZH3.zip
+Extracted vendor.new.dat.br using its transfer list; EROFS extracted with fsck.erofs.
+
+No BL, TrustZone, KeyMint, credential data, verification results, init services,
+VINTF manifests, or SELinux policy are changed by this mod.
+ZZHL hermesd.rc retains the same service command and creates an additional EFS directory.
+The separate ZZHL Hermes AIDL service is retained.
+libhwvault.so and libhermes_bdbridge.so are vendor shared libraries; consumers
+other than hermesd may also be affected. Static symbol checks are not runtime proof.
+
+Rollback: create unica/mods/hermes_fzh3_compat/disable, then rebuild from clean
+ZZHL firmware inputs and flash the rebuilt ROM. Incremental reuse of work_dir
+does not restore overwritten files. Removing disable re-enables the trial.
+Never remove credential data to test this mod.
+
+Donor and installed source hashes:
+77d76f7a45d42ffc583157d19aaf0e9f1d05b0c01207c7831932411dfbed25eb  vendor/bin/hermesd
+edaf25d5dd8c76d4dca8957d8af827d984b1be0875fd392a813f7dfa1e43ca79  vendor/lib64/libhermes_bdbridge.so
+7a47f21853576ca355d2dc5399f28cad3eb73745fc2f5703a4d9d738c6db44d7  vendor/lib64/libhwvault.so

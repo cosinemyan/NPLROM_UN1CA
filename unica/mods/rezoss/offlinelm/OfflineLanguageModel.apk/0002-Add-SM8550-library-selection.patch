@@ -1,0 +1,18 @@
+--- a/assets/config/supported_config.json
++++ b/assets/config/supported_config.json
+@@ -1,4 +1,15 @@
+ {
++  "qc_sm8550": {
++    "LLM": {
++      "libssneural_vndk.so": "3.5.0"
++    },
++    "LLMV": {
++      "libssneural_vndk.so": "3.5.0"
++    },
++    "LVM": {
++      "libssneural_vndk.so": "0.9.0.0"
++    }
++  },
+   "qc_sm8850": {
+     "LLM": {
+       "libssneural_vndk.so": "3.5.0"

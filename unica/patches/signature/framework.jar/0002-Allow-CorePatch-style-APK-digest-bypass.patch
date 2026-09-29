@@ -1,0 +1,79 @@
+From 3e9a313d8c0c4dc162a968b73f6e6b1dfedc8c6a Mon Sep 17 00:00:00 2001
+From: CorePatch <https://github.com/LSPosed/CorePatch.git>
+Date: Tue, 1 Sep 2026 15:19:36 +0200
+Subject: [PATCH] Allow CorePatch-style APK digest bypass
+
+Port the PackageParser-side part of CorePatch's authcreak behavior for
+APK Signature Scheme v2/v3 content digest checks. When the existing UN1CA
+runtime property is enabled, APK content integrity verification returns
+success before PackageManager rejects a modified APK with
+INSTALL_PARSE_FAILED_NO_CERTIFICATES.
+---
+ smali_classes4/android/util/apk/ApkSigningBlockUtils.smali | 36 +++++
+ 1 file changed, 36 insertions(+)
+
+diff --git a/smali_classes4/android/util/apk/ApkSigningBlockUtils.smali b/smali_classes4/android/util/apk/ApkSigningBlockUtils.smali
+index a8342b1d..f4f8b8fb 100644
+--- a/smali_classes4/android/util/apk/ApkSigningBlockUtils.smali
++++ b/smali_classes4/android/util/apk/ApkSigningBlockUtils.smali
+@@ -2039,6 +2039,24 @@
+         }
+     .end annotation
+ 
++    invoke-static {}, Landroid/content/pm/SigningDetails;->isUnicaSignatureVerificationDisabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_unica_parse_verity_original
++
++    const/4 v0, 0x0
++
++    const/16 v1, 0x20
++
++    invoke-static {p0, v0, v1}, Ljava/util/Arrays;->copyOfRange([BII)[B
++
++    move-result-object p0
++
++    return-object p0
++
++    :cond_unica_parse_verity_original
++
+     array-length v0, p0
+ 
+     const/16 v1, 0x28
+@@ -2550,6 +2566,16 @@
+         }
+     .end annotation
+ 
++    invoke-static {}, Landroid/content/pm/SigningDetails;->isUnicaSignatureVerificationDisabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_unica_verify_integrity_1mb_original
++
++    return-void
++
++    :cond_unica_verify_integrity_1mb_original
++
+     invoke-interface {p0}, Ljava/util/Map;->size()I
+ 
+     move-result v0
+@@ -2672,6 +2698,16 @@
+         }
+     .end annotation
+ 
++    invoke-static {}, Landroid/content/pm/SigningDetails;->isUnicaSignatureVerificationDisabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_unica_verify_integrity_verity_original
++
++    return-void
++
++    :cond_unica_verify_integrity_verity_original
++
+     :try_start_0
+     invoke-virtual {p1}, Ljava/io/RandomAccessFile;->getChannel()Ljava/nio/channels/FileChannel;
+ 
+-- 
+2.51.2

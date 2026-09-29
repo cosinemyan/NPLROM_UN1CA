@@ -1,0 +1,174 @@
+From 8b1d6f4a8d2b1f2e1b0f5a6c7d8e9f0011223344 Mon Sep 17 00:00:00 2001
+From: CorePatch <https://github.com/LSPosed/CorePatch.git>
+Date: Fri, 28 Aug 2026 11:26:32 +0200
+Subject: [PATCH] Allow disabling signature verification
+
+Gate PackageManager update and updated-system-app signature mismatches behind
+a runtime UN1CA property. This follows CorePatch's install-time signature
+bypass behavior without bypassing PERMISSION or AUTH signing capabilities.
+---
+ .../server/pm/InstallPackageHelper.smali      | 24 ++++++++++++++++++++++++
+ .../server/pm/KeySetManagerService.smali      | 12 ++++++++++++
+ .../server/pm/PackageManagerServiceUtils.smali | 54 ++++++++++++++++++++++++++
+ 3 files changed, 90 insertions(+)
+
+diff --git a/smali_classes2/com/android/server/pm/InstallPackageHelper.smali b/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
+index 9ad07e34..6d0d2db8 100644
+--- a/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
++++ b/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
+@@ -8417,6 +8417,20 @@
+ 
+     move-result p1
+ 
++    if-eqz p1, :cond_unica_permission_signature_check
++
++    invoke-static {}, Lcom/android/server/pm/PackageManagerServiceUtils;->isUnicaSignatureVerificationDisabled()Z
++
++    move-result v4
++
++    if-eqz v4, :cond_unica_permission_signature_check
++
++    const/4 p0, 0x1
++
++    return p0
++
++    :cond_unica_permission_signature_check
++
+     if-eqz p1, :cond_1
+ 
+     invoke-virtual {v3, v1, v2, p3}, Lcom/android/server/pm/KeySetManagerService;->shouldCheckUpgradeKeySetLocked(Lcom/android/server/pm/PackageSetting;Lcom/android/server/pm/SharedUserSetting;I)Z
+@@ -18749,6 +18763,16 @@
+     goto :goto_53
+ 
+     :cond_73
++    invoke-static {}, Lcom/android/server/pm/PackageManagerServiceUtils;->isUnicaSignatureVerificationDisabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_unica_signature_prepare_check
++
++    goto :goto_53
++
++    :cond_unica_signature_prepare_check
++
+     new-instance v0, Lcom/android/server/pm/PrepareFailure;
+ 
+     new-instance v1, Ljava/lang/StringBuilder;
+diff --git a/smali_classes2/com/android/server/pm/KeySetManagerService.smali b/smali_classes2/com/android/server/pm/KeySetManagerService.smali
+index 12345678..23456789 100644
+--- a/smali_classes2/com/android/server/pm/KeySetManagerService.smali
++++ b/smali_classes2/com/android/server/pm/KeySetManagerService.smali
+@@ -625,6 +625,18 @@
+ .method public final checkUpgradeKeySetLocked(Lcom/android/server/pm/PackageSetting;Lcom/android/server/pm/pkg/AndroidPackage;)Z
+     .locals 4
+ 
++    invoke-static {}, Lcom/android/server/pm/PackageManagerServiceUtils;->isUnicaSignatureVerificationDisabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_unica_upgrade_keyset_check
++
++    const/4 p0, 0x1
++
++    return p0
++
++    :cond_unica_upgrade_keyset_check
++
+     invoke-interface {p1}, Lcom/android/server/pm/pkg/PackageStateInternal;->getKeySetData()Lcom/android/server/pm/PackageKeySetData;
+ 
+     move-result-object p1
+diff --git a/smali_classes2/com/android/server/pm/PackageManagerServiceUtils.smali b/smali_classes2/com/android/server/pm/PackageManagerServiceUtils.smali
+index e20d5836..8a6b39ab 100644
+--- a/smali_classes2/com/android/server/pm/PackageManagerServiceUtils.smali
++++ b/smali_classes2/com/android/server/pm/PackageManagerServiceUtils.smali
+@@ -18,6 +18,20 @@
+     return-void
+ .end method
+ 
++.method public static isUnicaSignatureVerificationDisabled()Z
++    .locals 2
++
++    const-string/jumbo v0, "persist.sys.unica.disable_signature_verification"
++
++    const/4 v1, 0x0
++
++    invoke-static {v0, v1}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++
++    move-result v0
++
++    return v0
++.end method
++
+ .method public static buildVerificationRootHashString(Ljava/lang/String;[Ljava/lang/String;)Ljava/lang/String;
+     .locals 6
+ 
+@@ -3596,6 +3610,16 @@
+     goto :goto_2
+
+     :cond_2
++    invoke-static {}, Lcom/android/server/pm/PackageManagerServiceUtils;->isUnicaSignatureVerificationDisabled()Z
++
++    move-result p2
++
++    if-eqz p2, :cond_unica_system_signature_mismatch
++
++    goto :goto_2
++
++    :cond_unica_system_signature_mismatch
++
+     new-instance p2, Ljava/lang/StringBuilder;
+
+     const-string/jumbo v1, "Updated system app mismatches cert on /system: "
+@@ -3695,6 +3719,16 @@
+     goto :goto_7
+ 
+     :cond_a
++    invoke-static {}, Lcom/android/server/pm/PackageManagerServiceUtils;->isUnicaSignatureVerificationDisabled()Z
++
++    move-result v1
++
++    if-eqz v1, :cond_unica_update_signature_mismatch
++
++    goto :goto_7
++
++    :cond_unica_update_signature_mismatch
++
+     new-instance p0, Lcom/android/server/pm/PackageManagerException;
+ 
+     const-string p1, "Existing package "
+@@ -3807,6 +3841,16 @@
+     return p2
+ 
+     :cond_11
++    invoke-static {}, Lcom/android/server/pm/PackageManagerServiceUtils;->isUnicaSignatureVerificationDisabled()Z
++
++    move-result p0
++
++    if-eqz p0, :cond_unica_shared_lineage_mismatch
++
++    return p2
++
++    :cond_unica_shared_lineage_mismatch
++
+     new-instance p0, Lcom/android/server/pm/PackageManagerException;
+ 
+     const-string p1, " has a signing lineage that diverges from the lineage of the sharedUserId"
+@@ -3820,6 +3864,16 @@
+     throw p0
+ 
+     :cond_12
++    invoke-static {}, Lcom/android/server/pm/PackageManagerServiceUtils;->isUnicaSignatureVerificationDisabled()Z
++
++    move-result p0
++
++    if-eqz p0, :cond_unica_shared_signature_mismatch
++
++    return p2
++
++    :cond_unica_shared_signature_mismatch
++
+     new-instance p0, Lcom/android/server/pm/PackageManagerException;
+ 
+     const-string p2, " has no signatures that match those in shared user "
+-- 
+2.51.2

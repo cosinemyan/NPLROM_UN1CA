@@ -2,7 +2,7 @@ DECODE_APK "system" "system/priv-app/SecSetupWizard_Global/SecSetupWizard_Global
 
 LOG "- Enabling navigation bar type settings step"
 SMALI_PATCH "system" "system/priv-app/SecSetupWizard_Global/SecSetupWizard_Global.apk" \
-    "smali/I2/f.smali" "replace" \
+    "smali/e7/f.smali" "replace" \
     "d(Landroid/content/Context;Z)Ljava/util/ArrayList;" \
     "navigationbar_setting" \
     "this_string_does_not_exist" \

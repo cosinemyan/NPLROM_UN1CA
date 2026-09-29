@@ -1,25 +1,23 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Rezoss <rezoss79@users.noreply.github.com>
+From: @rezoss_reza <rezoss79@users.noreply.github.com>
 Date: Wed, 15 Jul 2026 00:00:00 +0200
 Subject: [PATCH] Allow suggested replies on upgraded devices
 
-HoneyBoard restricts its modern suggested-replies capability to devices
-launched on API 35 or newer. Allow the capability on upgraded devices while
-leaving the account, work-profile, user preference, and policy checks intact.
+Preserve the existing suggested-replies capability override for upgraded
+devices in S23U One UI 9; field O is read by the t3() capability accessor.
 
 ---
- smali/Y8/a.smali | 2 ++
- 1 file changed, 2 insertions(+)
+diff --git a/smali_classes2/nj/d.smali b/smali_classes2/nj/d.smali
+--- a/smali_classes2/nj/d.smali
++++ b/smali_classes2/nj/d.smali
+@@ -1960,6 +1960,8 @@
+     move v5, v2
 
-diff --git a/smali/Y8/a.smali b/smali/Y8/a.smali
---- a/smali/Y8/a.smali
-+++ b/smali/Y8/a.smali
-@@ -1770,4 +1770,6 @@
-     :goto_1e
-+    const/4 v1, 0x1
+     :goto_1f
++    const/4 v5, 0x1
 +
-     sput-boolean v1, LY8/a;->K:Z
- 
-     invoke-static {}, LY8/a;->e()LYa/b;
+     sput-boolean v5, Lnj/d;->O:Z
+
+     invoke-direct {v0}, Lnj/d;->n0()Lqn/b;
 -- 
-2.51.0
+2.43.0

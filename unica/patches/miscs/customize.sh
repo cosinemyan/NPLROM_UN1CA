@@ -12,12 +12,13 @@ SMALI_PATCH "system" "system/framework/framework.jar" \
     'ro.product.device' \
     'ro.product.vendor.device'
 
-# shellcheck disable=SC2016
-# Disable RescueParty
+# Disable AOSP CrashRecovery RescueParty, which is no longer in services.jar
+SET_PROP "system" "persist.sys.disable_rescue" "true"
+
+# Disable Samsung's PackageWatchdog rescue observer
 SMALI_PATCH "system" "system/framework/services.jar" \
-    "smali/com/android/server/RescueParty.smali" "return" \
-    '-$$Nest$smisDisabled()Z' \
-    'true'
+    "smali/com/android/server/SecRescueParty.smali" "null" \
+    'secRescuePartyRegisterHealthObserver(Landroid/content/Context;)V'
 
 # Better model detection in FreecessController
 SMALI_PATCH "system" "system/framework/services.jar" \

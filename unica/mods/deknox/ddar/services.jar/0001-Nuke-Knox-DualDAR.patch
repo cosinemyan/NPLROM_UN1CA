@@ -1,31 +1,317 @@
-From 1fc6def2ee2be7eb6c55ccced3891f715b67b919 Mon Sep 17 00:00:00 2001
-From: Salvo Giangreco <giangrecosalvo9@gmail.com>
-Date: Sat, 30 Aug 2025 13:18:53 +0200
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: UN1CA <noreply@unica>
 Subject: [PATCH] Nuke Knox DualDAR
-
-UN1CA: services.jar changed enough that the old bulk class-delete patch no
-longer applies. Keep this patch current-base and limited to active DualDAR
-entry points: provisioning/config, EDM startup, common service startup, persona
-feature queries, DAR support, and locksettings DualDAR user checks.
 ---
-diff --git a/smali/com/android/server/knox/dar/DarManagerService.smali b/smali/com/android/server/knox/dar/DarManagerService.smali
---- a/smali/com/android/server/knox/dar/DarManagerService.smali
-+++ b/smali/com/android/server/knox/dar/DarManagerService.smali
-@@ -1978,9 +1977,0 @@
--    iget-object p0, p0, Lcom/android/server/knox/dar/DarManagerService;->mDualDarDoManagerImpl:Lcom/android/server/knox/dar/ddar/core/DualDarDoManagerImpl;
+diff --git a/smali/com/android/server/devicepolicy/DualDarProvisioningHelper.smali b/smali/com/android/server/devicepolicy/DualDarProvisioningHelper.smali
+index ebdb7a6..2df6af2 100644
+--- a/smali/com/android/server/devicepolicy/DualDarProvisioningHelper.smali
++++ b/smali/com/android/server/devicepolicy/DualDarProvisioningHelper.smali
+@@ -13,108 +13,11 @@
+
+ # direct methods
+ .method public static getDualDARConfigParams(Landroid/content/Context;Landroid/os/PersistableBundle;)Landroid/os/Bundle;
+-    .locals 8
++    .locals 0
+
+-    if-eqz p1, :cond_0
+-
+-    invoke-static {p1}, Lcom/android/server/devicepolicy/DualDarProvisioningHelper;->isDualDARIntentProvisioned(Landroid/os/PersistableBundle;)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_0
+-
+-    new-instance p0, Landroid/os/Bundle;
+-
+-    invoke-direct {p0, p1}, Landroid/os/Bundle;-><init>(Landroid/os/PersistableBundle;)V
+-
+-    invoke-virtual {p0}, Landroid/os/Bundle;->deepCopy()Landroid/os/Bundle;
+-
+-    move-result-object p0
++    const/4 p0, 0x0
+
+     return-object p0
+-
+-    :cond_0
+-    invoke-static {p0}, Lcom/android/server/devicepolicy/DualDarProvisioningHelper;->getDualDARProfile(Landroid/content/Context;)Landroid/os/Bundle;
+-
+-    move-result-object p0
+-
+-    const/4 p1, 0x0
+-
+-    if-nez p0, :cond_1
+-
+-    return-object p1
+-
+-    :cond_1
+-    const-string/jumbo v0, "dualdar-config-client-package"
+-
+-    invoke-virtual {p0, v0}, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v1
+-
+-    const-string/jumbo v2, "dualdar-config-client-signature"
+-
+-    invoke-virtual {p0, v2}, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v3
+-
+-    const-string/jumbo v4, "dualdar-config-client-location"
+-
+-    invoke-virtual {p0, v4}, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    const-string/jumbo v5, "dualdar-config"
+-
+-    const/4 v6, 0x1
+-
+-    invoke-static {v5, v6}, Lcom/android/server/accounts/AccountManagerService$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Z)Landroid/os/Bundle;
+-
+-    move-result-object v5
+-
+-    const-string/jumbo v6, "default"
+-
+-    invoke-virtual {v6, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    move-result v7
+-
+-    if-eqz v7, :cond_2
+-
+-    move-object v7, p1
+-
+-    goto :goto_0
+-
+-    :cond_2
+-    move-object v7, v1
+-
+-    :goto_0
+-    invoke-virtual {v5, v0, v7}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
+-
+-    invoke-virtual {v6, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_3
+-
+-    move-object v3, p1
+-
+-    :cond_3
+-    invoke-virtual {v5, v2, v3}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
+-
+-    invoke-virtual {v6, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    move-result v0
+-
+-    if-eqz v0, :cond_4
+-
+-    goto :goto_1
+-
+-    :cond_4
+-    move-object p1, p0
+-
+-    :goto_1
+-    invoke-virtual {v5, v4, p1}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
+-
+-    return-object v5
+ .end method
+
+ .method public static getDualDARProfile(Landroid/content/Context;)Landroid/os/Bundle;
+@@ -143,180 +46,33 @@
+ .end method
+
+ .method public static isDualDARConfigured(Landroid/content/Context;Landroid/os/PersistableBundle;)Z
+-    .locals 3
+-
+-    const/4 v0, 0x1
+-
+-    const-string v1, "DualDarProvisioningHelper"
+-
+-    if-eqz p1, :cond_0
+-
+-    const-string/jumbo v2, "dualdar-config"
+-
+-    invoke-virtual {p1, v2}, Landroid/os/PersistableBundle;->getBoolean(Ljava/lang/String;)Z
+-
+-    move-result p1
+-
+-    if-eqz p1, :cond_0
+-
+-    const-string/jumbo p0, "isDualDARConfigured from provisioning params"
+-
+-    invoke-static {v1, p0}, Lcom/android/server/utils/Slogf;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    return v0
+-
+-    :cond_0
+-    invoke-static {p0}, Lcom/android/server/devicepolicy/DualDarProvisioningHelper;->getDualDARProfile(Landroid/content/Context;)Landroid/os/Bundle;
+-
+-    move-result-object p0
+-
+-    if-eqz p0, :cond_1
+-
+-    const-string/jumbo p0, "isDualDARConfigured from preset params"
+-
+-    invoke-static {v1, p0}, Lcom/android/server/utils/Slogf;->d(Ljava/lang/String;Ljava/lang/String;)I
++    .locals 0
+
+-    return v0
+-
+-    :cond_1
+     const/4 p0, 0x0
+
+     return p0
+ .end method
+
+ .method public static isDualDARIntentProvisioned(Landroid/os/PersistableBundle;)Z
+-    .locals 1
 -
 -    if-eqz p0, :cond_0
+-
+-    const-string/jumbo v0, "dualdar-config"
+-
+-    invoke-virtual {p0, v0}, Landroid/os/PersistableBundle;->getBoolean(Ljava/lang/String;)Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_0
++    .locals 0
+
+-    const-string p0, "DualDarProvisioningHelper"
+-
+-    const-string/jumbo v0, "isDualDARIntentProvisioned from provisioning params"
+-
+-    invoke-static {p0, v0}, Lcom/android/server/utils/Slogf;->d(Ljava/lang/String;Ljava/lang/String;)I
 -
 -    const/4 p0, 0x1
 -
 -    return p0
 -
 -    :cond_0
+     const/4 p0, 0x0
 
+     return p0
+ .end method
+
+ .method public static isDualDARNativeCrypto(Landroid/content/Context;Landroid/os/PersistableBundle;)Z
+-    .locals 5
+-
+-    const/4 v0, 0x0
+-
+-    const-string/jumbo v1, "dualdar-config-client-package"
+-
+-    const-string v2, "DualDarProvisioningHelper"
+-
+-    if-eqz p1, :cond_0
+-
+-    invoke-virtual {p1, v1}, Landroid/os/PersistableBundle;->getString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v3
+-
+-    invoke-static {v3}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+-
+-    move-result v3
+-
+-    if-nez v3, :cond_0
+-
+-    const-string p0, "Custom crypto from provisioning params"
+-
+-    invoke-static {v2, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    return v0
+-
+-    :cond_0
+-    const/4 v3, 0x1
+-
+-    if-eqz p1, :cond_1
+-
+-    const-string/jumbo v4, "dualdar-config"
+-
+-    invoke-virtual {p1, v4}, Landroid/os/PersistableBundle;->getBoolean(Ljava/lang/String;)Z
+-
+-    move-result p1
++    .locals 0
+
+-    if-eqz p1, :cond_1
+-
+-    const-string/jumbo p0, "native crypto from provisioning params"
+-
+-    invoke-static {v2, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    return v3
+-
+-    :cond_1
+-    invoke-static {p0}, Lcom/android/server/devicepolicy/DualDarProvisioningHelper;->getDualDARProfile(Landroid/content/Context;)Landroid/os/Bundle;
+-
+-    move-result-object p1
+-
+-    if-eqz p1, :cond_2
+-
+-    invoke-static {p0}, Lcom/android/server/devicepolicy/DualDarProvisioningHelper;->getDualDARProfile(Landroid/content/Context;)Landroid/os/Bundle;
+-
+-    move-result-object p0
+-
+-    invoke-virtual {p0, v1}, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    const-string/jumbo p1, "default"
+-
+-    invoke-virtual {p1, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_2
+-
+-    const-string/jumbo p0, "isDualDARNativeCrypto from preset params"
+-
+-    invoke-static {v2, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    return v3
++    const/4 p0, 0x0
+
+-    :cond_2
+-    return v0
++    return p0
+ .end method
+
+
+ # virtual methods
+ .method public final startProvisionService(Landroid/content/Intent;)V
+-    .locals 2
+-
+-    iget-object v0, p0, Lcom/android/server/devicepolicy/DualDarProvisioningHelper;->mContext:Landroid/content/Context;
+-
+-    iget-object p0, p0, Lcom/android/server/devicepolicy/DualDarProvisioningHelper;->connection:Lcom/android/server/devicepolicy/DualDarProvisioningHelper$5;
+-
+-    const/16 v1, 0x41
+-
+-    invoke-virtual {v0, p1, p0, v1}, Landroid/content/Context;->bindService(Landroid/content/Intent;Landroid/content/ServiceConnection;I)Z
+-
+-    move-result p0
+-
+-    if-eqz p0, :cond_0
++    .locals 0
+
+     return-void
+-
+-    :cond_0
+-    new-instance p0, Ljava/lang/Exception;
+-
+-    const-string/jumbo p1, "startProvisionService : failed to startService."
+-
+-    invoke-direct {p0, p1}, Ljava/lang/Exception;-><init>(Ljava/lang/String;)V
+-
+-    throw p0
+ .end method
 diff --git a/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali b/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali
+index 03a84ee..70d2fa4 100644
 --- a/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali
 +++ b/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali
-@@ -19509,51 +19509,2 @@
+@@ -19714,86 +19714,7 @@
+ .end method
+
+ .method public final startDualDARServices()V
 -    .locals 3
 -
 -    invoke-static {}, Landroid/os/Binder;->getCallingUid()I
@@ -77,9 +363,7 @@ diff --git a/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceI
 -    invoke-virtual {p0}, Landroid/os/ConditionVariable;->block()V
 -
 -    :cond_0
-+    .locals 0
-+
-@@ -19561,32 +19511,0 @@
+-    return-void
 -
 -    :cond_1
 -    const-string p0, "Deferred services have already created. set initial state DualDAR"
@@ -105,18 +389,805 @@ diff --git a/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceI
 -    return-void
 -
 -    :cond_2
--    new-instance p0, Ljava/lang/SecurityException;
+-    const-string/jumbo p0, "Only KnoxCore app can start DualDAR services"
 -
--    const-string/jumbo v0, "Only KnoxCore app can start DualDAR services"
+-    invoke-static {p0}, Lcom/android/server/wm/Task$$ExternalSyntheticBUOutline0;->m(Ljava/lang/String;)V
++    .locals 0
+
+     return-void
+ .end method
+diff --git a/smali/com/android/server/enterprise/dualdar/DualDARPolicy.smali b/smali/com/android/server/enterprise/dualdar/DualDARPolicy.smali
+index 9a3efb3..779a38b 100644
+--- a/smali/com/android/server/enterprise/dualdar/DualDARPolicy.smali
++++ b/smali/com/android/server/enterprise/dualdar/DualDARPolicy.smali
+@@ -495,134 +495,17 @@
+
+ # virtual methods
+ .method public final clearPolicy(Lcom/samsung/android/knox/ContextInfo;)Z
+-    .locals 6
 -
--    invoke-direct {p0, v0}, Ljava/lang/SecurityException;-><init>(Ljava/lang/String;)V
+-    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDARPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
+-
+-    move-result-object p1
+-
+-    iget v0, p1, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
+-
+-    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
+-
+-    const-string v1, "DualDARPolicy"
+-
+-    const-string/jumbo v2, "clearPolicy policy passed? : "
+-
+-    const/4 v3, 0x0
+-
+-    :try_start_0
+-    iget-object v4, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
+-
+-    const-string v5, "DUAL_DAR"
+-
+-    invoke-virtual {v4, v0, p1, v5}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->removeByAdmin(IILjava/lang/String;)Z
+-
+-    move-result v0
+-
+-    iget-object p0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->dualDarConfigCache:Ljava/util/Map;
+-
+-    invoke-static {p1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+-
+-    move-result-object p1
+-
+-    check-cast p0, Ljava/util/HashMap;
+-
+-    invoke-virtual {p0, p1}, Ljava/util/HashMap;->remove(Ljava/lang/Object;)Ljava/lang/Object;
+-
+-    new-instance p0, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {p0, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {p0, v0}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    new-array p1, v3, [Ljava/lang/Object;
+-
+-    invoke-static {v1, p0, p1}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+-    :try_end_0
+-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+-
+-    return v0
+-
+-    :catch_0
+-    move-exception p0
+-
+-    new-instance p1, Ljava/lang/StringBuilder;
+-
+-    const-string v0, "Exception while clearing policy, "
+-
+-    invoke-direct {p1, v0}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object p1
+-
+-    new-array v0, v3, [Ljava/lang/Object;
+-
+-    invoke-static {v1, p1, v0}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
++    .locals 0
+
+-    invoke-virtual {p0}, Ljava/lang/Exception;->printStackTrace()V
++    const/4 p0, 0x0
+
+-    return v3
++    return p0
+ .end method
+
+ .method public final clearResetPasswordTokenForInner(Lcom/samsung/android/knox/ContextInfo;)Z
+-    .locals 4
+-
+-    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDAROnDOPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
+-
+-    move-result-object p1
+-
+-    new-instance v0, Ljava/lang/StringBuilder;
+-
+-    const-string/jumbo v1, "clearResetPasswordTokenForInner: "
+-
+-    invoke-direct {v0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    iget v1, p1, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
+-
+-    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const/4 v1, 0x0
+-
+-    new-array v2, v1, [Ljava/lang/Object;
+-
+-    const-string v3, "DualDARPolicy"
+-
+-    invoke-static {v3, v0, v2}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+-
+-    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
+-
+-    invoke-static {p1}, Landroid/os/UserHandle;->getUserId(I)I
+-
+-    move-result p1
+-
+-    iget-object v0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mDualDarAuthUtils:Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;
+-
+-    invoke-virtual {v0, p1}, Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;->getInnerAuthUserId(I)I
+-
+-    move-result p1
+-
+-    if-gez p1, :cond_0
+-
+-    return v1
+-
+-    :cond_0
+-    iget-object p0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mVirtualLockUtils:Lcom/samsung/android/knox/dar/VirtualLockUtils;
+-
+-    invoke-virtual {p0, p1}, Lcom/samsung/android/knox/dar/VirtualLockUtils;->clearResetPasswordToken(I)Z
++    .locals 0
+
+-    move-result p0
++    const/4 p0, 0x0
+
+     return p0
+ .end method
+@@ -932,321 +815,31 @@
+ .method public final getConfig(Lcom/samsung/android/knox/ContextInfo;)Landroid/os/Bundle;
+     .locals 0
+
+-    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDARPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
+-
+-    move-result-object p1
+-
+-    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
+-
+-    iget-object p0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->dualDarConfigCache:Ljava/util/Map;
+-
+-    invoke-static {p1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+-
+-    move-result-object p1
+-
+-    check-cast p0, Ljava/util/HashMap;
+-
+-    invoke-virtual {p0, p1}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
+-
+-    move-result-object p0
+-
+-    check-cast p0, Landroid/os/Bundle;
++    const/4 p0, 0x0
+
+     return-object p0
+ .end method
+
+ .method public final getConfigFromDb(II)Landroid/os/Bundle;
+-    .locals 11
+-
+-    const-string v0, "DUAL_DAR"
+-
+-    const-string v1, "DualDARPolicy"
+-
+-    const-string/jumbo v2, "getConfig : DualDAR not enabled for: "
+-
+-    const-string/jumbo v3, "getConfigFromDb adminId : "
+-
+-    const/4 v4, 0x0
+-
+-    const/4 v5, 0x0
+-
+-    :try_start_0
+-    new-instance v6, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {v6, v3}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {v6, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    const-string v3, " userId : "
+-
+-    invoke-virtual {v6, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v6, p2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v3
+-
+-    new-array v6, v5, [Ljava/lang/Object;
+-
+-    invoke-static {v1, v3, v6}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+-
+-    iget-object v3, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
+-
+-    const-string/jumbo v6, "dataLockTimeOut"
+-
+-    invoke-virtual {v3, p1, p2, v0, v6}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->getString(IILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v3
+-
+-    if-nez v3, :cond_1
+-
+-    invoke-static {p2}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwner(I)Z
+-
+-    move-result v3
+-
+-    if-eqz v3, :cond_0
+-
+-    const-string/jumbo v2, "getConfig : DualDAR at DO case."
+-
+-    new-array v3, v5, [Ljava/lang/Object;
+-
+-    invoke-static {v1, v2, v3}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+-
+-    const-string v3, "-1"
+-
+-    goto :goto_0
+-
+-    :catch_0
+-    move-exception p0
+-
+-    goto :goto_4
+-
+-    :cond_0
+-    new-instance p0, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {p0, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {p0, p2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    new-array p1, v5, [Ljava/lang/Object;
+-
+-    invoke-static {v1, p0, p1}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+-
+-    return-object v4
+-
+-    :cond_1
+-    :goto_0
+-    invoke-static {v3}, Ljava/lang/Long;->parseLong(Ljava/lang/String;)J
+-
+-    move-result-wide v2
+-    :try_end_0
+-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
+-
+-    const/4 v6, 0x1
+-
+-    :try_start_1
+-    iget-object v7, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
+-
+-    const-string/jumbo v8, "deRestriction"
+-
+-    invoke-virtual {v7, p1, p2, v0, v8}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->getInt(IILjava/lang/String;Ljava/lang/String;)I
+-
+-    move-result v7
+-    :try_end_1
+-    .catch Lcom/android/server/enterprise/storage/SettingNotFoundException; {:try_start_1 .. :try_end_1} :catch_1
+-    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
+-
+-    goto :goto_1
+-
+-    :catch_1
+-    :try_start_2
+-    const-string/jumbo v7, "Unable to read deRestriction field"
+-
+-    new-array v8, v5, [Ljava/lang/Object;
+-
+-    invoke-static {v1, v7, v8}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+-
+-    move v7, v6
+-
+-    :goto_1
+-    invoke-static {p2}, Lcom/samsung/android/knox/SemPersonaManager;->isDualDARNativeCrypto(I)Z
+-
+-    move-result v8
+-
+-    if-nez v8, :cond_2
+-
+-    iget-object v8, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
+-
+-    const-string/jumbo v9, "clientAppPackageName"
+-
+-    invoke-virtual {v8, p1, p2, v0, v9}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->getString(IILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v8
+-
+-    iget-object v9, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
+-
+-    const-string/jumbo v10, "clientAppSignature"
+-
+-    invoke-virtual {v9, p1, p2, v0, v10}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->getString(IILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object v0
+-    :try_end_2
+-    .catch Ljava/lang/Exception; {:try_start_2 .. :try_end_2} :catch_0
+-
+-    goto :goto_2
+-
+-    :cond_2
+-    const-string v8, ""
+-
+-    move-object v0, v8
+-
+-    :goto_2
+-    :try_start_3
+-    new-instance v9, Landroid/os/Bundle;
+-
+-    invoke-direct {v9}, Landroid/os/Bundle;-><init>()V
+-
+-    const-string/jumbo v10, "dualdar-config-client-package"
+-
+-    invoke-virtual {v9, v10, v8}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
+-
+-    const-string/jumbo v8, "dualdar-config-client-signature"
+-
+-    invoke-virtual {v9, v8, v0}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
+-
+-    const-string/jumbo v0, "dualdar-config-de-restriction"
+-
+-    if-lez v7, :cond_3
+-
+-    goto :goto_3
+-
+-    :cond_3
+-    move v6, v5
+-
+-    :goto_3
+-    invoke-virtual {v9, v0, v6}, Landroid/os/Bundle;->putBoolean(Ljava/lang/String;Z)V
+-
+-    const-string/jumbo v0, "dualdar-config-datalock-timeout"
+-
+-    invoke-virtual {v9, v0, v2, v3}, Landroid/os/Bundle;->putLong(Ljava/lang/String;J)V
+-
+-    const-string/jumbo v0, "dualdar-config-datalock-whitelistpackages"
+-
+-    invoke-virtual {p0, p1, p2}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->getWhitelistedAppsFromStorage(II)[Lcom/samsung/android/knox/AppIdentity;
+-
+-    move-result-object p0
+-
+-    invoke-virtual {v9, v0, p0}, Landroid/os/Bundle;->putParcelableArray(Ljava/lang/String;[Landroid/os/Parcelable;)V
+-    :try_end_3
+-    .catch Ljava/lang/Exception; {:try_start_3 .. :try_end_3} :catch_0
+-
+-    return-object v9
+-
+-    :goto_4
+-    new-instance p1, Ljava/lang/StringBuilder;
+-
+-    const-string/jumbo p2, "getConfigFromDb has an exception: "
+-
+-    invoke-direct {p1, p2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object p1
+-
+-    new-array p2, v5, [Ljava/lang/Object;
+-
+-    invoke-static {v1, p1, p2}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
++    .locals 0
+
+-    invoke-virtual {p0}, Ljava/lang/Exception;->printStackTrace()V
++    const/4 p0, 0x0
+
+-    return-object v4
++    return-object p0
+ .end method
+
+ .method public final getPasswordMinimumLengthForInner(Lcom/samsung/android/knox/ContextInfo;)I
+-    .locals 1
+-
+-    iget-object p1, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mInjector:Lcom/android/server/enterprise/dualdar/DualDARPolicy$Injector;
+-
+-    iget-object p1, p1, Lcom/android/server/enterprise/dualdar/DualDARPolicy$Injector;->mContext:Landroid/content/Context;
+-
+-    const-string/jumbo v0, "device_policy"
+-
+-    invoke-virtual {p1, v0}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+-
+-    move-result-object p1
+-
+-    check-cast p1, Landroid/app/admin/DevicePolicyManager;
+-
+-    const/4 v0, 0x0
+-
+-    invoke-virtual {p1, v0}, Landroid/app/admin/DevicePolicyManager;->getPasswordQuality(Landroid/content/ComponentName;)I
+-
+-    move-result p1
+-
+-    const/high16 v0, 0x20000
+-
+-    if-lt p1, v0, :cond_0
+-
+-    invoke-virtual {p0}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->getPasswordMinimumLengthForInnerInternal()I
+-
+-    move-result p0
+-
+-    return p0
++    .locals 0
+
+-    :cond_0
+     const/4 p0, 0x0
+
+     return p0
+ .end method
+
+ .method public final getPasswordMinimumLengthForInnerInternal()I
+-    .locals 3
+-
+-    iget-object p0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
+-
+-    const/4 v0, 0x0
+-
+-    const-string v1, "DUAL_DAR"
+-
+-    const-string/jumbo v2, "innerPasswordMinLen"
+-
+-    invoke-virtual {p0, v0, v0, v1, v2}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->getIntListAsUser(IILjava/lang/String;Ljava/lang/String;)Ljava/util/ArrayList;
+-
+-    move-result-object p0
+-
+-    invoke-virtual {p0}, Ljava/util/ArrayList;->size()I
+-
+-    move-result v1
+-
+-    if-nez v1, :cond_0
+-
+-    const-string/jumbo p0, "Unable to read field"
+-
+-    new-array v1, v0, [Ljava/lang/Object;
+-
+-    const-string v2, "DualDARPolicy"
+-
+-    invoke-static {v2, p0, v1}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+-
+-    return v0
+-
+-    :cond_0
+-    invoke-static {p0}, Ljava/util/Collections;->max(Ljava/util/Collection;)Ljava/lang/Object;
+-
+-    move-result-object p0
+-
+-    check-cast p0, Ljava/lang/Integer;
+-
+-    invoke-virtual {p0}, Ljava/lang/Integer;->intValue()I
++    .locals 0
+
+-    move-result p0
++    const/4 p0, 0x0
+
+     return p0
+ .end method
+@@ -1605,38 +1198,11 @@
+ .end method
+
+ .method public final isResetPasswordTokenActiveForInner(Lcom/samsung/android/knox/ContextInfo;)Z
+-    .locals 1
+-
+-    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDAROnDOPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
+-
+-    move-result-object p1
+-
+-    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
+-
+-    invoke-static {p1}, Landroid/os/UserHandle;->getUserId(I)I
+-
+-    move-result p1
+-
+-    iget-object v0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mDualDarAuthUtils:Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;
+-
+-    invoke-virtual {v0, p1}, Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;->getInnerAuthUserId(I)I
+-
+-    move-result p1
+-
+-    if-gez p1, :cond_0
++    .locals 0
+
+     const/4 p0, 0x0
+
+     return p0
+-
+-    :cond_0
+-    iget-object p0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mVirtualLockUtils:Lcom/samsung/android/knox/dar/VirtualLockUtils;
+-
+-    invoke-virtual {p0, p1}, Lcom/samsung/android/knox/dar/VirtualLockUtils;->isResetPasswordTokenActive(I)Z
+-
+-    move-result p0
+-
+-    return p0
+ .end method
+
+ .method public final onAdminAdded(I)V
+@@ -1703,86 +1269,9 @@
+ .end method
+
+ .method public final resetPasswordWithTokenForInner(Lcom/samsung/android/knox/ContextInfo;Ljava/lang/String;[B)Z
+-    .locals 4
+-
+-    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDAROnDOPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
+-
+-    move-result-object p1
+-
+-    new-instance v0, Ljava/lang/StringBuilder;
+-
+-    const-string/jumbo v1, "resetPasswordWithTokenForInner: "
+-
+-    invoke-direct {v0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    iget v1, p1, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
+-
+-    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const/4 v1, 0x0
+-
+-    new-array v2, v1, [Ljava/lang/Object;
+-
+-    const-string v3, "DualDARPolicy"
+-
+-    invoke-static {v3, v0, v2}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+-
+-    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
+-
+-    invoke-static {p1}, Landroid/os/UserHandle;->getUserId(I)I
+-
+-    move-result p1
+-
+-    iget-object v0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mDualDarAuthUtils:Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;
+-
+-    invoke-virtual {v0, p1}, Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;->getInnerAuthUserId(I)I
+-
+-    move-result v0
+-
+-    if-gez v0, :cond_0
+-
+-    const-string/jumbo p0, "resetPasswordWithTokenForInner: Invalid inner auth user : "
+-
+-    invoke-static {v0, p0}, Landroid/frameworks/vibrator/VibrationParam$1$$ExternalSyntheticOutline0;->m(ILjava/lang/String;)Ljava/lang/String;
+-
+-    move-result-object p0
+-
+-    new-array p1, v1, [Ljava/lang/Object;
+-
+-    invoke-static {v3, p0, p1}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+-
+-    return v1
+-
+-    :cond_0
+-    new-instance v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy$$ExternalSyntheticLambda0;
+-
+-    invoke-direct {v1}, Ljava/lang/Object;-><init>()V
+-
+-    iput-object p0, v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy$$ExternalSyntheticLambda0;->f$0:Lcom/android/server/enterprise/dualdar/DualDARPolicy;
+-
+-    iput p1, v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy$$ExternalSyntheticLambda0;->f$1:I
+-
+-    iput-object p2, v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy$$ExternalSyntheticLambda0;->f$2:Ljava/lang/String;
+-
+-    iput-object p3, v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy$$ExternalSyntheticLambda0;->f$3:[B
+-
+-    iput v0, v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy$$ExternalSyntheticLambda0;->f$4:I
+-
+-    invoke-static {}, Ljava/lang/invoke/VarHandle;->storeStoreFence()V
+-
+-    invoke-static {v1}, Landroid/os/Binder;->withCleanCallingIdentity(Lcom/android/internal/util/FunctionalUtils$ThrowingSupplier;)Ljava/lang/Object;
+-
+-    move-result-object p0
+-
+-    check-cast p0, Ljava/lang/Boolean;
+-
+-    invoke-virtual {p0}, Ljava/lang/Boolean;->booleanValue()Z
++    .locals 0
+
+-    move-result p0
++    const/4 p0, 0x0
+
+     return p0
+ .end method
+@@ -2900,156 +2389,23 @@
+ .end method
+
+ .method public final setPasswordMinimumLengthForInner(Lcom/samsung/android/knox/ContextInfo;I)Z
+-    .locals 2
+-
+-    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDAROnDOPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
+-
+-    move-result-object p1
+-
+-    iget-object v0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mInjector:Lcom/android/server/enterprise/dualdar/DualDARPolicy$Injector;
+-
+-    iget-object v0, v0, Lcom/android/server/enterprise/dualdar/DualDARPolicy$Injector;->mContext:Landroid/content/Context;
+-
+-    const-string/jumbo v1, "device_policy"
+-
+-    invoke-virtual {v0, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
+-
+-    move-result-object v0
+-
+-    check-cast v0, Landroid/app/admin/DevicePolicyManager;
+-
+-    const/4 v1, 0x0
+-
+-    invoke-virtual {v0, v1}, Landroid/app/admin/DevicePolicyManager;->getPasswordQuality(Landroid/content/ComponentName;)I
+-
+-    move-result v0
+-
+-    const/high16 v1, 0x20000
+-
+-    if-lt v0, v1, :cond_0
+-
+-    new-instance v0, Landroid/content/ContentValues;
+-
+-    invoke-direct {v0}, Landroid/content/ContentValues;-><init>()V
+-
+-    const-string/jumbo v1, "innerPasswordMinLen"
+-
+-    invoke-static {p2}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+-
+-    move-result-object p2
+-
+-    invoke-virtual {v0, v1, p2}, Landroid/content/ContentValues;->put(Ljava/lang/String;Ljava/lang/Integer;)V
+-
+-    iget-object p0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
+-
+-    iget p2, p1, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
+-
+-    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
+-
+-    const-string v1, "DUAL_DAR"
+-
+-    invoke-virtual {p0, p2, p1, v1, v0}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->putValues(IILjava/lang/String;Landroid/content/ContentValues;)Z
++    .locals 0
+
+-    move-result p0
++    const/4 p0, 0x0
+
+     return p0
+-
+-    :cond_0
+-    new-instance p0, Ljava/lang/IllegalStateException;
+-
+-    invoke-static {v1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+-
+-    move-result-object p1
+-
+-    filled-new-array {p1}, [Ljava/lang/Object;
+-
+-    move-result-object p1
+-
+-    const-string/jumbo p2, "password quality should be at least %d for setPasswordMinimumLengthForInner"
+-
+-    invoke-static {p2, p1}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+-
+-    move-result-object p1
+-
+-    invoke-direct {p0, p1}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
 -
 -    throw p0
+ .end method
 
+ .method public final setResetPasswordTokenForInner(Lcom/samsung/android/knox/ContextInfo;[B)Z
+-    .locals 4
+-
+-    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDAROnDOPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
+-
+-    move-result-object p1
+-
+-    new-instance v0, Ljava/lang/StringBuilder;
+-
+-    const-string/jumbo v1, "setResetPasswordTokenForInner: "
+-
+-    invoke-direct {v0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    iget v1, p1, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
+-
+-    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const/4 v1, 0x0
+-
+-    new-array v2, v1, [Ljava/lang/Object;
+-
+-    const-string v3, "DualDARPolicy"
+-
+-    invoke-static {v3, v0, v2}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
+-
+-    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
+-
+-    invoke-static {p1}, Landroid/os/UserHandle;->getUserId(I)I
+-
+-    move-result p1
+-
+-    iget-object v0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mDualDarAuthUtils:Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;
+-
+-    invoke-virtual {v0, p1}, Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;->getInnerAuthUserId(I)I
+-
+-    move-result p1
+-
+-    if-gez p1, :cond_0
+-
+-    return v1
+-
+-    :cond_0
+-    iget-object p0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mVirtualLockUtils:Lcom/samsung/android/knox/dar/VirtualLockUtils;
+-
+-    invoke-virtual {p0, p2, p1}, Lcom/samsung/android/knox/dar/VirtualLockUtils;->setResetPasswordToken([BI)Z
++    .locals 0
+
+-    move-result p0
++    const/4 p0, 0x0
+
+     return p0
+ .end method
+
+ .method public final systemReady()V
+-    .locals 2
+-
+-    invoke-static {}, Lcom/android/server/pm/PersonaServiceHelper;->getDualDARUser()I
+-
+-    move-result v0
+-
+-    const/4 v1, -0x1
+-
+-    if-eq v0, v1, :cond_0
+-
+-    iget-object v1, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
+-
+-    invoke-virtual {v1, v0}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->getMUMContainerOwnerUid(I)I
+-
+-    move-result v1
+-
+-    invoke-virtual {p0, v1, v0}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->refreshConfig(II)V
++    .locals 0
+
+-    :cond_0
+     return-void
+ .end method
+diff --git a/smali/com/android/server/knox/dar/DarManagerService.smali b/smali/com/android/server/knox/dar/DarManagerService.smali
+index 66d9e3c..54dc342 100644
+--- a/smali/com/android/server/knox/dar/DarManagerService.smali
++++ b/smali/com/android/server/knox/dar/DarManagerService.smali
+@@ -1872,15 +1872,6 @@
+ .method public final isDualDarDoSupported()Z
+     .locals 0
+
+-    iget-object p0, p0, Lcom/android/server/knox/dar/DarManagerService;->mDualDarDoManagerImpl:Lcom/android/server/knox/dar/ddar/core/DualDarDoManagerImpl;
+-
+-    if-eqz p0, :cond_0
+-
+-    const/4 p0, 0x1
+-
+-    return p0
+-
+-    :cond_0
+     const/4 p0, 0x0
+
+     return p0
 diff --git a/smali/com/android/server/knox/dar/ddar/proxy/DualDARComnService.smali b/smali/com/android/server/knox/dar/ddar/proxy/DualDARComnService.smali
+index 0d2e5ee..375b9f5 100644
 --- a/smali/com/android/server/knox/dar/ddar/proxy/DualDARComnService.smali
 +++ b/smali/com/android/server/knox/dar/ddar/proxy/DualDARComnService.smali
-@@ -1786,380 +1786,10 @@
+@@ -1826,409 +1826,15 @@
+ .method public final systemReady()V
+     .locals 14
+
 -    const-string v0, "DualDARComnService"
 -
 -    const-string/jumbo v1, "initialize"
@@ -487,27 +1558,22 @@ diff --git a/smali/com/android/server/knox/dar/ddar/proxy/DualDARComnService.sma
 -    invoke-static {p0}, Lcom/samsung/android/knox/dar/ddar/proxy/KnoxProxyManager;->getInstance(Landroid/content/Context;)Lcom/samsung/android/knox/dar/ddar/proxy/KnoxProxyManager;
 -
 -    move-result-object p0
--
--    const-string v0, "KNOXCORE_PROXY_AGENT"
--
--    const-string/jumbo v1, "com.samsung.android.knox.containercore"
--
--    const-string/jumbo v3, "proxyAgent.class"
--
--    invoke-virtual {p0, v0, v2, v1, v3}, Lcom/samsung/android/knox/dar/ddar/proxy/KnoxProxyManager;->registerAgentByMetadata(Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
--
--    :cond_5
 +    const/4 v0, 0x0
-+
+
+-    const-string v0, "KNOXCORE_PROXY_AGENT"
 +    new-array v0, v0, [Ljava/lang/Object;
-+
+
+-    const-string/jumbo v1, "com.samsung.android.knox.containercore"
 +    const-string v1, "DualDARComnService"
-+
+
+-    const-string/jumbo v3, "proxyAgent.class"
 +    const-string/jumbo v2, "device does not support DualDAR"
-+
+
+-    invoke-virtual {p0, v0, v2, v1, v3}, Lcom/samsung/android/knox/dar/ddar/proxy/KnoxProxyManager;->registerAgentByMetadata(Ljava/lang/String;ILjava/lang/String;Ljava/lang/String;)Z
 +    invoke-static {v1, v2, v0}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
-+
-@@ -2167,25 +1797 @@
+
+-    :cond_5
+     return-void
 -
 -    :goto_5
 -    :try_start_7
@@ -532,13 +1598,15 @@ diff --git a/smali/com/android/server/knox/dar/ddar/proxy/DualDARComnService.sma
 -    .catchall {:try_start_9 .. :try_end_9} :catchall_0
 -
 -    throw p0
--.end method
-+.end method
-
+ .end method
 diff --git a/smali_classes2/com/android/server/pm/PersonaServiceHelper.smali b/smali_classes2/com/android/server/pm/PersonaServiceHelper.smali
+index ea4e976..c787fe0 100644
 --- a/smali_classes2/com/android/server/pm/PersonaServiceHelper.smali
 +++ b/smali_classes2/com/android/server/pm/PersonaServiceHelper.smali
-@@ -365,7 +365 @@
+@@ -362,26 +362,7 @@
+ .method public static getDualDARPolicyService()Ljava/util/Optional;
+     .locals 1
+
 -    sget-object v0, Lcom/android/server/pm/PersonaServiceHelper;->mDualDARPolicyService:Lcom/samsung/android/knox/ddar/IDualDARPolicy;
 -
 -    if-nez v0, :cond_0
@@ -546,8 +1614,9 @@ diff --git a/smali_classes2/com/android/server/pm/PersonaServiceHelper.smali b/s
 -    const-string v0, "DualDARPolicy"
 -
 -    invoke-static {v0}, Landroid/os/ServiceManager;->getService(Ljava/lang/String;)Landroid/os/IBinder;
-+    invoke-static {}, Ljava/util/Optional;->empty()Ljava/util/Optional;
-@@ -375,13 +368,0 @@
+-
+-    move-result-object v0
+-
 -    invoke-static {v0}, Lcom/samsung/android/knox/ddar/IDualDARPolicy$Stub;->asInterface(Landroid/os/IBinder;)Lcom/samsung/android/knox/ddar/IDualDARPolicy;
 -
 -    move-result-object v0
@@ -558,10 +1627,14 @@ diff --git a/smali_classes2/com/android/server/pm/PersonaServiceHelper.smali b/s
 -    sget-object v0, Lcom/android/server/pm/PersonaServiceHelper;->mDualDARPolicyService:Lcom/samsung/android/knox/ddar/IDualDARPolicy;
 -
 -    invoke-static {v0}, Ljava/util/Optional;->ofNullable(Ljava/lang/Object;)Ljava/util/Optional;
--
--    move-result-object v0
--
-@@ -392,7 +373 @@
++    invoke-static {}, Ljava/util/Optional;->empty()Ljava/util/Optional;
+
+     move-result-object v0
+
+@@ -389,45 +389,11 @@
+ .end method
+
+ .method public static getDualDARType(I)I
 -    .locals 2
 -
 -    invoke-static {p0}, Lcom/samsung/android/knox/SemPersonaManager;->isDarDualEncryptionEnabled(I)Z
@@ -569,8 +1642,11 @@ diff --git a/smali_classes2/com/android/server/pm/PersonaServiceHelper.smali b/s
 -    move-result v0
 -
 -    if-nez v0, :cond_0
-+    .locals 0
-@@ -403,28 +377,0 @@
++    .locals 2
+
+     const/4 p0, -0x1
+
+     return p0
 -
 -    :cond_0
 -    const/4 v0, 0x0
@@ -596,10 +1672,16 @@ diff --git a/smali_classes2/com/android/server/pm/PersonaServiceHelper.smali b/s
 -
 -    const-string v1, "DualDAR Container Type : "
 -
--    invoke-static {v0, v1, p0}, Lcom/android/server/RCPManagerService$$ExternalSyntheticOutline0;->m(ILjava/lang/String;Ljava/lang/String;)V
+-    invoke-static {v0, v1, p0}, Lcom/android/server/SystemConfig$$ExternalSyntheticOutline0;->m$2(ILjava/lang/String;Ljava/lang/String;)V
 -
 -    return v0
-@@ -434,44 +381,2 @@
+ .end method
+
+ .method public static getDualDARUser()I
+@@ -431,50 +406,8 @@
+ .end method
+
+ .method public static getDualDARUser()I
 -    .locals 3
 -
 -    invoke-static {}, Lcom/android/server/pm/PersonaServiceHelper;->getUserManager()Lcom/android/server/pm/UserManagerService;
@@ -642,2493 +1724,9 @@ diff --git a/smali_classes2/com/android/server/pm/PersonaServiceHelper.smali b/s
 -    iget v0, v1, Landroid/content/pm/UserInfo;->id:I
 -
 -    return v0
--
--    :cond_1
 +    .locals 1
-+
-@@ -796,49 +701,5 @@
--    .locals 3
--
--    invoke-static {}, Lcom/android/server/pm/PersonaServiceHelper;->getUserManager()Lcom/android/server/pm/UserManagerService;
--
--    move-result-object v0
--
--    const/4 v1, 0x0
--
--    invoke-virtual {v0, v1}, Lcom/android/server/pm/UserManagerService;->getUsers(Z)Ljava/util/List;
--
--    move-result-object v0
--
--    invoke-interface {v0}, Ljava/util/List;->iterator()Ljava/util/Iterator;
--
--    move-result-object v0
--
--    :cond_0
--    invoke-interface {v0}, Ljava/util/Iterator;->hasNext()Z
--
--    move-result v2
--
--    if-eqz v2, :cond_1
--
--    invoke-interface {v0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
--
--    move-result-object v2
--
--    check-cast v2, Landroid/content/pm/UserInfo;
--
--    if-eqz v2, :cond_0
--
--    iget v2, v2, Landroid/content/pm/UserInfo;->id:I
--
--    invoke-static {v2}, Lcom/samsung/android/knox/SemPersonaManager;->isDarDualEncryptionEnabled(I)Z
--
--    move-result v2
--
--    if-eqz v2, :cond_0
--
--    const/4 v1, 0x1
--
--    :cond_1
--    const-string/jumbo v0, "PersonaServiceHelper"
--
--    const-string/jumbo v2, "isDualDAREnabled result : "
--
--    invoke-static {v2, v0, v1}, Lcom/android/server/accessibility/AccessibilityManagerService$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Z)V
--
--    return v1
-+    .locals 1
-+
-+    const/4 v0, 0x0
-+
-+    return v0
-@@ -848,82 +709,3 @@
--    .locals 5
--
--    invoke-static {p2, p1}, Lcom/android/server/pm/PersonaServiceHelper;->isSystemApp(ILjava/lang/String;)Z
--
--    move-result v0
--
--    const/4 v1, 0x1
--
--    if-eqz v0, :cond_0
--
--    const-string/jumbo p0, "PersonaServiceHelper"
--
--    const-string/jumbo p2, "system app allowed - "
--
--    invoke-static {p2, p1, p0}, Lcom/android/server/DualAppManagerService$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
--
--    return v1
--
--    :cond_0
--    invoke-static {}, Lcom/android/server/pm/PersonaServiceHelper;->getDualDARPolicyService()Ljava/util/Optional;
--
--    move-result-object v0
--
--    new-instance v2, Lcom/android/server/pm/PersonaServiceHelper$$ExternalSyntheticLambda0;
--
--    invoke-direct {v2, v1}, Lcom/android/server/pm/PersonaServiceHelper$$ExternalSyntheticLambda0;-><init>(I)V
--
--    iput p2, v2, Lcom/android/server/pm/PersonaServiceHelper$$ExternalSyntheticLambda0;->f$0:I
--
--    invoke-static {}, Ljava/lang/invoke/VarHandle;->storeStoreFence()V
--
--    invoke-virtual {v0, v2}, Ljava/util/Optional;->map(Ljava/util/function/Function;)Ljava/util/Optional;
--
--    move-result-object v0
--
--    new-instance v1, Lcom/android/server/pm/PersonaServiceHelper$$ExternalSyntheticLambda2;
--
--    const/4 v2, 0x0
--
--    invoke-direct {v1, v2}, Lcom/android/server/pm/PersonaServiceHelper$$ExternalSyntheticLambda2;-><init>(I)V
--
--    iput p2, v1, Lcom/android/server/pm/PersonaServiceHelper$$ExternalSyntheticLambda2;->f$0:I
--
--    invoke-static {}, Ljava/lang/invoke/VarHandle;->storeStoreFence()V
--
--    invoke-virtual {v0, v1}, Ljava/util/Optional;->orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object;
--
--    move-result-object v0
--
--    check-cast v0, Landroid/os/Bundle;
--
--    if-eqz v0, :cond_2
--
--    new-instance v1, Ljava/util/ArrayList;
--
--    invoke-direct {v1}, Ljava/util/ArrayList;-><init>()V
--
--    const-string/jumbo v3, "dualdar-config-datalock-whitelistpackages"
--
--    invoke-virtual {v0, v3}, Landroid/os/Bundle;->getParcelableArray(Ljava/lang/String;)[Landroid/os/Parcelable;
--
--    move-result-object v0
--
--    array-length v3, v0
--
--    :goto_0
--    if-ge v2, v3, :cond_1
--
--    aget-object v4, v0, v2
--
--    check-cast v4, Lcom/samsung/android/knox/AppIdentity;
--
--    invoke-virtual {v1, v4}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
--
--    add-int/lit8 v2, v2, 0x1
--
--    goto :goto_0
--
--    :cond_1
--    invoke-static {p0, p2, p1, v1}, Lcom/android/server/pm/PersonaServiceHelper;->verifyPackageForDualDAR(Landroid/content/Context;ILjava/lang/String;Ljava/util/List;)Z
--
--    move-result p0
-+    .locals 0
-+
-+    const/4 p0, 0x0
-@@ -932,3 +713,0 @@
--
--    :cond_2
--    return v2
-@@ -1449,274 +1228,6 @@
--    .locals 11
--
--    const-string/jumbo v0, "verifyPackageForDualDAR package: "
--
--    const-string/jumbo v1, "PersonaServiceHelper"
--
--    invoke-static {v0, p2, v1}, Lcom/android/server/DualAppManagerService$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
--
--    check-cast p3, Ljava/util/ArrayList;
--
--    invoke-virtual {p3}, Ljava/util/ArrayList;->size()I
--
--    move-result v0
--
--    const/4 v2, 0x0
--
--    move v3, v2
--
--    :cond_0
--    const/4 v4, 0x0
--
--    if-ge v3, v0, :cond_1
--
--    invoke-virtual {p3, v3}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
--
--    move-result-object v5
--
--    add-int/lit8 v3, v3, 0x1
--
--    check-cast v5, Lcom/samsung/android/knox/AppIdentity;
--
--    invoke-virtual {v5}, Lcom/samsung/android/knox/AppIdentity;->getPackageName()Ljava/lang/String;
--
--    move-result-object v6
--
--    invoke-virtual {p2, v6}, Ljava/lang/String;->compareTo(Ljava/lang/String;)I
--
--    move-result v6
--
--    if-nez v6, :cond_0
--
--    goto :goto_0
--
--    :cond_1
--    move-object v5, v4
--
--    :goto_0
--    if-nez v5, :cond_2
--
--    const-string/jumbo p0, "Package not whitelisted: "
--
--    invoke-static {p0, p2, v1}, Lcom/android/server/StorageManagerService$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
--
--    return v2
--
--    :cond_2
--    invoke-virtual {v5}, Lcom/samsung/android/knox/AppIdentity;->getSignature()Ljava/lang/String;
--
--    move-result-object p2
--
--    const/4 p3, 0x1
--
--    if-eqz p2, :cond_9
--
--    invoke-virtual {v5}, Lcom/samsung/android/knox/AppIdentity;->getSignature()Ljava/lang/String;
--
--    move-result-object p2
--
--    invoke-virtual {p2}, Ljava/lang/String;->length()I
--
--    move-result p2
--
--    if-lez p2, :cond_9
--
--    invoke-virtual {v5}, Lcom/samsung/android/knox/AppIdentity;->getPackageName()Ljava/lang/String;
--
--    move-result-object p2
--
--    invoke-virtual {v5}, Lcom/samsung/android/knox/AppIdentity;->getSignature()Ljava/lang/String;
--
--    move-result-object v0
--
--    if-eqz v0, :cond_8
--
--    if-eqz p2, :cond_8
--
--    if-nez p1, :cond_3
--
--    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
--
--    move-result v3
--
--    if-nez v3, :cond_3
--
--    goto/16 :goto_8
--
--    :cond_3
--    invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
--
--    move-result-wide v5
--
--    :try_start_0
--    invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
--
--    move-result-object p0
--
--    const/high16 v3, 0x8000000
--
--    invoke-virtual {p0, p2, v3, p1}, Landroid/content/pm/PackageManager;->getPackageInfoAsUser(Ljava/lang/String;II)Landroid/content/pm/PackageInfo;
--
--    move-result-object p0
--    :try_end_0
--    .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
--    .catchall {:try_start_0 .. :try_end_0} :catchall_0
--
--    invoke-static {v5, v6}, Landroid/os/Binder;->restoreCallingIdentity(J)V
--
--    goto :goto_1
--
--    :catchall_0
--    move-exception p0
--
--    goto/16 :goto_7
--
--    :catch_0
--    move-exception p0
--
--    :try_start_1
--    invoke-virtual {p0}, Landroid/content/pm/PackageManager$NameNotFoundException;->printStackTrace()V
--    :try_end_1
--    .catchall {:try_start_1 .. :try_end_1} :catchall_0
--
--    invoke-static {v5, v6}, Landroid/os/Binder;->restoreCallingIdentity(J)V
--
--    move-object p0, v4
--
--    :goto_1
--    if-eqz p0, :cond_7
--
--    iget-object p0, p0, Landroid/content/pm/PackageInfo;->signingInfo:Landroid/content/pm/SigningInfo;
--
--    if-eqz p0, :cond_7
--
--    invoke-virtual {p0}, Landroid/content/pm/SigningInfo;->getApkContentsSigners()[Landroid/content/pm/Signature;
--
--    move-result-object p0
--
--    array-length p1, p0
--
--    move p2, v2
--
--    :goto_2
--    if-ge p2, p1, :cond_7
--
--    aget-object v3, p0, p2
--
--    if-eqz v3, :cond_6
--
--    invoke-virtual {v3}, Landroid/content/pm/Signature;->toByteArray()[B
--
--    move-result-object v5
--
--    :try_start_2
--    const-string/jumbo v6, "SHA256"
--
--    invoke-static {v6}, Ljava/security/MessageDigest;->getInstance(Ljava/lang/String;)Ljava/security/MessageDigest;
--
--    move-result-object v6
--    :try_end_2
--    .catch Ljava/security/NoSuchAlgorithmException; {:try_start_2 .. :try_end_2} :catch_1
--
--    invoke-virtual {v6, v5}, Ljava/security/MessageDigest;->update([B)V
--
--    invoke-virtual {v6}, Ljava/security/MessageDigest;->digest()[B
--
--    move-result-object v5
--
--    goto :goto_3
--
--    :catch_1
--    move-object v5, v4
--
--    :goto_3
--    new-instance v6, Ljava/lang/StringBuffer;
--
--    invoke-direct {v6}, Ljava/lang/StringBuffer;-><init>()V
--
--    array-length v7, v5
--
--    move v8, v2
--
--    :goto_4
--    if-ge v8, v7, :cond_4
--
--    aget-byte v9, v5, v8
--
--    and-int/lit16 v9, v9, 0xff
--
--    add-int/lit16 v9, v9, 0x100
--
--    const/16 v10, 0x10
--
--    invoke-static {v9, v10}, Ljava/lang/Integer;->toString(II)Ljava/lang/String;
--
--    move-result-object v9
--
--    invoke-virtual {v9, p3}, Ljava/lang/String;->substring(I)Ljava/lang/String;
--
--    move-result-object v9
--
--    invoke-virtual {v6, v9}, Ljava/lang/StringBuffer;->append(Ljava/lang/String;)Ljava/lang/StringBuffer;
--
--    add-int/lit8 v8, v8, 0x1
--
--    goto :goto_4
--
--    :cond_4
--    invoke-virtual {v6}, Ljava/lang/StringBuffer;->toString()Ljava/lang/String;
--
--    move-result-object v5
--
--    invoke-virtual {v0, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
--
--    move-result v5
--
--    if-eqz v5, :cond_5
--
--    :goto_5
--    move v2, p3
--
--    goto :goto_6
--
--    :cond_5
--    invoke-virtual {v3}, Landroid/content/pm/Signature;->toCharsString()Ljava/lang/String;
--
--    move-result-object v3
--
--    invoke-virtual {v0, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
--
--    move-result v3
--
--    if-eqz v3, :cond_6
--
--    goto :goto_5
--
--    :cond_6
--    add-int/lit8 p2, p2, 0x1
--
--    goto :goto_2
--
--    :cond_7
--    const-string p0, "FAIL to verify Pkg Signature"
--
--    invoke-static {v1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
--
--    :goto_6
--    return v2
--
--    :goto_7
--    invoke-static {v5, v6}, Landroid/os/Binder;->restoreCallingIdentity(J)V
--
--    throw p0
--
--    :cond_8
--    :goto_8
--    const-string p0, "Invalid arguments"
--
--    invoke-static {v1, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
--
--    return v2
--
--    :cond_9
--    return p3
--.end method
-+    .locals 0
-+
-+    const/4 p0, 0x0
-+
-+    return p0
-+.end method
 
-diff --git a/smali/com/android/server/locksettings/LockSettingsService$Injector$1.smali b/smali/com/android/server/locksettings/LockSettingsService$Injector$1.smali
---- a/smali/com/android/server/locksettings/LockSettingsService$Injector$1.smali
-+++ b/smali/com/android/server/locksettings/LockSettingsService$Injector$1.smali
-@@ -760,31 +759,0 @@
--    iget-object p0, p0, Lcom/android/server/locksettings/LockSettingsService$Injector$1;->val$storage:Ljava/lang/Object;
--
--    check-cast p0, Lcom/android/server/locksettings/LockSettingsService;
--
--    iget-object p0, p0, Lcom/android/server/locksettings/LockSettingsService;->mInjector:Lcom/android/server/locksettings/LockSettingsService$Injector;
--
--    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
--
--    invoke-static {}, Lcom/android/server/locksettings/LockSettingsService$Injector;->getUserManagerInternal()Lcom/android/server/pm/UserManagerInternal;
--
--    move-result-object p0
--
--    invoke-virtual {p0, p1}, Lcom/android/server/pm/UserManagerInternal;->getUserInfo(I)Landroid/content/pm/UserInfo;
--
--    move-result-object p0
--
--    if-eqz p0, :cond_0
--
--    iget p0, p0, Landroid/content/pm/UserInfo;->flags:I
--
--    const/high16 p1, 0x6000000
--
--    and-int/2addr p0, p1
--
--    if-lez p0, :cond_0
--
--    const/4 p0, 0x1
--
--    return p0
--
--    :cond_0
-@@ -797,25 +766,2 @@
--    .locals 1
--
--    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
--
--    move-result v0
--
--    if-eqz v0, :cond_0
--
--    iget-object p0, p0, Lcom/android/server/locksettings/LockSettingsService$Injector$1;->val$storage:Ljava/lang/Object;
--
--    check-cast p0, Lcom/android/server/locksettings/LockSettingsService;
--
--    iget-object p0, p0, Lcom/android/server/locksettings/LockSettingsService;->mDualDarAuthUtils:Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;
--
--    invoke-virtual {p0, p1}, Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;->isInnerAuthUserForDo(I)Z
--
--    move-result p0
--
--    if-eqz p0, :cond_0
--
--    const/4 p0, 0x1
--
--    return p0
--
--    :cond_0
-+    .locals 0
-+
+-    :cond_1
+     const/4 v0, -0x1
 
-diff --git a/smali/com/android/server/locksettings/LockSettingsService.smali b/smali/com/android/server/locksettings/LockSettingsService.smali
---- a/smali/com/android/server/locksettings/LockSettingsService.smali
-+++ b/smali/com/android/server/locksettings/LockSettingsService.smali
-@@ -10116,34 +10116,2 @@
--    .locals 1
--
--    invoke-static {p1}, Lcom/samsung/android/knox/dar/VirtualLockUtils;->isVirtualUserId(I)Z
--
--    move-result v0
--
--    if-eqz v0, :cond_0
--
--    iget-object p0, p0, Lcom/android/server/locksettings/LockSettingsService;->mDualDarAuthUtils:Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;
--
--    invoke-virtual {p0, p1}, Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;->isInnerAuthUserForDo(I)Z
--
--    move-result p0
--
--    return p0
--
--    :cond_0
--    invoke-static {p1}, Lcom/samsung/android/knox/SemPersonaManager;->isDarDualEncryptionEnabled(I)Z
--
--    move-result p0
--
--    if-eqz p0, :cond_1
--
--    invoke-static {p1}, Lcom/samsung/android/knox/SemPersonaManager;->isDoEnabled(I)Z
--
--    move-result p0
--
--    if-nez p0, :cond_1
--
--    const/4 p0, 0x1
--
--    return p0
--
--    :cond_1
-+    .locals 0
-+
-
-diff --git a/smali/com/android/server/devicepolicy/DualDarProvisioningHelper.smali b/smali/com/android/server/devicepolicy/DualDarProvisioningHelper.smali
---- a/smali/com/android/server/devicepolicy/DualDarProvisioningHelper.smali
-+++ b/smali/com/android/server/devicepolicy/DualDarProvisioningHelper.smali
-@@ -16 +16 @@
--    .locals 8
-+    .locals 0
-@@ -18,15 +18 @@
--    if-eqz p1, :cond_0
--
--    invoke-static {p1}, Lcom/android/server/devicepolicy/DualDarProvisioningHelper;->isDualDARIntentProvisioned(Landroid/os/PersistableBundle;)Z
--
--    move-result v0
--
--    if-eqz v0, :cond_0
--
--    new-instance p0, Landroid/os/Bundle;
--
--    invoke-direct {p0, p1}, Landroid/os/Bundle;-><init>(Landroid/os/PersistableBundle;)V
--
--    invoke-virtual {p0}, Landroid/os/Bundle;->deepCopy()Landroid/os/Bundle;
--
--    move-result-object p0
-+    const/4 p0, 0x0
-@@ -35,83 +20,0 @@
--
--    :cond_0
--    invoke-static {p0}, Lcom/android/server/devicepolicy/DualDarProvisioningHelper;->getDualDARProfile(Landroid/content/Context;)Landroid/os/Bundle;
--
--    move-result-object p0
--
--    const/4 p1, 0x0
--
--    if-nez p0, :cond_1
--
--    return-object p1
--
--    :cond_1
--    const-string/jumbo v0, "dualdar-config-client-package"
--
--    invoke-virtual {p0, v0}, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
--
--    move-result-object v1
--
--    const-string/jumbo v2, "dualdar-config-client-signature"
--
--    invoke-virtual {p0, v2}, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
--
--    move-result-object v3
--
--    const-string/jumbo v4, "dualdar-config-client-location"
--
--    invoke-virtual {p0, v4}, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
--
--    move-result-object p0
--
--    const-string/jumbo v5, "dualdar-config"
--
--    const/4 v6, 0x1
--
--    invoke-static {v5, v6}, Lcom/android/server/accounts/AccountManagerService$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Z)Landroid/os/Bundle;
--
--    move-result-object v5
--
--    const-string/jumbo v6, "default"
--
--    invoke-virtual {v6, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
--
--    move-result v7
--
--    if-eqz v7, :cond_2
--
--    move-object v7, p1
--
--    goto :goto_0
--
--    :cond_2
--    move-object v7, v1
--
--    :goto_0
--    invoke-virtual {v5, v0, v7}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
--
--    invoke-virtual {v6, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
--
--    move-result v0
--
--    if-eqz v0, :cond_3
--
--    move-object v3, p1
--
--    :cond_3
--    invoke-virtual {v5, v2, v3}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
--
--    invoke-virtual {v6, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
--
--    move-result v0
--
--    if-eqz v0, :cond_4
--
--    goto :goto_1
--
--    :cond_4
--    move-object p1, p0
--
--    :goto_1
--    invoke-virtual {v5, v4, p1}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
--
--    return-object v5
-@@ -146 +49 @@
--    .locals 3
-+    .locals 0
-@@ -148,34 +50,0 @@
--    const/4 v0, 0x1
--
--    const-string v1, "DualDarProvisioningHelper"
--
--    if-eqz p1, :cond_0
--
--    const-string/jumbo v2, "dualdar-config"
--
--    invoke-virtual {p1, v2}, Landroid/os/PersistableBundle;->getBoolean(Ljava/lang/String;)Z
--
--    move-result p1
--
--    if-eqz p1, :cond_0
--
--    const-string/jumbo p0, "isDualDARConfigured from provisioning params"
--
--    invoke-static {v1, p0}, Lcom/android/server/utils/Slogf;->d(Ljava/lang/String;Ljava/lang/String;)I
--
--    return v0
--
--    :cond_0
--    invoke-static {p0}, Lcom/android/server/devicepolicy/DualDarProvisioningHelper;->getDualDARProfile(Landroid/content/Context;)Landroid/os/Bundle;
--
--    move-result-object p0
--
--    if-eqz p0, :cond_1
--
--    const-string/jumbo p0, "isDualDARConfigured from preset params"
--
--    invoke-static {v1, p0}, Lcom/android/server/utils/Slogf;->d(Ljava/lang/String;Ljava/lang/String;)I
--
--    return v0
--
--    :cond_1
-@@ -188 +57 @@
--    .locals 1
-+    .locals 0
-@@ -190,21 +58,0 @@
--    if-eqz p0, :cond_0
--
--    const-string/jumbo v0, "dualdar-config"
--
--    invoke-virtual {p0, v0}, Landroid/os/PersistableBundle;->getBoolean(Ljava/lang/String;)Z
--
--    move-result p0
--
--    if-eqz p0, :cond_0
--
--    const-string p0, "DualDarProvisioningHelper"
--
--    const-string/jumbo v0, "isDualDARIntentProvisioned from provisioning params"
--
--    invoke-static {p0, v0}, Lcom/android/server/utils/Slogf;->d(Ljava/lang/String;Ljava/lang/String;)I
--
--    const/4 p0, 0x1
--
--    return p0
--
--    :cond_0
-@@ -217 +65 @@
--    .locals 5
-+    .locals 0
-@@ -219 +67 @@
--    const/4 v0, 0x0
-+    const/4 p0, 0x0
-@@ -221,72 +69 @@
--    const-string/jumbo v1, "dualdar-config-client-package"
--
--    const-string v2, "DualDarProvisioningHelper"
--
--    if-eqz p1, :cond_0
--
--    invoke-virtual {p1, v1}, Landroid/os/PersistableBundle;->getString(Ljava/lang/String;)Ljava/lang/String;
--
--    move-result-object v3
--
--    invoke-static {v3}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
--
--    move-result v3
--
--    if-nez v3, :cond_0
--
--    const-string p0, "Custom crypto from provisioning params"
--
--    invoke-static {v2, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
--
--    return v0
--
--    :cond_0
--    const/4 v3, 0x1
--
--    if-eqz p1, :cond_1
--
--    const-string/jumbo v4, "dualdar-config"
--
--    invoke-virtual {p1, v4}, Landroid/os/PersistableBundle;->getBoolean(Ljava/lang/String;)Z
--
--    move-result p1
--
--    if-eqz p1, :cond_1
--
--    const-string/jumbo p0, "native crypto from provisioning params"
--
--    invoke-static {v2, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
--
--    return v3
--
--    :cond_1
--    invoke-static {p0}, Lcom/android/server/devicepolicy/DualDarProvisioningHelper;->getDualDARProfile(Landroid/content/Context;)Landroid/os/Bundle;
--
--    move-result-object p1
--
--    if-eqz p1, :cond_2
--
--    invoke-static {p0}, Lcom/android/server/devicepolicy/DualDarProvisioningHelper;->getDualDARProfile(Landroid/content/Context;)Landroid/os/Bundle;
--
--    move-result-object p0
--
--    invoke-virtual {p0, v1}, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
--
--    move-result-object p0
--
--    const-string/jumbo p1, "default"
--
--    invoke-virtual {p1, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
--
--    move-result p0
--
--    if-eqz p0, :cond_2
--
--    const-string/jumbo p0, "isDualDARNativeCrypto from preset params"
--
--    invoke-static {v2, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
--
--    return v3
--
--    :cond_2
--    return v0
-+    return p0
-@@ -298,13 +75 @@
--    .locals 2
--
--    iget-object v0, p0, Lcom/android/server/devicepolicy/DualDarProvisioningHelper;->mContext:Landroid/content/Context;
--
--    iget-object p0, p0, Lcom/android/server/devicepolicy/DualDarProvisioningHelper;->connection:Lcom/android/server/devicepolicy/DualDarProvisioningHelper$5;
--
--    const/16 v1, 0x41
--
--    invoke-virtual {v0, p1, p0, v1}, Landroid/content/Context;->bindService(Landroid/content/Intent;Landroid/content/ServiceConnection;I)Z
--
--    move-result p0
--
--    if-eqz p0, :cond_0
-+    .locals 0
-@@ -313,9 +77,0 @@
--
--    :cond_0
--    new-instance p0, Ljava/lang/Exception;
--
--    const-string/jumbo p1, "startProvisionService : failed to startService."
--
--    invoke-direct {p0, p1}, Ljava/lang/Exception;-><init>(Ljava/lang/String;)V
--
--    throw p0
-
-diff --git a/smali/com/android/server/enterprise/dualdar/DualDARPolicy.smali b/smali/com/android/server/enterprise/dualdar/DualDARPolicy.smali
---- a/smali/com/android/server/enterprise/dualdar/DualDARPolicy.smali
-+++ b/smali/com/android/server/enterprise/dualdar/DualDARPolicy.smali
-@@ -498,75 +498,5 @@
--    .locals 6
--
--    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDARPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
--
--    move-result-object p1
--
--    iget v0, p1, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
--
--    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    const-string v1, "DualDARPolicy"
--
--    const-string/jumbo v2, "clearPolicy policy passed? : "
--
--    const/4 v3, 0x0
--
--    :try_start_0
--    iget-object v4, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
--
--    const-string v5, "DUAL_DAR"
--
--    invoke-virtual {v4, v0, p1, v5}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->removeByAdmin(IILjava/lang/String;)Z
--
--    move-result v0
--
--    iget-object p0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->dualDarConfigCache:Ljava/util/Map;
--
--    invoke-static {p1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
--
--    move-result-object p1
--
--    check-cast p0, Ljava/util/HashMap;
--
--    invoke-virtual {p0, p1}, Ljava/util/HashMap;->remove(Ljava/lang/Object;)Ljava/lang/Object;
--
--    new-instance p0, Ljava/lang/StringBuilder;
--
--    invoke-direct {p0, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {p0, v0}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
--
--    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p0
--
--    new-array p1, v3, [Ljava/lang/Object;
--
--    invoke-static {v1, p0, p1}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
--
--    return v0
--
--    :catch_0
--    move-exception p0
--
--    new-instance p1, Ljava/lang/StringBuilder;
--
--    const-string v0, "Exception while clearing policy, "
--
--    invoke-direct {p1, v0}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p1
--
--    new-array v0, v3, [Ljava/lang/Object;
--
--    invoke-static {v1, p1, v0}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    invoke-virtual {p0}, Ljava/lang/Exception;->printStackTrace()V
--
--    return v3
-+    .locals 0
-+
-+    const/4 p0, 0x0
-+
-+    return p0
-@@ -576,50 +506,3 @@
--    .locals 4
--
--    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDAROnDOPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
--
--    move-result-object p1
--
--    new-instance v0, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v1, "clearResetPasswordTokenForInner: "
--
--    invoke-direct {v0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    iget v1, p1, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v0
--
--    const/4 v1, 0x0
--
--    new-array v2, v1, [Ljava/lang/Object;
--
--    const-string v3, "DualDARPolicy"
--
--    invoke-static {v3, v0, v2}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
--
--    invoke-static {p1}, Landroid/os/UserHandle;->getUserId(I)I
--
--    move-result p1
--
--    iget-object v0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mDualDarAuthUtils:Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;
--
--    invoke-virtual {v0, p1}, Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;->getInnerAuthUserId(I)I
--
--    move-result p1
--
--    if-gez p1, :cond_0
--
--    return v1
--
--    :cond_0
--    iget-object p0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mVirtualLockUtils:Lcom/samsung/android/knox/dar/VirtualLockUtils;
--
--    invoke-virtual {p0, p1}, Lcom/samsung/android/knox/dar/VirtualLockUtils;->clearResetPasswordToken(I)Z
--
--    move-result p0
-+    .locals 0
-+
-+    const/4 p0, 0x0
-@@ -935,19 +818 @@
--    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDARPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
--
--    move-result-object p1
--
--    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    iget-object p0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->dualDarConfigCache:Ljava/util/Map;
--
--    invoke-static {p1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
--
--    move-result-object p1
--
--    check-cast p0, Ljava/util/HashMap;
--
--    invoke-virtual {p0, p1}, Ljava/util/HashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
--
--    move-result-object p0
--
--    check-cast p0, Landroid/os/Bundle;
-+    const/4 p0, 0x0
-@@ -959,211 +824,5 @@
--    .locals 11
--
--    const-string v0, "DUAL_DAR"
--
--    const-string v1, "DualDARPolicy"
--
--    const-string/jumbo v2, "getConfig : DualDAR not enabled for: "
--
--    const-string/jumbo v3, "getConfigFromDb adminId : "
--
--    const/4 v4, 0x0
--
--    const/4 v5, 0x0
--
--    :try_start_0
--    new-instance v6, Ljava/lang/StringBuilder;
--
--    invoke-direct {v6, v3}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v6, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    const-string v3, " userId : "
--
--    invoke-virtual {v6, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v6, p2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v3
--
--    new-array v6, v5, [Ljava/lang/Object;
--
--    invoke-static {v1, v3, v6}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    iget-object v3, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
--
--    const-string/jumbo v6, "dataLockTimeOut"
--
--    invoke-virtual {v3, p1, p2, v0, v6}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->getString(IILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
--
--    move-result-object v3
--
--    if-nez v3, :cond_1
--
--    invoke-static {p2}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwner(I)Z
--
--    move-result v3
--
--    if-eqz v3, :cond_0
--
--    const-string/jumbo v2, "getConfig : DualDAR at DO case."
--
--    new-array v3, v5, [Ljava/lang/Object;
--
--    invoke-static {v1, v2, v3}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    const-string v3, "-1"
--
--    goto :goto_0
--
--    :catch_0
--    move-exception p0
--
--    goto :goto_4
--
--    :cond_0
--    new-instance p0, Ljava/lang/StringBuilder;
--
--    invoke-direct {p0, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {p0, p2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p0
--
--    new-array p1, v5, [Ljava/lang/Object;
--
--    invoke-static {v1, p0, p1}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    return-object v4
--
--    :cond_1
--    :goto_0
--    invoke-static {v3}, Ljava/lang/Long;->parseLong(Ljava/lang/String;)J
--
--    move-result-wide v2
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
--
--    const/4 v6, 0x1
--
--    :try_start_1
--    iget-object v7, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
--
--    const-string/jumbo v8, "deRestriction"
--
--    invoke-virtual {v7, p1, p2, v0, v8}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->getInt(IILjava/lang/String;Ljava/lang/String;)I
--
--    move-result v7
--    :try_end_1
--    .catch Lcom/android/server/enterprise/storage/SettingNotFoundException; {:try_start_1 .. :try_end_1} :catch_1
--    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
--
--    goto :goto_1
--
--    :catch_1
--    :try_start_2
--    const-string/jumbo v7, "Unable to read deRestriction field"
--
--    new-array v8, v5, [Ljava/lang/Object;
--
--    invoke-static {v1, v7, v8}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    move v7, v6
--
--    :goto_1
--    invoke-static {p2}, Lcom/samsung/android/knox/SemPersonaManager;->isDualDARNativeCrypto(I)Z
--
--    move-result v8
--
--    if-nez v8, :cond_2
--
--    iget-object v8, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
--
--    const-string/jumbo v9, "clientAppPackageName"
--
--    invoke-virtual {v8, p1, p2, v0, v9}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->getString(IILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
--
--    move-result-object v8
--
--    iget-object v9, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
--
--    const-string/jumbo v10, "clientAppSignature"
--
--    invoke-virtual {v9, p1, p2, v0, v10}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->getString(IILjava/lang/String;Ljava/lang/String;)Ljava/lang/String;
--
--    move-result-object v0
--    :try_end_2
--    .catch Ljava/lang/Exception; {:try_start_2 .. :try_end_2} :catch_0
--
--    goto :goto_2
--
--    :cond_2
--    const-string v8, ""
--
--    move-object v0, v8
--
--    :goto_2
--    :try_start_3
--    new-instance v9, Landroid/os/Bundle;
--
--    invoke-direct {v9}, Landroid/os/Bundle;-><init>()V
--
--    const-string/jumbo v10, "dualdar-config-client-package"
--
--    invoke-virtual {v9, v10, v8}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
--
--    const-string/jumbo v8, "dualdar-config-client-signature"
--
--    invoke-virtual {v9, v8, v0}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
--
--    const-string/jumbo v0, "dualdar-config-de-restriction"
--
--    if-lez v7, :cond_3
--
--    goto :goto_3
--
--    :cond_3
--    move v6, v5
--
--    :goto_3
--    invoke-virtual {v9, v0, v6}, Landroid/os/Bundle;->putBoolean(Ljava/lang/String;Z)V
--
--    const-string/jumbo v0, "dualdar-config-datalock-timeout"
--
--    invoke-virtual {v9, v0, v2, v3}, Landroid/os/Bundle;->putLong(Ljava/lang/String;J)V
--
--    const-string/jumbo v0, "dualdar-config-datalock-whitelistpackages"
--
--    invoke-virtual {p0, p1, p2}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->getWhitelistedAppsFromStorage(II)[Lcom/samsung/android/knox/AppIdentity;
--
--    move-result-object p0
--
--    invoke-virtual {v9, v0, p0}, Landroid/os/Bundle;->putParcelableArray(Ljava/lang/String;[Landroid/os/Parcelable;)V
--    :try_end_3
--    .catch Ljava/lang/Exception; {:try_start_3 .. :try_end_3} :catch_0
--
--    return-object v9
--
--    :goto_4
--    new-instance p1, Ljava/lang/StringBuilder;
--
--    const-string/jumbo p2, "getConfigFromDb has an exception: "
--
--    invoke-direct {p1, p2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p1
--
--    new-array p2, v5, [Ljava/lang/Object;
--
--    invoke-static {v1, p1, p2}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    invoke-virtual {p0}, Ljava/lang/Exception;->printStackTrace()V
--
--    return-object v4
-+    .locals 0
-+
-+    const/4 p0, 0x0
-+
-+    return-object p0
-@@ -1173,27 +832,3 @@
--    .locals 1
--
--    iget-object p1, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mInjector:Lcom/android/server/enterprise/dualdar/DualDARPolicy$Injector;
--
--    iget-object p1, p1, Lcom/android/server/enterprise/dualdar/DualDARPolicy$Injector;->mContext:Landroid/content/Context;
--
--    const-string/jumbo v0, "device_policy"
--
--    invoke-virtual {p1, v0}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
--
--    move-result-object p1
--
--    check-cast p1, Landroid/app/admin/DevicePolicyManager;
--
--    const/4 v0, 0x0
--
--    invoke-virtual {p1, v0}, Landroid/app/admin/DevicePolicyManager;->getPasswordQuality(Landroid/content/ComponentName;)I
--
--    move-result p1
--
--    const/high16 v0, 0x20000
--
--    if-lt p1, v0, :cond_0
--
--    invoke-virtual {p0}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->getPasswordMinimumLengthForInnerInternal()I
--
--    move-result p0
-+    .locals 0
-+
-+    const/4 p0, 0x0
-@@ -1202,2 +837,5 @@
--
--    :cond_0
-+.end method
-+
-+.method public final getPasswordMinimumLengthForInnerInternal()I
-+    .locals 0
-+
-@@ -1205,45 +842,0 @@
--
--    return p0
--.end method
--
--.method public final getPasswordMinimumLengthForInnerInternal()I
--    .locals 3
--
--    iget-object p0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
--
--    const/4 v0, 0x0
--
--    const-string v1, "DUAL_DAR"
--
--    const-string/jumbo v2, "innerPasswordMinLen"
--
--    invoke-virtual {p0, v0, v0, v1, v2}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->getIntListAsUser(IILjava/lang/String;Ljava/lang/String;)Ljava/util/ArrayList;
--
--    move-result-object p0
--
--    invoke-virtual {p0}, Ljava/util/ArrayList;->size()I
--
--    move-result v1
--
--    if-nez v1, :cond_0
--
--    const-string/jumbo p0, "Unable to read field"
--
--    new-array v1, v0, [Ljava/lang/Object;
--
--    const-string v2, "DualDARPolicy"
--
--    invoke-static {v2, p0, v1}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    return v0
--
--    :cond_0
--    invoke-static {p0}, Ljava/util/Collections;->max(Ljava/util/Collection;)Ljava/lang/Object;
--
--    move-result-object p0
--
--    check-cast p0, Ljava/lang/Integer;
--
--    invoke-virtual {p0}, Ljava/lang/Integer;->intValue()I
--
--    move-result p0
-@@ -1492,113 +1085,5 @@
--    .locals 6
--
--    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDAROnDOPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
--
--    move-result-object p1
--
--    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
--
--    invoke-static {p1}, Landroid/os/UserHandle;->getUserId(I)I
--
--    move-result p1
--
--    const-class v0, Lcom/android/server/locksettings/LockSettingsService$LocalService;
--
--    invoke-static {v0}, Lcom/android/server/LocalServices;->getService(Ljava/lang/Class;)Ljava/lang/Object;
--
--    move-result-object v0
--
--    check-cast v0, Lcom/android/server/locksettings/LockSettingsService$LocalService;
--
--    const-string v1, "DualDARPolicy"
--
--    const/4 v2, 0x0
--
--    if-eqz v0, :cond_0
--
--    invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
--
--    move-result-wide v3
--
--    :try_start_0
--    iget-object v5, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mDualDarAuthUtils:Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;
--
--    invoke-virtual {v5, p1}, Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;->getInnerAuthUserId(I)I
--
--    move-result v5
--
--    invoke-virtual {v0, v5}, Lcom/android/server/locksettings/LockSettingsService$LocalService;->getUserPasswordMetrics(I)Landroid/app/admin/PasswordMetrics;
--
--    move-result-object v0
--    :try_end_0
--    .catchall {:try_start_0 .. :try_end_0} :catchall_0
--
--    invoke-static {v3, v4}, Landroid/os/Binder;->restoreCallingIdentity(J)V
--
--    goto :goto_0
--
--    :catchall_0
--    move-exception p0
--
--    invoke-static {v3, v4}, Landroid/os/Binder;->restoreCallingIdentity(J)V
--
--    throw p0
--
--    :cond_0
--    const-string v0, "Couldn\'t access service"
--
--    new-array v3, v2, [Ljava/lang/Object;
--
--    invoke-static {v1, v0, v3}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    const/4 v0, 0x0
--
--    :goto_0
--    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->getPasswordMinimumMetrics(I)Landroid/app/admin/PasswordMetrics;
--
--    move-result-object p0
--
--    if-eqz v0, :cond_3
--
--    if-nez p0, :cond_1
--
--    goto :goto_1
--
--    :cond_1
--    invoke-static {p0, v2, v0}, Landroid/app/admin/PasswordMetrics;->validatePasswordMetrics(Landroid/app/admin/PasswordMetrics;ILandroid/app/admin/PasswordMetrics;)Ljava/util/List;
--
--    move-result-object p0
--
--    invoke-interface {p0}, Ljava/util/List;->isEmpty()Z
--
--    move-result p1
--
--    if-nez p1, :cond_2
--
--    new-instance v0, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v3, "Password validation errors: "
--
--    invoke-direct {v0, v3}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p0
--
--    new-array v0, v2, [Ljava/lang/Object;
--
--    invoke-static {v1, p0, v0}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    :cond_2
--    return p1
--
--    :cond_3
--    :goto_1
--    const-string p0, "Invalid metrics"
--
--    new-array p1, v2, [Ljava/lang/Object;
--
--    invoke-static {v1, p0, p1}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    return v2
-+    .locals 0
-+
-+    const/4 p0, 0x0
-+
-+    return p0
-@@ -1608,19 +1093 @@
--    .locals 1
--
--    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDAROnDOPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
--
--    move-result-object p1
--
--    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
--
--    invoke-static {p1}, Landroid/os/UserHandle;->getUserId(I)I
--
--    move-result p1
--
--    iget-object v0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mDualDarAuthUtils:Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;
--
--    invoke-virtual {v0, p1}, Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;->getInnerAuthUserId(I)I
--
--    move-result p1
--
--    if-gez p1, :cond_0
-+    .locals 0
-@@ -1629,9 +1095,0 @@
--
--    return p0
--
--    :cond_0
--    iget-object p0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mVirtualLockUtils:Lcom/samsung/android/knox/dar/VirtualLockUtils;
--
--    invoke-virtual {p0, p1}, Lcom/samsung/android/knox/dar/VirtualLockUtils;->isResetPasswordTokenActive(I)Z
--
--    move-result p0
-@@ -1706,80 +1164,3 @@
--    .locals 4
--
--    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDAROnDOPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
--
--    move-result-object p1
--
--    new-instance v0, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v1, "resetPasswordWithTokenForInner: "
--
--    invoke-direct {v0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    iget v1, p1, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v0
--
--    const/4 v1, 0x0
--
--    new-array v2, v1, [Ljava/lang/Object;
--
--    const-string v3, "DualDARPolicy"
--
--    invoke-static {v3, v0, v2}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
--
--    invoke-static {p1}, Landroid/os/UserHandle;->getUserId(I)I
--
--    move-result p1
--
--    iget-object v0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mDualDarAuthUtils:Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;
--
--    invoke-virtual {v0, p1}, Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;->getInnerAuthUserId(I)I
--
--    move-result v0
--
--    if-gez v0, :cond_0
--
--    const-string/jumbo p0, "resetPasswordWithTokenForInner: Invalid inner auth user : "
--
--    invoke-static {v0, p0}, Landroid/frameworks/vibrator/VibrationParam$1$$ExternalSyntheticOutline0;->m(ILjava/lang/String;)Ljava/lang/String;
--
--    move-result-object p0
--
--    new-array p1, v1, [Ljava/lang/Object;
--
--    invoke-static {v3, p0, p1}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    return v1
--
--    :cond_0
--    new-instance v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy$$ExternalSyntheticLambda0;
--
--    invoke-direct {v1}, Ljava/lang/Object;-><init>()V
--
--    iput-object p0, v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy$$ExternalSyntheticLambda0;->f$0:Lcom/android/server/enterprise/dualdar/DualDARPolicy;
--
--    iput p1, v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy$$ExternalSyntheticLambda0;->f$1:I
--
--    iput-object p2, v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy$$ExternalSyntheticLambda0;->f$2:Ljava/lang/String;
--
--    iput-object p3, v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy$$ExternalSyntheticLambda0;->f$3:[B
--
--    iput v0, v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy$$ExternalSyntheticLambda0;->f$4:I
--
--    invoke-static {}, Ljava/lang/invoke/VarHandle;->storeStoreFence()V
--
--    invoke-static {v1}, Landroid/os/Binder;->withCleanCallingIdentity(Lcom/android/internal/util/FunctionalUtils$ThrowingSupplier;)Ljava/lang/Object;
--
--    move-result-object p0
--
--    check-cast p0, Ljava/lang/Boolean;
--
--    invoke-virtual {p0}, Ljava/lang/Boolean;->booleanValue()Z
--
--    move-result p0
-+    .locals 0
-+
-+    const/4 p0, 0x0
-@@ -2079,821 +1460,5 @@
--    .locals 20
--
--    move-object/from16 v1, p0
--
--    move-object/from16 v2, p2
--
--    invoke-virtual/range {p0 .. p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDARPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
--
--    move-result-object v3
--
--    iget v0, v3, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
--
--    const-string/jumbo v4, "setConfig : callingUid : "
--
--    invoke-static {v0, v4}, Landroid/frameworks/vibrator/VibrationParam$1$$ExternalSyntheticOutline0;->m(ILjava/lang/String;)Ljava/lang/String;
--
--    move-result-object v0
--
--    const/4 v4, 0x0
--
--    new-array v5, v4, [Ljava/lang/Object;
--
--    const-string v6, "DualDARPolicy"
--
--    invoke-static {v6, v0, v5}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    iget v0, v3, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    invoke-static {v0}, Lcom/samsung/android/knox/SemPersonaManager;->isDarDualEncryptionEnabled(I)Z
--
--    move-result v0
--
--    const/4 v5, -0x1
--
--    if-nez v0, :cond_0
--
--    new-instance v0, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v1, "setConfig : DualDAR not enabled for: "
--
--    invoke-direct {v0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    iget v1, v3, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v0
--
--    new-array v1, v4, [Ljava/lang/Object;
--
--    invoke-static {v6, v0, v1}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    return v5
--
--    :cond_0
--    const-string/jumbo v0, "dualdar-config-datalock-whitelistpackages"
--
--    invoke-virtual {v2, v0}, Landroid/os/Bundle;->containsKey(Ljava/lang/String;)Z
--
--    move-result v7
--
--    const-string v8, "DUAL_DAR"
--
--    if-eqz v7, :cond_9
--
--    new-instance v7, Ljava/util/ArrayList;
--
--    invoke-direct {v7}, Ljava/util/ArrayList;-><init>()V
--
--    new-instance v9, Ljava/util/ArrayList;
--
--    invoke-direct {v9}, Ljava/util/ArrayList;-><init>()V
--
--    new-instance v10, Ljava/util/ArrayList;
--
--    invoke-direct {v10}, Ljava/util/ArrayList;-><init>()V
--
--    new-instance v11, Ljava/util/ArrayList;
--
--    invoke-direct {v11}, Ljava/util/ArrayList;-><init>()V
--
--    invoke-virtual {v1, v3, v10, v11}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->getClientAndProfileOwnerApps(Lcom/samsung/android/knox/ContextInfo;Ljava/util/List;Ljava/util/List;)V
--
--    invoke-virtual {v2, v0}, Landroid/os/Bundle;->getParcelableArray(Ljava/lang/String;)[Landroid/os/Parcelable;
--
--    move-result-object v0
--
--    if-eqz v0, :cond_3
--
--    array-length v12, v0
--
--    if-lez v12, :cond_3
--
--    move v12, v4
--
--    :goto_0
--    array-length v13, v0
--
--    if-ge v12, v13, :cond_3
--
--    aget-object v13, v0, v12
--
--    check-cast v13, Lcom/samsung/android/knox/AppIdentity;
--
--    if-eqz v13, :cond_2
--
--    invoke-virtual {v13}, Lcom/samsung/android/knox/AppIdentity;->getPackageName()Ljava/lang/String;
--
--    move-result-object v14
--
--    if-eqz v14, :cond_2
--
--    invoke-virtual {v13}, Lcom/samsung/android/knox/AppIdentity;->getPackageName()Ljava/lang/String;
--
--    move-result-object v14
--
--    invoke-virtual {v14}, Ljava/lang/String;->length()I
--
--    move-result v14
--
--    if-nez v14, :cond_1
--
--    goto :goto_1
--
--    :cond_1
--    invoke-virtual {v13}, Lcom/samsung/android/knox/AppIdentity;->getPackageName()Ljava/lang/String;
--
--    move-result-object v14
--
--    invoke-virtual {v11, v14}, Ljava/util/ArrayList;->contains(Ljava/lang/Object;)Z
--
--    move-result v14
--
--    if-nez v14, :cond_2
--
--    invoke-virtual {v7, v13}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
--
--    invoke-virtual {v13}, Lcom/samsung/android/knox/AppIdentity;->getPackageName()Ljava/lang/String;
--
--    move-result-object v13
--
--    invoke-virtual {v9, v13}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
--
--    :cond_2
--    :goto_1
--    add-int/lit8 v12, v12, 0x1
--
--    goto :goto_0
--
--    :cond_3
--    iget v0, v3, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
--
--    iget v12, v3, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    invoke-virtual {v1, v0, v12}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->getWhitelistedAppsFromStorage(II)[Lcom/samsung/android/knox/AppIdentity;
--
--    move-result-object v12
--
--    invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
--
--    move-result-wide v13
--
--    if-eqz v12, :cond_6
--
--    array-length v0, v12
--
--    if-eqz v0, :cond_6
--
--    array-length v15, v12
--
--    move v5, v4
--
--    :goto_2
--    if-ge v5, v15, :cond_6
--
--    aget-object v16, v12, v5
--
--    iget v0, v3, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    invoke-virtual/range {v16 .. v16}, Lcom/samsung/android/knox/AppIdentity;->getPackageName()Ljava/lang/String;
--
--    move-result-object v4
--
--    invoke-static {v0, v4}, Lcom/android/server/pm/PersonaServiceHelper;->isSystemApp(ILjava/lang/String;)Z
--
--    move-result v0
--
--    if-eqz v0, :cond_5
--
--    :cond_4
--    move/from16 v17, v5
--
--    move-object/from16 v18, v9
--
--    move-object/from16 v19, v11
--
--    goto :goto_5
--
--    :cond_5
--    invoke-virtual/range {v16 .. v16}, Lcom/samsung/android/knox/AppIdentity;->getPackageName()Ljava/lang/String;
--
--    move-result-object v0
--
--    invoke-virtual {v9, v0}, Ljava/util/ArrayList;->contains(Ljava/lang/Object;)Z
--
--    move-result v0
--
--    if-nez v0, :cond_4
--
--    invoke-virtual/range {v16 .. v16}, Lcom/samsung/android/knox/AppIdentity;->getPackageName()Ljava/lang/String;
--
--    move-result-object v0
--
--    invoke-virtual {v11, v0}, Ljava/util/ArrayList;->contains(Ljava/lang/Object;)Z
--
--    move-result v0
--
--    if-nez v0, :cond_4
--
--    :try_start_0
--    invoke-static {}, Landroid/app/ActivityManager;->getService()Landroid/app/IActivityManager;
--
--    move-result-object v0
--
--    invoke-virtual/range {v16 .. v16}, Lcom/samsung/android/knox/AppIdentity;->getPackageName()Ljava/lang/String;
--
--    move-result-object v4
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_2
--
--    move/from16 v17, v5
--
--    :try_start_1
--    iget v5, v3, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--    :try_end_1
--    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_1
--
--    move-object/from16 v18, v9
--
--    const/4 v9, 0x0
--
--    move-object/from16 v19, v11
--
--    const/4 v11, 0x0
--
--    :try_start_2
--    invoke-interface {v0, v4, v11, v9, v5}, Landroid/app/IActivityManager;->clearApplicationUserData(Ljava/lang/String;ZLandroid/content/pm/IPackageDataObserver;I)Z
--    :try_end_2
--    .catch Ljava/lang/Exception; {:try_start_2 .. :try_end_2} :catch_0
--
--    goto :goto_5
--
--    :catch_0
--    move-exception v0
--
--    goto :goto_4
--
--    :catch_1
--    move-exception v0
--
--    :goto_3
--    move-object/from16 v18, v9
--
--    move-object/from16 v19, v11
--
--    goto :goto_4
--
--    :catch_2
--    move-exception v0
--
--    move/from16 v17, v5
--
--    goto :goto_3
--
--    :goto_4
--    invoke-virtual {v0}, Ljava/lang/Exception;->printStackTrace()V
--
--    new-instance v0, Ljava/lang/StringBuilder;
--
--    const-string v4, "Exception in clearing user data for: "
--
--    invoke-direct {v0, v4}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual/range {v16 .. v16}, Lcom/samsung/android/knox/AppIdentity;->getPackageName()Ljava/lang/String;
--
--    move-result-object v4
--
--    invoke-virtual {v0, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
--
--    const-string v4, " installed in: "
--
--    invoke-virtual {v0, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
--
--    iget v4, v3, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    invoke-virtual {v0, v4}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v0
--
--    const/4 v11, 0x0
--
--    new-array v4, v11, [Ljava/lang/Object;
--
--    invoke-static {v6, v0, v4}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    :goto_5
--    add-int/lit8 v5, v17, 0x1
--
--    move-object/from16 v9, v18
--
--    move-object/from16 v11, v19
--
--    const/4 v4, 0x0
--
--    goto :goto_2
--
--    :cond_6
--    invoke-static {v13, v14}, Landroid/os/Binder;->restoreCallingIdentity(J)V
--
--    invoke-virtual {v7, v10}, Ljava/util/ArrayList;->addAll(Ljava/util/Collection;)Z
--
--    new-instance v0, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v4, "setWhitelistPackagesForDataLockedState called, whitelistAppCount: "
--
--    invoke-direct {v0, v4}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v7}, Ljava/util/ArrayList;->size()I
--
--    move-result v4
--
--    invoke-virtual {v0, v4}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v0
--
--    const/4 v11, 0x0
--
--    new-array v4, v11, [Ljava/lang/Object;
--
--    invoke-static {v6, v0, v4}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    new-instance v0, Landroid/content/ContentValues;
--
--    invoke-direct {v0}, Landroid/content/ContentValues;-><init>()V
--
--    const-string/jumbo v4, "whiteListPkgsForDataLockState"
--
--    invoke-static {v7}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->flattenPackages(Ljava/util/List;)Ljava/lang/String;
--
--    move-result-object v5
--
--    invoke-virtual {v0, v4, v5}, Landroid/content/ContentValues;->put(Ljava/lang/String;Ljava/lang/String;)V
--
--    const-string/jumbo v4, "whiteListPkgSignaturesForDataLockState"
--
--    invoke-static {v7}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->flattenSignatures(Ljava/util/List;)Ljava/lang/String;
--
--    move-result-object v5
--
--    invoke-virtual {v0, v4, v5}, Landroid/content/ContentValues;->put(Ljava/lang/String;Ljava/lang/String;)V
--
--    iget-object v4, v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
--
--    iget v5, v3, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
--
--    iget v7, v3, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    invoke-virtual {v4, v5, v7, v8, v0}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->putValues(IILjava/lang/String;Landroid/content/ContentValues;)Z
--
--    move-result v0
--
--    if-eqz v0, :cond_7
--
--    const-string/jumbo v4, "successfully changed whitelist packages for datalock state"
--
--    const/4 v11, 0x0
--
--    new-array v5, v11, [Ljava/lang/Object;
--
--    invoke-static {v6, v4, v5}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    const-string/jumbo v4, "whitelisted_apps"
--
--    invoke-static {v3, v2, v4}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->logDualDarAnalytics(Lcom/samsung/android/knox/ContextInfo;Landroid/os/Bundle;Ljava/lang/String;)V
--
--    goto :goto_6
--
--    :cond_7
--    const/4 v11, 0x0
--
--    const-string/jumbo v4, "failed to write new whitelist packages to persistent storage"
--
--    new-array v5, v11, [Ljava/lang/Object;
--
--    invoke-static {v6, v4, v5}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    :goto_6
--    if-eqz v0, :cond_8
--
--    const/4 v0, 0x0
--
--    goto :goto_7
--
--    :cond_8
--    const/4 v0, -0x2
--
--    :goto_7
--    move v11, v0
--
--    goto :goto_8
--
--    :cond_9
--    const/4 v11, 0x0
--
--    :goto_8
--    const-string/jumbo v0, "dualdar-config-datalock-timeout"
--
--    invoke-virtual {v2, v0}, Landroid/os/Bundle;->containsKey(Ljava/lang/String;)Z
--
--    move-result v4
--
--    const-string v5, ""
--
--    if-eqz v4, :cond_10
--
--    invoke-virtual {v2, v0}, Landroid/os/Bundle;->getLong(Ljava/lang/String;)J
--
--    move-result-wide v9
--
--    iget v4, v3, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    invoke-static {v4}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwner(I)Z
--
--    move-result v4
--
--    if-eqz v4, :cond_a
--
--    const-wide/32 v12, 0x493e0
--
--    goto :goto_9
--
--    :cond_a
--    const-wide/32 v12, 0xea60
--
--    :goto_9
--    const-string/jumbo v4, "setDataLockTimeout called, dataLockTimeout: "
--
--    invoke-static {v9, v10, v4}, Lcom/android/server/DeviceIdleController$$ExternalSyntheticOutline0;->m(JLjava/lang/String;)Ljava/lang/String;
--
--    move-result-object v4
--
--    const/4 v7, 0x0
--
--    new-array v14, v7, [Ljava/lang/Object;
--
--    invoke-static {v6, v4, v14}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    cmp-long v4, v9, v12
--
--    if-ltz v4, :cond_b
--
--    const-wide v14, 0x7fffffffffffffffL
--
--    cmp-long v4, v9, v14
--
--    if-ltz v4, :cond_c
--
--    :cond_b
--    const-wide/16 v14, -0x1
--
--    cmp-long v4, v9, v14
--
--    if-nez v4, :cond_f
--
--    :cond_c
--    new-instance v4, Landroid/content/ContentValues;
--
--    invoke-direct {v4}, Landroid/content/ContentValues;-><init>()V
--
--    new-instance v7, Ljava/lang/StringBuilder;
--
--    invoke-direct {v7, v5}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v7, v9, v10}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v7}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v7
--
--    const-string/jumbo v9, "dataLockTimeOut"
--
--    invoke-virtual {v4, v9, v7}, Landroid/content/ContentValues;->put(Ljava/lang/String;Ljava/lang/String;)V
--
--    iget-object v7, v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
--
--    iget v9, v3, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
--
--    iget v10, v3, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    invoke-virtual {v7, v9, v10, v8, v4}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->putValues(IILjava/lang/String;Landroid/content/ContentValues;)Z
--
--    move-result v4
--
--    if-eqz v4, :cond_d
--
--    const-string/jumbo v7, "successfully changed datalock timeout"
--
--    const/4 v9, 0x0
--
--    new-array v10, v9, [Ljava/lang/Object;
--
--    invoke-static {v6, v7, v10}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    const-string/jumbo v7, "datalock_timeout"
--
--    invoke-static {v3, v2, v7}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->logDualDarAnalytics(Lcom/samsung/android/knox/ContextInfo;Landroid/os/Bundle;Ljava/lang/String;)V
--
--    goto :goto_a
--
--    :cond_d
--    const/4 v9, 0x0
--
--    const-string/jumbo v7, "failed to write new datalock timeout to persistent storage"
--
--    new-array v10, v9, [Ljava/lang/Object;
--
--    invoke-static {v6, v7, v10}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    :goto_a
--    if-eqz v4, :cond_e
--
--    goto :goto_c
--
--    :cond_e
--    :goto_b
--    const/4 v4, -0x1
--
--    goto :goto_d
--
--    :cond_f
--    new-instance v4, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v7, "setDataLockTimeout Invalid datalock timeout. It should be in range ["
--
--    invoke-direct {v4, v7}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v4, v12, v13}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
--
--    const-string v7, ", 9223372036854775807] ms"
--
--    invoke-virtual {v4, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v4
--
--    const/4 v7, 0x0
--
--    new-array v9, v7, [Ljava/lang/Object;
--
--    invoke-static {v6, v4, v9}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    goto :goto_b
--
--    :cond_10
--    :goto_c
--    const/4 v4, 0x0
--
--    :goto_d
--    const-string/jumbo v7, "dualdar-config-de-restriction"
--
--    invoke-virtual {v2, v7}, Landroid/os/Bundle;->containsKey(Ljava/lang/String;)Z
--
--    move-result v9
--
--    if-eqz v9, :cond_13
--
--    invoke-virtual {v2, v7}, Landroid/os/Bundle;->getBoolean(Ljava/lang/String;)Z
--
--    move-result v9
--
--    new-instance v10, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v12, "setDeRestriction called, deRestriction: "
--
--    invoke-direct {v10, v12}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v10, v9}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v10}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v10
--
--    const/4 v12, 0x0
--
--    new-array v13, v12, [Ljava/lang/Object;
--
--    invoke-static {v6, v10, v13}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    new-instance v10, Landroid/content/ContentValues;
--
--    invoke-direct {v10}, Landroid/content/ContentValues;-><init>()V
--
--    const-string/jumbo v12, "deRestriction"
--
--    invoke-static {v9}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
--
--    move-result-object v9
--
--    invoke-virtual {v10, v12, v9}, Landroid/content/ContentValues;->put(Ljava/lang/String;Ljava/lang/Integer;)V
--
--    iget-object v9, v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
--
--    iget v12, v3, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
--
--    iget v13, v3, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    invoke-virtual {v9, v12, v13, v8, v10}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->putValues(IILjava/lang/String;Landroid/content/ContentValues;)Z
--
--    move-result v8
--
--    if-eqz v8, :cond_11
--
--    const-string/jumbo v9, "Successfully changed DE restriction config"
--
--    const/4 v12, 0x0
--
--    new-array v10, v12, [Ljava/lang/Object;
--
--    invoke-static {v6, v9, v10}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    const-string/jumbo v6, "de_access_restriction"
--
--    invoke-static {v3, v2, v6}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->logDualDarAnalytics(Lcom/samsung/android/knox/ContextInfo;Landroid/os/Bundle;Ljava/lang/String;)V
--
--    goto :goto_e
--
--    :cond_11
--    const/4 v12, 0x0
--
--    const-string v9, "Failed to write new DE restriction config"
--
--    new-array v10, v12, [Ljava/lang/Object;
--
--    invoke-static {v6, v9, v10}, Lcom/android/server/knox/dar/ddar/DDLog;->e(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    :goto_e
--    if-eqz v8, :cond_12
--
--    goto :goto_f
--
--    :cond_12
--    const/4 v6, -0x3
--
--    goto :goto_10
--
--    :cond_13
--    :goto_f
--    const/4 v6, 0x0
--
--    :goto_10
--    if-eqz v11, :cond_14
--
--    if-eqz v4, :cond_14
--
--    if-nez v6, :cond_15
--
--    :cond_14
--    iget v8, v3, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    iget-object v9, v1, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
--
--    invoke-virtual {v9, v8}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->getMUMContainerOwnerUid(I)I
--
--    move-result v9
--
--    invoke-virtual {v1, v9, v8}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->refreshConfig(II)V
--
--    :cond_15
--    iget v1, v3, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    invoke-static {v1}, Lcom/samsung/android/knox/SemPersonaManager;->isDoEnabled(I)Z
--
--    invoke-static {v1}, Lcom/android/server/pm/PersonaServiceHelper;->getDualDARType(I)I
--
--    move-result v3
--
--    invoke-static {v2}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->getWhitelistPkgesFromConfig(Landroid/os/Bundle;)Ljava/lang/String;
--
--    move-result-object v8
--
--    const-string v9, "Admin created DualDAR with configuration, Type : "
--
--    const-string v10, ",  Version: "
--
--    invoke-static {v3, v9, v10}, Lcom/android/server/BatteryService$$ExternalSyntheticOutline0;->m(ILjava/lang/String;Ljava/lang/String;)Ljava/lang/StringBuilder;
--
--    move-result-object v9
--
--    invoke-static {}, Lcom/samsung/android/knox/ddar/DualDARPolicy;->getDualDARVersion()Ljava/lang/String;
--
--    move-result-object v10
--
--    if-nez v10, :cond_16
--
--    move-object v10, v5
--
--    :cond_16
--    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
--
--    const-string v10, ",  Lock Timeout :"
--
--    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v2, v0}, Landroid/os/Bundle;->getLong(Ljava/lang/String;)J
--
--    move-result-wide v12
--
--    invoke-virtual {v9, v12, v13}, Ljava/lang/StringBuilder;->append(J)Ljava/lang/StringBuilder;
--
--    const-string v10, ",  Device Encryption storage access restriction: "
--
--    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v2, v7}, Landroid/os/Bundle;->getBoolean(Ljava/lang/String;)Z
--
--    move-result v10
--
--    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
--
--    const-string v10, ",  Whitelisted Packages: "
--
--    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v9, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v9}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v9
--
--    const/4 v12, 0x0
--
--    new-array v10, v12, [Ljava/lang/Object;
--
--    const-string v13, "DualDARPolicy:DualDARAnalytics"
--
--    invoke-static {v13, v9, v10}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    invoke-static {v3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
--
--    move-result-object v3
--
--    invoke-static {}, Lcom/samsung/android/knox/ddar/DualDARPolicy;->getDualDARVersion()Ljava/lang/String;
--
--    move-result-object v9
--
--    if-nez v9, :cond_17
--
--    goto :goto_11
--
--    :cond_17
--    move-object v5, v9
--
--    :goto_11
--    invoke-virtual {v2, v0}, Landroid/os/Bundle;->getLong(Ljava/lang/String;)J
--
--    move-result-wide v9
--
--    invoke-static {v9, v10}, Ljava/lang/Long;->valueOf(J)Ljava/lang/Long;
--
--    move-result-object v0
--
--    invoke-virtual {v2, v7}, Landroid/os/Bundle;->getBoolean(Ljava/lang/String;)Z
--
--    move-result v2
--
--    invoke-static {v2}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
--
--    move-result-object v2
--
--    filled-new-array {v3, v5, v0, v2, v8}, [Ljava/lang/Object;
--
--    move-result-object v0
--
--    const/16 v2, 0x174
--
--    invoke-static {v1, v2, v0}, Landroid/sec/enterprise/auditlog/AuditLog;->logEventAsUser(II[Ljava/lang/Object;)V
--
--    if-nez v11, :cond_18
--
--    if-nez v4, :cond_18
--
--    if-nez v6, :cond_18
--
--    move v4, v12
--
--    goto :goto_12
--
--    :cond_18
--    if-eqz v11, :cond_19
--
--    move v4, v11
--
--    goto :goto_12
--
--    :cond_19
--    if-eqz v4, :cond_1a
--
--    goto :goto_12
--
--    :cond_1a
--    move v4, v6
--
--    :goto_12
--    return v4
-+    .locals 0
-+
-+    const/4 p0, -0x1
-+
-+    return p0
-@@ -2903,51 +1468,3 @@
--    .locals 2
--
--    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDAROnDOPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
--
--    move-result-object p1
--
--    iget-object v0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mInjector:Lcom/android/server/enterprise/dualdar/DualDARPolicy$Injector;
--
--    iget-object v0, v0, Lcom/android/server/enterprise/dualdar/DualDARPolicy$Injector;->mContext:Landroid/content/Context;
--
--    const-string/jumbo v1, "device_policy"
--
--    invoke-virtual {v0, v1}, Landroid/content/Context;->getSystemService(Ljava/lang/String;)Ljava/lang/Object;
--
--    move-result-object v0
--
--    check-cast v0, Landroid/app/admin/DevicePolicyManager;
--
--    const/4 v1, 0x0
--
--    invoke-virtual {v0, v1}, Landroid/app/admin/DevicePolicyManager;->getPasswordQuality(Landroid/content/ComponentName;)I
--
--    move-result v0
--
--    const/high16 v1, 0x20000
--
--    if-lt v0, v1, :cond_0
--
--    new-instance v0, Landroid/content/ContentValues;
--
--    invoke-direct {v0}, Landroid/content/ContentValues;-><init>()V
--
--    const-string/jumbo v1, "innerPasswordMinLen"
--
--    invoke-static {p2}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
--
--    move-result-object p2
--
--    invoke-virtual {v0, v1, p2}, Landroid/content/ContentValues;->put(Ljava/lang/String;Ljava/lang/Integer;)V
--
--    iget-object p0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
--
--    iget p2, p1, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
--
--    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    const-string v1, "DUAL_DAR"
--
--    invoke-virtual {p0, p2, p1, v1, v0}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->putValues(IILjava/lang/String;Landroid/content/ContentValues;)Z
--
--    move-result p0
-+    .locals 0
-+
-+    const/4 p0, 0x0
-@@ -2956,21 +1472,0 @@
--
--    :cond_0
--    new-instance p0, Ljava/lang/IllegalStateException;
--
--    invoke-static {v1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
--
--    move-result-object p1
--
--    filled-new-array {p1}, [Ljava/lang/Object;
--
--    move-result-object p1
--
--    const-string/jumbo p2, "password quality should be at least %d for setPasswordMinimumLengthForInner"
--
--    invoke-static {p2, p1}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
--
--    move-result-object p1
--
--    invoke-direct {p0, p1}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
--
--    throw p0
-@@ -2980,50 +1476,3 @@
--    .locals 4
--
--    invoke-virtual {p0, p1}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->enforceDualDAROnDOPermission(Lcom/samsung/android/knox/ContextInfo;)Lcom/samsung/android/knox/ContextInfo;
--
--    move-result-object p1
--
--    new-instance v0, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v1, "setResetPasswordTokenForInner: "
--
--    invoke-direct {v0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    iget v1, p1, Lcom/samsung/android/knox/ContextInfo;->mContainerId:I
--
--    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v0
--
--    const/4 v1, 0x0
--
--    new-array v2, v1, [Ljava/lang/Object;
--
--    const-string v3, "DualDARPolicy"
--
--    invoke-static {v3, v0, v2}, Lcom/android/server/knox/dar/ddar/DDLog;->d(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)V
--
--    iget p1, p1, Lcom/samsung/android/knox/ContextInfo;->mCallerUid:I
--
--    invoke-static {p1}, Landroid/os/UserHandle;->getUserId(I)I
--
--    move-result p1
--
--    iget-object v0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mDualDarAuthUtils:Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;
--
--    invoke-virtual {v0, p1}, Lcom/samsung/android/knox/dar/ddar/DualDarAuthUtils;->getInnerAuthUserId(I)I
--
--    move-result p1
--
--    if-gez p1, :cond_0
--
--    return v1
--
--    :cond_0
--    iget-object p0, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->mVirtualLockUtils:Lcom/samsung/android/knox/dar/VirtualLockUtils;
--
--    invoke-virtual {p0, p2, p1}, Lcom/samsung/android/knox/dar/VirtualLockUtils;->setResetPasswordToken([BI)Z
--
--    move-result p0
-+    .locals 0
-+
-+    const/4 p0, 0x0
-@@ -3035,19 +1484,2 @@
--    .locals 2
--
--    invoke-static {}, Lcom/android/server/pm/PersonaServiceHelper;->getDualDARUser()I
--
--    move-result v0
--
--    const/4 v1, -0x1
--
--    if-eq v0, v1, :cond_0
--
--    iget-object v1, p0, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->edmStorageProvider:Lcom/android/server/enterprise/storage/EdmStorageProvider;
--
--    invoke-virtual {v1, v0}, Lcom/android/server/enterprise/storage/EdmStorageProviderBase;->getMUMContainerOwnerUid(I)I
--
--    move-result v1
--
--    invoke-virtual {p0, v1, v0}, Lcom/android/server/enterprise/dualdar/DualDARPolicy;->refreshConfig(II)V
--
--    :cond_0
-+    .locals 0
-+
-
---
-2.51.1
+     return v0

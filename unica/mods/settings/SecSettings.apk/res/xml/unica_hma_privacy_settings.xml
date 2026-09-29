@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto" android:title="@string/unica_hma_privacy_title" settings:hierarchicalParentFragment="io.mesalabs.unica.settings.spoof.SpoofSettingsFragment" settings:topLevelPreferenceKey="unica_hma_privacy">
+    <Preference android:selectable="false" android:title="Protect selected apps" android:summary="Choose apps and presets, then enable protection. Restart protected apps after changes so cached results and process permissions refresh. Configuration applies to this Android user." />
+    <SecSwitchPreference android:key="hma_enabled" android:title="Enable HMA protection" android:persistent="false" />
+    <SecPreference android:key="hma_targets" android:title="App to spoof" android:summary="Choose banking apps or other apps that receive filtered results. Applies to this Android user." />
+    <SecPreference android:key="hma_hidden" android:title="App to hide" android:summary="Choose modules, MT Manager, and other user apps to hide." />
+    <SecPreference android:key="hma_playUpdate" android:title="Prevent Play Store update" android:summary="Hide selected user apps from Google Play Store package visibility." />
+    <SecPreference android:key="hma_unknown" android:title="Unknown Installed" android:summary="Spoof selected unknown-source user apps as installed from Play Store or Galaxy Store." />
+    <PreferenceCategory android:title="Activity launch protection">
+        <SecSwitchPreference android:key="hma_activity" android:title="Block launches of hidden apps" android:persistent="false" />
+        <SecPreference android:key="hma_invertActivity" android:title="Invert protection for selected apps" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Presets">
+        <SecPreference android:key="hma_apps" android:title="Application presets" />
+        <SecPreference android:key="hma_settings" android:title="Settings presets" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Compatibility and permissions">
+        <SecSwitchPreference android:key="hma_risky" android:title="Risky package protection" android:summary="Keep apps with Google Play services dependencies visible to Play services." android:persistent="false" />
+        <SecPreference android:key="hma_gids" android:title="Restrict Zygote permissions" android:summary="Experimental. Applies when protected apps restart." />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Backup and restore">
+        <SecPreference android:key="hma_backup" android:title="Back up HMA config" android:summary="Export the current HMA configuration as an HMA-OSS style JSON file." />
+        <SecPreference android:key="hma_restore" android:title="Restore HMA config" android:summary="Import a UN1CA HMA backup or compatible HMA-OSS JSON file." />
+    </PreferenceCategory>
+</PreferenceScreen>

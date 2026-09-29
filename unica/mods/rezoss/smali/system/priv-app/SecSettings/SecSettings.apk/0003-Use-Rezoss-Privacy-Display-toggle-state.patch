@@ -1,12 +1,12 @@
 From 9f731f7f991c4b6f38d31bde8c4b9248c8aa0003 Mon Sep 17 00:00:00 2001
-From: Rezoss <rezoss@local>
+From: @rezoss_reza <rezoss@local>
 Date: Wed, 1 Jul 2026 00:00:00 +0200
 Subject: [PATCH] Use Rezoss Privacy Display toggle state
 
-diff --git a/smali_classes5/com/samsung/android/settings/bpd/utils/PdUtils.smali b/smali_classes5/com/samsung/android/settings/bpd/utils/PdUtils.smali
+diff --git a/smali_classes3/com/samsung/android/settings/bpd/utils/RezossPdUtils.smali b/smali_classes3/com/samsung/android/settings/bpd/utils/RezossPdUtils.smali
 index e9d8f90..f99a3ad 100644
---- a/smali_classes5/com/samsung/android/settings/bpd/utils/PdUtils.smali
-+++ b/smali_classes5/com/samsung/android/settings/bpd/utils/PdUtils.smali
+--- a/smali_classes3/com/samsung/android/settings/bpd/utils/RezossPdUtils.smali
++++ b/smali_classes3/com/samsung/android/settings/bpd/utils/RezossPdUtils.smali
 @@ -36,7 +36,7 @@
  
      move-result-object p0

@@ -1,27 +1,23 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Rezoss <rezoss79@users.noreply.github.com>
+From: @rezoss_reza <rezoss79@users.noreply.github.com>
 Date: Thu, 9 Jul 2026 00:00:00 +0200
 Subject: [PATCH] Force suggested replies enabled
 
-Keep HoneyBoard's suggested responses runtime flag and global setting
-enabled even when the preference key is missing from a fresh data profile.
-Now Nudge chips depend on this keyboard-side gate.
+Preserve the suggested-responses runtime and global-setting override in the
+S23U One UI 9 updateSuggestResponse method.
 
 ---
- smali/e9/a.smali | 2 ++
- 1 file changed, 2 insertions(+)
+diff --git a/smali_classes2/tj/d.smali b/smali_classes2/tj/d.smali
+--- a/smali_classes2/tj/d.smali
++++ b/smali_classes2/tj/d.smali
+@@ -649,6 +649,8 @@
+     move v3, v2
 
-diff --git a/smali/e9/a.smali b/smali/e9/a.smali
---- a/smali/e9/a.smali
-+++ b/smali/e9/a.smali
-@@ -74,6 +74,8 @@
-     move v0, v1
- 
      :goto_0
-+    const/4 v0, 0x1
++    const/4 v3, 0x1
 +
-     sget-object p1, Le9/c;->g:Lkotlin/Lazy;
- 
-     invoke-interface {p1}, Lkotlin/Lazy;->getValue()Ljava/lang/Object;
+     invoke-direct {p0}, Ltj/d;->r()Lqn/f;
+
+     move-result-object v0
 -- 
-2.51.0
+2.43.0

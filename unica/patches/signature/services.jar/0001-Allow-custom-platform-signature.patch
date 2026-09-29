@@ -122,9 +122,9 @@ index fed2903d..0afae29a 100644
 +    invoke-static/range {v0 .. v7}, Lcom/android/server/pm/ScanPackageUtils;->collectCertificatesLI(Lcom/android/server/pm/PackageSetting;Lcom/android/internal/pm/parsing/pkg/ParsedPackage;Lcom/android/server/pm/pkg/AndroidPackage;Lcom/android/server/pm/Settings$VersionInfo;ZZZ[Landroid/content/pm/Signature;)V
 +
 +    move v3, v4
-     :try_end_c
-     .catch Lcom/android/server/pm/PackageManagerException; {:try_start_c .. :try_end_c} :catch_1
-     .catchall {:try_start_c .. :try_end_c} :catchall_4
+     :try_end_10
+     .catch Lcom/android/server/pm/PackageManagerException; {:try_start_10 .. :try_end_10} :catch_1
+     .catchall {:try_start_10 .. :try_end_10} :catchall_4
 @@ -23995,7 +24051,9 @@
  
      iget-object v2, v2, Lcom/android/server/pm/PackageManagerService;->mPlatformPackage:Lcom/android/server/pm/pkg/AndroidPackage;
@@ -376,8 +376,8 @@ index 62acf239..4d705051 100644
 -    const-string p3, " is missing signatures.  Collecting certs again to recover them."
 +    const-string p4, " is missing signatures.  Collecting certs again to recover them."
  
--    invoke-static {p2, p0, p3, p5}, Lcom/android/server/ProfileService$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-+    invoke-static {p3, p0, p4, p6}, Lcom/android/server/ProfileService$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+-    invoke-static {p2, p0, p3, p5}, Lcom/android/server/SystemConfig$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
++    invoke-static {p3, p0, p4, p6}, Lcom/android/server/SystemConfig$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
  
      goto :goto_3
  
@@ -410,8 +410,8 @@ index 62acf239..4d705051 100644
 +    const-string p3, ""
  
      :goto_2
--    invoke-static {p0, p2, p5}, Lcom/android/server/DeviceIdleController$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
-+    invoke-static {p0, p3, p6}, Lcom/android/server/DeviceIdleController$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
+-    invoke-static {p0, p2, p5}, Lcom/android/server/HeapdumpWatcher$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
++    invoke-static {p0, p3, p6}, Lcom/android/server/HeapdumpWatcher$$ExternalSyntheticOutline0;->m(Ljava/lang/StringBuilder;Ljava/lang/String;Ljava/lang/String;)V
  
      :goto_3
 -    const-wide/32 p2, 0x40000

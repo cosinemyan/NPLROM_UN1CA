@@ -1,5 +1,5 @@
 From 5f1cf4bf6ea6e44df916c061f18a989de15e250b Mon Sep 17 00:00:00 2001
-From: Rezoss <rezoss@local>
+From: @rezoss_reza <rezoss@local>
 Date: Thu, 2 Jul 2026 00:00:00 +0200
 Subject: [PATCH] Mirror Privacy Display quick tile state
 
@@ -94,9 +94,9 @@ diff --git a/smali_classes3/com/android/systemui/samsung/quicksetting/ui/details
 diff --git a/smali_classes3/com/android/systemui/qs/tiles/ScreenPrivacyTile.smali b/smali_classes3/com/android/systemui/qs/tiles/ScreenPrivacyTile.smali
 --- a/smali_classes3/com/android/systemui/qs/tiles/ScreenPrivacyTile.smali
 +++ b/smali_classes3/com/android/systemui/qs/tiles/ScreenPrivacyTile.smali
-@@ -269,6 +269,27 @@
+@@ -245,6 +245,27 @@
  
-     xor-int/lit8 v2, v2, 0x1
+     xor-int/2addr v2, v1
  
 +    iget-object v3, p0, Lcom/android/systemui/qs/tileimpl/QSTileImpl;->mContext:Landroid/content/Context;
 +
@@ -106,17 +106,17 @@ diff --git a/smali_classes3/com/android/systemui/qs/tiles/ScreenPrivacyTile.smal
 +
 +    move-result-object v3
 +
-+    const-string/jumbo v4, "rezoss_pd_main_enabled"
++    const-string/jumbo v5, "rezoss_pd_main_enabled"
 +
-+    invoke-static {v3, v4, v2}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++    invoke-static {v3, v5, v2}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
 +
-+    const-string/jumbo v4, "pd_main_enabled"
++    const-string/jumbo v5, "pd_main_enabled"
 +
-+    invoke-static {v3, v4, v2}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++    invoke-static {v3, v5, v2}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
 +
-+    const-string/jumbo v4, "pd_activate_status"
++    const-string/jumbo v5, "pd_activate_status"
 +
-+    invoke-static {v3, v4, v2}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++    invoke-static {v3, v5, v2}, Landroid/provider/Settings$System;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
 +
 +    :cond_rezoss_0
      new-instance v3, Ljava/lang/StringBuilder;

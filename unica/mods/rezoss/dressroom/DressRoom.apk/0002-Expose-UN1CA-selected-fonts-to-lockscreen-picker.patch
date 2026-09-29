@@ -1,78 +1,69 @@
 AUTHOR Rezoss
+Subject: [PATCH] Expose UN1CA selected fonts to lockscreen picker
 
-diff -ruN base/smali_classes3/O5/a.smali mod/smali_classes3/O5/a.smali
---- base/smali_classes3/O5/a.smali	2026-08-30 12:33:16.177244452 +0200
-+++ mod/smali_classes3/O5/a.smali	2026-08-30 14:58:40.627918613 +0200
-@@ -879,7 +879,9 @@
- .end method
- 
- .method public final f()[I
--    .locals 0
-+    .locals 1
+diff -ruN base/smali_classes2/yc/x.smali mod/smali_classes2/yc/x.smali
+--- base/smali_classes2/yc/x.smali
++++ mod/smali_classes2/yc/x.smali
+@@ -82,11 +82,17 @@
+
+     check-cast v2, Lpc/b;
+
++    iget-object v3, v2, Lpc/b;->a:Landroid/content/Context;
 +
-+    iget-object v0, p0, LO5/a;->a:Landroid/content/Context;
- 
-     invoke-virtual {p0}, LO5/a;->i()Lcom/samsung/android/clockpack/plugins/clock/ClockManager;
- 
-@@ -889,6 +891,10 @@
- 
-     move-result-object p0
- 
-+    invoke-static {v0, p0}, Lio/mesalabs/unica/dressroom/ClockFontBank;->appendDownloadedFontTypeIfNeeded(Landroid/content/Context;[I)[I
+     invoke-virtual {v2}, Lpc/b;->d()Lcom/samsung/android/clockpack/plugins/clock/ClockManager;
+
+     move-result-object v2
+
+     invoke-virtual {v2}, Lcom/samsung/android/clockpack/plugins/clock/ClockManager;->getClockFontList()[I
 +
-+    move-result-object p0
++    move-result-object v2
 +
-     return-object p0
- .end method
- 
-@@ -1384,7 +1390,9 @@
- .end method
- 
- .method public final v()Ljava/util/ArrayList;
--    .locals 0
-+    .locals 1
++    invoke-static {v3, v2}, Lio/mesalabs/unica/dressroom/ClockFontBank;->appendDownloadedFontTypeIfNeeded(Landroid/content/Context;[I)[I
+
+     move-result-object v2
+
+diff -ruN base/smali_classes2/ig/b.smali mod/smali_classes2/ig/b.smali
+--- base/smali_classes2/ig/b.smali
++++ mod/smali_classes2/ig/b.smali
+@@ -318,10 +318,16 @@
+
+     invoke-virtual {v0}, Lcom/samsung/android/clockpack/plugins/clock/ClockManager;->getSystemFontList()Ljava/util/ArrayList;
+
+     move-result-object v0
+
++    iget-object v2, v2, Lpc/b;->a:Landroid/content/Context;
 +
-+    iget-object v0, p0, LO5/a;->a:Landroid/content/Context;
- 
-     invoke-virtual {p0}, LO5/a;->i()Lcom/samsung/android/clockpack/plugins/clock/ClockManager;
- 
-@@ -1394,11 +1402,17 @@
- 
-     move-result-object p0
- 
-+    invoke-static {v0, p0}, Lio/mesalabs/unica/dressroom/ClockFontBank;->appendSelectedFontList(Landroid/content/Context;Ljava/util/ArrayList;)Ljava/util/ArrayList;
-+
-+    move-result-object p0
-+
-     return-object p0
- .end method
- 
- .method public final w()Ljava/util/HashMap;
--    .locals 3
-+    .locals 4
-+
-+    iget-object v3, p0, LO5/a;->a:Landroid/content/Context;
- 
-     :try_start_0
-     invoke-virtual {p0}, LO5/a;->i()Lcom/samsung/android/clockpack/plugins/clock/ClockManager;
-@@ -1407,10 +1421,16 @@
- 
-     invoke-virtual {v0}, Lcom/samsung/android/clockpack/plugins/clock/ClockManager;->getSystemFontMap()Ljava/util/HashMap;
- 
--    move-result-object p0
-+    move-result-object v0
-+
-+    invoke-static {v3, v0}, Lio/mesalabs/unica/dressroom/ClockFontBank;->appendSelectedFontMap(Landroid/content/Context;Ljava/util/HashMap;)Ljava/util/HashMap;
++    invoke-static {v2, v0}, Lio/mesalabs/unica/dressroom/ClockFontBank;->appendSelectedFontList(Landroid/content/Context;Ljava/util/ArrayList;)Ljava/util/ArrayList;
 +
 +    move-result-object v0
++
+     goto :goto_1
+
+     :cond_3
+     move-object v0, v1
+
+diff -ruN base/smali_classes2/yc/a0.smali mod/smali_classes2/yc/a0.smali
+--- base/smali_classes2/yc/a0.smali
++++ mod/smali_classes2/yc/a0.smali
+@@ -81,9 +81,17 @@
+
+     invoke-virtual {v1}, Lcom/samsung/android/clockpack/plugins/clock/ClockManager;->getSystemFontMap()Ljava/util/HashMap;
+
+-    move-result-object v0
++    move-result-object v1
++
++    iget-object v2, v0, Lpc/b;->a:Landroid/content/Context;
++
++    invoke-static {v2, v1}, Lio/mesalabs/unica/dressroom/ClockFontBank;->appendSelectedFontMap(Landroid/content/Context;Ljava/util/HashMap;)Ljava/util/HashMap;
++
++    move-result-object v1
      :try_end_0
      .catchall {:try_start_0 .. :try_end_0} :catchall_0
- 
-+    move-object p0, v0
 +
++    move-object v0, v1
+
      goto :goto_0
- 
-     :catchall_0
+
 diff -ruN base/smali_classes3/io/mesalabs/unica/dressroom/ClockFontBank$1.smali mod/smali_classes3/io/mesalabs/unica/dressroom/ClockFontBank$1.smali
 --- base/smali_classes3/io/mesalabs/unica/dressroom/ClockFontBank$1.smali	1970-01-01 01:00:00.000000000 +0100
 +++ mod/smali_classes3/io/mesalabs/unica/dressroom/ClockFontBank$1.smali	2026-08-30 14:58:40.633482715 +0200

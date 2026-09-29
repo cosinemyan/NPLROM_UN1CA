@@ -3,22 +3,22 @@ From: Salvo Giangreco <giangrecosalvo9@gmail.com>
 Date: Mon, 6 Oct 2025 14:35:37 +0200
 Subject: [PATCH] Allow custom PackageBlockListPolicy
 
-UN1CA: retargeted using the available `.orig`/`.rej` smali artifacts for this target.
+UN1CA: retargeted against the fresh SM-S918B services.jar decode for this target.
 
 UN1CA: `ScanPackageUtils` no longer contains the old blocklist hunk on this base, so this patch only updates the remaining live call sites.
 
 UN1CA: this patch is not complete! Please check unica/mods/blocklist/customize.sh for more info.
 ---
- .../server/pm/InstallPackageHelper.smali      | 12 ++---
- .../pm/install/PackageBlockListPolicy.smali   | 19 +-----
- .../server/pm/lifecycle/PmLifecycleImpl.smali | 49 -------------------
- 3 files changed, 6 insertions(+), 75 deletions(-)
+ .../android/server/pm/InstallPackageHelper.smali   | 14 ++-----
+ .../server/pm/install/PackageBlockListPolicy.smali | 20 ----------
+ .../server/pm/lifecycle/PmLifecycleImpl.smali      | 42 --------------------
+ 3 files changed, 6 insertions(+), 70 deletions(-)
 
 diff --git a/smali_classes2/com/android/server/pm/InstallPackageHelper.smali b/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
 index d8893e3df..1ac76a316 100644
 --- a/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
 +++ b/smali_classes2/com/android/server/pm/InstallPackageHelper.smali
-@@ -21808,20 +21808,16 @@
+@@ -22443,20 +22443,16 @@
      :try_start_5
 -    sget-object v2, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sIsRduDevice:Ljava/util/concurrent/atomic/AtomicBoolean;
 -
@@ -42,7 +42,7 @@ index d8893e3df..1ac76a316 100644
  
      invoke-static {v2}, Lcom/samsung/android/server/pm/install/PmConfigParser;->parsePackages(Ljava/lang/String;)Ljava/util/List;
  
-@@ -21831,7 +21827,7 @@
+@@ -22466,7 +22462,7 @@
  
      invoke-direct {v3, v2}, Ljava/util/HashSet;-><init>(Ljava/util/Collection;)V
  
@@ -51,7 +51,7 @@ index d8893e3df..1ac76a316 100644
  
      :cond_8
      sget-boolean v2, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sBypassBlocklist:Z
-@@ -21843,6 +21839,6 @@
+@@ -22478,7 +22474,7 @@
      goto :goto_2
  
      :cond_9
@@ -59,7 +59,8 @@ index d8893e3df..1ac76a316 100644
 +    sget-object v2, Lcom/samsung/android/server/pm/install/PackageBlockListPolicy;->sBlocklist:Ljava/util/HashSet;
  
      invoke-virtual {v2, v1}, Ljava/util/HashSet;->contains(Ljava/lang/Object;)Z
- 
+
+     move-result v2
 diff --git a/smali_classes2/com/samsung/android/server/pm/install/PackageBlockListPolicy.smali b/smali_classes2/com/samsung/android/server/pm/install/PackageBlockListPolicy.smali
 index e6a229638..eeed61f8e 100644
 --- a/smali_classes2/com/samsung/android/server/pm/install/PackageBlockListPolicy.smali
@@ -92,7 +93,7 @@ diff --git a/smali_classes2/com/samsung/android/server/pm/lifecycle/PmLifecycleI
 index 91512edd5..f87336b76 100644
 --- a/smali_classes2/com/samsung/android/server/pm/lifecycle/PmLifecycleImpl.smali
 +++ b/smali_classes2/com/samsung/android/server/pm/lifecycle/PmLifecycleImpl.smali
-@@ -3228,46 +3228,4 @@
+@@ -3222,48 +3222,6 @@
  
      move-result-object v0
  
@@ -114,16 +115,16 @@ index 91512edd5..f87336b76 100644
 -
 -    const/4 v7, 0x1
 -
--    if-ne v6, v7, :cond_18
+-    if-ne v6, v7, :cond_16
 -
 -    const/4 v6, 0x1
 -
--    goto :goto_13
+-    goto :goto_11
 -
--    :cond_18
+-    :cond_16
 -    move v6, v5
 -
--    :goto_13
+-    :goto_11
 -    invoke-virtual {v3, v6}, Ljava/util/concurrent/atomic/AtomicBoolean;->set(Z)V
 -
 -    invoke-static {v4}, Landroid/provider/Settings$Secure;->getUriFor(Ljava/lang/String;)Landroid/net/Uri;
@@ -139,6 +140,8 @@ index 91512edd5..f87336b76 100644
 -    invoke-virtual {v2, v3, v5, v4, v6}, Landroid/content/ContentResolver;->registerContentObserver(Landroid/net/Uri;ZLandroid/database/ContentObserver;I)V
 -
      iget-object v0, v1, Lcom/samsung/android/server/pm/lifecycle/PmLifecycleImpl;->mATCommandReceiver:Lcom/samsung/android/server/pm/mm/MaintenanceModeManager$ATCommandReceiver;
+
+     iget-object v2, v1, Lcom/samsung/android/server/pm/lifecycle/PmLifecycleImpl;->mInjector:Lcom/android/server/pm/PackageManagerServiceInjector;
  
 -- 
 2.51.0

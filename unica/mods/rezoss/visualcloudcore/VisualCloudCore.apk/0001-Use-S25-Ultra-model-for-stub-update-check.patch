@@ -1,14 +1,14 @@
 AUTHOR Rezoss
 
-diff --git a/smali/L/e.smali b/smali/L/e.smali
---- a/smali/L/e.smali
-+++ b/smali/L/e.smali
-@@ -363,6 +363,8 @@
+diff --git a/smali/k0/e.smali b/smali/k0/e.smali
+--- a/smali/k0/e.smali
++++ b/smali/k0/e.smali
+@@ -380,6 +380,8 @@
      :goto_9
-     sget-object v9, Landroid/os/Build;->MODEL:Ljava/lang/String;
+     sget-object v10, Landroid/os/Build;->MODEL:Ljava/lang/String;
 
-+    const-string v9, "SM-S948B"
++    const-string v10, "SM-S948B"
 +
-     const-string v10, "SAMSUNG-"
+     const-string v11, "SAMSUNG-"
 
-     invoke-virtual {v9, v10, v4}, Ljava/lang/String;->replaceFirst(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+     invoke-virtual {v10, v11, v4}, Ljava/lang/String;->replaceFirst(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;

@@ -4,39 +4,12 @@ Date: Sun, 26 Oct 2025 15:31:23 +0100
 Subject: [PATCH] Introduce HideDeveloperStatusUtils
 
 ---
- .../android/provider/Settings$Global.smali    |  15 +
  .../HideDeveloperStatusUtils$Action.smali     | 152 +++++++
  .../unica/HideDeveloperStatusUtils.smali      | 371 ++++++++++++++++++
- 3 files changed, 538 insertions(+)
+ 2 files changed, 523 insertions(+)
  create mode 100644 smali_classes6/io/mesalabs/unica/HideDeveloperStatusUtils$Action.smali
  create mode 100644 smali_classes6/io/mesalabs/unica/HideDeveloperStatusUtils.smali
 
-diff --git a/smali_classes3/android/provider/Settings$Global.smali b/smali_classes3/android/provider/Settings$Global.smali
-index 25bf82f9..e46b5e33 100644
---- a/smali_classes3/android/provider/Settings$Global.smali
-+++ b/smali_classes3/android/provider/Settings$Global.smali
-@@ -4539,6 +4539,21 @@
-     return-object p0
- 
-     :cond_1
-+    invoke-virtual {p0}, Landroid/content/ContentResolver;->getPackageName()Ljava/lang/String;
-+
-+    move-result-object v0
-+
-+    invoke-static {p0, v0, p1}, Lio/mesalabs/unica/HideDeveloperStatusUtils;->shouldHideDevStatus(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;)Z
-+
-+    move-result v0
-+
-+    if-eqz v0, :cond_2
-+
-+    const-string p0, "0"
-+
-+    return-object p0
-+
-+    :cond_2
-     sget-object v0, Landroid/provider/Settings$Global;->sNameValueCache:Landroid/provider/Settings$NameValueCache;
- 
-     invoke-virtual {v0, p0, p1, p2}, Landroid/provider/Settings$NameValueCache;->getStringForUser(Landroid/content/ContentResolver;Ljava/lang/String;I)Ljava/lang/String;
 diff --git a/smali_classes6/io/mesalabs/unica/HideDeveloperStatusUtils$Action.smali b/smali_classes6/io/mesalabs/unica/HideDeveloperStatusUtils$Action.smali
 new file mode 100644
 index 00000000..71db276a
@@ -574,4 +547,3 @@ index 00000000..7126a143
 +.end method
 -- 
 2.51.1
-

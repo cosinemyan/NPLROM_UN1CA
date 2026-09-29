@@ -50,39 +50,44 @@ if [ -f "$WORK_DIR/system/system/priv-app/KmxService/KmxService.apk" ]; then
     LOG "- Downloading latest Knox Matrix app"
     DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.samsung.android.kmxservice")" \
         "$WORK_DIR/system/system/priv-app/KmxService/KmxService.apk"
-    APPLY_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
-        "$MODPATH/KmxService.apk/0002-Ignore-FabricEscrowVault-errors-in-KmxServiceReceiver.patch"
-    SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
-        "smali_classes2/com/samsung/android/kmxservice/common/util/RootOfTrust.smali" "return" \
-        'getVerifiedBootState()I' '0'
-    SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
-        "smali_classes2/com/samsung/android/kmxservice/common/util/RootOfTrust.smali" "return" \
-        'isDeviceLocked()Z' 'true'
-    SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
-        "smali_classes2/com/samsung/android/kmxservice/fabrickeystore/keystore/cert/RootOfTrust.smali" "return" \
-        'getVerifiedBootState()I' '0'
-    SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
-        "smali_classes2/com/samsung/android/kmxservice/fabrickeystore/keystore/cert/RootOfTrust.smali" "return" \
-        'isDeviceLocked()Z' 'true'
-    SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
-        "smali_classes2/com/samsung/android/kmxservice/sdk/trustchain/util/RootOfTrust.smali" "return" \
-        'getVerifiedBootState()I' '0'
-    SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
-        "smali_classes2/com/samsung/android/kmxservice/sdk/trustchain/util/RootOfTrust.smali" "return" \
-        'isDeviceLocked()Z' 'true'
-    SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
-        "smali_classes2/com/samsung/android/kmxservice/common/util/IntegrityStatus.smali" "return" \
-        'getStatus()I' '0'
-    SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
-        "smali_classes2/com/samsung/android/kmxservice/common/util/IntegrityStatus.smali" "return" \
-        'isNormal()Z' 'true'
-    SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
-        "smali_classes2/com/samsung/android/kmxservice/fabrickeystore/keystore/cert/IntegrityStatus.smali" "return" \
-        'isNormal()Z' 'true'
-    SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
-        "smali_classes2/com/samsung/android/kmxservice/sdk/trustchain/util/IntegrityStatus.smali" "return" \
-        'getStatus()I' '0'
-    SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
-        "smali_classes2/com/samsung/android/kmxservice/sdk/trustchain/util/IntegrityStatus.smali" "return" \
-        'isNormal()Z' 'true'
+    DECODE_APK "system" "system/priv-app/KmxService/KmxService.apk"
+
+    KMX_APKTOOL_DIR="$APKTOOL_DIR/system/priv-app/KmxService/KmxService.apk"
+    KMX_RECEIVER="$(find "$KMX_APKTOOL_DIR" -type f \
+        -path "*/com/samsung/android/kmxservice/common/receiver/KmxServiceReceiver.smali" \
+        -print -quit)"
+    if [ -n "$KMX_RECEIVER" ] && \
+            grep -q -F 'FabricEscrowVault;->evIsExistKey()Z' "$KMX_RECEIVER"; then
+        APPLY_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
+            "$MODPATH/KmxService.apk/0002-Ignore-FabricEscrowVault-errors-in-KmxServiceReceiver.patch"
+    else
+        LOG "- Skipping obsolete FabricEscrowVault receiver patch"
+    fi
+
+    readarray -t KMX_ROOT_OF_TRUST_FILES < <(find "$KMX_APKTOOL_DIR" -type f \
+        -path "*/com/samsung/android/kmxservice/*/RootOfTrust.smali" | sort)
+    readarray -t KMX_INTEGRITY_STATUS_FILES < <(find "$KMX_APKTOOL_DIR" -type f \
+        -path "*/com/samsung/android/kmxservice/*/IntegrityStatus.smali" | sort)
+    if [ "${#KMX_ROOT_OF_TRUST_FILES[@]}" -eq 0 ] || \
+            [ "${#KMX_INTEGRITY_STATUS_FILES[@]}" -eq 0 ]; then
+        LOGE "Knox Matrix integrity classes not found"
+        return 1
+    fi
+
+    for KMX_FILE in "${KMX_ROOT_OF_TRUST_FILES[@]}"; do
+        KMX_FILE="${KMX_FILE#"$KMX_APKTOOL_DIR/"}"
+        SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
+            "$KMX_FILE" "return" 'getVerifiedBootState()I' '0'
+        SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
+            "$KMX_FILE" "return" 'isDeviceLocked()Z' 'true'
+    done
+    for KMX_FILE in "${KMX_INTEGRITY_STATUS_FILES[@]}"; do
+        KMX_FILE="${KMX_FILE#"$KMX_APKTOOL_DIR/"}"
+        if grep -q -F 'getStatus()I' "$KMX_APKTOOL_DIR/$KMX_FILE"; then
+            SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
+                "$KMX_FILE" "return" 'getStatus()I' '0'
+        fi
+        SMALI_PATCH "system" "system/priv-app/KmxService/KmxService.apk" \
+            "$KMX_FILE" "return" 'isNormal()Z' 'true'
+    done
 fi

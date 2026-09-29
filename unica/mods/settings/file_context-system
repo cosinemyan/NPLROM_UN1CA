@@ -6,3 +6,6 @@
 /system/etc/init/unica_scpm_allowlist\.rc u:object_r:system_file:s0
 /system/etc/init/vulkan\.rc u:object_r:system_file:s0
 /system/etc/unica(/.*)? u:object_r:system_file:s0
+/system/etc/unica/notification_ai_scpm_policies\.json u:object_r:system_file:s0
+/system/etc/unica/now_nudge_defaults\.sh u:object_r:system_file:s0
+/system/etc/unica/scpm_allowlist_apply\.sh u:object_r:system_file:s0

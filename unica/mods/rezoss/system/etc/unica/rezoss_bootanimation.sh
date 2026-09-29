@@ -1,228 +1,190 @@
 #!/system/bin/sh
 
 LOG_TAG="RezossBootAnim"
-STAGE_DIR="/data/misc/bootanim"
-STATE_LOG="$STAGE_DIR/rezoss_bootanimation.log"
-USER_ZIP="/data/media/0/bootanimation.zip"
-STAGED_ZIP="$STAGE_DIR/bootanimation.zip"
-STAGED_NEXT="$STAGE_DIR/bootanimation.zip.next"
-STAGED_TMP="$STAGED_ZIP.tmp"
-SYSTEM_ZIP="/system/media/bootanimation.zip"
+MODULE_ROOT="/data/adb/modules"
+MODULE_ZIP_REL="system/media/bootanimation.zip"
+CACHE_DIR="/data/misc/bootanim"
+CACHE_ZIP="$CACHE_DIR/rezoss.zip"
 AOSP_BOOTANIM="/system/bin/bootanimation_zip"
-SYSTEM_BOOTANIM="/system/bin/bootanimation"
+WAIT_TIMEOUT=30
+BOOTANIM_WAIT_TIMEOUT=60
 MODE="apply"
-BIND_CHANGED=0
 
 case "$1" in
     ""|--apply)
         MODE="apply"
         ;;
-    --stage-only)
-        MODE="stage-only"
-        ;;
-    --wait-stage)
-        MODE="wait-stage"
-        ;;
-    --stage-now)
-        MODE="stage-now"
-        ;;
 esac
-
-prepare_stage_dir()
-{
-    mkdir -p "$STAGE_DIR" 2>/dev/null
-    chown system:system "$STAGE_DIR" 2>/dev/null
-    chmod 0755 "$STAGE_DIR" 2>/dev/null
-    restorecon "$STAGE_DIR" 2>/dev/null
-}
 
 log_msg()
 {
     log -t "$LOG_TAG" "$1"
-    [ -d "$STAGE_DIR" ] || return 0
-
-    TS="$(date '+%m-%d %H:%M:%S' 2>/dev/null)"
-    [ -n "$TS" ] || TS="unknown"
-    echo "$TS [$MODE] $1" >> "$STATE_LOG" 2>/dev/null
 }
 
-is_mounted()
+is_boot_completed()
 {
-    grep -q " $1 " /proc/mounts 2>/dev/null
+    [ "$(getprop sys.boot_completed 2>/dev/null)" = "1" ]
 }
 
-bind_file()
+is_stock_bootanim_running()
 {
-    SRC="$1"
-    DST="$2"
+    [ "$(getprop init.svc.bootanim 2>/dev/null)" = "running" ]
+}
 
-    if is_mounted "$DST"; then
-        log_msg "$DST is already bind mounted"
-        return 0
-    fi
+is_rezoss_bootanim_running()
+{
+    [ "$(getprop init.svc.rezoss_bootanim 2>/dev/null)" = "running" ]
+}
 
-    if mount -o bind "$SRC" "$DST"; then
-        BIND_CHANGED=1
+find_module_zip_once()
+{
+    FOUND_ZIP=""
+
+    [ -d "$MODULE_ROOT" ] || return 1
+
+    for MODULE_DIR in "$MODULE_ROOT"/*; do
+        [ -d "$MODULE_DIR" ] || continue
+        [ -f "$MODULE_DIR/module.prop" ] || continue
+        [ -f "$MODULE_DIR/disable" ] && continue
+        [ -f "$MODULE_DIR/remove" ] && continue
+
+        MODULE_ZIP="$MODULE_DIR/$MODULE_ZIP_REL"
+        [ -s "$MODULE_ZIP" ] || continue
+
+        FOUND_ZIP="$MODULE_ZIP"
         return 0
-    fi
+    done
 
     return 1
 }
 
-stage_user_zip()
+wait_for_module_zip()
 {
-    FORCE_ACTIVE="$1"
+    WAITED=0
 
-    prepare_stage_dir
+    while [ "$WAITED" -le "$WAIT_TIMEOUT" ]; do
+        if find_module_zip_once; then
+            return 0
+        fi
 
-    cp -f "$USER_ZIP" "$STAGED_TMP" || return 1
-    if [ ! -s "$STAGED_TMP" ]; then
-        rm -f "$STAGED_TMP"
+        if is_boot_completed; then
+            return 1
+        fi
+
+        [ "$WAITED" -ge "$WAIT_TIMEOUT" ] && break
+
+        sleep 1
+        WAITED=$((WAITED + 1))
+    done
+
+    return 1
+}
+
+cache_module_zip()
+{
+    SRC_ZIP="$1"
+    TMP_ZIP="$CACHE_ZIP.tmp.$$"
+
+    if ! mkdir -p "$CACHE_DIR"; then
+        log_msg "failed to create $CACHE_DIR"
         return 1
     fi
 
-    if [ "$FORCE_ACTIVE" != "1" ] && is_mounted "$SYSTEM_ZIP"; then
-        mv -f "$STAGED_TMP" "$STAGED_NEXT" || return 1
-        chown system:system "$STAGED_NEXT"
-        chmod 0644 "$STAGED_NEXT"
-        chcon u:object_r:bootanim_data_file:s0 "$STAGED_NEXT" 2>/dev/null || restorecon "$STAGED_NEXT" 2>/dev/null
-        sync "$STAGED_NEXT" 2>/dev/null
-        log_msg "$SYSTEM_ZIP is mounted, staged updated bootanimation.zip for next boot"
-        return 0
+    rm -f "$TMP_ZIP" 2>/dev/null
+    if ! cp "$SRC_ZIP" "$TMP_ZIP"; then
+        log_msg "failed to copy $SRC_ZIP"
+        rm -f "$TMP_ZIP" 2>/dev/null
+        return 1
     fi
 
-    mv -f "$STAGED_TMP" "$STAGED_ZIP" || return 1
-    chown system:system "$STAGED_ZIP"
-    chmod 0644 "$STAGED_ZIP"
-    chcon u:object_r:bootanim_data_file:s0 "$STAGED_ZIP" 2>/dev/null || restorecon "$STAGED_ZIP" 2>/dev/null
-    sync "$STAGED_ZIP" 2>/dev/null
+    chown system:system "$TMP_ZIP" 2>/dev/null || true
+    chmod 0644 "$TMP_ZIP" 2>/dev/null || true
+    restorecon "$TMP_ZIP" 2>/dev/null || true
+
+    if ! mv -f "$TMP_ZIP" "$CACHE_ZIP"; then
+        log_msg "failed to move cached bootanimation zip"
+        rm -f "$TMP_ZIP" 2>/dev/null
+        return 1
+    fi
+
+    restorecon "$CACHE_ZIP" 2>/dev/null || true
+    log_msg "cached module bootanimation from $SRC_ZIP"
     return 0
 }
 
-stage_from_user_zip()
+clear_cached_zip()
 {
-    prepare_stage_dir
-    WAIT_STAGE="$1"
-    FORCE_ACTIVE="$2"
-    log_msg "checking $USER_ZIP"
-
-    if [ "$WAIT_STAGE" = "1" ]; then
-        WAITED=0
-        while [ ! -r "$USER_ZIP" ] && [ "$WAITED" -lt 180 ]; do
-            sleep 2
-            WAITED=$((WAITED + 2))
-        done
+    if [ -e "$CACHE_ZIP" ] && ! is_rezoss_bootanim_running; then
+        rm -f "$CACHE_ZIP" 2>/dev/null
     fi
-
-    if [ -r "$USER_ZIP" ]; then
-        if stage_user_zip "$FORCE_ACTIVE"; then
-            log_msg "staged custom bootanimation.zip"
-        else
-            log_msg "failed to stage bootanimation.zip"
-        fi
-        return 0
-    fi
-
-    if [ "$WAIT_STAGE" = "1" ]; then
-        log_msg "custom bootanimation.zip not readable after wait, keeping staged copy"
-    elif [ "$FORCE_ACTIVE" = "1" ]; then
-        log_msg "custom bootanimation.zip not readable, keeping staged copy"
-    elif [ "$(getprop sys.user.0.ce_available 2>/dev/null)" != "true" ]; then
-        log_msg "user storage not available, keeping staged copy"
-    else
-        rm -f "$STAGED_ZIP" "$STAGED_NEXT" "$STAGED_TMP"
-        log_msg "no custom bootanimation.zip, cleared staged copy"
-    fi
-
-    return 0
 }
 
-restart_bootanim()
+start_rezoss_bootanim()
 {
-    if [ "$(getprop sys.boot_completed 2>/dev/null)" = "1" ]; then
-        log_msg "boot completed, not restarting bootanim"
-        return 0
-    fi
+    WAITED=0
 
-    if [ "$BIND_CHANGED" != "1" ]; then
-        log_msg "no new bind mount, not restarting bootanim"
-        return 0
-    fi
-
-    BOOTANIM_STATE="$(getprop init.svc.bootanim 2>/dev/null)"
-    if [ "$BOOTANIM_STATE" != "running" ]; then
-        log_msg "bootanim service is $BOOTANIM_STATE, bind will apply when it starts"
-        return 0
-    fi
-
-    setprop ctl.restart bootanim 2>/dev/null
-    log_msg "requested bootanim restart"
-}
-
-apply_staged_zip()
-{
-    ZIP_BOUND=0
-
-    prepare_stage_dir
-
-    if [ -s "$STAGED_NEXT" ] && ! is_mounted "$SYSTEM_ZIP"; then
-        mv -f "$STAGED_NEXT" "$STAGED_ZIP" && log_msg "promoted next bootanimation.zip"
-    fi
-
-    if [ ! -s "$STAGED_ZIP" ]; then
-        log_msg "no staged bootanimation.zip, keeping Samsung QMG bootanimation"
-        return 0
-    fi
-
-    if [ ! -f "$AOSP_BOOTANIM" ]; then
+    if [ ! -x "$AOSP_BOOTANIM" ]; then
         log_msg "$AOSP_BOOTANIM is missing"
         return 0
     fi
 
-    if [ ! -e "$SYSTEM_ZIP" ]; then
-        log_msg "$SYSTEM_ZIP bind target is missing"
+    if [ ! -s "$CACHE_ZIP" ]; then
+        log_msg "$CACHE_ZIP is missing"
         return 0
     fi
 
-    if [ ! -e "$SYSTEM_BOOTANIM" ]; then
-        log_msg "$SYSTEM_BOOTANIM bind target is missing"
+    if is_rezoss_bootanim_running; then
+        log_msg "rezoss_bootanim is already running"
         return 0
     fi
 
-    if ! is_mounted "$SYSTEM_ZIP"; then
-        if ! mount -o bind "$STAGED_ZIP" "$SYSTEM_ZIP"; then
-            log_msg "failed to bind staged zip to $SYSTEM_ZIP"
+    while [ "$WAITED" -le "$BOOTANIM_WAIT_TIMEOUT" ]; do
+        if is_rezoss_bootanim_running; then
+            log_msg "rezoss_bootanim is already running"
             return 0
         fi
-        ZIP_BOUND=1
-        BIND_CHANGED=1
-    else
-        log_msg "$SYSTEM_ZIP is already bind mounted"
-    fi
 
-    if ! bind_file "$AOSP_BOOTANIM" "$SYSTEM_BOOTANIM"; then
-        [ "$ZIP_BOUND" = "1" ] && umount "$SYSTEM_ZIP" 2>/dev/null
-        log_msg "failed to bind AOSP bootanimation binary"
+        if is_stock_bootanim_running; then
+            setprop ctl.stop bootanim 2>/dev/null
+            setprop ctl.start rezoss_bootanim 2>/dev/null
+            log_msg "requested AOSP zip bootanimation service"
+            return 0
+        fi
+
+        if is_boot_completed; then
+            log_msg "boot completed before Samsung bootanim service was running"
+            return 0
+        fi
+
+        [ "$WAITED" -ge "$BOOTANIM_WAIT_TIMEOUT" ] && break
+
+        sleep 1
+        WAITED=$((WAITED + 1))
+    done
+
+    log_msg "Samsung bootanim service was not running before timeout"
+    return 0
+}
+
+apply_module_zip()
+{
+    if ! wait_for_module_zip; then
+        clear_cached_zip
+        log_msg "no module bootanimation.zip, keeping Samsung QMG bootanimation"
         return 0
     fi
 
-    log_msg "using staged AOSP bootanimation.zip"
-    restart_bootanim
+    if ! cache_module_zip "$FOUND_ZIP"; then
+        return 0
+    fi
+
+    start_rezoss_bootanim
     return 0
 }
 
 case "$MODE" in
-    stage-only)
-        stage_from_user_zip 0
-        ;;
-    wait-stage)
-        stage_from_user_zip 1
-        ;;
-    stage-now)
-        stage_from_user_zip 0 1
-        ;;
     *)
-        apply_staged_zip
+        apply_module_zip
         ;;
 esac
 

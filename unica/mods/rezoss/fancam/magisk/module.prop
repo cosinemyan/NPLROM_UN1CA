@@ -1,0 +1,6 @@
+id=unica_fancam_bridge_test
+name=UN1CA My FanCam SYNTHETIC Bridge Test
+version=0.1-test1
+versionCode=1
+author=Rezoss / Codex
+description=SM8550 diagnostic prototype: synthetic moving box and fixed pose/identity fixtures. NOT real person detection. Requires the exact tested MCA/libauto build. Disable and reboot to restore.

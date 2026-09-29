@@ -1,0 +1,22 @@
+From: @rezoss_reza <rezoss@local>
+Subject: [PATCH] Guard missing Knox application restrictions service
+
+Use the existing empty restrictions fallback when the Knox local service
+is unavailable, instead of propagating a NullPointerException over Binder.
+
+diff --git a/smali_classes2/com/samsung/android/knox/custom/KnoxCustomManagerService.smali b/smali_classes2/com/samsung/android/knox/custom/KnoxCustomManagerService.smali
+--- a/smali_classes2/com/samsung/android/knox/custom/KnoxCustomManagerService.smali
++++ b/smali_classes2/com/samsung/android/knox/custom/KnoxCustomManagerService.smali
+@@ -8263,10 +8263,12 @@
+ .method public final getApplicationRestrictionsInternal(Ljava/lang/String;I)Landroid/os/Bundle;
+     .locals 0
+
+     iget-object p0, p0, Lcom/samsung/android/knox/custom/KnoxCustomManagerService;->mApplicationRestrictionsInternal:Lcom/samsung/android/knox/localservice/ApplicationRestrictionsInternal;
+
++    if-eqz p0, :cond_0
++
+     invoke-virtual {p0, p1, p2}, Lcom/samsung/android/knox/localservice/ApplicationRestrictionsInternal;->getApplicationRestrictionsInternal(Ljava/lang/String;I)Landroid/os/Bundle;
+
+     move-result-object p0
+
+     if-eqz p0, :cond_0

@@ -1,13 +1,12 @@
 AUTHOR Rezoss
 
 diff --git a/smali/com/samsung/android/app/clockpack/provider/LockContentProvider.smali b/smali/com/samsung/android/app/clockpack/provider/LockContentProvider.smali
-index 3c06a6db..f301809d 100644
 --- a/smali/com/samsung/android/app/clockpack/provider/LockContentProvider.smali
 +++ b/smali/com/samsung/android/app/clockpack/provider/LockContentProvider.smali
-@@ -5471,6 +5471,51 @@
- 
-     invoke-virtual {v3}, Laod/k5;->a()V
- 
+@@ -2424,6 +2424,51 @@
+
+     invoke-virtual {v3}, Laod/fc;->a()V
+
 +    if-eqz p1, :cond_unica_stretch_sync_done
 +
 +    const/16 v2, 0x323
@@ -18,7 +17,7 @@ index 3c06a6db..f301809d 100644
 +
 +    if-gt v1, v2, :cond_unica_stretch_sync_done
 +
-+    new-instance v2, Laod/W;
++    new-instance v2, Laod/i1;
 +
 +    invoke-virtual {p0}, Landroid/content/ContentProvider;->getContext()Landroid/content/Context;
 +
@@ -26,17 +25,17 @@ index 3c06a6db..f301809d 100644
 +
 +    if-eqz v3, :cond_unica_stretch_sync_done
 +
-+    invoke-direct {v2, v3}, Laod/W;-><init>(Landroid/content/Context;)V
++    invoke-direct {v2, v3}, Laod/i1;-><init>(Landroid/content/Context;)V
 +
-+    iget-object v2, v2, Laod/W;->l:Laod/k5;
++    iget-object v2, v2, Laod/i1;->l:Laod/fc;
 +
 +    invoke-static {v1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
 +
 +    move-result-object v8
 +
-+    invoke-virtual {v2, v8}, Laod/k5;->z(Ljava/lang/Object;)V
++    invoke-virtual {v2, v8}, Laod/fc;->z(Ljava/lang/Object;)V
 +
-+    invoke-virtual {v2}, Laod/k5;->a()V
++    invoke-virtual {v2}, Laod/fc;->a()V
 +
 +    invoke-virtual {v3}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 +
@@ -54,5 +53,5 @@ index 3c06a6db..f301809d 100644
 +
 +    :cond_unica_stretch_sync_done
      new-instance v2, Ljava/lang/StringBuilder;
- 
-     const-string v3, "updateLockClockFontType() : fontType="
+
+     const-string/jumbo v3, "updateLockClockFontType() : fontType="

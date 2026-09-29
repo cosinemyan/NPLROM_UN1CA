@@ -5,35 +5,23 @@ Subject: [PATCH] Allow local Audio Eraser packages
 
 Accept exact packages from Settings.System.unica_scpm_allowlist_packages
 when SystemUI filters active playback apps for the Audio Eraser panel. This
-keeps the stock SoundAlive AudioEraserProvider/SCPM flow intact, but lets the
+keeps the stock SoundAlive SAContentProvider command flow intact, but lets the
 UN1CA SCPM Allowlist menu add extra media apps locally.
 ---
- ...dioPlaybackStartable$audioPlaybackCallback$1$onPlaybackConfigChanged$1.smali | 56 +++++++++++-
- 1 file changed, 55 insertions(+), 1 deletion(-)
+ 1 file changed, 49 insertions(+), 0 deletion(-)
 
 diff --git a/smali_classes3/com/android/systemui/samsung/quicksetting/ui/banner/AudioEraserAudioPlaybackStartable$audioPlaybackCallback$1$onPlaybackConfigChanged$1.smali b/smali_classes3/com/android/systemui/samsung/quicksetting/ui/banner/AudioEraserAudioPlaybackStartable$audioPlaybackCallback$1$onPlaybackConfigChanged$1.smali
-index 1111111..2222222 100644
 --- a/smali_classes3/com/android/systemui/samsung/quicksetting/ui/banner/AudioEraserAudioPlaybackStartable$audioPlaybackCallback$1$onPlaybackConfigChanged$1.smali
 +++ b/smali_classes3/com/android/systemui/samsung/quicksetting/ui/banner/AudioEraserAudioPlaybackStartable$audioPlaybackCallback$1$onPlaybackConfigChanged$1.smali
-@@ -463,8 +463,9 @@
-     move v0, v5
+@@ -483,7 +483,56 @@
 
-     :goto_8
--    if-eqz v0, :cond_d
-+    if-eqz v0, :cond_unica_local_audio_eraser_check
+     move-result v0
 
-+    :cond_unica_local_audio_eraser_allow
-     iget-object v0, v1, Lcom/android/systemui/samsung/quicksetting/ui/banner/AudioEraserAudioPlaybackStartable;->activePlaybacks:Ljava/util/Map;
-
-     invoke-static {v7}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
-@@ -485,6 +486,55 @@
-
-     goto :goto_a
-
-+    :cond_unica_local_audio_eraser_check
++    if-nez v0, :cond_e
++
 +    iget-object v0, v1, Lcom/android/systemui/samsung/quicksetting/ui/banner/AudioEraserAudioPlaybackStartable;->context:Landroid/content/Context;
 +
-+    if-eqz v0, :cond_d
+     if-eqz v0, :cond_f
 +
 +    invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 +
@@ -45,7 +33,7 @@ index 1111111..2222222 100644
 +
 +    move-result-object v0
 +
-+    if-eqz v0, :cond_d
++    if-eqz v0, :cond_f
 +
 +    const-string v9, "\n"
 +
@@ -58,7 +46,7 @@ index 1111111..2222222 100644
 +    :goto_unica_local_audio_eraser
 +    array-length v10, v0
 +
-+    if-ge v9, v10, :cond_d
++    if-ge v9, v10, :cond_f
 +
 +    aget-object v10, v0, v9
 +
@@ -72,15 +60,15 @@ index 1111111..2222222 100644
 +
 +    if-eqz v10, :cond_unica_local_audio_eraser_next
 +
-+    goto :cond_unica_local_audio_eraser_allow
++    goto :cond_e
 +
 +    :cond_unica_local_audio_eraser_next
 +    add-int/lit8 v9, v9, 0x1
 +
 +    goto :goto_unica_local_audio_eraser
 +
-     :cond_d
-     iget-boolean v0, v1, Lcom/android/systemui/samsung/quicksetting/ui/banner/AudioEraserAudioPlaybackStartable;->isServerAppList:Z
 
+     :cond_e
+     iget-object v0, v1, Lcom/android/systemui/samsung/quicksetting/ui/banner/AudioEraserAudioPlaybackStartable;->activePlaybacks:Ljava/util/Map;
 --
 2.43.0

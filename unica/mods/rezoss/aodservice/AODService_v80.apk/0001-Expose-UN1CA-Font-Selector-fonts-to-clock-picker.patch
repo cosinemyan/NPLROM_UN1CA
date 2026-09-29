@@ -1,22 +1,45 @@
 AUTHOR Rezoss
 
-diff --git a/smali_classes3/aod/jX.smali b/smali_classes3/aod/jX.smali
-index 61686dca..2b451ca5 100644
---- a/smali_classes3/aod/jX.smali
-+++ b/smali_classes3/aod/jX.smali
-@@ -2496,6 +2496,12 @@
-     goto/16 :goto_4
- 
-     :cond_9
-+    sget-object v3, Laod/jX;->sSystemFontMap:Ljava/util/HashMap;
+diff --git a/smali_classes3/aod/ql2.smali b/smali_classes3/aod/ql2.smali
+--- a/smali_classes3/aod/ql2.smali
++++ b/smali_classes3/aod/ql2.smali
+@@ -2091,1 +2091,25 @@
++    invoke-static {p1}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
 +
-+    move-object/from16 v0, p0
++    move-result v0
 +
-+    invoke-static {v0, v2, v3}, Lio/mesalabs/unica/aod/ClockFontBank;->appendSelectedFonts(Landroid/content/Context;Ljava/util/ArrayList;Ljava/util/HashMap;)V
++    if-nez v0, :cond_unica_font_bank_done
 +
-     const/4 v0, 0x1
- 
-     sput-boolean v0, Laod/jX;->sIsSystemFontMapInitialized:Z
++    const-string v0, "unica_font:"
++
++    invoke-virtual {p1, v0}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_unica_font_bank_done
++
++    new-instance v0, Ljava/util/ArrayList;
++
++    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
++
++    sget-object v1, Laod/ql2;->sSystemFontMap:Ljava/util/HashMap;
++
++    invoke-static {p0, v0, v1}, Lio/mesalabs/unica/aod/ClockFontBank;->appendSelectedFonts(Landroid/content/Context;Ljava/util/ArrayList;Ljava/util/HashMap;)V
++
++    :cond_unica_font_bank_done
++
+     sget-object v0, Laod/ql2;->sSystemFontMap:Ljava/util/HashMap;
+@@ -2560,6 +2560,10 @@
+     goto :goto_5
+
+     :cond_7
++    sget-object v0, Laod/ql2;->sSystemFontMap:Ljava/util/HashMap;
++
++    invoke-static {v1, v3, v0}, Lio/mesalabs/unica/aod/ClockFontBank;->appendSelectedFonts(Landroid/content/Context;Ljava/util/ArrayList;Ljava/util/HashMap;)V
++
+     sput-boolean v11, Laod/ql2;->sIsSystemFontMapInitialized:Z
+
+     sput-boolean v11, Laod/ql2;->sIsSystemFontListInitialized:Z
 diff --git a/smali_classes3/io/mesalabs/unica/aod/ClockFontBank$1.smali b/smali_classes3/io/mesalabs/unica/aod/ClockFontBank$1.smali
 new file mode 100644
 index 00000000..f48d196b

@@ -4,15 +4,13 @@ Date: Thu, 5 Apr 2018 10:01:19 +0800
 Subject: [PATCH] Disable vendor mismatch warning
 
 ---
- ...gerService$$ExternalSyntheticLambda8.smali | 14 +---
- ...calService$$ExternalSyntheticLambda4.smali | 83 ++-----------------
- 2 files changed, 9 insertions(+), 88 deletions(-)
+ ...gerService$$ExternalSyntheticLambda7.smali | 18 +-----------------
+ 1 file changed, 1 insertion(+), 17 deletions(-)
 
-diff --git a/smali/com/android/server/am/ActivityManagerService$$ExternalSyntheticLambda8.smali b/smali/com/android/server/am/ActivityManagerService$$ExternalSyntheticLambda8.smali
-index a55014bf1..f80efb330 100644
---- a/smali/com/android/server/am/ActivityManagerService$$ExternalSyntheticLambda8.smali
-+++ b/smali/com/android/server/am/ActivityManagerService$$ExternalSyntheticLambda8.smali
-@@ -167,26 +167,10 @@
+diff --git a/smali/com/android/server/am/ActivityManagerService$$ExternalSyntheticLambda7.smali b/smali/com/android/server/am/ActivityManagerService$$ExternalSyntheticLambda7.smali
+--- a/smali/com/android/server/am/ActivityManagerService$$ExternalSyntheticLambda7.smali
++++ b/smali/com/android/server/am/ActivityManagerService$$ExternalSyntheticLambda7.smali
+@@ -179,26 +179,10 @@
      :try_start_3
      const-string v2, "ActivityTaskManager"
  
@@ -27,7 +25,7 @@ index a55014bf1..f80efb330 100644
 -
 -    new-instance v4, Lcom/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda4;
 -
--    const/4 v5, 0x2
+-    const/4 v5, 0x3
 -
 -    invoke-direct {v4, v5}, Lcom/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda4;-><init>(I)V
 -
@@ -40,151 +38,5 @@ index a55014bf1..f80efb330 100644
      :cond_2
      monitor-exit v3
      :try_end_3
-diff --git a/smali_classes2/com/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda4.smali b/smali_classes2/com/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda4.smali
-index 7ce9f057e..7547637d2 100644
---- a/smali_classes2/com/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda4.smali
-+++ b/smali_classes2/com/android/server/wm/ActivityTaskManagerService$LocalService$$ExternalSyntheticLambda4.smali
-@@ -34,73 +34,6 @@
- 
-     packed-switch v0, :pswitch_data_0
- 
--    iget-object p0, p0, Lcom/android/server/wm/ActivityTaskManagerService$LocalService;->this$0:Lcom/android/server/wm/ActivityTaskManagerService;
--
--    iget-boolean v0, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mShowDialogs:Z
--
--    if-eqz v0, :cond_0
--
--    new-instance v0, Lcom/android/server/am/BaseErrorDialog;
--
--    iget-object v1, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mUiContext:Landroid/content/Context;
--
--    invoke-direct {v0, v1}, Lcom/android/server/am/BaseErrorDialog;-><init>(Landroid/content/Context;)V
--
--    invoke-virtual {v0}, Landroid/app/AlertDialog;->getWindow()Landroid/view/Window;
--
--    move-result-object v1
--
--    const/16 v2, 0x7da
--
--    invoke-virtual {v1, v2}, Landroid/view/Window;->setType(I)V
--
--    const/4 v1, 0x0
--
--    invoke-virtual {v0, v1}, Landroid/app/AlertDialog;->setCancelable(Z)V
--
--    iget-object v1, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mUiContext:Landroid/content/Context;
--
--    const v2, 0x10401eb
--
--    invoke-virtual {v1, v2}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
--
--    move-result-object v1
--
--    invoke-virtual {v0, v1}, Landroid/app/AlertDialog;->setTitle(Ljava/lang/CharSequence;)V
--
--    iget-object v1, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mUiContext:Landroid/content/Context;
--
--    const v2, 0x104100f
--
--    invoke-virtual {v1, v2}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
--
--    move-result-object v1
--
--    invoke-virtual {v0, v1}, Landroid/app/AlertDialog;->setMessage(Ljava/lang/CharSequence;)V
--
--    iget-object v1, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mUiContext:Landroid/content/Context;
--
--    const v2, 0x104000a
--
--    invoke-virtual {v1, v2}, Landroid/content/Context;->getText(I)Ljava/lang/CharSequence;
--
--    move-result-object v1
--
--    iget-object p0, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mUiHandler:Lcom/android/server/wm/ActivityTaskManagerService$UiHandler;
--
--    const/4 v2, 0x1
--
--    invoke-virtual {p0, v2, v0}, Landroid/os/Handler;->obtainMessage(ILjava/lang/Object;)Landroid/os/Message;
--
--    move-result-object p0
--
--    const/4 v2, -0x1
--
--    invoke-virtual {v0, v2, v1, p0}, Landroid/app/AlertDialog;->setButton(ILjava/lang/CharSequence;Landroid/os/Message;)V
--
--    invoke-virtual {v0}, Landroid/app/AlertDialog;->show()V
--
--    :cond_0
-     return-void
- 
-     :pswitch_0
-@@ -108,7 +41,7 @@
- 
-     iget-boolean v0, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mShowDialogs:Z
- 
--    if-eqz v0, :cond_1
-+    if-eqz v0, :cond_0
- 
-     new-instance v0, Lcom/android/server/am/BaseErrorDialog;
- 
-@@ -170,7 +103,7 @@
- 
-     invoke-virtual {v0}, Landroid/app/AlertDialog;->show()V
- 
--    :cond_1
-+    :cond_0
-     return-void
- 
-     :pswitch_1
-@@ -178,7 +111,7 @@
- 
-     iget-boolean v0, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mShowDialogs:Z
- 
--    if-eqz v0, :cond_4
-+    if-eqz v0, :cond_3
- 
-     new-instance v0, Lcom/android/server/am/BaseErrorDialog;
- 
-@@ -202,13 +135,13 @@
- 
-     sget-boolean v2, Lcom/samsung/android/rune/CoreRune;->IS_TABLET_DEVICE:Z
- 
--    if-eqz v2, :cond_2
-+    if-eqz v2, :cond_1
- 
-     const v3, 0x1040d7b
- 
-     goto :goto_0
- 
--    :cond_2
-+    :cond_1
-     const v3, 0x1040d7a
- 
-     :goto_0
-@@ -220,13 +153,13 @@
- 
-     iget-object v1, p0, Lcom/android/server/wm/ActivityTaskManagerService;->mUiContext:Landroid/content/Context;
- 
--    if-eqz v2, :cond_3
-+    if-eqz v2, :cond_2
- 
-     const v2, 0x1040d79
- 
-     goto :goto_1
- 
--    :cond_3
-+    :cond_2
-     const v2, 0x1040d78
- 
-     :goto_1
-@@ -258,7 +191,7 @@
- 
-     invoke-virtual {v0}, Landroid/app/AlertDialog;->show()V
- 
--    :cond_4
-+    :cond_3
-     return-void
- 
-     nop
 -- 
 2.52.0

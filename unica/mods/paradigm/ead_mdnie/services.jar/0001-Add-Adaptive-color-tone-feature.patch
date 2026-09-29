@@ -1313,10 +1313,14 @@ diff --git a/smali_classes2/com/samsung/android/hardware/display/SemMdnieManager
 index 5bdf8c673..92d367f9c 100644
 --- a/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
 +++ b/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService.smali
-@@ -56,6 +56,8 @@
+@@ -56,6 +56,12 @@
  
  .field public mEnvironmentAdaptiveDisplayEnabled:Z
  
++.field public mBlueLightFilterAdaptiveModeEnabled:Z
++
++.field public mBlueLightFilterCustomAlwaysOn:Z
++
 +.field public final mEnvironmentAdaptiveDisplaySupported:Z
 +
  .field public final mMdnieWhiteRGBSupported:Z
@@ -1351,10 +1355,14 @@ index 5bdf8c673..92d367f9c 100644
      iget-object v2, v0, Lcom/samsung/android/hardware/display/SemMdnieManagerService;->mContext:Landroid/content/Context;
  
      invoke-virtual {v2}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
-@@ -827,6 +837,8 @@
+@@ -827,6 +843,12 @@
  
      iput-boolean v2, v0, Lcom/samsung/android/hardware/display/SemMdnieManagerService;->mEnvironmentAdaptiveDisplayEnabled:Z
  
++    iput-boolean v2, v0, Lcom/samsung/android/hardware/display/SemMdnieManagerService;->mBlueLightFilterAdaptiveModeEnabled:Z
++
++    iput-boolean v2, v0, Lcom/samsung/android/hardware/display/SemMdnieManagerService;->mBlueLightFilterCustomAlwaysOn:Z
++
 +    iput-boolean v2, v0, Lcom/samsung/android/hardware/display/SemMdnieManagerService;->mEnvironmentAdaptiveDisplaySupported:Z
 +
      iput-boolean v2, v0, Lcom/samsung/android/hardware/display/SemMdnieManagerService;->mUseAfterimageCompensationServiceConfig:Z
@@ -1523,7 +1531,7 @@ index 5bdf8c673..92d367f9c 100644
  
  # virtual methods
  .method public final afpcDataApply()Z
-@@ -2725,14 +2870,150 @@
+@@ -2725,14 +2870,166 @@
  .end method
  
  .method public final setEadMode(II[I)V
@@ -1603,7 +1611,15 @@ index 5bdf8c673..92d367f9c 100644
 +
 +    aget p1, p3, p1
 +
-+    invoke-static {p1, v0, v1, p0}, Lcom/android/server/CustomizedBinderCallsStatsInternal$$ExternalSyntheticOutline0;->m(ILjava/lang/String;Ljava/lang/String;Ljava/lang/StringBuilder;)V
++    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    invoke-virtual {p0, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-static {v1, p0}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
 +
 +    :cond_1
      return-void
@@ -1670,13 +1686,21 @@ index 5bdf8c673..92d367f9c 100644
 +
 +    aget p2, p3, p2
 +
-+    invoke-static {p2, p1, v0, p0}, Lcom/android/server/CustomizedBinderCallsStatsInternal$$ExternalSyntheticOutline0;->m(ILjava/lang/String;Ljava/lang/String;Ljava/lang/StringBuilder;)V
++    invoke-virtual {p0, p2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-static {v0, p0}, Landroid/util/Slog;->i(Ljava/lang/String;Ljava/lang/String;)I
 +
 +    :cond_1
      return-void
  .end method
  
-@@ -3742,28 +4023,167 @@
+@@ -3742,28 +4039,167 @@
  .end method
  
  .method public final setWhiteRGB(IIIIII)Z
@@ -1856,4 +1880,3 @@ index 5bdf8c673..92d367f9c 100644
      return p0
 -- 
 2.51.1
-

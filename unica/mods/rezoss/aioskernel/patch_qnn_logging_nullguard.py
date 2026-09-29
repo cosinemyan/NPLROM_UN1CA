@@ -17,13 +17,16 @@ ORIGINAL_1 = bytes.fromhex(
     "00013fd6"  # blr x8
     "c00600b4"  # cbz x0, return
 )
+# Both original entry paths now share the guarded argument setup. The normal
+# path jumps to the alternate path's mov x2 / blr / result handling; the
+# alternate entry jumps back here. Keep x0=x21, w1=w22 and x2=x19 intact.
 PATCHED_1 = bytes.fromhex(
-    "886e40f9"
-    "480700b4"  # cbz x8, return
-    "e103162a"
-    "e20313aa"
-    "00013fd6"
-    "c00600b4"
+    "886e40f9"  # 0x89ce8: ldr x8, [x20, #0xd8]
+    "480700b4"  # cbz x8, 0x89dd4 (canary check and epilogue)
+    "e00315aa"  # mov x0, x21
+    "e103162a"  # mov w1, w22
+    "4b000014"  # b 0x89e24 (mov x2, x19; blr x8; original result handling)
+    "1f2003d5"  # nop (unreachable)
 )
 
 ORIGINAL_2 = bytes.fromhex(
@@ -35,14 +38,13 @@ ORIGINAL_2 = bytes.fromhex(
     "a0f6ffb5"  # cbnz x0, retry/log path
 )
 PATCHED_2 = bytes.fromhex(
-    "886e40f9"
-    "c8fdffb4"  # cbz x8, return
+    "b4ffff17"  # 0x89e18: b 0x89ce8 (shared null check and arguments)
+    "e00315aa"  # unreachable original argument setup
     "e103162a"
-    "e20313aa"
+    "e20313aa"  # shared call tail, entered from 0x89cf8
     "00013fd6"
-    "a0f6ffb5"
+    "a0f6ffb5"  # preserve backend-error handling
 )
-
 
 def replace_once(data: bytes, original: bytes, patched: bytes, label: str) -> tuple[bytes, int | None]:
     original_count = data.count(original)
@@ -58,7 +60,7 @@ def replace_once(data: bytes, original: bytes, patched: bytes, label: str) -> tu
         )
 
     offset = data.index(original)
-    return data[:offset] + patched + data[offset + len(original) :], offset + 4
+    return data[:offset] + patched + data[offset + len(original) :], offset
 
 
 def main() -> None:
@@ -70,6 +72,16 @@ def main() -> None:
     args = parser.parse_args()
 
     data = args.input.read_bytes()
+    # The shared call uses relative branches between these two blocks.
+    sites = []
+    for original, patched in ((ORIGINAL_1, PATCHED_1), (ORIGINAL_2, PATCHED_2)):
+        matches = [data.find(pattern) for pattern in (original, patched)
+                   if data.count(pattern) == 1]
+        if len(matches) != 1:
+            raise SystemExit("Unexpected or ambiguous QNN logging instruction blocks")
+        sites.append(matches[0])
+    if sites[1] - sites[0] != 0x130:
+        raise SystemExit("Unexpected QNN logging block spacing")
     data, offset_1 = replace_once(data, ORIGINAL_1, PATCHED_1, "normal logging init")
     data, offset_2 = replace_once(data, ORIGINAL_2, PATCHED_2, "alternate logging init")
 

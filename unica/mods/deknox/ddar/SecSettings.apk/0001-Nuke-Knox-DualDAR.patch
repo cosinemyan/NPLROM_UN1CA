@@ -1,92 +1,154 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Salvo Giangreco <giangrecosalvo9@gmail.com>
-Date: Sat, 30 May 2026 22:39:08 +0200
+From: UN1CA <noreply@unica>
 Subject: [PATCH] Nuke Knox DualDAR
-
-Refresh for the current SecSettings dex layout. Keep this patch focused
-on active DualDAR feature and policy queries so it applies cleanly on the
-current S918BXXSAFZE1 base.
-
 ---
- 14 files changed, 22 insertions(+), 210 deletions(-)
-
 diff --git a/smali_classes2/com/android/settings/password/ChooseLockGeneric$ChooseLockGenericFragment.smali b/smali_classes2/com/android/settings/password/ChooseLockGeneric$ChooseLockGenericFragment.smali
+index 927f994..7e7db41 100644
 --- a/smali_classes2/com/android/settings/password/ChooseLockGeneric$ChooseLockGenericFragment.smali
 +++ b/smali_classes2/com/android/settings/password/ChooseLockGeneric$ChooseLockGenericFragment.smali
-@@ -2722,3 +2722 @@
+@@ -2811,9 +2811,7 @@
+     :cond_2b
+     sget-object v16, Lcom/samsung/android/settings/knox/KnoxUtils;->mDeviceType:Ljava/lang/String;
+
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result v16
 +    const/16 v16, 0x0
-@@ -2789,3 +2787 @@
+
+     if-eqz v16, :cond_2c
+
+@@ -2878,9 +2876,7 @@
+     :cond_2e
+     sget-object v0, Lcom/samsung/android/settings/knox/KnoxUtils;->mDeviceType:Ljava/lang/String;
+
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result v0
 +    const/4 v0, 0x0
-@@ -3904,3 +3900 @@
+
+     if-eqz v0, :cond_2f
+
+@@ -4038,9 +4034,7 @@
+     :goto_c
+     iput-boolean v3, v0, Lcom/android/settings/password/ChooseLockGeneric$ChooseLockGenericFragment;->mIsEnforcedPwdChanged:Z
+
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result v3
 +    const/4 v3, 0x0
-@@ -8798,3 +8792 @@
+
+     if-eqz v3, :cond_1c
+
+@@ -9227,9 +9221,7 @@
+
+     if-nez v3, :cond_33
+
 -    invoke-static {v10}, Lcom/samsung/android/knox/SemPersonaManager;->isDarDualEncryptionEnabled(I)Z
 -
 -    move-result v3
 +    const/4 v3, 0x0
+
+     if-nez v3, :cond_33
+
 diff --git a/smali_classes2/com/android/settings/password/ChooseLockPassword$ChooseLockPasswordFragment.smali b/smali_classes2/com/android/settings/password/ChooseLockPassword$ChooseLockPasswordFragment.smali
+index 2c97c2b..317ff0a 100644
 --- a/smali_classes2/com/android/settings/password/ChooseLockPassword$ChooseLockPasswordFragment.smali
 +++ b/smali_classes2/com/android/settings/password/ChooseLockPassword$ChooseLockPasswordFragment.smali
-@@ -2678,3 +2678 @@
--    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
--
--    move-result v3
+@@ -2675,6 +2675,7 @@
+     invoke-static {v2, v1, v0, v4, v3}, Landroid/app/PendingIntent;->getBroadcastAsUser(Landroid/content/Context;ILandroid/content/Intent;ILandroid/os/UserHandle;)Landroid/app/PendingIntent;
+
+     move-result-object v0
 +    const/4 v3, 0x0
+
+     iget-object v2, p0, Lcom/android/settings/password/ChooseLockPassword$ChooseLockPasswordFragment;->mAlarmManager:Landroid/app/AlarmManager;
+
 diff --git a/smali_classes2/com/android/settings/password/ConfirmDeviceCredentialBaseFragment.smali b/smali_classes2/com/android/settings/password/ConfirmDeviceCredentialBaseFragment.smali
+index 99a4240..1ca9fe4 100644
 --- a/smali_classes2/com/android/settings/password/ConfirmDeviceCredentialBaseFragment.smali
 +++ b/smali_classes2/com/android/settings/password/ConfirmDeviceCredentialBaseFragment.smali
-@@ -668,3 +668 @@
+@@ -661,9 +661,7 @@
+     :cond_e
+     sget-object v0, Lcom/samsung/android/settings/knox/KnoxUtils;->mDeviceType:Ljava/lang/String;
+
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result v0
 +    const/4 v0, 0x0
+
+     if-eqz v0, :cond_10
+
 diff --git a/smali_classes2/com/android/settings/password/ConfirmLockPassword$ConfirmLockPasswordFragment.smali b/smali_classes2/com/android/settings/password/ConfirmLockPassword$ConfirmLockPasswordFragment.smali
+index d5ff78f..4a838e5 100644
 --- a/smali_classes2/com/android/settings/password/ConfirmLockPassword$ConfirmLockPasswordFragment.smali
 +++ b/smali_classes2/com/android/settings/password/ConfirmLockPassword$ConfirmLockPasswordFragment.smali
-@@ -575,3 +575 @@
+@@ -594,9 +594,7 @@
+     :cond_0
+     sget-object v0, Lcom/samsung/android/settings/knox/KnoxUtils;->mDeviceType:Ljava/lang/String;
+
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result v0
 +    const/4 v0, 0x0
-@@ -2710,3 +2708 @@
--    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
--
--    move-result v1
+
+     if-eqz v0, :cond_5
+
+@@ -2729,6 +2727,7 @@
+
+     move-result v5
+
 +    const/4 v1, 0x0
+     invoke-virtual {v0, v5}, Landroid/widget/Button;->setTextColor(I)V
+
+     iget-object v0, p0, Lcom/android/settings/password/ConfirmLockPassword$ConfirmLockPasswordFragment;->mContinueButton:Landroid/widget/Button;
 diff --git a/smali_classes2/com/android/settings/password/ConfirmLockPassword.smali b/smali_classes2/com/android/settings/password/ConfirmLockPassword.smali
+index 2744a12..8e6561a 100644
 --- a/smali_classes2/com/android/settings/password/ConfirmLockPassword.smali
 +++ b/smali_classes2/com/android/settings/password/ConfirmLockPassword.smali
-@@ -270,3 +270 @@
+@@ -265,9 +265,7 @@
+     :goto_3
+     sget-object v1, Lcom/samsung/android/settings/knox/KnoxUtils;->mDeviceType:Ljava/lang/String;
+
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result v1
 +    const/4 v1, 0x0
-@@ -382,3 +380 @@
+
+     if-eqz v1, :cond_5
+
+@@ -377,9 +375,7 @@
+     :goto_0
+     sget-object v5, Lcom/samsung/android/settings/knox/KnoxUtils;->mDeviceType:Ljava/lang/String;
+
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result v5
 +    const/4 v5, 0x0
+
+     if-eqz v5, :cond_2
+
 diff --git a/smali_classes2/com/android/settings/security/LockUnificationPreferenceController.smali b/smali_classes2/com/android/settings/security/LockUnificationPreferenceController.smali
+index 89b8aae..e698d72 100644
 --- a/smali_classes2/com/android/settings/security/LockUnificationPreferenceController.smali
 +++ b/smali_classes2/com/android/settings/security/LockUnificationPreferenceController.smali
-@@ -164,3 +164 @@
+@@ -161,9 +161,7 @@
+
+     if-eqz p0, :cond_0
+
 -    invoke-static {v0}, Lcom/samsung/android/knox/SemPersonaManager;->isDarDualEncryptionEnabled(I)Z
 -
 -    move-result p0
 +    const/4 p0, 0x0
-diff --git a/smali_classes4/com/samsung/android/knox/container/KnoxContainerManager.smali b/smali_classes4/com/samsung/android/knox/container/KnoxContainerManager.smali
---- a/smali_classes4/com/samsung/android/knox/container/KnoxContainerManager.smali
-+++ b/smali_classes4/com/samsung/android/knox/container/KnoxContainerManager.smali
-@@ -3470,38 +3469,0 @@
+
+     if-nez p0, :cond_0
+
+diff --git a/smali_classes3/com/samsung/android/knox/container/KnoxContainerManager.smali b/smali_classes3/com/samsung/android/knox/container/KnoxContainerManager.smali
+index 9f81793..9fd6710 100644
+--- a/smali_classes3/com/samsung/android/knox/container/KnoxContainerManager.smali
++++ b/smali_classes3/com/samsung/android/knox/container/KnoxContainerManager.smali
+@@ -3467,44 +3467,6 @@
+
+     iget-object v0, p0, Lcom/samsung/android/knox/container/KnoxContainerManager;->mDualDARPolicy:Lcom/samsung/android/knox/ddar/DualDARPolicy;
+
 -    if-nez v0, :cond_1
 -
 -    monitor-enter p0
@@ -125,36 +187,62 @@ diff --git a/smali_classes4/com/samsung/android/knox/container/KnoxContainerMana
 -    throw v0
 -
 -    :cond_1
-diff --git a/smali_classes4/com/samsung/android/knox/ddar/DualDARPolicy.smali b/smali_classes4/com/samsung/android/knox/ddar/DualDARPolicy.smali
---- a/smali_classes4/com/samsung/android/knox/ddar/DualDARPolicy.smali
-+++ b/smali_classes4/com/samsung/android/knox/ddar/DualDARPolicy.smali
-@@ -101 +101 @@
--    const-string v0, "1.8.0"
+     return-object v0
+ .end method
+
+diff --git a/smali_classes3/com/samsung/android/knox/ddar/DualDARPolicy.smali b/smali_classes3/com/samsung/android/knox/ddar/DualDARPolicy.smali
+index 8748865..0c0e3ab 100644
+--- a/smali_classes3/com/samsung/android/knox/ddar/DualDARPolicy.smali
++++ b/smali_classes3/com/samsung/android/knox/ddar/DualDARPolicy.smali
+@@ -98,6 +98,7 @@
+
+     const-string v0, "DualDARPolicy"
+
 +    const/4 v0, 0x0
-@@ -134 +134 @@
+     invoke-static {v0}, Landroid/os/ServiceManager;->getService(Ljava/lang/String;)Landroid/os/IBinder;
+
+     move-result-object v0
+@@ -117,7 +118,7 @@
+ .method public static isDualDarSupportedForManagedDevice()Z
+     .locals 1
+
 -    const/4 v0, 0x1
 +    const/4 v0, 0x0
-diff --git a/smali_classes5/com/samsung/android/settings/deviceinfo/softwareinfo/KnoxVersionPreferenceController.smali b/smali_classes5/com/samsung/android/settings/deviceinfo/softwareinfo/KnoxVersionPreferenceController.smali
---- a/smali_classes5/com/samsung/android/settings/deviceinfo/softwareinfo/KnoxVersionPreferenceController.smali
-+++ b/smali_classes5/com/samsung/android/settings/deviceinfo/softwareinfo/KnoxVersionPreferenceController.smali
-@@ -361,3 +361 @@
+
+     return v0
+ .end method
+diff --git a/smali_classes3/com/samsung/android/settings/deviceinfo/softwareinfo/KnoxVersionPreferenceController.smali b/smali_classes3/com/samsung/android/settings/deviceinfo/softwareinfo/KnoxVersionPreferenceController.smali
+index c6d0959..79a0084 100644
+--- a/smali_classes3/com/samsung/android/settings/deviceinfo/softwareinfo/KnoxVersionPreferenceController.smali
++++ b/smali_classes3/com/samsung/android/settings/deviceinfo/softwareinfo/KnoxVersionPreferenceController.smali
+@@ -358,9 +358,7 @@
+
+     sget-object v7, Lcom/samsung/android/settings/knox/KnoxUtils;->mDeviceType:Ljava/lang/String;
+
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result v7
 +    const/4 v7, 0x0
-diff --git a/smali_classes5/com/samsung/android/settings/knox/KnoxUtils.smali b/smali_classes5/com/samsung/android/settings/knox/KnoxUtils.smali
---- a/smali_classes5/com/samsung/android/settings/knox/KnoxUtils.smali
-+++ b/smali_classes5/com/samsung/android/settings/knox/KnoxUtils.smali
-@@ -1907,6 +1906,0 @@
+
+     const v8, 0x7f152b0d
+
+diff --git a/smali_classes3/com/samsung/android/settings/knox/KnoxUtils.smali b/smali_classes3/com/samsung/android/settings/knox/KnoxUtils.smali
+index 0bdd88b..146ba2c 100644
+--- a/smali_classes3/com/samsung/android/settings/knox/KnoxUtils.smali
++++ b/smali_classes3/com/samsung/android/settings/knox/KnoxUtils.smali
+@@ -1922,30 +1922,9 @@
+ .method public static getDualDarDoInnerAuthUserId(Landroid/content/Context;)I
+     .locals 1
+
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result v0
 -
 -    if-nez v0, :cond_0
 -
-@@ -1914,15 +1907,0 @@
--
--    return p0
+     const/4 p0, -0x1
+
+     return p0
 -
 -    :cond_0
 -    new-instance v0, Lcom/android/internal/widget/LockPatternUtils;
@@ -168,7 +256,15 @@ diff --git a/smali_classes5/com/samsung/android/settings/knox/KnoxUtils.smali b/
 -    invoke-virtual {p0}, Lcom/android/internal/widget/LockPatternUtils$LockPatternUtilForDualDarDo;->getInnerAuthUserForDo()I
 -
 -    move-result p0
-@@ -3090,19 +3068,0 @@
+-
+-    return p0
+ .end method
+
+ .method public static getInflatedLayoutType(Landroid/content/Context;)I
+@@ -3122,25 +3101,6 @@
+ .method public static isChangeRequestedForInner(Landroid/content/Context;)I
+     .locals 0
+
 -    invoke-static {p0}, Lcom/samsung/android/knox/EnterpriseDeviceManager;->getInstance(Landroid/content/Context;)Lcom/samsung/android/knox/EnterpriseDeviceManager;
 -
 -    move-result-object p0
@@ -188,16 +284,22 @@ diff --git a/smali_classes5/com/samsung/android/settings/knox/KnoxUtils.smali b/
 -    return p0
 -
 -    :cond_0
-@@ -3117,6 +3076,0 @@
+     const/4 p0, 0x0
+
+     return p0
+@@ -3149,35 +3109,17 @@
+ .method public static isDualDarDoInnerAuthUser(Landroid/content/Context;I)Z
+     .locals 1
+
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result v0
 -
 -    if-nez v0, :cond_0
 -
-@@ -3124,15 +3077,0 @@
--
--    return p0
+     const/4 p0, 0x0
+
+     return p0
 -
 -    :cond_0
 -    new-instance v0, Lcom/android/internal/widget/LockPatternUtils;
@@ -211,104 +313,86 @@ diff --git a/smali_classes5/com/samsung/android/settings/knox/KnoxUtils.smali b/
 -    invoke-virtual {p0, p1}, Lcom/android/internal/widget/LockPatternUtils$LockPatternUtilForDualDarDo;->isInnerAuthUserForDo(I)Z
 -
 -    move-result p0
-@@ -3146,58 +3085,3 @@
--    invoke-static {p0}, Landroid/os/UserManager;->get(Landroid/content/Context;)Landroid/os/UserManager;
 -
--    move-result-object p0
--
--    if-eqz p0, :cond_2
--
--    const/4 v0, 0x0
--
--    invoke-virtual {p0, v0}, Landroid/os/UserManager;->getUsers(Z)Ljava/util/List;
--
--    move-result-object p0
--
--    invoke-interface {p0}, Ljava/util/List;->iterator()Ljava/util/Iterator;
--
--    move-result-object p0
--
--    :cond_0
--    invoke-interface {p0}, Ljava/util/Iterator;->hasNext()Z
--
--    move-result v1
--
--    if-eqz v1, :cond_1
--
--    invoke-interface {p0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
--
--    move-result-object v1
--
--    check-cast v1, Landroid/content/pm/UserInfo;
--
--    if-eqz v1, :cond_0
--
--    iget v1, v1, Landroid/content/pm/UserInfo;->id:I
--
--    invoke-static {v1}, Lcom/samsung/android/knox/SemPersonaManager;->isDarDualEncryptionEnabled(I)Z
--
--    move-result v1
--
--    if-eqz v1, :cond_0
--
--    const/4 v0, 0x1
--
--    :cond_1
--    const-string p0, "KnoxUtils"
--
--    const-string v1, "isDualDAREnabled result : "
--
--    invoke-static {v1, p0, v0}, Lcom/android/settings/AirplaneModeEnabler$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/String;Z)V
--
--    return v0
--
--    :cond_2
--    new-instance p0, Ljava/lang/IllegalStateException;
--
--    const-string v0, "Unable to load UserManager"
--
--    invoke-direct {p0, v0}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
--
--    throw p0
+-    return p0
+ .end method
+
+ .method public static isDualDarEnabled(Landroid/content/Context;)Z
+     .locals 2
+
 +    const/4 p0, 0x0
 +
 +    return p0
-diff --git a/smali_classes5/com/samsung/android/settings/lockscreen/LockScreenSettings.smali b/smali_classes5/com/samsung/android/settings/lockscreen/LockScreenSettings.smali
---- a/smali_classes5/com/samsung/android/settings/lockscreen/LockScreenSettings.smali
-+++ b/smali_classes5/com/samsung/android/settings/lockscreen/LockScreenSettings.smali
-@@ -72,3 +72 @@
+     invoke-static {p0}, Landroid/os/UserManager;->get(Landroid/content/Context;)Landroid/os/UserManager;
+
+     move-result-object p0
+diff --git a/smali_classes3/com/samsung/android/settings/lockscreen/LockScreenSettings.smali b/smali_classes3/com/samsung/android/settings/lockscreen/LockScreenSettings.smali
+index 8ee2f9d..935f17b 100644
+--- a/smali_classes3/com/samsung/android/settings/lockscreen/LockScreenSettings.smali
++++ b/smali_classes3/com/samsung/android/settings/lockscreen/LockScreenSettings.smali
+@@ -69,9 +69,7 @@
+
+     sget-object v0, Lcom/samsung/android/settings/knox/KnoxUtils;->mDeviceType:Ljava/lang/String;
+
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result v0
 +    const/4 v0, 0x0
-diff --git a/smali_classes5/com/samsung/android/settings/lockscreen/LockUtils.smali b/smali_classes5/com/samsung/android/settings/lockscreen/LockUtils.smali
---- a/smali_classes5/com/samsung/android/settings/lockscreen/LockUtils.smali
-+++ b/smali_classes5/com/samsung/android/settings/lockscreen/LockUtils.smali
-@@ -1910,3 +1910 @@
+
+     iput-boolean v0, p0, Lcom/samsung/android/settings/lockscreen/LockScreenSettings;->mIsDualDarDoEnabled:Z
+
+diff --git a/smali_classes3/com/samsung/android/settings/lockscreen/LockUtils.smali b/smali_classes3/com/samsung/android/settings/lockscreen/LockUtils.smali
+index b65a929..fbbc3cb 100644
+--- a/smali_classes3/com/samsung/android/settings/lockscreen/LockUtils.smali
++++ b/smali_classes3/com/samsung/android/settings/lockscreen/LockUtils.smali
+@@ -1656,9 +1656,7 @@
+     :cond_0
+     sget-object v1, Lcom/samsung/android/settings/knox/KnoxUtils;->mDeviceType:Ljava/lang/String;
+
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result v1
 +    const/4 v1, 0x0
-@@ -2090,3 +2088 @@
+
+     const-string v2, "LockUtils"
+
+@@ -1844,9 +1842,7 @@
+     const/4 v1, 0x0
+
+     :goto_2
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result v5
 +    const/4 v5, 0x0
-diff --git a/smali_classes5/com/samsung/android/settings/lockscreen/controller/DualDarDoScreenLockTypePreferenceController.smali b/smali_classes5/com/samsung/android/settings/lockscreen/controller/DualDarDoScreenLockTypePreferenceController.smali
---- a/smali_classes5/com/samsung/android/settings/lockscreen/controller/DualDarDoScreenLockTypePreferenceController.smali
-+++ b/smali_classes5/com/samsung/android/settings/lockscreen/controller/DualDarDoScreenLockTypePreferenceController.smali
-@@ -353,3 +353 @@
+
+     if-nez v5, :cond_7
+
+diff --git a/smali_classes3/com/samsung/android/settings/lockscreen/controller/DualDarDoScreenLockTypePreferenceController.smali b/smali_classes3/com/samsung/android/settings/lockscreen/controller/DualDarDoScreenLockTypePreferenceController.smali
+index 3d0ea37..791cb4f 100644
+--- a/smali_classes3/com/samsung/android/settings/lockscreen/controller/DualDarDoScreenLockTypePreferenceController.smali
++++ b/smali_classes3/com/samsung/android/settings/lockscreen/controller/DualDarDoScreenLockTypePreferenceController.smali
+@@ -354,9 +354,7 @@
+
+     sget-object v0, Lcom/samsung/android/settings/knox/KnoxUtils;->mDeviceType:Ljava/lang/String;
+
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result v0
 +    const/4 v0, 0x0
-diff --git a/smali_classes5/com/samsung/android/settings/password/LockTypePolicy.smali b/smali_classes5/com/samsung/android/settings/password/LockTypePolicy.smali
---- a/smali_classes5/com/samsung/android/settings/password/LockTypePolicy.smali
-+++ b/smali_classes5/com/samsung/android/settings/password/LockTypePolicy.smali
-@@ -297,3 +297 @@
+
+     if-nez v0, :cond_0
+
+diff --git a/smali_classes3/com/samsung/android/settings/password/LockTypePolicy.smali b/smali_classes3/com/samsung/android/settings/password/LockTypePolicy.smali
+index f929d68..21424af 100644
+--- a/smali_classes3/com/samsung/android/settings/password/LockTypePolicy.smali
++++ b/smali_classes3/com/samsung/android/settings/password/LockTypePolicy.smali
+@@ -316,9 +316,7 @@
+
+     iput-boolean p2, p0, Lcom/samsung/android/settings/password/LockTypePolicy;->mIsOrganizationOwnedDeviceWithManagedProfile:Z
+
 -    invoke-static {}, Lcom/samsung/android/knox/dar/ddar/DualDarManager;->isOnDeviceOwnerEnabled()Z
 -
 -    move-result p2
 +    const/4 p2, 0x0
---
-2.51.1
+
+     iput-boolean p2, p0, Lcom/samsung/android/settings/password/LockTypePolicy;->mIsDualDarDoEnabled:Z

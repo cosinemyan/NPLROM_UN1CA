@@ -72,9 +72,7 @@
 /system/lib64/libsbs\.so u:object_r:system_lib_file:s0
 /system/lib64/libtensorflowlite_gpu_delegate\.so u:object_r:system_lib_file:s0
 /system/lib64/libveframework\.videoeditor\.samsung\.so u:object_r:system_lib_file:s0
-/system/lib64/android\.media\.audio\.eraser\.types-V2-ndk\.so u:object_r:system_lib_file:s0
 /system/lib64/libtensorflowlite_jni\.so u:object_r:system_lib_file:s0
-/system/lib64/libmediasndk\.so u:object_r:system_lib_file:s0
 /system/lib64/libvoice_booster\.so u:object_r:system_lib_file:s0
 /system/lib64/lib_sag_ai_sound_sep_v1\.00\.so u:object_r:system_lib_file:s0
 /system/lib64/lib_sag_ai_sound_sep_v2\.00\.so u:object_r:system_lib_file:s0
@@ -269,8 +267,6 @@
 /system/priv-app/AIOSKernelService/AIOSKernelService\.apk u:object_r:system_file:s0
 /system/priv-app/EnvironmentAdaptiveDisplay u:object_r:system_file:s0
 /system/priv-app/EnvironmentAdaptiveDisplay/EnvironmentAdaptiveDisplay\.apk u:object_r:system_file:s0
-/system/priv-app/MediaSearch u:object_r:system_file:s0
-/system/priv-app/MediaSearch/MediaSearch\.apk u:object_r:system_file:s0
 /system/priv-app/Moments u:object_r:system_file:s0
 /system/priv-app/Moments/Moments\.apk u:object_r:system_file:s0
 /system/priv-app/SemanticSearchCore u:object_r:system_file:s0
@@ -278,4 +274,3 @@
 /system/priv-app/wallpaper-res u:object_r:system_file:s0
 /system/priv-app/wallpaper-res/wallpaper-res\.apk u:object_r:system_file:s0
 /system/priv-app/SamsungAiCore/SamsungAiCore\.apk u:object_r:system_file:s0
-/system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions\.apk u:object_r:system_file:s0

@@ -1,0 +1,104 @@
+AUTHOR Rezoss
+
+diff --git a/assets/config/supported_config.json b/assets/config/supported_config.json
+--- a/assets/config/supported_config.json
++++ b/assets/config/supported_config.json
+@@ -1,4 +1,15 @@
+ {
++  "qc_sm8550": {
++    "LLM": {
++      "libssneural_vndk.so": "3.5.0"
++    },
++    "LLMV": {
++      "libssneural_vndk.so": "3.5.0"
++    },
++    "LVM": {
++      "libssneural_vndk.so": "0.9.0.0"
++    }
++  },
+   "qc_sm8850": {
+     "LLM": {
+       "libssneural_vndk.so": "3.5.0"
+diff --git a/assets/versionConfig.json b/assets/versionConfig.json
+--- a/assets/versionConfig.json
++++ b/assets/versionConfig.json
+@@ -67,6 +67,26 @@
+             "extract_libs": false,
+             "soc_model": "generic"
+         },
++        {
++            "name": "sm8550",
++            "inactive": false,
++            "flavorNumber": "500",
++            "modelVersion": {
++                "default": 20251216
++            },
++            "features": [
++                "FEATURE_WALLPAPER",
++                "FEATURE_INOUT_PAINTING",
++                "FEATURE_GEN_EDIT_ON_DEVICE",
++                "FEATURE_HARMONIZATION_ON_DEVICE",
++                "FEATURE_SPEECHLLM_INFERENCE",
++                "FEATURE_SPEECHLLM_TOKEN_COUNT",
++                "FEATURE_SPEECHLLM_PREWARM_MODEL"
++            ],
++            "use_service": true,
++            "extract_libs": true,
++            "soc_model": "qc_sm8550"
++        },
+         {
+             "name": "sm8750",
+             "inactive": false,
+diff --git a/smali/c0/a.smali b/smali/c0/a.smali
+--- a/smali/c0/a.smali
++++ b/smali/c0/a.smali
+@@ -13,7 +13,7 @@
+
+     sget-object v0, Lc0/f;->a:Ljava/util/HashSet;
+
+-    const-string v1, "sm8850"
++    const-string v1, "sm8550"
+
+     invoke-virtual {v1}, Ljava/lang/String;->toUpperCase()Ljava/lang/String;
+
+diff --git a/smali/c0/f.smali b/smali/c0/f.smali
+--- a/smali/c0/f.smali
++++ b/smali/c0/f.smali
+@@ -15,7 +15,7 @@
+
+     const-string v2, "SM8850"
+
+-    const-string v3, "SM8650"
++    const-string v3, "SM8550"
+
+     filled-new-array {v3, v1, v2}, [Ljava/lang/String;
+
+diff --git a/smali/c0/g.smali b/smali/c0/g.smali
+--- a/smali/c0/g.smali
++++ b/smali/c0/g.smali
+@@ -32,14 +32,23 @@
+
+     check-cast p1, Lcom/samsung/android/aicore/VersionConfig$Chipset;
+
+-    const-string p0, "sm8850"
+-
+     iget-object p1, p1, Lcom/samsung/android/aicore/VersionConfig$Chipset;->name:Ljava/lang/String;
+
++    const-string p0, "sm8550"
++
+     invoke-virtual {p0, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+
+     move-result p0
+
++    if-nez p0, :cond_supported_chipset
++
++    const-string p0, "sm8850"
++
++    invoke-virtual {p0, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p0
++
++    :cond_supported_chipset
+     return p0
+
+     :pswitch_0

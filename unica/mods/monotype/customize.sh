@@ -1,4 +1,4 @@
-# The One UI 8.5 path is handled by the static smali patch in
+# The One UI 9 path is handled by the static smali patch in
 # smali/system/priv-app/SecSettings/SecSettings.apk.
 
 FONT_PRELOAD_PACKAGE="com.monotype.android.font.samsungsans"

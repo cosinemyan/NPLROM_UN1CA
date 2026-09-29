@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: @rezoss_reza <rezoss@local>
+Date: Mon, 31 Aug 2026 00:00:00 +0200
+Subject: [PATCH] Preserve hidden AMOLED screen mode on boot
+
+diff --git a/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService$ScreenWatchingReceiver.smali b/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService$ScreenWatchingReceiver.smali
+--- a/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService$ScreenWatchingReceiver.smali
++++ b/smali_classes2/com/samsung/android/hardware/display/SemMdnieManagerService$ScreenWatchingReceiver.smali
+@@ -201,8 +201,22 @@
+     iget-object p2, p0, Lcom/samsung/android/hardware/display/SemMdnieManagerService$ScreenWatchingReceiver;->this$0:Lcom/samsung/android/hardware/display/SemMdnieManagerService;
+
+     if-eqz p1, :cond_3
+
++    iget p1, p2, Lcom/samsung/android/hardware/display/SemMdnieManagerService;->mScreenModeSetting:I
++
++    if-ltz p1, :cond_rezoss_wcg_screen_mode_default
++
++    const/4 v0, 0x2
++
++    if-gt p1, v0, :cond_rezoss_wcg_screen_mode_default
++
++    :cond_rezoss_wcg_keep_screen_mode
++    iput p1, p2, Lcom/samsung/android/hardware/display/SemMdnieManagerService;->mScreenMode:I
++
++    goto :goto_1
++
++    :cond_rezoss_wcg_screen_mode_default
+     iput v1, p2, Lcom/samsung/android/hardware/display/SemMdnieManagerService;->mScreenMode:I
+
+     goto :goto_1
+

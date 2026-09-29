@@ -1,27 +1,31 @@
 AUTHOR Rezoss
 
 diff --git a/smali/com/samsung/android/app/facewidget/utils/KeyguardClockProvider.smali b/smali/com/samsung/android/app/facewidget/utils/KeyguardClockProvider.smali
-index b5488080..9480a70c 100644
 --- a/smali/com/samsung/android/app/facewidget/utils/KeyguardClockProvider.smali
 +++ b/smali/com/samsung/android/app/facewidget/utils/KeyguardClockProvider.smali
-@@ -7004,6 +7004,10 @@
+@@ -7741,6 +7741,10 @@
  .method public initialize()V
-     .locals 7
- 
+     .locals 14
+
 +    iget-object v1, p0, Lcom/samsung/android/app/facewidget/utils/KeyguardClockProvider;->context:Landroid/content/Context;
 +
 +    invoke-static {v1}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->syncAodStretchFontType(Landroid/content/Context;)V
 +
-     const/4 v0, 0x0
- 
-     const-string v1, "initialize"
+     const-string v0, "initialize"
+
+     const-string v1, "initialize()"
 diff --git a/smali_classes2/com/samsung/android/app/aodservice/provider/AODContentProvider.smali b/smali_classes2/com/samsung/android/app/aodservice/provider/AODContentProvider.smali
-index 7c94375c..cd0ac3cc 100644
 --- a/smali_classes2/com/samsung/android/app/aodservice/provider/AODContentProvider.smali
 +++ b/smali_classes2/com/samsung/android/app/aodservice/provider/AODContentProvider.smali
-@@ -1911,0 +1912,2 @@
+@@ -1905,6 +1905,8 @@
+     move-result-object v0
+
+     iput-object v0, p0, Lcom/samsung/android/app/aodservice/provider/AODContentProvider;->p:Lcom/samsung/android/app/aodservice/common/provider/DB/DBAdapter;
 +
 +    invoke-static {v1}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->syncAodStretchFontType(Landroid/content/Context;)V
+
+     const/4 p0, 0x1
+
 diff --git a/smali_classes2/io/mesalabs/unica/aod/ClockFontSettingsSync.smali b/smali_classes2/io/mesalabs/unica/aod/ClockFontSettingsSync.smali
 new file mode 100644
 index 0000000..0ec08f4
@@ -96,9 +100,9 @@ index 0000000..0ec08f4
 +
 +    invoke-direct {v0, p0}, Lcom/samsung/android/app/aodservice/common/provider/settingdata/LockClockSettingData;-><init>(Landroid/content/Context;)V
 +
-+    iget-object v1, v0, Lcom/samsung/android/app/aodservice/common/provider/settingdata/LockClockSettingData;->v:Laod/k5;
++    iget-object v1, v0, Lcom/samsung/android/app/aodservice/common/provider/settingdata/LockClockSettingData;->v:Laod/fc;
 +
-+    invoke-virtual {v1}, Laod/k5;->c()Ljava/lang/Object;
++    invoke-virtual {v1}, Laod/fc;->c()Ljava/lang/Object;
 +
 +    move-result-object v1
 +
@@ -110,9 +114,9 @@ index 0000000..0ec08f4
 +
 +    if-eqz v1, :cond_done
 +
-+    iget-object v0, v0, Lcom/samsung/android/app/aodservice/common/provider/settingdata/LockClockSettingData;->q:Laod/k5;
++    iget-object v0, v0, Lcom/samsung/android/app/aodservice/common/provider/settingdata/LockClockSettingData;->q:Laod/fc;
 +
-+    invoke-virtual {v0}, Laod/k5;->c()Ljava/lang/Object;
++    invoke-virtual {v0}, Laod/fc;->c()Ljava/lang/Object;
 +
 +    move-result-object v0
 +
@@ -128,13 +132,13 @@ index 0000000..0ec08f4
 +
 +    if-gt v0, v1, :cond_done
 +
-+    new-instance v1, Laod/W;
++    new-instance v1, Laod/i1;
 +
-+    invoke-direct {v1, p0}, Laod/W;-><init>(Landroid/content/Context;)V
++    invoke-direct {v1, p0}, Laod/i1;-><init>(Landroid/content/Context;)V
 +
-+    iget-object v1, v1, Laod/W;->l:Laod/k5;
++    iget-object v1, v1, Laod/i1;->l:Laod/fc;
 +
-+    invoke-virtual {v1}, Laod/k5;->c()Ljava/lang/Object;
++    invoke-virtual {v1}, Laod/fc;->c()Ljava/lang/Object;
 +
 +    move-result-object v3
 +
@@ -148,9 +152,9 @@ index 0000000..0ec08f4
 +
 +    move-result-object v3
 +
-+    invoke-virtual {v1, v3}, Laod/k5;->z(Ljava/lang/Object;)V
++    invoke-virtual {v1, v3}, Laod/fc;->z(Ljava/lang/Object;)V
 +
-+    invoke-virtual {v1}, Laod/k5;->a()V
++    invoke-virtual {v1}, Laod/fc;->a()V
 +
 +    invoke-static {p0}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->notifyAodClockFontType(Landroid/content/Context;)V
 +
