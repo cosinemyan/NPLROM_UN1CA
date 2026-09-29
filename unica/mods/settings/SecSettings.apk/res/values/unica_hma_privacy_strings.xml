@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unica_hma_privacy_title">App privacy (HMA)</string>
+    <string name="unica_hma_privacy_summary">App visibility, activity protection, settings presets and process permissions</string>
+</resources>

@@ -1,0 +1,26 @@
+HMA privacy policy for UN1CA
+
+Feature semantics and application preset definitions adapted from:
+https://github.com/frknkrc44/HMA-OSS
+Revision d1cfcbce72ac07eb998cd49be1d5385ade48f713
+Copyright HMA-OSS contributors, including Furkan Karcıoğlu.
+Licensed under AGPL-3.0-or-later; see COPYING.
+
+This is a ROM framework integration, not the HMA-OSS Zygisk module.
+It does not require Zygisk or LSPosed. Configuration is stored per Android
+user in Settings.Secure/unica_hma_policy and applies only to selected callers.
+Logging is off by default; the viewer filters this user's recent UnicaHMA
+logcat events. Installer spoofing is not part of this implementation.
+
+Java sources are retained under src/. Generated smali is distributed as patches
+under this mod and the Settings mod. Compile with Java 8 bytecode, D8 min API 26,
+then disassemble with the project's baksmali. Do not package compile-only stubs.
+tools/rebuild.sh reproduces the three generated patches in a new /tmp directory
+and backs up existing patches before replacement. It requires local android.jar,
+json.jar and r8.jar inputs (validated with Android 4.1.1.4 compile stubs,
+org.json 20240303 and R8/D8 8.3.37). Dependencies are not included in the ROM.
+tests/run.sh runs host preset and settings replacement tests with local inputs.
+Host tests and DEX assembly do not establish on-device behavior.
+The Settings fragment retains its previous registered class name for gateway
+compatibility. The old Global settings getter hook is retired to prevent it
+from overriding the new per-caller settings policy.
