@@ -47,9 +47,14 @@ SMALI_PATCH "system" "system/framework/services.jar" \
 
 # Spoof ROT/IntegrityStatus in Knox Matrix
 if [ -f "$WORK_DIR/system/system/priv-app/KmxService/KmxService.apk" ]; then
-    LOG "- Downloading latest Knox Matrix app"
-    DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.samsung.android.kmxservice")" \
-        "$WORK_DIR/system/system/priv-app/KmxService/KmxService.apk"
+    KMX_STORE_URL="$(GET_GALAXY_STORE_DOWNLOAD_URL "com.samsung.android.kmxservice")" || KMX_STORE_URL=""
+    if [ -n "$KMX_STORE_URL" ]; then
+        LOG "- Downloading latest Knox Matrix app"
+        DOWNLOAD_FILE "$KMX_STORE_URL" \
+            "$WORK_DIR/system/system/priv-app/KmxService/KmxService.apk"
+    else
+        LOGW "Galaxy Store URI unavailable for Knox Matrix; patching firmware KmxService.apk"
+    fi
     DECODE_APK "system" "system/priv-app/KmxService/KmxService.apk"
 
     KMX_APKTOOL_DIR="$APKTOOL_DIR/system/priv-app/KmxService/KmxService.apk"

@@ -77,11 +77,15 @@ GET_GALAXY_STORE_DOWNLOAD_URL()
     local OS
     local ONEUI
     local PROTOCOL
+    local -a OS_CANDIDATES
+    local -a ONEUI_CANDIDATES
+    local OS_TRY
+    local ONEUI_TRY
 
     # Galaxy S26 Ultra EUR_OPENX
     # Galaxy S25 Ultra EUR_OPENX / KOR_SINGLEX
-    # Galaxy S23 Ultra GBL_OPENX
-    DEVICES=("SM-S948B" "SM-S938B" "SM-S938N")
+    # Galaxy S23 / S23 Ultra (NPL QSSI + GBL)
+    DEVICES=("SM-S948B" "SM-S938B" "SM-S938N" "SM-S918B" "SM-S911B")
 
     OS="$(GET_PROP "system" "ro.build.version.sdk")"
     ONEUI="$(GET_PROP "system" "ro.build.version.oneui")"
@@ -95,39 +99,52 @@ GET_GALAXY_STORE_DOWNLOAD_URL()
         ONEUI="80500"
     fi
 
-    PROTOCOL+="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>"
-    PROTOCOL+="<SamsungProtocol networkType=\"0\" openApiVersion=\"$OS\" deviceModel=\"DEVICE\""
-    PROTOCOL+=" mcc=\"262\" mnc=\"01\" csc=\"EUX\" version=\"7.7\""
-    PROTOCOL+=" deviceFeature=\"locale=en_GB||abi32=armeabi-v7a:armeabi||abi64=arm64-v8a||oneUiVersion=$ONEUI\">"
-    PROTOCOL+="<request id=\"2303\" numParam=\"2\">"
-    PROTOCOL+="<param name=\"stduk\">0</param>"
-    PROTOCOL+="<param name=\"productID\">PRODUCTID</param>"
-    PROTOCOL+="</request>"
-    PROTOCOL+="</SamsungProtocol>"
+    # Many Galaxy Store listings lag One UI 9 / SDK 37; retry older API/One UI combos.
+    OS_CANDIDATES=("$OS")
+    [[ "$OS" != "36" ]] && OS_CANDIDATES+=("36")
+    [[ "$OS" != "35" ]] && OS_CANDIDATES+=("35")
+    ONEUI_CANDIDATES=("$ONEUI")
+    [[ "$ONEUI" != "80500" ]] && ONEUI_CANDIDATES+=("80500")
+    [[ "$ONEUI" != "80100" ]] && ONEUI_CANDIDATES+=("80100")
 
     local OUT
     local REQUEST
-    for i in "${DEVICES[@]}"; do
-        if [[ "$PACKAGE" =~ ^[+-]?[0-9]+$ ]]; then
-            OUT="$PACKAGE"
-        else
-            OUT="$(curl -L -s "https://vas.samsungapps.com/stub/stubUpdateCheck.as?appId=$PACKAGE&versionCode=0&deviceId=$i&mcc=262&mnc=01&csc=EUX&sdkVer=$OS&oneUiVersion=$ONEUI&systemId=0")"
-            OUT="$(grep -o -P "(?<=<productId>)[^<]+" <<< "$OUT")"
-            if [ ! "$OUT" ]; then
-                continue
-            fi
-        fi
+    local i
+    for OS_TRY in "${OS_CANDIDATES[@]}"; do
+        for ONEUI_TRY in "${ONEUI_CANDIDATES[@]}"; do
+            PROTOCOL="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>"
+            PROTOCOL+="<SamsungProtocol networkType=\"0\" openApiVersion=\"$OS_TRY\" deviceModel=\"DEVICE\""
+            PROTOCOL+=" mcc=\"262\" mnc=\"01\" csc=\"EUX\" version=\"7.7\""
+            PROTOCOL+=" deviceFeature=\"locale=en_GB||abi32=armeabi-v7a:armeabi||abi64=arm64-v8a||oneUiVersion=$ONEUI_TRY\">"
+            PROTOCOL+="<request id=\"2303\" numParam=\"2\">"
+            PROTOCOL+="<param name=\"stduk\">0</param>"
+            PROTOCOL+="<param name=\"productID\">PRODUCTID</param>"
+            PROTOCOL+="</request>"
+            PROTOCOL+="</SamsungProtocol>"
 
-        REQUEST="$PROTOCOL"
-        REQUEST="${REQUEST//DEVICE/$i}"
-        REQUEST="${REQUEST//PRODUCTID/$OUT}"
+            for i in "${DEVICES[@]}"; do
+                if [[ "$PACKAGE" =~ ^[+-]?[0-9]+$ ]]; then
+                    OUT="$PACKAGE"
+                else
+                    OUT="$(curl -L -s "https://vas.samsungapps.com/stub/stubUpdateCheck.as?appId=$PACKAGE&versionCode=0&deviceId=$i&mcc=262&mnc=01&csc=EUX&sdkVer=$OS_TRY&oneUiVersion=$ONEUI_TRY&systemId=0")"
+                    OUT="$(grep -o -P "(?<=<productId>)[^<]+" <<< "$OUT")"
+                    if [ ! "$OUT" ]; then
+                        continue
+                    fi
+                fi
 
-        OUT="$(curl -L -s "https://uk-odc.samsungapps.com/ods.as" -H "Content-Type: text/plain" -d "$REQUEST")"
-        OUT="$(grep -o -P "(?<=<value name=\"downLoadURI\">)[^<]+" <<< "$OUT")"
-        if [ "$OUT" ]; then
-            echo "${OUT//amp;/}"
-            return 0
-        fi
+                REQUEST="$PROTOCOL"
+                REQUEST="${REQUEST//DEVICE/$i}"
+                REQUEST="${REQUEST//PRODUCTID/$OUT}"
+
+                OUT="$(curl -L -s "https://uk-odc.samsungapps.com/ods.as" -H "Content-Type: text/plain" -d "$REQUEST")"
+                OUT="$(grep -o -P "(?<=<value name=\"downLoadURI\">)[^<]+" <<< "$OUT")"
+                if [ "$OUT" ]; then
+                    echo "${OUT//amp;/}"
+                    return 0
+                fi
+            done
+        done
     done
 
     LOGE "No download URI found for app \"$PACKAGE\""
