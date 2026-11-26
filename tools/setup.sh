@@ -175,12 +175,18 @@ elif ! "$BIN_DIR/apktool" b --help 2>&1 | grep -q 'shorten-res-paths'; then
     echo "[>] Building patched apktool from external/apktool..."
     # shellcheck source=/dev/null
     source "$PROJECT_ROOT/tools/ensure_build_jdk.sh"
+    # System Java 25+ breaks Gradle/Kotlin; ensure_build_jdk sets JAVA_HOME to 17–24.
+    # Corrupt/foreign-owned .gradle checksum caches cause "Bad file descriptor" — wipe before build.
     (
+      export JAVA_HOME PATH
       cd "$PROJECT_ROOT/external/apktool"
+      ./gradlew --stop >/dev/null 2>&1 || true
+      rm -rf .gradle/8.*/checksums .gradle/caches
       git reset --hard
       git apply "$PROJECT_ROOT/external/patches/apktool/0001-feat-support-aapt-optimization.patch"
       ./gradlew shadowJar -x test --no-daemon
     )
+    rm -f "$BIN_DIR/apktool.jar"
     cp -a "$PROJECT_ROOT/external/apktool/scripts/linux/apktool" "$BIN_DIR/apktool"
     cp -a "$PROJECT_ROOT/external/apktool/brut.apktool/apktool-cli/build/libs/apktool-cli.jar" "$BIN_DIR/apktool.jar"
     chmod +x "$BIN_DIR/apktool"

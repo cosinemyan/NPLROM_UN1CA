@@ -200,9 +200,22 @@ for i in "${FIRMWARES[@]}"; do
     fi
 
     LOG "- Downloading firmware..."
+
+    # Fail early if a prior root/nobody download left ODIN_DIR unwritable.
+    mkdir -p "$ODIN_DIR" "$OUT_DIR" || true
+    if [ ! -w "$ODIN_DIR" ] || { [ -d "$ODIN_DIR/${MODEL}_${CSC}" ] && [ ! -w "$ODIN_DIR/${MODEL}_${CSC}" ]; }; then
+        LOG "\033[0;31m! No write permission for ${ODIN_DIR//$SRC_DIR\//}/${MODEL}_${CSC}\033[0m"
+        LOG "\033[0;33m! Fix with: sudo chown -R \"\$USER:\$USER\" \"${ODIN_DIR}\" \"${FW_DIR}\" \"${OUT_DIR}\"\033[0m"
+        exit 1
+    fi
+
     # Only wipe a completed download (force). Keep partial *.enc4 so FUS Range-resume works.
     if [ -f "$ODIN_DIR/${MODEL}_${CSC}/.downloaded" ]; then
-        rm -rf "$ODIN_DIR/${MODEL}_${CSC}"
+        if ! rm -rf "$ODIN_DIR/${MODEL}_${CSC}"; then
+            LOG "\033[0;31m! Could not remove old Odin packages (permission denied)\033[0m"
+            LOG "\033[0;33m! Fix with: sudo chown -R \"\$USER:\$USER\" \"${ODIN_DIR}/${MODEL}_${CSC}\"\033[0m"
+            exit 1
+        fi
     fi
     if ! DOWNLOAD_FIRMWARE_BUNDLE "$ODIN_DIR/${MODEL}_${CSC}"; then
         LOG "\033[0;31m! Download failed after retries (partial file kept in $ODIN_DIR/${MODEL}_${CSC})\033[0m"
