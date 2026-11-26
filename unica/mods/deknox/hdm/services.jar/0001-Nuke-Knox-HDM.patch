@@ -4,13 +4,13 @@ Subject: [PATCH] Nuke Knox HDM
 ---
 diff --git a/smali/android/security/securekeygeneration/ISecureKeyGeneration$Stub$Proxy.smali b/orig/smali/android/security/securekeygeneration/ISecureKeyGeneration$Stub$Proxy.smali
 deleted file mode 100644
-index 7753d27..0000000
---- a/smali/android/security/securekeygeneration/ISecureKeyGeneration$Stub$Proxy.smali
+index 1111111..0000000
+--- a/smali/android/security/securekeygeneration/ISecureKeyGeneration$Stub$Proxy.smali	2026-11-26 09:28:18.759245821 +0545
 +++ /dev/null
 @@ -1,20 +0,0 @@
 -.class public final Landroid/security/securekeygeneration/ISecureKeyGeneration$Stub$Proxy;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Landroid/security/securekeygeneration/ISecureKeyGeneration;
@@ -30,13 +30,13 @@ index 7753d27..0000000
 -.end method
 diff --git a/smali/android/security/securekeygeneration/ISecureKeyGeneration$Stub.smali b/orig/smali/android/security/securekeygeneration/ISecureKeyGeneration$Stub.smali
 deleted file mode 100644
-index 71e9276..0000000
---- a/smali/android/security/securekeygeneration/ISecureKeyGeneration$Stub.smali
+index 1111111..0000000
+--- a/smali/android/security/securekeygeneration/ISecureKeyGeneration$Stub.smali	2026-11-26 09:28:18.759532832 +0545
 +++ /dev/null
 @@ -1,10 +0,0 @@
 -.class public abstract Landroid/security/securekeygeneration/ISecureKeyGeneration$Stub;
 -.super Landroid/os/Binder;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Landroid/security/securekeygeneration/ISecureKeyGeneration;
@@ -46,25 +46,25 @@ index 71e9276..0000000
 -.field public static final synthetic $r8$clinit:I
 diff --git a/smali/android/security/securekeygeneration/ISecureKeyGeneration.smali b/orig/smali/android/security/securekeygeneration/ISecureKeyGeneration.smali
 deleted file mode 100644
-index 301b939..0000000
---- a/smali/android/security/securekeygeneration/ISecureKeyGeneration.smali
+index 1111111..0000000
+--- a/smali/android/security/securekeygeneration/ISecureKeyGeneration.smali	2026-11-26 09:28:18.759865830 +0545
 +++ /dev/null
 @@ -1,6 +0,0 @@
 -.class public interface abstract Landroid/security/securekeygeneration/ISecureKeyGeneration;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Landroid/os/IInterface;
 diff --git a/smali/android/security/securekeygeneration/SecureKeyInfo$1.smali b/orig/smali/android/security/securekeygeneration/SecureKeyInfo$1.smali
 deleted file mode 100644
-index 1040955..0000000
---- a/smali/android/security/securekeygeneration/SecureKeyInfo$1.smali
+index 1111111..0000000
+--- a/smali/android/security/securekeygeneration/SecureKeyInfo$1.smali	2026-11-26 09:28:18.760370933 +0545
 +++ /dev/null
 @@ -1,156 +0,0 @@
 -.class public final Landroid/security/securekeygeneration/SecureKeyInfo$1;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Landroid/os/Parcelable$Creator;
@@ -220,13 +220,13 @@ index 1040955..0000000
 -.end method
 diff --git a/smali/android/security/securekeygeneration/SecureKeyInfo.smali b/orig/smali/android/security/securekeygeneration/SecureKeyInfo.smali
 deleted file mode 100644
-index 7d93816..0000000
---- a/smali/android/security/securekeygeneration/SecureKeyInfo.smali
+index 1111111..0000000
+--- a/smali/android/security/securekeygeneration/SecureKeyInfo.smali	2026-11-26 09:28:18.760573555 +0545
 +++ /dev/null
 @@ -1,136 +0,0 @@
 -.class public final Landroid/security/securekeygeneration/SecureKeyInfo;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Landroid/os/Parcelable;
@@ -361,58 +361,296 @@ index 7d93816..0000000
 -    return-void
 -.end method
 diff --git a/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali b/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali
-index 03a84ee..01b375c 100644
---- a/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali
-+++ b/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali
-@@ -1420,38 +1420,7 @@
-     invoke-virtual {v0, v2}, Lcom/android/server/enterprise/restriction/RestrictionPolicy;->systemReady(I)V
-
-     :cond_1b
--    :try_start_11
--    const-string/jumbo v0, "hdm_service"
+index 1111111..2222222 100644
+--- a/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali	2026-11-26 09:29:25.098892849 +0545
++++ b/smali/com/android/server/enterprise/EnterpriseDeviceManagerServiceImpl.smali	2026-11-26 09:37:08.263108976 +0545
+@@ -3435,277 +3435,6 @@
+ 
+     invoke-static {v0, v3}, Landroid/os/ServiceManager;->addService(Ljava/lang/String;Landroid/os/IBinder;)V
+ 
+-    const-string/jumbo v3, "hdm_service"
 -
--    invoke-static {v0}, Lcom/android/server/enterprise/EnterpriseService;->getPolicyService(Ljava/lang/String;)Ljava/lang/Object;
+-    new-instance v4, Lcom/android/server/enterprise/hdm/HdmService;
+-
+-    iget-object v0, v2, Lcom/android/server/enterprise/EnterpriseDeviceManagerServiceImpl$Injector;->mContext:Landroid/content/Context;
+-
+-    invoke-direct {v4}, Lcom/samsung/android/knox/hdm/IHdmManager$Stub;-><init>()V
+-
+-    iput-object v6, v4, Lcom/android/server/enterprise/hdm/HdmService;->mEDM:Lcom/samsung/android/knox/EnterpriseDeviceManager;
+-
+-    const/4 v7, 0x0
+-
+-    iput-boolean v7, v4, Lcom/android/server/enterprise/hdm/HdmService;->syncSwBlockByBoot:Z
+-
+-    iput-object v0, v4, Lcom/android/server/enterprise/hdm/HdmService;->mContext:Landroid/content/Context;
+-
+-    iput-object v6, v4, Lcom/android/server/enterprise/hdm/HdmService;->mSerialNumber:[B
+-
+-    const-string v2, ""
+-
+-    iput-object v2, v4, Lcom/android/server/enterprise/hdm/HdmService;->mImei0:Ljava/lang/String;
+-
+-    iput-object v6, v4, Lcom/android/server/enterprise/hdm/HdmService;->mHashImei:[B
+-
+-    iput-object v2, v4, Lcom/android/server/enterprise/hdm/HdmService;->mMacAddress:Ljava/lang/String;
+-
+-    new-instance v2, Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;
+-
+-    const-string v7, "HDM - HdmSoftwareBlock"
+-
+-    invoke-direct {v2}, Ljava/lang/Object;-><init>()V
+-
+-    :try_start_b
+-    new-instance v8, Ljava/io/File;
+-
+-    const-string v9, "/data/misc/hdm"
+-
+-    invoke-direct {v8, v9}, Ljava/io/File;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {v8}, Ljava/io/File;->exists()Z
+-
+-    move-result v9
+-
+-    if-nez v9, :cond_15
+-
+-    invoke-virtual {v8}, Ljava/io/File;->mkdir()Z
+-
+-    :cond_15
+-    iput-object v0, v2, Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;->context:Landroid/content/Context;
+-
+-    invoke-static {v0}, Lcom/samsung/android/knox/EnterpriseDeviceManager;->getInstance(Landroid/content/Context;)Lcom/samsung/android/knox/EnterpriseDeviceManager;
 -
 -    move-result-object v0
 -
--    check-cast v0, Lcom/android/server/enterprise/hdm/HdmService;
+-    iput-object v0, v2, Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;->edm:Lcom/samsung/android/knox/EnterpriseDeviceManager;
 -
--    if-eqz v0, :cond_1c
+-    invoke-virtual {v0}, Lcom/samsung/android/knox/EnterpriseDeviceManager;->getRestrictionPolicy()Lcom/samsung/android/knox/restriction/RestrictionPolicy;
 -
--    const-string v1, "EnterpriseDeviceManagerService"
+-    move-result-object v0
 -
--    const-string/jumbo v3, "call systemReady for hdm "
+-    iput-object v0, v2, Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;->restrictionPolicy:Lcom/samsung/android/knox/restriction/RestrictionPolicy;
 -
--    invoke-static {v1, v3}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+-    invoke-virtual {v2}, Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;->initControlMap()Ljava/util/Map;
 -
--    invoke-virtual {v0, v2}, Lcom/android/server/enterprise/hdm/HdmService;->systemReady(I)V
--    :try_end_11
--    .catchall {:try_start_11 .. :try_end_11} :catchall_3
+-    move-result-object v0
 -
--    goto :goto_11
+-    iput-object v0, v2, Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;->supportedFunctionMap:Ljava/util/Map;
 -
--    :catchall_3
--    const-string v0, "EnterpriseDeviceManagerService"
+-    new-instance v0, Ljava/util/ArrayList;
 -
--    const-string/jumbo v1, "fail to notify HDM"
+-    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
 -
--    invoke-static {v0, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
+-    invoke-static {v13}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
 -
--    :cond_1c
--    :goto_11
-+    :goto_12
-     return-void
- .end method
-
+-    move-result-object v8
+-
+-    invoke-virtual {v0, v8}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+-
+-    const/16 v8, 0x10
+-
+-    invoke-static {v8}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+-
+-    move-result-object v9
+-
+-    invoke-virtual {v0, v9}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+-
+-    invoke-static {v10}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+-
+-    move-result-object v9
+-
+-    invoke-virtual {v0, v9}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+-
+-    const/16 v9, 0x40
+-
+-    invoke-static {v9}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+-
+-    move-result-object v9
+-
+-    invoke-virtual {v0, v9}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+-
+-    iput-object v0, v2, Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;->swBlockBeforeList:Ljava/util/List;
+-
+-    new-instance v0, Ljava/util/ArrayList;
+-
+-    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+-
+-    const/16 v9, 0x100
+-
+-    invoke-static {v9}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+-
+-    move-result-object v9
+-
+-    invoke-virtual {v0, v9}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+-
+-    iput-object v0, v2, Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;->swRebootList:Ljava/util/List;
+-
+-    invoke-static {}, Lcom/samsung/android/knox/hdm/HdmManager;->getHdmVersion()Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    const-string v9, " - "
+-
+-    invoke-virtual {v0, v9}, Ljava/lang/String;->split(Ljava/lang/String;)[Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    invoke-static {v0}, Ljava/util/Arrays;->toString([Ljava/lang/Object;)Ljava/lang/String;
+-
+-    move-result-object v9
+-
+-    invoke-static {v7, v9}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    aget-object v0, v0, v5
+-
+-    invoke-static {v0, v8}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;I)I
+-
+-    move-result v0
+-
+-    iput v0, v2, Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;->hdmSubSystem:I
+-
+-    invoke-virtual {v2, v0}, Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;->initTargetSubSystems(I)I
+-
+-    move-result v0
+-
+-    iput v0, v2, Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;->targetSubSystems:I
+-
+-    invoke-virtual {v2}, Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;->isSwBlockEnabled()Z
+-
+-    move-result v8
+-
+-    iput-boolean v8, v2, Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;->swBlockEnabled:Z
+-
+-    const-string/jumbo v8, "sys.hdm.double.protection.subsystem"
+-
+-    invoke-static {v0}, Ljava/lang/Integer;->toString(I)Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    invoke-static {v8, v0}, Landroid/os/SystemProperties;->set(Ljava/lang/String;Ljava/lang/String;)V
+-    :try_end_b
+-    .catch Ljava/lang/Exception; {:try_start_b .. :try_end_b} :catch_8
+-
+-    goto :goto_16
+-
+-    :catch_8
+-    move-exception v0
+-
+-    const-string v8, "HdmSoftwareBlock failed: "
+-
+-    invoke-static {v8, v0, v7}, Lcom/android/server/HeapdumpWatcher$$ExternalSyntheticOutline0;->m(Ljava/lang/String;Ljava/lang/Exception;Ljava/lang/String;)V
+-
+-    :goto_16
+-    iput-object v2, v4, Lcom/android/server/enterprise/hdm/HdmService;->hdmSoftwareBlock:Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;
+-
+-    new-instance v2, Lcom/android/server/enterprise/hdm/HdmVendorController;
+-
+-    invoke-direct {v2}, Ljava/lang/Object;-><init>()V
+-
+-    iput-object v6, v2, Lcom/android/server/enterprise/hdm/HdmVendorController;->mISehKhdm:Lvendor/samsung/hardware/khdm/ISehKhdm;
+-
+-    const-string v0, "33"
+-
+-    invoke-static {v0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+-
+-    move-result v7
+-
+-    const-string v8, "Hdm - VendorInterface"
+-
+-    const-string/jumbo v0, "isAidlServiceDeclared: "
+-
+-    :try_start_c
+-    const-string/jumbo v9, "vendor.samsung.hardware.khdm.ISehKhdm/default"
+-
+-    invoke-static {v9}, Landroid/os/ServiceManager;->isDeclared(Ljava/lang/String;)Z
+-
+-    move-result v9
+-
+-    new-instance v10, Ljava/lang/StringBuilder;
+-
+-    invoke-direct {v10, v0}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {v10, v9}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v10}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    invoke-static {v8, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+-    :try_end_c
+-    .catch Ljava/lang/Exception; {:try_start_c .. :try_end_c} :catch_9
+-
+-    goto :goto_17
+-
+-    :catch_9
+-    move-exception v0
+-
+-    new-instance v9, Ljava/lang/StringBuilder;
+-
+-    const-string/jumbo v10, "isAidlServiceDeclared failed: "
+-
+-    invoke-direct {v9, v10}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {v9, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v9}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    invoke-static {v8, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    const/4 v9, 0x0
+-
+-    :goto_17
+-    xor-int/lit8 v0, v9, 0x1
+-
+-    iput-boolean v0, v2, Lcom/android/server/enterprise/hdm/HdmVendorController;->hidlSupport:Z
+-
+-    new-instance v5, Ljava/lang/StringBuilder;
+-
+-    const-string/jumbo v9, "apiLevel: "
+-
+-    invoke-direct {v5, v9}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
+-
+-    invoke-virtual {v5, v7}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
+-
+-    const-string v7, ", hidlSupport: "
+-
+-    invoke-virtual {v5, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v5, v0}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
+-
+-    invoke-virtual {v5}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+-
+-    move-result-object v0
+-
+-    invoke-static {v8, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    invoke-static {}, Ljava/lang/invoke/VarHandle;->storeStoreFence()V
+-
+-    iput-object v2, v4, Lcom/android/server/enterprise/hdm/HdmService;->vendorController:Lcom/android/server/enterprise/hdm/HdmVendorController;
+-
+-    const-string v0, "HDM - HdmService"
+-
+-    const-string v2, "HdmService.java instantiated"
+-
+-    invoke-static {v0, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+-
+-    invoke-static {}, Ljava/lang/invoke/VarHandle;->storeStoreFence()V
+-
+-    invoke-static {v4, v3}, Lcom/android/server/enterprise/EnterpriseDeviceManagerServiceImpl$Injector;->addLazySystemService(Lcom/android/server/enterprise/EnterpriseServiceCallback;Ljava/lang/String;)V
+-
+     iget-object v0, v1, Lcom/android/server/enterprise/EnterpriseDeviceManagerServiceImpl;->mContext:Landroid/content/Context;
+ 
+     sget v2, Lcom/android/server/enterprise/appconfig/ApplicationRestrictionsService;->$r8$clinit:I
 diff --git a/smali/com/android/server/enterprise/hdm/HdmSakManager.smali b/orig/smali/com/android/server/enterprise/hdm/HdmSakManager.smali
 deleted file mode 100644
-index d337cfc..0000000
---- a/smali/com/android/server/enterprise/hdm/HdmSakManager.smali
+index 1111111..0000000
+--- a/smali/com/android/server/enterprise/hdm/HdmSakManager.smali	2026-11-26 09:28:20.584208018 +0545
 +++ /dev/null
 @@ -1,1007 +0,0 @@
 -.class public abstract Lcom/android/server/enterprise/hdm/HdmSakManager;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -
 -# static fields
@@ -1419,13 +1657,13 @@ index d337cfc..0000000
 -.end method
 diff --git a/smali/com/android/server/enterprise/hdm/HdmService$$ExternalSyntheticLambda0.smali b/orig/smali/com/android/server/enterprise/hdm/HdmService$$ExternalSyntheticLambda0.smali
 deleted file mode 100644
-index cc915f7..0000000
---- a/smali/com/android/server/enterprise/hdm/HdmService$$ExternalSyntheticLambda0.smali
+index 1111111..0000000
+--- a/smali/com/android/server/enterprise/hdm/HdmService$$ExternalSyntheticLambda0.smali	2026-11-26 09:28:20.584508565 +0545
 +++ /dev/null
 @@ -1,22 +0,0 @@
 -.class public final synthetic Lcom/android/server/enterprise/hdm/HdmService$$ExternalSyntheticLambda0;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Ljava/lang/Runnable;
@@ -1447,13 +1685,13 @@ index cc915f7..0000000
 -.end method
 diff --git a/smali/com/android/server/enterprise/hdm/HdmService$SetPolicyContext.smali b/orig/smali/com/android/server/enterprise/hdm/HdmService$SetPolicyContext.smali
 deleted file mode 100644
-index b3bfd84..0000000
---- a/smali/com/android/server/enterprise/hdm/HdmService$SetPolicyContext.smali
+index 1111111..0000000
+--- a/smali/com/android/server/enterprise/hdm/HdmService$SetPolicyContext.smali	2026-11-26 09:28:20.584861881 +0545
 +++ /dev/null
 @@ -1,11 +0,0 @@
 -.class public final Lcom/android/server/enterprise/hdm/HdmService$SetPolicyContext;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -
 -# instance fields
@@ -1464,13 +1702,13 @@ index b3bfd84..0000000
 -.field public serviceName:Ljava/lang/String;
 diff --git a/smali/com/android/server/enterprise/hdm/HdmService.smali b/orig/smali/com/android/server/enterprise/hdm/HdmService.smali
 deleted file mode 100644
-index d80c785..0000000
---- a/smali/com/android/server/enterprise/hdm/HdmService.smali
+index 1111111..0000000
+--- a/smali/com/android/server/enterprise/hdm/HdmService.smali	2026-11-26 09:28:20.586433145 +0545
 +++ /dev/null
 @@ -1,4495 +0,0 @@
 -.class public final Lcom/android/server/enterprise/hdm/HdmService;
 -.super Lcom/samsung/android/knox/hdm/IHdmManager$Stub;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Lcom/android/server/enterprise/EnterpriseServiceCallback;
@@ -5965,13 +6203,13 @@ index d80c785..0000000
 -.end method
 diff --git a/smali/com/android/server/enterprise/hdm/HdmSoftwareBlock$$ExternalSyntheticLambda0.smali b/orig/smali/com/android/server/enterprise/hdm/HdmSoftwareBlock$$ExternalSyntheticLambda0.smali
 deleted file mode 100644
-index 4b83a6b..0000000
---- a/smali/com/android/server/enterprise/hdm/HdmSoftwareBlock$$ExternalSyntheticLambda0.smali
+index 1111111..0000000
+--- a/smali/com/android/server/enterprise/hdm/HdmSoftwareBlock$$ExternalSyntheticLambda0.smali	2026-11-26 09:28:20.585345884 +0545
 +++ /dev/null
 @@ -1,452 +0,0 @@
 -.class public final synthetic Lcom/android/server/enterprise/hdm/HdmSoftwareBlock$$ExternalSyntheticLambda0;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Ljava/util/function/Function;
@@ -6423,13 +6661,13 @@ index 4b83a6b..0000000
 -.end method
 diff --git a/smali/com/android/server/enterprise/hdm/HdmSoftwareBlock.smali b/orig/smali/com/android/server/enterprise/hdm/HdmSoftwareBlock.smali
 deleted file mode 100644
-index 757bca9..0000000
---- a/smali/com/android/server/enterprise/hdm/HdmSoftwareBlock.smali
+index 1111111..0000000
+--- a/smali/com/android/server/enterprise/hdm/HdmSoftwareBlock.smali	2026-11-26 09:28:20.586340380 +0545
 +++ /dev/null
 @@ -1,1498 +0,0 @@
 -.class public final Lcom/android/server/enterprise/hdm/HdmSoftwareBlock;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -
 -# instance fields
@@ -7925,1111 +8163,15 @@ index 757bca9..0000000
 -
 -    return p0
 -.end method
-diff --git a/smali/com/android/server/enterprise/hdm/HdmVendorController.smali b/smali/com/android/server/enterprise/hdm/HdmVendorController.smali
-index b456cda..15713c8 100644
---- a/smali/com/android/server/enterprise/hdm/HdmVendorController.smali
-+++ b/smali/com/android/server/enterprise/hdm/HdmVendorController.smali
-@@ -6,8 +6,3 @@
--# instance fields
--.field public hidlSupport:Z
--
--.field public mISehKhdm:Lvendor/samsung/hardware/khdm/ISehKhdm;
--
-
- # direct methods
- .method public static native hdm_apply_policy([B[B[B[B[BZ)[B
-@@ -49,1082 +44,4 @@
- .method public static native hdm_unload()I
- .end method
-
--.method public static parseDeviceResponse(ILjava/lang/String;[B)[B
--    .locals 1
--
--    new-instance v0, Ljava/lang/StringBuilder;
--
--    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
--
--    invoke-virtual {v0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
--
--    const-string p1, " using ISehKhdm: len: "
--
--    invoke-virtual {v0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p1
--
--    const-string v0, "Hdm - VendorInterface"
--
--    invoke-static {v0, p1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--
--    const/16 p1, 0xa
--
--    if-ge p0, p1, :cond_0
--
--    const/4 p0, 0x0
--
--    return-object p0
--
--    :cond_0
--    new-array p1, p0, [B
--
--    const/4 v0, 0x0
--
--    invoke-static {p2, v0, p1, v0, p0}, Ljava/lang/System;->arraycopy(Ljava/lang/Object;ILjava/lang/Object;II)V
--
--    return-object p1
--.end method
--
--
--# virtual methods
--.method public final getService()Lvendor/samsung/hardware/khdm/ISehKhdm;
--    .locals 3
--
--    new-instance v0, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v1, "getService: "
--
--    invoke-direct {v0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    iget-object v1, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->mISehKhdm:Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v0
--
--    const-string v1, "Hdm - VendorInterface"
--
--    invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--
--    iget-object v0, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->mISehKhdm:Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    if-nez v0, :cond_2
--
--    const-string/jumbo v0, "vendor.samsung.hardware.khdm.ISehKhdm/default"
--
--    invoke-static {v0}, Landroid/os/ServiceManager;->waitForService(Ljava/lang/String;)Landroid/os/IBinder;
--
--    move-result-object v0
--
--    sget v1, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub;->$r8$clinit:I
--
--    if-nez v0, :cond_0
--
--    const/4 v0, 0x0
--
--    goto :goto_0
--
--    :cond_0
--    sget-object v1, Lvendor/samsung/hardware/khdm/ISehKhdm;->DESCRIPTOR:Ljava/lang/String;
--
--    invoke-interface {v0, v1}, Landroid/os/IBinder;->queryLocalInterface(Ljava/lang/String;)Landroid/os/IInterface;
--
--    move-result-object v1
--
--    if-eqz v1, :cond_1
--
--    instance-of v2, v1, Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    if-eqz v2, :cond_1
--
--    move-object v0, v1
--
--    check-cast v0, Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    goto :goto_0
--
--    :cond_1
--    new-instance v1, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;
--
--    invoke-direct {v1}, Ljava/lang/Object;-><init>()V
--
--    iput-object v0, v1, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->mRemote:Landroid/os/IBinder;
--
--    move-object v0, v1
--
--    :goto_0
--    iput-object v0, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->mISehKhdm:Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    :cond_2
--    iget-object p0, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->mISehKhdm:Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    return-object p0
--.end method
--
--.method public final hdmApplyPolicy([B[B[B[B[BZ)[B
--    .locals 7
--
--    const-string v1, "Hdm - VendorInterface"
--
--    :try_start_0
--    const-string/jumbo v0, "hdmApplyPolicy policy: "
--
--    invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--
--    iget-boolean v0, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->hidlSupport:Z
--
--    if-eqz v0, :cond_0
--
--    invoke-static/range {p1 .. p6}, Lcom/android/server/enterprise/hdm/HdmVendorController;->hdm_apply_policy([B[B[B[B[BZ)[B
--
--    move-result-object p0
--
--    return-object p0
--
--    :catch_0
--    move-exception v0
--
--    move-object p0, v0
--
--    goto :goto_0
--
--    :cond_0
--    const/16 v0, 0x3a98
--
--    new-array v0, v0, [B
--
--    new-instance v2, Lvendor/samsung/hardware/khdm/SehDeviceInfo;
--
--    invoke-direct {v2}, Lvendor/samsung/hardware/khdm/SehDeviceInfo;-><init>()V
--
--    const/16 v3, 0x80
--
--    new-array v4, v3, [B
--
--    const/4 v5, 0x0
--
--    if-eqz p2, :cond_1
--
--    array-length v6, p2
--
--    invoke-static {p2, v5, v4, v5, v6}, Ljava/lang/System;->arraycopy(Ljava/lang/Object;ILjava/lang/Object;II)V
--
--    :cond_1
--    iput-object v4, v2, Lvendor/samsung/hardware/khdm/SehDeviceInfo;->serialNumber:[B
--
--    new-array p2, v3, [B
--
--    if-eqz p3, :cond_2
--
--    array-length v4, p3
--
--    invoke-static {p3, v5, p2, v5, v4}, Ljava/lang/System;->arraycopy(Ljava/lang/Object;ILjava/lang/Object;II)V
--
--    :cond_2
--    iput-object p2, v2, Lvendor/samsung/hardware/khdm/SehDeviceInfo;->imei0:[B
--
--    new-array p2, v3, [B
--
--    if-eqz p4, :cond_3
--
--    array-length p3, p4
--
--    invoke-static {p4, v5, p2, v5, p3}, Ljava/lang/System;->arraycopy(Ljava/lang/Object;ILjava/lang/Object;II)V
--
--    :cond_3
--    iput-object p2, v2, Lvendor/samsung/hardware/khdm/SehDeviceInfo;->hashedImei:[B
--
--    new-array p2, v3, [B
--
--    if-eqz p5, :cond_4
--
--    array-length p3, p5
--
--    invoke-static {p5, v5, p2, v5, p3}, Ljava/lang/System;->arraycopy(Ljava/lang/Object;ILjava/lang/Object;II)V
--
--    :cond_4
--    iput-object p2, v2, Lvendor/samsung/hardware/khdm/SehDeviceInfo;->macAddr:[B
--
--    iput-boolean p6, v2, Lvendor/samsung/hardware/khdm/SehDeviceInfo;->isWrappedKey:Z
--
--    invoke-virtual {p0}, Lcom/android/server/enterprise/hdm/HdmVendorController;->getService()Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    move-result-object p0
--
--    check-cast p0, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;
--
--    invoke-virtual {p0, p1, v2, v0}, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->applyPolicy([BLvendor/samsung/hardware/khdm/SehDeviceInfo;[B)I
--
--    move-result p0
--
--    const-string/jumbo p1, "hdmApplyPolicy"
--
--    invoke-static {p0, p1, v0}, Lcom/android/server/enterprise/hdm/HdmVendorController;->parseDeviceResponse(ILjava/lang/String;[B)[B
--
--    move-result-object p0
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
--
--    return-object p0
--
--    :goto_0
--    new-instance p1, Ljava/lang/StringBuilder;
--
--    const-string/jumbo p2, "hdmApplyPolicy failed: "
--
--    invoke-direct {p1, p2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p1
--
--    invoke-static {v1, p1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
--
--    const/4 p0, 0x0
--
--    return-object p0
--.end method
--
--.method public final hdmGenerateNonce(Z)[B
--    .locals 3
--
--    const-string/jumbo v0, "hdmGenerateNonce"
--
--    const-string v1, "Hdm - VendorInterface"
--
--    :try_start_0
--    invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--
--    iget-boolean v2, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->hidlSupport:Z
--
--    if-eqz v2, :cond_0
--
--    invoke-static {p1}, Lcom/android/server/enterprise/hdm/HdmVendorController;->hdm_generate_nonce(Z)[B
--
--    move-result-object p0
--
--    return-object p0
--
--    :catch_0
--    move-exception p0
--
--    goto :goto_0
--
--    :cond_0
--    const/16 v2, 0x3a98
--
--    new-array v2, v2, [B
--
--    invoke-virtual {p0}, Lcom/android/server/enterprise/hdm/HdmVendorController;->getService()Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    move-result-object p0
--
--    check-cast p0, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;
--
--    invoke-virtual {p0, p1, v2}, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->generateNonce(Z[B)I
--
--    move-result p0
--
--    invoke-static {p0, v0, v2}, Lcom/android/server/enterprise/hdm/HdmVendorController;->parseDeviceResponse(ILjava/lang/String;[B)[B
--
--    move-result-object p0
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
--
--    return-object p0
--
--    :goto_0
--    new-instance p1, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v0, "hdmGenerateNonce failed: "
--
--    invoke-direct {p1, v0}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p1
--
--    invoke-static {v1, p1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
--
--    const/4 p0, 0x0
--
--    return-object p0
--.end method
--
--.method public final hdmGetId(Z[B[B)[B
--    .locals 8
--
--    const-string/jumbo v0, "hdmGetId"
--
--    const-string v1, "Hdm - VendorInterface"
--
--    :try_start_0
--    invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--
--    iget-boolean v2, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->hidlSupport:Z
--
--    if-eqz v2, :cond_0
--
--    invoke-static {p2, p3, p1}, Lcom/android/server/enterprise/hdm/HdmVendorController;->hdm_get_id([B[BZ)[B
--
--    move-result-object p0
--
--    return-object p0
--
--    :catch_0
--    move-exception p0
--
--    goto :goto_0
--
--    :cond_0
--    const/16 v2, 0x3a98
--
--    new-array v2, v2, [B
--
--    new-instance v3, Lvendor/samsung/hardware/khdm/SehDeviceInfo;
--
--    invoke-direct {v3}, Lvendor/samsung/hardware/khdm/SehDeviceInfo;-><init>()V
--
--    const/16 v4, 0x80
--
--    new-array v5, v4, [B
--
--    iput-object v5, v3, Lvendor/samsung/hardware/khdm/SehDeviceInfo;->serialNumber:[B
--
--    new-array v5, v4, [B
--
--    const/4 v6, 0x0
--
--    if-eqz p2, :cond_1
--
--    array-length v7, p2
--
--    invoke-static {p2, v6, v5, v6, v7}, Ljava/lang/System;->arraycopy(Ljava/lang/Object;ILjava/lang/Object;II)V
--
--    :cond_1
--    iput-object v5, v3, Lvendor/samsung/hardware/khdm/SehDeviceInfo;->imei0:[B
--
--    new-array p2, v4, [B
--
--    iput-object p2, v3, Lvendor/samsung/hardware/khdm/SehDeviceInfo;->hashedImei:[B
--
--    new-array p2, v4, [B
--
--    if-eqz p3, :cond_2
--
--    array-length v4, p3
--
--    invoke-static {p3, v6, p2, v6, v4}, Ljava/lang/System;->arraycopy(Ljava/lang/Object;ILjava/lang/Object;II)V
--
--    :cond_2
--    iput-object p2, v3, Lvendor/samsung/hardware/khdm/SehDeviceInfo;->macAddr:[B
--
--    iput-boolean p1, v3, Lvendor/samsung/hardware/khdm/SehDeviceInfo;->isWrappedKey:Z
--
--    invoke-virtual {p0}, Lcom/android/server/enterprise/hdm/HdmVendorController;->getService()Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    move-result-object p0
--
--    check-cast p0, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;
--
--    invoke-virtual {p0, v3, v2}, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->getDeviceId(Lvendor/samsung/hardware/khdm/SehDeviceInfo;[B)I
--
--    move-result p0
--
--    invoke-static {p0, v0, v2}, Lcom/android/server/enterprise/hdm/HdmVendorController;->parseDeviceResponse(ILjava/lang/String;[B)[B
--
--    move-result-object p0
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
--
--    return-object p0
--
--    :goto_0
--    new-instance p1, Ljava/lang/StringBuilder;
--
--    const-string/jumbo p2, "hdmGetId failed: "
--
--    invoke-direct {p1, p2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p1
--
--    invoke-static {v1, p1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
--
--    const/4 p0, 0x0
--
--    return-object p0
--.end method
--
--.method public final hdmGetKey()I
--    .locals 3
--
--    const-string v0, "Hdm - VendorInterface"
--
--    const-string/jumbo v1, "hdmGetKey using ISehKhdm: "
--
--    :try_start_0
--    iget-boolean v2, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->hidlSupport:Z
--
--    if-eqz v2, :cond_0
--
--    invoke-static {}, Lcom/android/server/enterprise/hdm/HdmVendorController;->hdm_get_key()I
--
--    move-result p0
--
--    return p0
--
--    :catch_0
--    move-exception p0
--
--    goto :goto_0
--
--    :cond_0
--    invoke-virtual {p0}, Lcom/android/server/enterprise/hdm/HdmVendorController;->getService()Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    move-result-object p0
--
--    check-cast p0, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;
--
--    invoke-virtual {p0}, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->checkKey()I
--
--    move-result p0
--
--    new-instance v2, Ljava/lang/StringBuilder;
--
--    invoke-direct {v2, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v2, p0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v1
--
--    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
--
--    return p0
--
--    :goto_0
--    new-instance v1, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v2, "checkKey failed: "
--
--    invoke-direct {v1, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v1
--
--    invoke-static {v0, v1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
--
--    const/4 p0, -0x1
--
--    return p0
--.end method
--
--.method public final hdmGetPolicy(Z[B[B)[B
--    .locals 1
--
--    :try_start_0
--    iget-boolean v0, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->hidlSupport:Z
--
--    if-eqz v0, :cond_0
--
--    invoke-static {p1, p2, p3}, Lcom/android/server/enterprise/hdm/HdmVendorController;->hdm_get_policy(Z[B[B)[B
--
--    move-result-object p0
--
--    return-object p0
--
--    :cond_0
--    const/16 v0, 0x3a98
--
--    new-array v0, v0, [B
--
--    invoke-virtual {p0}, Lcom/android/server/enterprise/hdm/HdmVendorController;->getService()Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    move-result-object p0
--
--    check-cast p0, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;
--
--    invoke-virtual {p0, p1, p2, p3, v0}, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->getPolicy(Z[B[B[B)I
--
--    move-result p0
--
--    const-string/jumbo p1, "hdmGetPolicy"
--
--    invoke-static {p0, p1, v0}, Lcom/android/server/enterprise/hdm/HdmVendorController;->parseDeviceResponse(ILjava/lang/String;[B)[B
--
--    move-result-object p0
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
--
--    return-object p0
--
--    :catch_0
--    move-exception p0
-
--    new-instance p1, Ljava/lang/StringBuilder;
--
--    const-string/jumbo p2, "hdmGetPolicy failed: "
--
--    invoke-direct {p1, p2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p1
--
--    const-string p2, "Hdm - VendorInterface"
--
--    invoke-static {p2, p1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
--
--    const/4 p0, 0x0
--
--    return-object p0
--.end method
--
--.method public final hdmGetRevocationInfo(Z)[B
--    .locals 3
--
--    const-string/jumbo v0, "hdmGetRevocationInfo"
--
--    const-string v1, "Hdm - VendorInterface"
--
--    :try_start_0
--    invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--
--    iget-boolean v2, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->hidlSupport:Z
--
--    if-eqz v2, :cond_0
--
--    invoke-static {p1}, Lcom/android/server/enterprise/hdm/HdmVendorController;->hdm_get_revocation_info(Z)[B
--
--    move-result-object p0
--
--    return-object p0
--
--    :catch_0
--    move-exception p0
--
--    goto :goto_0
--
--    :cond_0
--    const/16 v2, 0x3a98
--
--    new-array v2, v2, [B
--
--    invoke-virtual {p0}, Lcom/android/server/enterprise/hdm/HdmVendorController;->getService()Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    move-result-object p0
--
--    check-cast p0, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;
--
--    invoke-virtual {p0, p1, v2}, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->getRevocationInfo(Z[B)I
--
--    move-result p0
--
--    invoke-static {p0, v0, v2}, Lcom/android/server/enterprise/hdm/HdmVendorController;->parseDeviceResponse(ILjava/lang/String;[B)[B
--
--    move-result-object p0
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
--
--    return-object p0
--
--    :goto_0
--    new-instance p1, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v0, "hdmGetRevocationInfo failed: "
--
--    invoke-direct {p1, v0}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p1
--
--    invoke-static {v1, p1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
--
--    const/4 p0, 0x0
--
--    return-object p0
--.end method
--
--.method public final hdmKgCmd(I)I
--    .locals 3
--
--    const-string v0, "Hdm - VendorInterface"
--
--    const-string/jumbo v1, "hdmKgCmd using ISehKhdm: "
--
--    :try_start_0
--    iget-boolean v2, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->hidlSupport:Z
--
--    if-eqz v2, :cond_0
--
--    invoke-static {p1}, Lcom/android/server/enterprise/hdm/HdmVendorController;->hdm_kg_cmd(I)I
--
--    move-result p0
--
--    return p0
--
--    :catch_0
--    move-exception p0
--
--    goto :goto_0
--
--    :cond_0
--    invoke-virtual {p0}, Lcom/android/server/enterprise/hdm/HdmVendorController;->getService()Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    move-result-object p0
--
--    check-cast p0, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;
--
--    invoke-virtual {p0, p1}, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->executeHdmCmd(I)I
--
--    move-result p1
--
--    new-instance v2, Ljava/lang/StringBuilder;
--
--    invoke-direct {v2, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v2, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v1
--
--    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--
--    if-eqz p1, :cond_1
--
--    invoke-virtual {p0}, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->terminate()I
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
--
--    :cond_1
--    return p1
--
--    :goto_0
--    new-instance p1, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v1, "hdmKgCmd failed: "
--
--    invoke-direct {p1, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p1
--
--    invoke-static {v0, p1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
--
--    const/4 p0, -0x1
--
--    return p0
--.end method
--
--.method public final hdmLoad()I
--    .locals 4
--
--    const-string v0, "Hdm - VendorInterface"
--
--    const-string/jumbo v1, "hdmLoad using ISehKhdm: "
--
--    :try_start_0
--    iget-boolean v2, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->hidlSupport:Z
--
--    if-eqz v2, :cond_0
--
--    invoke-static {}, Lcom/android/server/enterprise/hdm/HdmVendorController;->hdm_load()I
--
--    move-result p0
--
--    return p0
--
--    :catch_0
--    move-exception p0
--
--    goto :goto_0
--
--    :cond_0
--    invoke-virtual {p0}, Lcom/android/server/enterprise/hdm/HdmVendorController;->getService()Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    move-result-object p0
--
--    check-cast p0, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;
--
--    invoke-virtual {p0}, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->initiate()I
--
--    move-result v2
--
--    new-instance v3, Ljava/lang/StringBuilder;
--
--    invoke-direct {v3, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v3, v2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v1
--
--    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--
--    if-eqz v2, :cond_1
--
--    invoke-virtual {p0}, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->terminate()I
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
--
--    :cond_1
--    return v2
--
--    :goto_0
--    new-instance v1, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v2, "hdmLoad failed: "
--
--    invoke-direct {v1, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v1
--
--    invoke-static {v0, v1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
--
--    const/4 p0, -0x1
--
--    return p0
--.end method
--
--.method public final hdmRemoveRevocationInfo()I
--    .locals 3
--
--    const-string v0, "Hdm - VendorInterface"
--
--    const-string/jumbo v1, "hdmRemoveRevocationInfo using ISehKhdm: "
--
--    :try_start_0
--    const-string/jumbo v2, "hdmRemoveRevocationInfo"
--
--    invoke-static {v0, v2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--
--    iget-boolean v2, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->hidlSupport:Z
--
--    if-eqz v2, :cond_0
--
--    invoke-static {}, Lcom/android/server/enterprise/hdm/HdmVendorController;->hdm_remove_revocation_info()I
--
--    move-result p0
--
--    return p0
--
--    :catch_0
--    move-exception p0
--
--    goto :goto_0
--
--    :cond_0
--    invoke-virtual {p0}, Lcom/android/server/enterprise/hdm/HdmVendorController;->getService()Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    move-result-object p0
--
--    check-cast p0, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;
--
--    invoke-virtual {p0}, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->removeRevocationInfo()I
--
--    move-result p0
--
--    new-instance v2, Ljava/lang/StringBuilder;
--
--    invoke-direct {v2, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v2, p0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v1
--
--    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
--
--    return p0
--
--    :goto_0
--    new-instance v1, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v2, "hdmRemoveRevocationInfo failed: "
--
--    invoke-direct {v1, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v1
--
--    invoke-static {v0, v1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
--
--    const/4 p0, -0x1
--
--    return p0
--.end method
--
--.method public final hdmSetKey([B)I
--    .locals 3
--
--    const-string v0, "Hdm - VendorInterface"
--
--    const-string/jumbo v1, "hdmSetKey using ISehKhdm: "
--
--    :try_start_0
--    iget-boolean v2, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->hidlSupport:Z
--
--    if-eqz v2, :cond_0
--
--    invoke-static {p1}, Lcom/android/server/enterprise/hdm/HdmVendorController;->hdm_set_key([B)I
--
--    move-result p0
--
--    return p0
--
--    :catch_0
--    move-exception p0
--
--    goto :goto_0
--
--    :cond_0
--    invoke-virtual {p0}, Lcom/android/server/enterprise/hdm/HdmVendorController;->getService()Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    move-result-object p0
--
--    check-cast p0, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;
--
--    invoke-virtual {p0, p1}, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->setKey([B)I
--
--    move-result p0
--
--    new-instance p1, Ljava/lang/StringBuilder;
--
--    invoke-direct {p1, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p1
--
--    invoke-static {v0, p1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
--
--    return p0
--
--    :goto_0
--    new-instance p1, Ljava/lang/StringBuilder;
--
--    const-string/jumbo v1, "hdmSetKey failed: "
--
--    invoke-direct {p1, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p1
--
--    invoke-static {v0, p1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
--
--    const/4 p0, -0x1
--
--    return p0
--.end method
--
--.method public final hdmSyncRevocationInfo(Z[B)[B
--    .locals 3
--
--    const-string/jumbo v0, "hdmSyncRevocationInfo"
--
--    const-string v1, "Hdm - VendorInterface"
--
--    :try_start_0
--    invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--
--    iget-boolean v2, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->hidlSupport:Z
--
--    if-eqz v2, :cond_0
--
--    invoke-static {p1, p2}, Lcom/android/server/enterprise/hdm/HdmVendorController;->hdm_sync_revocation_info(Z[B)[B
--
--    move-result-object p0
--
--    return-object p0
--
--    :catch_0
--    move-exception p0
--
--    goto :goto_0
--
--    :cond_0
--    const/16 v2, 0x3a98
--
--    new-array v2, v2, [B
--
--    invoke-virtual {p0}, Lcom/android/server/enterprise/hdm/HdmVendorController;->getService()Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    move-result-object p0
--
--    check-cast p0, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;
--
--    invoke-virtual {p0, p1, p2, v2}, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->syncRevocationInfo(Z[B[B)I
--
--    move-result p0
--
--    invoke-static {p0, v0, v2}, Lcom/android/server/enterprise/hdm/HdmVendorController;->parseDeviceResponse(ILjava/lang/String;[B)[B
--
--    move-result-object p0
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
--
--    return-object p0
--
--    :goto_0
--    new-instance p1, Ljava/lang/StringBuilder;
--
--    const-string/jumbo p2, "hdmSyncRevocationInfo failed: "
--
--    invoke-direct {p1, p2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object p1
--
--    invoke-static {v1, p1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
--
--    const/4 p0, 0x0
--
--    return-object p0
--.end method
--
--.method public final hdmUnload()I
--    .locals 6
--
--    const-string v0, "Hdm - VendorInterface"
--
--    const-string/jumbo v1, "hdmUnload failed: "
--
--    const-string/jumbo v2, "hdmUnload using ISehKhdm: "
--
--    const/4 v3, 0x0
--
--    :try_start_0
--    iget-boolean v4, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->hidlSupport:Z
--
--    if-eqz v4, :cond_0
--
--    invoke-static {}, Lcom/android/server/enterprise/hdm/HdmVendorController;->hdm_unload()I
--
--    move-result v0
--    :try_end_0
--    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
--    .catchall {:try_start_0 .. :try_end_0} :catchall_0
--
--    iput-object v3, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->mISehKhdm:Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    return v0
--
--    :catchall_0
--    move-exception v0
--
--    goto :goto_1
--
--    :catch_0
--    move-exception v2
--
--    goto :goto_0
--
--    :cond_0
--    :try_start_1
--    invoke-virtual {p0}, Lcom/android/server/enterprise/hdm/HdmVendorController;->getService()Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    move-result-object v4
--
--    check-cast v4, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;
--
--    invoke-virtual {v4}, Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;->terminate()I
--
--    move-result v4
--
--    new-instance v5, Ljava/lang/StringBuilder;
--
--    invoke-direct {v5, v2}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v5, v4}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v5}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v2
--
--    invoke-static {v0, v2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
--    :try_end_1
--    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
--    .catchall {:try_start_1 .. :try_end_1} :catchall_0
--
--    iput-object v3, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->mISehKhdm:Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    return v4
--
--    :goto_0
--    :try_start_2
--    new-instance v4, Ljava/lang/StringBuilder;
--
--    invoke-direct {v4, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
--
--    invoke-virtual {v4, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
--
--    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
--
--    move-result-object v1
--
--    invoke-static {v0, v1, v2}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
--    :try_end_2
--    .catchall {:try_start_2 .. :try_end_2} :catchall_0
--
--    iput-object v3, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->mISehKhdm:Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    const/4 p0, -0x1
--
--    return p0
--
--    :goto_1
--    iput-object v3, p0, Lcom/android/server/enterprise/hdm/HdmVendorController;->mISehKhdm:Lvendor/samsung/hardware/khdm/ISehKhdm;
--
--    throw v0
--.end method
 diff --git a/smali_classes2/com/samsung/security/securekeyblob/DeviceAttestationException.smali b/orig/smali_classes2/com/samsung/security/securekeyblob/DeviceAttestationException.smali
 deleted file mode 100644
-index 935d838..0000000
---- a/smali_classes2/com/samsung/security/securekeyblob/DeviceAttestationException.smali
+index 1111111..0000000
+--- a/smali_classes2/com/samsung/security/securekeyblob/DeviceAttestationException.smali	2026-11-26 09:28:23.131181567 +0545
 +++ /dev/null
 @@ -1,13 +0,0 @@
 -.class public Lcom/samsung/security/securekeyblob/DeviceAttestationException;
 -.super Ljava/lang/Exception;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -
 -# direct methods
@@ -9040,44 +8182,15 @@ index 935d838..0000000
 -
 -    return-void
 -.end method
-diff --git a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenParameterSpec.smali b/orig/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenParameterSpec.smali
-deleted file mode 100644
-index 3408ae5..0000000
---- a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenParameterSpec.smali
-+++ /dev/null
-@@ -1,23 +0,0 @@
--.class public final Lcom/samsung/security/securekeyblob/SecureKeyGenParameterSpec;
--.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
--
--
--# instance fields
--.field public mBlockModes:[Ljava/lang/String;
--
--.field public mChallenge:[B
--
--.field public mDNQualifier:[B
--
--.field public mDigests:[Ljava/lang/String;
--
--.field public mEncryptionPaddings:[Ljava/lang/String;
--
--.field public mKeySize:I
--
--.field public mMgf1Digests:Ljava/util/Set;
--
--.field public mServiceTAName:[B
--
--.field public mSignaturePaddings:[Ljava/lang/String;
 diff --git a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda0.smali b/orig/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda0.smali
 deleted file mode 100644
-index bfe4a92..0000000
---- a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda0.smali
+index 1111111..0000000
+--- a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda0.smali	2026-11-26 09:28:23.131851140 +0545
 +++ /dev/null
 @@ -1,449 +0,0 @@
 -.class public final synthetic Lcom/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda0;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -
 -# instance fields
@@ -9526,13 +8639,13 @@ index bfe4a92..0000000
 -.end method
 diff --git a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda1.smali b/orig/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda1.smali
 deleted file mode 100644
-index edba4d4..0000000
---- a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda1.smali
+index 1111111..0000000
+--- a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda1.smali	2026-11-26 09:28:23.131851140 +0545
 +++ /dev/null
 @@ -1,114 +0,0 @@
 -.class public final synthetic Lcom/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda1;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Ljava/util/function/Consumer;
@@ -9646,13 +8759,13 @@ index edba4d4..0000000
 -.end method
 diff --git a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda3.smali b/orig/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda3.smali
 deleted file mode 100644
-index 8e82822..0000000
---- a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda3.smali
+index 1111111..0000000
+--- a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda3.smali	2026-11-26 09:28:23.132142148 +0545
 +++ /dev/null
 @@ -1,157 +0,0 @@
 -.class public final synthetic Lcom/samsung/security/securekeyblob/SecureKeyGenerator$$ExternalSyntheticLambda3;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Ljava/util/function/Consumer;
@@ -9809,13 +8922,13 @@ index 8e82822..0000000
 -.end method
 diff --git a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator.smali b/orig/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator.smali
 deleted file mode 100644
-index 7d50729..0000000
---- a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator.smali
+index 1111111..0000000
+--- a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenerator.smali	2026-11-26 09:28:23.132735848 +0545
 +++ /dev/null
 @@ -1,740 +0,0 @@
 -.class public final Lcom/samsung/security/securekeyblob/SecureKeyGenerator;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -
 -# instance fields
@@ -10553,15 +9666,44 @@ index 7d50729..0000000
 -
 -    throw p1
 -.end method
+diff --git a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenParameterSpec.smali b/orig/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenParameterSpec.smali
+deleted file mode 100644
+index 1111111..0000000
+--- a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyGenParameterSpec.smali	2026-11-26 09:28:23.131387375 +0545
++++ /dev/null
+@@ -1,23 +0,0 @@
+-.class public final Lcom/samsung/security/securekeyblob/SecureKeyGenParameterSpec;
+-.super Ljava/lang/Object;
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
+-
+-
+-# instance fields
+-.field public mBlockModes:[Ljava/lang/String;
+-
+-.field public mChallenge:[B
+-
+-.field public mDNQualifier:[B
+-
+-.field public mDigests:[Ljava/lang/String;
+-
+-.field public mEncryptionPaddings:[Ljava/lang/String;
+-
+-.field public mKeySize:I
+-
+-.field public mMgf1Digests:Ljava/util/Set;
+-
+-.field public mServiceTAName:[B
+-
+-.field public mSignaturePaddings:[Ljava/lang/String;
 diff --git a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyResult.smali b/orig/smali_classes2/com/samsung/security/securekeyblob/SecureKeyResult.smali
 deleted file mode 100644
-index 1dfa160..0000000
---- a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyResult.smali
+index 1111111..0000000
+--- a/smali_classes2/com/samsung/security/securekeyblob/SecureKeyResult.smali	2026-11-26 09:28:23.132511405 +0545
 +++ /dev/null
 @@ -1,11 +0,0 @@
 -.class public final Lcom/samsung/security/securekeyblob/SecureKeyResult;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -
 -# instance fields
@@ -10572,13 +9714,13 @@ index 1dfa160..0000000
 -.field public mServiceKey:[B
 diff --git a/smali_classes2/vendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy.smali b/orig/smali_classes2/vendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy.smali
 deleted file mode 100644
-index ca386e0..0000000
---- a/smali_classes2/vendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy.smali
+index 1111111..0000000
+--- a/smali_classes2/vendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy.smali	2026-11-26 09:28:23.165930196 +0545
 +++ /dev/null
 @@ -1,1003 +0,0 @@
 -.class public final Lvendor/samsung/hardware/khdm/ISehKhdm$Stub$Proxy;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Lvendor/samsung/hardware/khdm/ISehKhdm;
@@ -11581,13 +10723,13 @@ index ca386e0..0000000
 -.end method
 diff --git a/smali_classes2/vendor/samsung/hardware/khdm/ISehKhdm$Stub.smali b/orig/smali_classes2/vendor/samsung/hardware/khdm/ISehKhdm$Stub.smali
 deleted file mode 100644
-index e12cea8..0000000
---- a/smali_classes2/vendor/samsung/hardware/khdm/ISehKhdm$Stub.smali
+index 1111111..0000000
+--- a/smali_classes2/vendor/samsung/hardware/khdm/ISehKhdm$Stub.smali	2026-11-26 09:28:23.165443959 +0545
 +++ /dev/null
 @@ -1,10 +0,0 @@
 -.class public abstract Lvendor/samsung/hardware/khdm/ISehKhdm$Stub;
 -.super Landroid/os/Binder;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Lvendor/samsung/hardware/khdm/ISehKhdm;
@@ -11597,13 +10739,13 @@ index e12cea8..0000000
 -.field public static final synthetic $r8$clinit:I
 diff --git a/smali_classes2/vendor/samsung/hardware/khdm/ISehKhdm.smali b/orig/smali_classes2/vendor/samsung/hardware/khdm/ISehKhdm.smali
 deleted file mode 100644
-index 6cfdcb6..0000000
---- a/smali_classes2/vendor/samsung/hardware/khdm/ISehKhdm.smali
+index 1111111..0000000
+--- a/smali_classes2/vendor/samsung/hardware/khdm/ISehKhdm.smali	2026-11-26 09:28:23.165673743 +0545
 +++ /dev/null
 @@ -1,30 +0,0 @@
 -.class public interface abstract Lvendor/samsung/hardware/khdm/ISehKhdm;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Landroid/os/IInterface;
@@ -11633,13 +10775,13 @@ index 6cfdcb6..0000000
 -.end method
 diff --git a/smali_classes2/vendor/samsung/hardware/khdm/SehDeviceInfo$1.smali b/orig/smali_classes2/vendor/samsung/hardware/khdm/SehDeviceInfo$1.smali
 deleted file mode 100644
-index 5e91b8c..0000000
---- a/smali_classes2/vendor/samsung/hardware/khdm/SehDeviceInfo$1.smali
+index 1111111..0000000
+--- a/smali_classes2/vendor/samsung/hardware/khdm/SehDeviceInfo$1.smali	2026-11-26 09:28:23.165875844 +0545
 +++ /dev/null
 @@ -1,28 +0,0 @@
 -.class public final Lvendor/samsung/hardware/khdm/SehDeviceInfo$1;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Landroid/os/Parcelable$Creator;
@@ -11667,13 +10809,13 @@ index 5e91b8c..0000000
 -.end method
 diff --git a/smali_classes2/vendor/samsung/hardware/khdm/SehDeviceInfo.smali b/orig/smali_classes2/vendor/samsung/hardware/khdm/SehDeviceInfo.smali
 deleted file mode 100644
-index 2bb3210..0000000
---- a/smali_classes2/vendor/samsung/hardware/khdm/SehDeviceInfo.smali
+index 1111111..0000000
+--- a/smali_classes2/vendor/samsung/hardware/khdm/SehDeviceInfo.smali	2026-11-26 09:28:23.166216336 +0545
 +++ /dev/null
 @@ -1,333 +0,0 @@
 -.class public final Lvendor/samsung/hardware/khdm/SehDeviceInfo;
 -.super Ljava/lang/Object;
--.source "qb/114805780 ff5c14adb871103219eb3acf19570a5e1a66f296be170edb236eafe9d0eb6f83"
+-.source "qb/115377202 beaa6963e2d61e532f52e0d4029b70eb8d75e4d9c1d5a6364748278c88fe5259"
 -
 -# interfaces
 -.implements Landroid/os/Parcelable;
