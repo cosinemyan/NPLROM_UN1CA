@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="io.mesalabs.unica.teesettings" android:versionCode="1" android:versionName="1.0">
+    <uses-sdk android:minSdkVersion="35" android:targetSdkVersion="37" />
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+    <application android:label="TEE Simulator Settings" android:allowBackup="false" android:usesCleartextTraffic="false" android:theme="@android:style/Theme.Material.NoActionBar" android:supportsRtl="true">
+        <activity android:name="io.mesalabs.unica.keybox.RomSettingsActivity" android:exported="true" android:permission="android.permission.WRITE_SECURE_SETTINGS" android:configChanges="orientation|screenSize|keyboardHidden|uiMode" />
+    </application>
+</manifest>

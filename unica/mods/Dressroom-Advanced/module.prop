@@ -1,0 +1,8 @@
+id=dressroom-advanced
+name=Dressroom-Advanced (native ROM port)
+author=BlueOutside
+authorUrl=https://github.com/BlueOutside
+description=Native Advanced clock, depth, widgets and Extras port; retains UN1CA fonts and Ambient Weather.
+source=https://github.com/BlueOutside/Dressroom-Advanced
+sourceRevision=5bb66521ee7d82d51f30a1238e18dd153b263c54
+license=Dressroom Advanced Source-Available License 1.0; independent UN1CA adapters retain their own license

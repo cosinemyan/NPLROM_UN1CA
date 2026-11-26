@@ -1,0 +1,22 @@
+--- a/include/net/cfg80211.h
++++ b/include/net/cfg80211.h
+@@ -4554,6 +4554,8 @@
+  * @mod_link_station: Modify a link of a station.
+  * @del_link_station: Remove a link of a station.
+  */
++struct cfg80211_mlo_tid_map;
++
+ struct cfg80211_ops {
+ 	int	(*suspend)(struct wiphy *wiphy, struct cfg80211_wowlan *wow);
+ 	int	(*resume)(struct wiphy *wiphy);
+@@ -4906,6 +4908,10 @@
+ 				    struct link_station_parameters *params);
+ 	int	(*del_link_station)(struct wiphy *wiphy, struct net_device *dev,
+ 				    struct link_station_del_parameters *params);
++	/* Slot present in the untouched S23U cfg80211 module BTF. */
++	int (*get_link_tid_map_status)(struct wiphy *wiphy,
++				       struct net_device *dev,
++				       struct cfg80211_mlo_tid_map *map);
+ 
+ 	ANDROID_BACKPORT_RESERVED(1);
+ 	ANDROID_BACKPORT_RESERVED(2);

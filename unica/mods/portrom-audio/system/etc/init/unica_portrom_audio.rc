@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Boot only: never mount or unmount in response to a live toggle.
+on load_persist_props_action && property:persist.sys.unica.speaker_profile=true
+    mount none /system/etc/unica/portrom-audio/speaker/etc/stage_policy.conf /system/etc/stage_policy.conf bind
+    mount none /system/etc/unica/portrom-audio/speaker/lib/lib_SoundBooster_ver1100.so /system/lib/lib_SoundBooster_ver1100.so bind
+    mount none /system/etc/unica/portrom-audio/speaker/lib64/lib_SoundBooster_ver1100.so /system/lib64/lib_SoundBooster_ver1100.so bind
+    mount none /system/etc/unica/portrom-audio/speaker/lib64/libcorefx.so /system/lib64/libcorefx.so bind
+    mount none /vendor/etc/unica/portrom-audio/speaker/etc/SoundBoosterParam.txt /vendor/etc/SoundBoosterParam.txt bind
+    mount none /vendor/etc/unica/portrom-audio/speaker/lib/lib_SoundBooster_ver1100.so /vendor/lib/lib_SoundBooster_ver1100.so bind
+    mount none /vendor/etc/unica/portrom-audio/speaker/lib64/lib_SoundBooster_ver1100.so /vendor/lib64/lib_SoundBooster_ver1100.so bind
+
+on load_persist_props_action && property:persist.sys.unica.portrom_audio=true
+    mount none /system/etc/unica/portrom-audio/audio /system/media/audio bind

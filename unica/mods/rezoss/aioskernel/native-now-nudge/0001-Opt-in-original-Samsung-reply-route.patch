@@ -1,0 +1,99 @@
+Subject: [PATCH] Add opt-in original Samsung Now Nudge routing
+
+Default is unchanged. Apply after Rezoss patch 0026; the runtime setting is
+rezoss_now_nudge_native. This does not make incompatible model binaries work.
+
+--- a/smali_classes16/io/mesalabs/rezoss/ai/InAppReplies.smali
++++ b/smali_classes16/io/mesalabs/rezoss/ai/InAppReplies.smali
+@@ -1075,6 +1075,15 @@
+     .end annotation
+ 
+     .line 36
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/NativeNowNudgeRoute;->enabled(Landroid/content/Context;)Z
++
++    move-result v0
++
++    if-eqz v0, :rezoss_keep_qwen_route
++
++    return-void
++
++    :rezoss_keep_qwen_route
+     invoke-static {p1}, Lio/mesalabs/rezoss/ai/InAppReplies;->supports(Ljava/lang/String;)Z
+ 
+     move-result v0
+@@ -1823,4 +1832,15 @@
+     .line 94
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/NativeNowNudgeRoute;->enabled(Landroid/content/Context;)Z
++
++    move-result v0
++
++    if-eqz v0, :rezoss_keep_qwen_route
++
++    const/4 v0, 0x0
++
++    return v0
++
++    :rezoss_keep_qwen_route
+     invoke-static {p1}, Lio/mesalabs/rezoss/ai/InAppReplies;->supports(Ljava/lang/String;)Z
+ 
+     move-result v0
+--- a/smali_classes14/com/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService.smali
++++ b/smali_classes14/com/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService.smali
+@@ -1060,6 +1060,25 @@
+ 
+     move-result-object p0
+ 
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/NativeNowNudgeRoute;->enabled(Landroid/content/Context;)Z
++
++    move-result v1
++
++    if-eqz v1, :rezoss_keep_notification_qwen
++
++    new-instance v1, Lcom/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler;
++
++    invoke-direct {v1, p0}, Lcom/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler;-><init>(Landroid/content/Context;)V
++
++    invoke-virtual {v1, p2, p1, p3}, Lcom/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler;->suggestConversationActions(Landroid/view/textclassifier/TextClassificationSessionId;Landroid/view/textclassifier/ConversationActions$Request;Landroid/os/CancellationSignal;)Landroid/view/textclassifier/ConversationActions;
++
++    move-result-object p0
++
++    invoke-static {v0}, Lnd/a;->b(Ljava/lang/String;)V
++
++    return-object p0
++
++    :rezoss_keep_notification_qwen
+     invoke-static {p0, p1}, Lio/mesalabs/rezoss/ai/NotificationReplies;->suggest(Landroid/content/Context;Landroid/view/textclassifier/ConversationActions$Request;)Landroid/view/textclassifier/ConversationActions;
+ 
+     move-result-object p0
+--- /dev/null
++++ b/smali_classes16/io/mesalabs/rezoss/ai/NativeNowNudgeRoute.smali
+@@ -0,0 +1,29 @@
++.class public final Lio/mesalabs/rezoss/ai/NativeNowNudgeRoute;
++.super Ljava/lang/Object;
++
++.method public static enabled(Landroid/content/Context;)Z
++    .locals 3
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    const-string v1, "rezoss_now_nudge_native"
++
++    const/4 v2, 0x0
++
++    invoke-static {v0, v1, v2}, Landroid/provider/Settings$Global;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result v0
++
++    const/4 v1, 0x1
++
++    if-ne v0, v1, :rezoss_disabled
++
++    return v1
++
++    :rezoss_disabled
++    const/4 v0, 0x0
++
++    return v0
++.end method

@@ -1,0 +1,16 @@
+--- a/io/mesalabs/unica/localsummary/LocalSummaryProvider.smali
++++ b/io/mesalabs/unica/localsummary/LocalSummaryProvider.smali
+@@ -338,11 +338,11 @@
+     return-object v0
+
+     :cond_failed
+-    const-string v0, "New messages are waiting."
++    const-string v0, "summary unavailable"
+
+-    invoke-static {v0}, Lio/mesalabs/unica/localsummary/LocalSummaryProvider;->success(Ljava/lang/String;)Landroid/os/Bundle;
++    invoke-static {v0}, Lio/mesalabs/unica/localsummary/LocalSummaryProvider;->error(Ljava/lang/String;)Landroid/os/Bundle;
+
+     move-result-object v0
+
+     return-object v0
+ .end method

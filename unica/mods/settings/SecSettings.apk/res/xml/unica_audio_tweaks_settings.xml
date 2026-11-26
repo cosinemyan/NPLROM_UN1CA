@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto" android:title="@string/unica_audio_tweaks_settings_title" settings:hierarchicalParentFragment="io.mesalabs.unica.settings.UnicaSettingsFragment" settings:topLevelPreferenceKey="custom_mwgrb8x4_entry">
+    <SecSwitchPreference android:title="@string/unica_boot_sound_title" android:key="unica_boot_sound" settings:controller="io.mesalabs.unica.settings.ui.BootSoundPreferenceController" />
+    <SecSwitchPreference android:icon="@drawable/ic_unica_design_music" android:title="@string/unica_speaker_profile_title" android:key="unica_speaker_profile" android:persistent="false" android:summary="@string/unica_speaker_profile_off" settings:controller="io.mesalabs.unica.portrom.SpeakerProfilePreferenceController" />
+    <SecSwitchPreference android:icon="@drawable/ic_unica_design_music" android:title="@string/unica_portrom_audio_title" android:key="unica_portrom_audio" android:persistent="false" android:summary="@string/unica_portrom_audio_off" settings:controller="io.mesalabs.unica.portrom.PortRomAudioPreferenceController" />
+    <SecSwitchPreference android:icon="@drawable/ic_unica_design_music" android:title="@string/unica_viper_title" android:key="unica_viper_enabled" android:persistent="false" android:summary="@string/unica_viper_off" settings:controller="io.mesalabs.unica.viper.ViperPreferenceController" />
+    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_unica_design_music" android:title="@string/unica_viper_options_title" android:key="unica_viper_options" android:summary="@string/unica_viper_options_summary">
+        <intent android:targetPackage="com.llsl.viper4android" android:targetClass="com.llsl.viper4android.ui.MainActivity" />
+    </io.mesalabs.unica.settings.preference.IconPreference>
+</PreferenceScreen>

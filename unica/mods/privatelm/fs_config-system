@@ -1,0 +1,4 @@
+system 0 0 755 capabilities=0x0
+system/app 0 0 755 capabilities=0x0
+system/app/PrivateLM 0 0 755 capabilities=0x0
+system/app/PrivateLM/PrivateLM.apk 0 0 644 capabilities=0x0

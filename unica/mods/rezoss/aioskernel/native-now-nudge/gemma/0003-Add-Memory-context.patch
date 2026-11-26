@@ -1,0 +1,7 @@
+Subject: [PATCH] Give Memory a separate 20000-token local context
+
+--- a/backend/java/io/mesalabs/rezoss/nudge/TextBackend.java
++++ b/backend/java/io/mesalabs/rezoss/nudge/TextBackend.java
+@@ -1 +1 @@
+-    private String memoryLocal(String prompt,Control control)throws Exception {throw new IOException("memory_gemma_required");}
++    private String memoryLocal(String prompt,Control control)throws Exception {return gemma.generateMemory(prompt,control);}

@@ -1,0 +1,5 @@
+/system/bin/unica-battery u:object_r:unica_battery_exec:s0
+/data/misc/unica_battery u:object_r:unica_battery_data:s0
+/data/misc/unica_battery/lock u:object_r:unica_battery_data:s0
+/data/misc/unica_battery/requests(/.*)? u:object_r:unica_battery_request:s0
+/data/misc/unica_battery/responses(/.*)? u:object_r:unica_battery_response:s0

@@ -1,0 +1,7 @@
+AUTHOR Rezoss
+
+--- a/allowed-system-preload-apps.xml
++++ b/allowed-system-preload-apps.xml
+@@ -1068 +1068,2 @@
++    <allowed-system-preload package="io.mesalabs.rezoss.qwen"/>
+ </config>

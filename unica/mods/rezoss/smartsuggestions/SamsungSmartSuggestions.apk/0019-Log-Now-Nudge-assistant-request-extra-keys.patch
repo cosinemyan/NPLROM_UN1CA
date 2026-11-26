@@ -1,0 +1,56 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: UN1CA <noreply@unica.local>
+Date: Sun, 20 Sep 2026 15:10:00 +0200
+Subject: [PATCH] Log Now Nudge assistant request extra keys
+
+Do not log notification text or extra values.  This only logs whether the
+notification-assistant ConversationActions request carries an extras bundle and
+which keys are present, so the next live test can distinguish a caller-side
+missing-extras problem from a SmartSuggestions routing problem.
+
+diff --git a/smali_classes14/com/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService.smali b/smali_classes14/com/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService.smali
+--- a/smali_classes14/com/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService.smali
++++ b/smali_classes14/com/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService.smali
+@@ -891,6 +891,40 @@
+
+     if-eqz v1, :cond_0
+
++    invoke-virtual {p1}, Landroid/view/textclassifier/ConversationActions$Request;->getExtras()Landroid/os/Bundle;
++
++    move-result-object v1
++
++    if-eqz v1, :rezoss_diag_assistant_no_extras
++
++    invoke-virtual {v1}, Landroid/os/BaseBundle;->keySet()Ljava/util/Set;
++
++    move-result-object v3
++
++    new-instance v4, Ljava/lang/StringBuilder;
++
++    const-string/jumbo v1, "onSuggestConversationActions assistant extras keys="
++
++    invoke-direct {v4, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
++
++    invoke-virtual {v4, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v2, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    goto :rezoss_diag_assistant_done
++
++    :rezoss_diag_assistant_no_extras
++    const-string/jumbo v1, "onSuggestConversationActions assistant extras keys=<null>"
++
++    invoke-static {v2, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    :rezoss_diag_assistant_done
+     iget-object v1, p0, Lcom/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService;->mPolicy:Lcom/samsung/android/smartsuggestions/service/textclassifier/CustomTextClassifierPolicy;
+
+     invoke-virtual {v1, p1}, Lcom/samsung/android/smartsuggestions/service/textclassifier/CustomTextClassifierPolicy;->getNowNudgeExtraValue(Landroid/view/textclassifier/ConversationActions$Request;)Z
+--
+2.43.0

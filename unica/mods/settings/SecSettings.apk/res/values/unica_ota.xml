@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unica_ota_title">OTA Update</string>
+    <string name="unica_ota_summary">Check for updates or install a local OTA package</string>
+</resources>

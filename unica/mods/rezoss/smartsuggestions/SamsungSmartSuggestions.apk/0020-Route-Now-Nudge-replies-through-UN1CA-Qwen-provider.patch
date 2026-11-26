@@ -1,0 +1,582 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: UN1CA <noreply@unica.local>
+Date: Fri, 25 Sep 2026 00:00:00 +0200
+Subject: [PATCH] Route Now Nudge replies through UN1CA Qwen provider
+
+Bypass Samsung's native NowNudgeConversationActionsHandler for notification
+assistant requests after the existing extras synthesis gate.  The native path
+falls back into Samsung AIOS/SSNeural/QNN and returns empty or crashes on the
+SM8550 port.
+
+Call the local Qwen HTTP server directly, then convert its line-based output
+into Android text-reply ConversationActions.  Logs only
+structural status, never notification text or generated replies.
+
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -31,9 +31,12 @@
+     <uses-permission android:name="com.samsung.android.app.paynow.permission.PAY_NOW"/>
+     <uses-permission android:name="com.samsung.android.settings.permission.LAUNCH_MULTI_PANE_SETTINGS_DEEP_LINK"/>
+     <uses-permission android:name="com.samsung.android.settings.permission.SETTINGS"/>
++    <uses-permission android:name="io.mesalabs.unica.permission.LOCAL_SUMMARY"/>
+     <queries>
+         <package android:name="com.samsung.android.scloud.config"/>
+         <package android:name="com.samsung.android.intellivoiceservice"/>
++        <package android:name="io.mesalabs.unica.localsummary"/>
++        <provider android:authorities="io.mesalabs.unica.localsummary"/>
+         <intent>
+             <action android:name="com.samsung.android.scs.asr.action.SEARCH_LANGPACK"/>
+         </intent>
+
+--- a/smali_classes14/com/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService.smali
++++ b/smali_classes14/com/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService.smali
+@@ -1053,19 +1053,15 @@
+     invoke-static {v2, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+
+     :rezoss_assistant_now_nudge
+-    const-string/jumbo v1, "onSuggestConversationActions, route AssistantService request to Now Nudge."
++    const-string/jumbo v1, "onSuggestConversationActions, route AssistantService request to UN1CA Qwen Now Nudge."
+
+     invoke-static {v2, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+
+-    new-instance v1, Lcom/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler;
+-
+     invoke-virtual {p0}, Lcom/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService;->getApplicationContext()Landroid/content/Context;
+
+     move-result-object p0
+
+-    invoke-direct {v1, p0}, Lcom/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler;-><init>(Landroid/content/Context;)V
+-
+-    invoke-virtual {v1, p2, p1, p3}, Lcom/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler;->suggestConversationActions(Landroid/view/textclassifier/TextClassificationSessionId;Landroid/view/textclassifier/ConversationActions$Request;Landroid/os/CancellationSignal;)Landroid/view/textclassifier/ConversationActions;
++    invoke-static {p0, p1}, Lcom/samsung/android/smartsuggestions/extservice/services/RezossLocalQwenActions;->suggest(Landroid/content/Context;Landroid/view/textclassifier/ConversationActions$Request;)Landroid/view/textclassifier/ConversationActions;
+
+     move-result-object p0
+
+
+--- /dev/null
++++ b/smali_classes14/com/samsung/android/smartsuggestions/extservice/services/RezossLocalQwenActions.smali
+@@ -0,0 +1,524 @@
++.class public final Lcom/samsung/android/smartsuggestions/extservice/services/RezossLocalQwenActions;
++.super Ljava/lang/Object;
++
++
++.method private constructor <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method private static buildActions(Ljava/lang/String;)Landroid/view/textclassifier/ConversationActions;
++    .locals 8
++
++    new-instance v0, Ljava/util/ArrayList;
++
++    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
++
++    if-eqz p0, :cond_done
++
++    const-string/jumbo v1, "\\r?\\n"
++
++    invoke-virtual {p0, v1}, Ljava/lang/String;->split(Ljava/lang/String;)[Ljava/lang/String;
++
++    move-result-object v1
++
++    const/4 v2, 0x0
++
++    const/4 v3, 0x0
++
++    :goto_loop
++    array-length v4, v1
++
++    if-ge v2, v4, :cond_done
++
++    const/4 v4, 0x3
++
++    if-lt v3, v4, :cond_next_line
++
++    goto :cond_done
++
++    :cond_next_line
++    aget-object v5, v1, v2
++
++    invoke-static {v5}, Lcom/samsung/android/smartsuggestions/extservice/services/RezossLocalQwenActions;->cleanReply(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v5
++
++    if-eqz v5, :cond_continue
++
++    new-instance v6, Landroid/view/textclassifier/ConversationAction$Builder;
++
++    const-string/jumbo v7, "text_reply"
++
++    invoke-direct {v6, v7}, Landroid/view/textclassifier/ConversationAction$Builder;-><init>(Ljava/lang/String;)V
++
++    invoke-virtual {v6, v5}, Landroid/view/textclassifier/ConversationAction$Builder;->setTextReply(Ljava/lang/CharSequence;)Landroid/view/textclassifier/ConversationAction$Builder;
++
++    move-result-object v6
++
++    const/high16 v7, 0x3f800000    # 1.0f
++
++    invoke-virtual {v6, v7}, Landroid/view/textclassifier/ConversationAction$Builder;->setConfidenceScore(F)Landroid/view/textclassifier/ConversationAction$Builder;
++
++    move-result-object v6
++
++    invoke-virtual {v6}, Landroid/view/textclassifier/ConversationAction$Builder;->build()Landroid/view/textclassifier/ConversationAction;
++
++    move-result-object v6
++
++    invoke-virtual {v0, v6}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
++
++    add-int/lit8 v3, v3, 0x1
++
++    :cond_continue
++    add-int/lit8 v2, v2, 0x1
++
++    goto :goto_loop
++
++    :cond_done
++    new-instance v1, Landroid/view/textclassifier/ConversationActions;
++
++    const-string/jumbo v2, "unica-qwen"
++
++    invoke-direct {v1, v0, v2}, Landroid/view/textclassifier/ConversationActions;-><init>(Ljava/util/List;Ljava/lang/String;)V
++
++    return-object v1
++.end method
++
++.method private static buildPrompt(Landroid/view/textclassifier/ConversationActions$Request;)Ljava/lang/String;
++    .locals 8
++
++    if-eqz p0, :cond_empty
++
++    invoke-virtual {p0}, Landroid/view/textclassifier/ConversationActions$Request;->getConversation()Ljava/util/List;
++
++    move-result-object v0
++
++    if-eqz v0, :cond_empty
++
++    invoke-interface {v0}, Ljava/util/List;->isEmpty()Z
++
++    move-result v1
++
++    if-nez v1, :cond_empty
++
++    new-instance v2, Ljava/lang/StringBuilder;
++
++    const-string/jumbo v1, "Generate up to 3 short notification reply suggestions. Return only replies, one per line, no numbering.\nConversation:"
++
++    invoke-direct {v2, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
++
++    invoke-interface {v0}, Ljava/util/List;->iterator()Ljava/util/Iterator;
++
++    move-result-object v3
++
++    const/4 v6, 0x0
++
++    :goto_loop
++    invoke-interface {v3}, Ljava/util/Iterator;->hasNext()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_finish
++
++    invoke-interface {v3}, Ljava/util/Iterator;->next()Ljava/lang/Object;
++
++    move-result-object v4
++
++    check-cast v4, Landroid/view/textclassifier/ConversationActions$Message;
++
++    invoke-virtual {v4}, Landroid/view/textclassifier/ConversationActions$Message;->getText()Ljava/lang/CharSequence;
++
++    move-result-object v5
++
++    if-eqz v5, :goto_loop
++
++    invoke-static {v5}, Ljava/lang/String;->valueOf(Ljava/lang/Object;)Ljava/lang/String;
++
++    move-result-object v5
++
++    invoke-virtual {v5}, Ljava/lang/String;->trim()Ljava/lang/String;
++
++    move-result-object v5
++
++    invoke-virtual {v5}, Ljava/lang/String;->length()I
++
++    move-result v0
++
++    if-lez v0, :goto_loop
++
++    const-string/jumbo v1, "\n- "
++
++    invoke-virtual {v2, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    invoke-virtual {v2, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    add-int/lit8 v6, v6, 0x1
++
++    invoke-virtual {v2}, Ljava/lang/StringBuilder;->length()I
++
++    move-result v0
++
++    const/16 v7, 0x1000
++
++    if-le v0, v7, :goto_loop
++
++    goto :cond_finish
++
++    :cond_finish
++    if-lez v6, :cond_empty
++
++    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v0
++
++    return-object v0
++
++    :cond_empty
++    const/4 v0, 0x0
++
++    return-object v0
++.end method
++
++.method private static cleanReply(Ljava/lang/String;)Ljava/lang/String;
++    .locals 3
++
++    if-eqz p0, :cond_empty
++
++    invoke-virtual {p0}, Ljava/lang/String;->trim()Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljava/lang/String;->length()I
++
++    move-result v0
++
++    if-lez v0, :cond_empty
++
++    const-string/jumbo v1, "^[0-9]+[.)] *"
++
++    const-string v2, ""
++
++    invoke-virtual {p0, v1, v2}, Ljava/lang/String;->replaceFirst(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    const-string/jumbo v1, "^[-*] *"
++
++    invoke-virtual {p0, v1, v2}, Ljava/lang/String;->replaceFirst(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljava/lang/String;->trim()Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljava/lang/String;->length()I
++
++    move-result v0
++
++    if-lez v0, :cond_empty
++
++    const/16 v1, 0x50
++
++    if-le v0, v1, :cond_return
++
++    const/4 v0, 0x0
++
++    invoke-virtual {p0, v0, v1}, Ljava/lang/String;->substring(II)Ljava/lang/String;
++
++    move-result-object p0
++
++    :cond_return
++    return-object p0
++
++    :cond_empty
++    const/4 v0, 0x0
++
++    return-object v0
++.end method
++
++.method private static emptyActions()Landroid/view/textclassifier/ConversationActions;
++    .locals 3
++
++    new-instance v0, Ljava/util/ArrayList;
++
++    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
++
++    new-instance v1, Landroid/view/textclassifier/ConversationActions;
++
++    const-string/jumbo v2, "unica-qwen"
++
++    invoke-direct {v1, v0, v2}, Landroid/view/textclassifier/ConversationActions;-><init>(Ljava/util/List;Ljava/lang/String;)V
++
++    return-object v1
++.end method
++
++
++.method private static readStream(Ljava/io/InputStream;)Ljava/lang/String;
++    .locals 5
++
++    new-instance v0, Ljava/io/ByteArrayOutputStream;
++
++    invoke-direct {v0}, Ljava/io/ByteArrayOutputStream;-><init>()V
++
++    const/16 v1, 0x400
++
++    new-array v1, v1, [B
++
++    :goto_read
++    invoke-virtual {p0, v1}, Ljava/io/InputStream;->read([B)I
++
++    move-result v2
++
++    if-lez v2, :cond_done
++
++    const/4 v3, 0x0
++
++    invoke-virtual {v0, v1, v3, v2}, Ljava/io/ByteArrayOutputStream;->write([BII)V
++
++    goto :goto_read
++
++    :cond_done
++    invoke-virtual {p0}, Ljava/io/InputStream;->close()V
++
++    const-string v4, "UTF-8"
++
++    invoke-virtual {v0, v4}, Ljava/io/ByteArrayOutputStream;->toString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v4
++
++    return-object v4
++.end method
++
++.method private static summarizeWithServer(Ljava/lang/String;)Ljava/lang/String;
++    .locals 11
++
++    const/4 v0, 0x0
++
++    :try_start_0
++    new-instance v1, Ljava/net/URL;
++
++    const-string v2, "http://127.0.0.1:8085/completion"
++
++    invoke-direct {v1, v2}, Ljava/net/URL;-><init>(Ljava/lang/String;)V
++
++    invoke-virtual {v1}, Ljava/net/URL;->openConnection()Ljava/net/URLConnection;
++
++    move-result-object v1
++
++    check-cast v1, Ljava/net/HttpURLConnection;
++
++    const-string v2, "POST"
++
++    invoke-virtual {v1, v2}, Ljava/net/HttpURLConnection;->setRequestMethod(Ljava/lang/String;)V
++
++    const/16 v2, 0x5dc
++
++    invoke-virtual {v1, v2}, Ljava/net/HttpURLConnection;->setConnectTimeout(I)V
++
++    const/16 v2, 0x2ee0
++
++    invoke-virtual {v1, v2}, Ljava/net/HttpURLConnection;->setReadTimeout(I)V
++
++    const/4 v2, 0x1
++
++    invoke-virtual {v1, v2}, Ljava/net/HttpURLConnection;->setDoOutput(Z)V
++
++    const-string v2, "Content-Type"
++
++    const-string v3, "application/json"
++
++    invoke-virtual {v1, v2, v3}, Ljava/net/HttpURLConnection;->setRequestProperty(Ljava/lang/String;Ljava/lang/String;)V
++
++    new-instance v2, Ljava/lang/StringBuilder;
++
++    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v3, "{\"prompt\":"
++
++    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v2
++
++    invoke-static {p0}, Lorg/json/JSONObject;->quote(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {v2, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p0
++
++    const-string v2, ",\"n_predict\":48,\"temperature\":0.3,\"stop\":[\"<|im_end|>\",\"\\n\\n\"]}"
++
++    invoke-virtual {p0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p0
++
++    const-string v2, "UTF-8"
++
++    invoke-virtual {p0, v2}, Ljava/lang/String;->getBytes(Ljava/lang/String;)[B
++
++    move-result-object p0
++
++    invoke-virtual {v1}, Ljava/net/HttpURLConnection;->getOutputStream()Ljava/io/OutputStream;
++
++    move-result-object v2
++
++    invoke-virtual {v2, p0}, Ljava/io/OutputStream;->write([B)V
++
++    invoke-virtual {v2}, Ljava/io/OutputStream;->close()V
++
++    invoke-virtual {v1}, Ljava/net/HttpURLConnection;->getResponseCode()I
++
++    move-result p0
++
++    const/16 v2, 0xc8
++
++    if-ne p0, v2, :cond_http_failed
++
++    invoke-virtual {v1}, Ljava/net/HttpURLConnection;->getInputStream()Ljava/io/InputStream;
++
++    move-result-object p0
++
++    invoke-static {p0}, Lcom/samsung/android/smartsuggestions/extservice/services/RezossLocalQwenActions;->readStream(Ljava/io/InputStream;)Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {v1}, Ljava/net/HttpURLConnection;->disconnect()V
++
++    new-instance v1, Lorg/json/JSONObject;
++
++    invoke-direct {v1, p0}, Lorg/json/JSONObject;-><init>(Ljava/lang/String;)V
++
++    const-string p0, "content"
++
++    invoke-virtual {v1, p0}, Lorg/json/JSONObject;->optString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    if-eqz p0, :cond_empty
++
++    invoke-virtual {p0}, Ljava/lang/String;->trim()Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljava/lang/String;->length()I
++
++    move-result v1
++
++    if-lez v1, :cond_empty
++
++    const/16 v2, 0x200
++
++    if-le v1, v2, :cond_success
++
++    const/4 v1, 0x0
++
++    invoke-virtual {p0, v1, v2}, Ljava/lang/String;->substring(II)Ljava/lang/String;
++
++    move-result-object p0
++
++    :cond_success
++    return-object p0
++
++    :cond_http_failed
++    invoke-virtual {v1}, Ljava/net/HttpURLConnection;->disconnect()V
++
++    :cond_empty
++    return-object v0
++    :try_end_0
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
++
++    :catch_0
++    move-exception p0
++
++    return-object v0
++.end method
++
++.method public static suggest(Landroid/content/Context;Landroid/view/textclassifier/ConversationActions$Request;)Landroid/view/textclassifier/ConversationActions;
++    .locals 7
++
++    :try_start_0
++    invoke-static {p1}, Lcom/samsung/android/smartsuggestions/extservice/services/RezossLocalQwenActions;->buildPrompt(Landroid/view/textclassifier/ConversationActions$Request;)Ljava/lang/String;
++
++    move-result-object p1
++
++    if-eqz p1, :cond_empty
++
++    invoke-virtual {p1}, Ljava/lang/String;->length()I
++
++    move-result p0
++
++    if-lez p0, :cond_empty
++
++    invoke-static {p1}, Lcom/samsung/android/smartsuggestions/extservice/services/RezossLocalQwenActions;->summarizeWithServer(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-static {p0}, Lcom/samsung/android/smartsuggestions/extservice/services/RezossLocalQwenActions;->buildActions(Ljava/lang/String;)Landroid/view/textclassifier/ConversationActions;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Landroid/view/textclassifier/ConversationActions;->getConversationActions()Ljava/util/List;
++
++    move-result-object p1
++
++    invoke-interface {p1}, Ljava/util/List;->size()I
++
++    move-result p1
++
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    const-string/jumbo v1, "UN1CA Qwen Now Nudge actionCount="
++
++    invoke-direct {v0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
++
++    invoke-virtual {v0, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p1
++
++    const-string v0, "CustomTextClassifierService"
++
++    invoke-static {v0, p1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    :try_end_0
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
++
++    return-object p0
++
++    :cond_empty
++    :try_start_1
++    invoke-static {}, Lcom/samsung/android/smartsuggestions/extservice/services/RezossLocalQwenActions;->emptyActions()Landroid/view/textclassifier/ConversationActions;
++
++    move-result-object p0
++    :try_end_1
++    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
++
++    return-object p0
++
++    :catch_0
++    move-exception p0
++
++    const-string p1, "CustomTextClassifierService"
++
++    const-string/jumbo v0, "UN1CA Qwen Now Nudge unavailable"
++
++    invoke-static {p1, v0, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    invoke-static {}, Lcom/samsung/android/smartsuggestions/extservice/services/RezossLocalQwenActions;->emptyActions()Landroid/view/textclassifier/ConversationActions;
++
++    move-result-object p0
++
++    return-object p0
++.end method

@@ -45,7 +45,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 115
++    .line 161
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$1;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 
      invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -62,7 +62,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public onClick(Landroid/content/DialogInterface;I)V
 +    .registers 9
 +
-+    .line 115
++    .line 161
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$1;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 +
 +    # getter for: Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->GID_KEYS:[Ljava/lang/String;
@@ -209,7 +209,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 393
++    .line 439
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$1;->this$1:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$1;->val$pm:Landroid/content/pm/PackageManager;
@@ -224,7 +224,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public compare(Landroid/content/pm/ApplicationInfo;Landroid/content/pm/ApplicationInfo;)I
 +    .registers 4
 +
-+    .line 393
++    .line 439
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$1;->val$pm:Landroid/content/pm/PackageManager;
 +
 +    invoke-virtual {v0, p1}, Landroid/content/pm/PackageManager;->getApplicationLabel(Landroid/content/pm/ApplicationInfo;)Ljava/lang/CharSequence;
@@ -265,7 +265,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 393
++    .line 439
 +    check-cast p1, Landroid/content/pm/ApplicationInfo;
 +
 +    check-cast p2, Landroid/content/pm/ApplicationInfo;
@@ -325,7 +325,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 401
++    .line 447
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2$1$1;->this$3:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2$1;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2$1$1;->val$result:Ljava/util/Set;
@@ -340,7 +340,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public onClick(Landroid/content/DialogInterface;I)V
 +    .registers 6
 +
-+    .line 402
++    .line 448
 +    :try_start_0
 +    new-instance p1, Lorg/json/JSONObject;
 +
@@ -412,7 +412,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    :catch_3e
 +    move-exception p1
 +
-+    .line 403
++    .line 449
 +    :goto_3f
 +    return-void
 +.end method
@@ -455,7 +455,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 397
++    .line 443
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2$1;->this$2:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2;
 +
 +    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -468,12 +468,12 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public onClick(Landroid/content/DialogInterface;I)V
 +    .registers 5
 +
-+    .line 398
++    .line 444
 +    new-instance p1, Ljava/util/TreeSet;
 +
 +    invoke-direct {p1}, Ljava/util/TreeSet;-><init>()V
 +
-+    .line 399
++    .line 445
 +    const/4 p2, 0x0
 +
 +    :goto_6
@@ -506,7 +506,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_6
 +
-+    .line 400
++    .line 446
 +    :cond_21
 +    invoke-interface {p1}, Ljava/util/Set;->isEmpty()Z
 +
@@ -553,7 +553,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    :goto_46
 +    return-void
 +
-+    .line 401
++    .line 447
 +    :cond_47
 +    new-instance p2, Landroid/app/AlertDialog$Builder;
 +
@@ -588,10 +588,10 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object p1
 +
-+    .line 403
++    .line 449
 +    invoke-virtual {p1}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
 +
-+    .line 404
++    .line 450
 +    return-void
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2$2.smali b/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2$2.smali
@@ -633,7 +633,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 397
++    .line 443
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2$2;->this$2:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2;
 +
 +    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -646,7 +646,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public onClick(Landroid/content/DialogInterface;IZ)V
 +    .registers 4
 +
-+    .line 397
++    .line 443
 +    iget-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2$2;->this$2:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2;
 +
 +    iget-object p1, p1, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2;->val$checked:[Z
@@ -712,7 +712,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 397
++    .line 443
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2;->this$1:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2;->val$labels:[Ljava/lang/String;
@@ -731,7 +731,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public run()V
 +    .registers 5
 +
-+    .line 397
++    .line 443
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$2;->this$1:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10;
 +
 +    iget-object v0, v0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
@@ -793,7 +793,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object v0
 +
-+    .line 404
++    .line 450
 +    invoke-virtual {v0}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
 +
 +    return-void
@@ -837,7 +837,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 405
++    .line 451
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$3;->this$1:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10;
 +
 +    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -850,7 +850,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public run()V
 +    .registers 4
 +
-+    .line 405
++    .line 451
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$3;->this$1:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10;
 +
 +    iget-object v0, v0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
@@ -945,7 +945,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 388
++    .line 434
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10;->val$c:Landroid/content/Context;
@@ -962,7 +962,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public run()V
 +    .registers 14
 +
-+    .line 390
++    .line 436
 +    const-string/jumbo v0, "\n"
 +
 +    :try_start_2
@@ -972,12 +972,12 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object v1
 +
-+    .line 391
++    .line 437
 +    new-instance v2, Ljava/util/ArrayList;
 +
 +    invoke-direct {v2}, Ljava/util/ArrayList;-><init>()V
 +
-+    .line 392
++    .line 438
 +    const/4 v3, 0x0
 +
 +    invoke-virtual {v1, v3}, Landroid/content/pm/PackageManager;->getInstalledApplications(I)Ljava/util/List;
@@ -1026,7 +1026,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_16
 +
-+    .line 393
++    .line 439
 +    :cond_38
 +    new-instance v4, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10$1;
 +
@@ -1034,7 +1034,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-static {v2, v4}, Ljava/util/Collections;->sort(Ljava/util/List;Ljava/util/Comparator;)V
 +
-+    .line 394
++    .line 440
 +    invoke-interface {v2}, Ljava/util/List;->size()I
 +
 +    move-result v4
@@ -1047,14 +1047,14 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    new-array v5, v5, [Ljava/lang/String;
 +
-+    .line 395
++    .line 441
 +    invoke-interface {v2}, Ljava/util/List;->size()I
 +
 +    move-result v6
 +
 +    new-array v6, v6, [Z
 +
-+    .line 396
++    .line 442
 +    move v7, v3
 +
 +    :goto_53
@@ -1184,7 +1184,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_53
 +
-+    .line 397
++    .line 443
 +    :cond_c3
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 +
@@ -1201,7 +1201,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    :try_end_d1
 +    .catch Ljava/lang/RuntimeException; {:try_start_2 .. :try_end_d1} :catch_d2
 +
-+    .line 405
++    .line 451
 +    goto :goto_e1
 +
 +    :catch_d2
@@ -1220,7 +1220,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0, v1}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
 +
-+    .line 406
++    .line 452
 +    :goto_e1
 +    return-void
 +.end method
@@ -1301,7 +1301,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 146
++    .line 192
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$2;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$2;->val$search:Landroid/widget/EditText;
@@ -1330,7 +1330,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public run()V
 +    .registers 6
 +
-+    .line 147
++    .line 193
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$2;->val$search:Landroid/widget/EditText;
 +
 +    invoke-virtual {v0}, Landroid/widget/EditText;->getText()Landroid/text/Editable;
@@ -1347,7 +1347,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object v0
 +
-+    .line 148
++    .line 194
 +    iget-object v1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$2;->val$visible:Ljava/util/ArrayList;
 +
 +    invoke-virtual {v1}, Ljava/util/ArrayList;->clear()V
@@ -1356,7 +1356,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v1}, Ljava/util/ArrayList;->clear()V
 +
-+    .line 149
++    .line 195
 +    const/4 v1, 0x0
 +
 +    move v2, v1
@@ -1419,13 +1419,13 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_1c
 +
-+    .line 150
++    .line 196
 +    :cond_52
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$2;->val$adapter:Landroid/widget/ArrayAdapter;
 +
 +    invoke-virtual {v0}, Landroid/widget/ArrayAdapter;->notifyDataSetChanged()V
 +
-+    .line 151
++    .line 197
 +    nop
 +
 +    :goto_58
@@ -1461,7 +1461,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_58
 +
-+    .line 152
++    .line 198
 +    :cond_78
 +    return-void
 +.end method
@@ -1514,7 +1514,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 153
++    .line 199
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$3;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$3;->val$refreshList:Ljava/lang/Runnable;
@@ -1529,21 +1529,21 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public afterTextChanged(Landroid/text/Editable;)V
 +    .registers 2
 +
-+    .line 153
++    .line 199
 +    return-void
 +.end method
 +
 +.method public beforeTextChanged(Ljava/lang/CharSequence;III)V
 +    .registers 5
 +
-+    .line 153
++    .line 199
 +    return-void
 +.end method
 +
 +.method public onTextChanged(Ljava/lang/CharSequence;III)V
 +    .registers 5
 +
-+    .line 153
++    .line 199
 +    iget-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$3;->val$refreshList:Ljava/lang/Runnable;
 +
 +    invoke-interface {p1}, Ljava/lang/Runnable;->run()V
@@ -1615,7 +1615,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 154
++    .line 200
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$4;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$4;->val$visible:Ljava/util/ArrayList;
@@ -1647,7 +1647,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 155
++    .line 201
 +    iget-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$4;->val$visible:Ljava/util/ArrayList;
 +
 +    invoke-virtual {p1, p3}, Ljava/util/ArrayList;->get(I)Ljava/lang/Object;
@@ -1660,7 +1660,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result p1
 +
-+    .line 156
++    .line 202
 +    iget-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$4;->val$checked:[Z
 +
 +    iget-object p4, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$4;->val$list:Landroid/widget/ListView;
@@ -1671,7 +1671,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    aput-boolean p3, p2, p1
 +
-+    .line 157
++    .line 203
 +    iget-boolean p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$4;->val$enableAll:Z
 +
 +    const/4 p3, 0x0
@@ -1701,7 +1701,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_1e
 +
-+    .line 158
++    .line 204
 +    :cond_2e
 +    iget-boolean p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$4;->val$enableAll:Z
 +
@@ -1734,13 +1734,13 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    aput-boolean p1, p2, p3
 +
-+    .line 159
++    .line 205
 +    :cond_46
 +    iget-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$4;->val$refreshList:Ljava/lang/Runnable;
 +
 +    invoke-interface {p1}, Ljava/lang/Runnable;->run()V
 +
-+    .line 160
++    .line 206
 +    return-void
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$5.smali b/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$5.smali
@@ -1808,7 +1808,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 162
++    .line 208
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$5;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$5;->val$retained:Ljava/util/Set;
@@ -1831,7 +1831,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public onClick(Landroid/content/DialogInterface;I)V
 +    .registers 5
 +
-+    .line 163
++    .line 209
 +    iget-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$5;->val$retained:Ljava/util/Set;
 +
 +    if-nez p1, :cond_a
@@ -1849,7 +1849,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {p1, p2}, Ljava/util/TreeSet;-><init>(Ljava/util/Collection;)V
 +
-+    .line 164
++    .line 210
 +    :goto_11
 +    iget-boolean p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$5;->val$enableAll:Z
 +
@@ -1877,7 +1877,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_13
 +
-+    .line 165
++    .line 211
 +    :cond_28
 +    :try_start_28
 +    iget-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$5;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
@@ -1907,7 +1907,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    :catch_3e
 +    move-exception p1
 +
-+    .line 166
++    .line 212
 +    :goto_3f
 +    return-void
 +.end method
@@ -1964,7 +1964,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 173
++    .line 219
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$6;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$6;->val$checked:[Z
@@ -1990,7 +1990,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 174
++    .line 220
 +    iget-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$6;->val$checked:[Z
 +
 +    check-cast p1, Landroid/widget/ListView;
@@ -2001,7 +2001,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    aput-boolean p4, p2, p3
 +
-+    .line 175
++    .line 221
 +    iget-boolean p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$6;->val$enableAll:Z
 +
 +    const/4 p4, 0x0
@@ -2037,7 +2037,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_12
 +
-+    .line 176
++    .line 222
 +    :cond_29
 +    iget-boolean p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$6;->val$enableAll:Z
 +
@@ -2072,7 +2072,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {p1, p4, p2}, Landroid/widget/ListView;->setItemChecked(IZ)V
 +
-+    .line 177
++    .line 223
 +    :cond_44
 +    return-void
 +.end method
@@ -2141,7 +2141,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 169
++    .line 215
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$7;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$7;->val$retained:Ljava/util/Set;
@@ -2164,7 +2164,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public onClick(Landroid/content/DialogInterface;I)V
 +    .registers 5
 +
-+    .line 170
++    .line 216
 +    iget-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$7;->val$retained:Ljava/util/Set;
 +
 +    if-nez p1, :cond_a
@@ -2182,7 +2182,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {p1, p2}, Ljava/util/TreeSet;-><init>(Ljava/util/Collection;)V
 +
-+    .line 171
++    .line 217
 +    :goto_11
 +    iget-boolean p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$7;->val$enableAll:Z
 +
@@ -2210,7 +2210,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_13
 +
-+    .line 172
++    .line 218
 +    :cond_28
 +    :try_start_28
 +    iget-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$7;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
@@ -2240,7 +2240,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    :catch_3e
 +    move-exception p1
 +
-+    .line 173
++    .line 219
 +    :goto_3f
 +    return-void
 +.end method
@@ -2293,7 +2293,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 169
++    .line 215
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$8;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$8;->val$checked:[Z
@@ -2308,7 +2308,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public onClick(Landroid/content/DialogInterface;IZ)V
 +    .registers 4
 +
-+    .line 169
++    .line 215
 +    iget-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$8;->val$checked:[Z
 +
 +    aput-boolean p3, p1, p2
@@ -2373,7 +2373,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 192
++    .line 238
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9$1;->this$1:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9$1;->val$pm:Landroid/content/pm/PackageManager;
@@ -2388,7 +2388,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public compare(Landroid/content/pm/ApplicationInfo;Landroid/content/pm/ApplicationInfo;)I
 +    .registers 4
 +
-+    .line 192
++    .line 238
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9$1;->val$pm:Landroid/content/pm/PackageManager;
 +
 +    invoke-virtual {v0, p1}, Landroid/content/pm/PackageManager;->getApplicationLabel(Landroid/content/pm/ApplicationInfo;)Ljava/lang/CharSequence;
@@ -2429,7 +2429,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 192
++    .line 238
 +    check-cast p1, Landroid/content/pm/ApplicationInfo;
 +
 +    check-cast p2, Landroid/content/pm/ApplicationInfo;
@@ -2501,7 +2501,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 199
++    .line 245
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9$2;->this$1:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9$2;->val$values:[Ljava/lang/String;
@@ -2522,7 +2522,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public run()V
 +    .registers 10
 +
-+    .line 199
++    .line 245
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9$2;->this$1:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9;
 +
 +    iget-object v0, v0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
@@ -2655,7 +2655,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 200
++    .line 246
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9$3;->this$1:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9;
 +
 +    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
@@ -2668,7 +2668,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public run()V
 +    .registers 4
 +
-+    .line 200
++    .line 246
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9$3;->this$1:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9;
 +
 +    iget-object v0, v0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
@@ -2771,7 +2771,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 183
++    .line 229
 +    iput-object p1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9;->val$c:Landroid/content/Context;
@@ -2792,7 +2792,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public run()V
 +    .registers 13
 +
-+    .line 185
++    .line 231
 +    :try_start_0
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9;->val$c:Landroid/content/Context;
 +
@@ -2800,12 +2800,12 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object v0
 +
-+    .line 186
++    .line 232
 +    new-instance v1, Ljava/util/ArrayList;
 +
 +    invoke-direct {v1}, Ljava/util/ArrayList;-><init>()V
 +
-+    .line 187
++    .line 233
 +    const/4 v2, 0x0
 +
 +    invoke-virtual {v0, v2}, Landroid/content/pm/PackageManager;->getInstalledApplications(I)Ljava/util/List;
@@ -2829,7 +2829,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    check-cast v4, Landroid/content/pm/ApplicationInfo;
 +
-+    .line 188
++    .line 234
 +    iget-object v5, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 +
 +    # invokes: Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->userApp(Landroid/content/pm/ApplicationInfo;)Z
@@ -2841,7 +2841,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_14
 +
-+    .line 189
++    .line 235
 +    :cond_29
 +    const-string/jumbo v5, "invertActivity"
 +
@@ -2865,14 +2865,14 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_14
 +
-+    .line 190
++    .line 236
 +    :cond_3e
 +    invoke-interface {v1, v4}, Ljava/util/List;->add(Ljava/lang/Object;)Z
 +
-+    .line 191
++    .line 237
 +    goto :goto_14
 +
-+    .line 192
++    .line 238
 +    :cond_42
 +    new-instance v3, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9$1;
 +
@@ -2880,7 +2880,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-static {v1, v3}, Ljava/util/Collections;->sort(Ljava/util/List;Ljava/util/Comparator;)V
 +
-+    .line 193
++    .line 239
 +    const-string/jumbo v3, "targets"
 +
 +    iget-object v4, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9;->val$key:Ljava/lang/String;
@@ -2889,7 +2889,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result v10
 +
-+    .line 194
++    .line 240
 +    if-eqz v10, :cond_56
 +
 +    const/4 v3, 0x1
@@ -2899,7 +2899,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    :cond_56
 +    move v3, v2
 +
-+    .line 195
++    .line 241
 +    :goto_57
 +    invoke-interface {v1}, Ljava/util/List;->size()I
 +
@@ -2917,7 +2917,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    new-array v8, v4, [Ljava/lang/String;
 +
-+    .line 196
++    .line 242
 +    if-eqz v10, :cond_6f
 +
 +    const-string/jumbo v4, "__enable_all_user_apps__"
@@ -2928,7 +2928,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    aput-object v4, v8, v2
 +
-+    .line 197
++    .line 243
 +    :cond_6f
 +    new-instance v9, Ljava/util/HashSet;
 +
@@ -2936,7 +2936,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {v9, v4}, Ljava/util/HashSet;-><init>(Ljava/util/Collection;)V
 +
-+    .line 198
++    .line 244
 +    nop
 +
 +    :goto_77
@@ -2996,7 +2996,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_77
 +
-+    .line 199
++    .line 245
 +    :cond_b0
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9;->this$0:Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 +
@@ -3017,7 +3017,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    :try_end_c0
 +    .catch Ljava/lang/RuntimeException; {:try_start_0 .. :try_end_c0} :catch_c1
 +
-+    .line 200
++    .line 246
 +    goto :goto_d0
 +
 +    :catch_c1
@@ -3036,14 +3036,14 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0, v1}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
 +
-+    .line 201
++    .line 247
 +    :goto_d0
 +    return-void
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment.smali b/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment.smali
 --- a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment.smali
 +++ b/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment.smali
-@@ -1,38 +1,55 @@
+@@ -1,38 +1,61 @@
 -.class public Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
 +.class public final Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;
  .super Lcom/android/settings/SettingsPreferenceFragment;
@@ -3058,6 +3058,12 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.field private static final APP_KEYS:[Ljava/lang/String;
 +
 +.field private static final APP_LABELS:[Ljava/lang/String;
++
++.field private static final CHUNK_MARKER:Ljava/lang/String; = "_hma_chunked"
++
++.field private static final CHUNK_PREFIX:Ljava/lang/String; = "unica_hma_policy_chunk_"
++
++.field private static final CHUNK_SIZE:I = 0x7530
 +
 +.field private static final ENABLE_ALL:Ljava/lang/String; = "__enable_all_user_apps__"
 +
@@ -3104,7 +3110,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 -    .locals 3
 -
 +.method static constructor <clinit>()V
-+    .registers 9
++    .registers 11
 +
 +    .line 22
      new-instance v0, Lcom/android/settings/search/BaseSearchIndexProvider;
@@ -3118,143 +3124,233 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 
      invoke-static {v1, v2}, Lio/mesalabs/unica/utils/Utils;->getResourceId(Ljava/lang/String;Ljava/lang/String;)I
 
-@@ -42,313 +59,3645 @@
+@@ -42,313 +65,4180 @@
 
      sput-object v0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->SEARCH_INDEX_DATA_PROVIDER:Lcom/android/settings/search/BaseSearchIndexProvider;
 
-+    .line 26
-+    const-string/jumbo v7, "sus_apps"
++    .line 29
++    const/16 v0, 0x8
 +
-+    const-string/jumbo v8, "xposed"
++    new-array v1, v0, [Ljava/lang/String;
 +
 +    const-string/jumbo v2, "accessibility_apps"
 +
-+    const-string/jumbo v3, "custom_rom"
++    const/4 v3, 0x0
 +
-+    const-string/jumbo v4, "detector_apps"
++    aput-object v2, v1, v3
 +
-+    const-string/jumbo v5, "root_apps"
++    const-string/jumbo v2, "custom_rom"
 +
-+    const-string/jumbo v6, "shizuku_dhizuku"
++    const/4 v4, 0x1
 +
-+    filled-new-array/range {v2 .. v8}, [Ljava/lang/String;
++    aput-object v2, v1, v4
 +
-+    move-result-object v0
++    const-string/jumbo v2, "detector_apps"
 +
-+    sput-object v0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->APP_KEYS:[Ljava/lang/String;
++    const/4 v5, 0x2
 +
-+    .line 27
-+    const-string/jumbo v6, "Suspicious apps"
++    aput-object v2, v1, v5
 +
-+    const-string/jumbo v7, "LSPosed / Xposed modules"
++    const-string/jumbo v2, "root_apps"
 +
-+    const-string/jumbo v1, "Accessibility apps"
++    const/4 v6, 0x3
++
++    aput-object v2, v1, v6
++
++    const-string/jumbo v2, "shizuku_dhizuku"
++
++    const/4 v7, 0x4
++
++    aput-object v2, v1, v7
++
++    const-string/jumbo v2, "sus_apps"
++
++    const/4 v8, 0x5
++
++    aput-object v2, v1, v8
++
++    const-string/jumbo v2, "xposed"
++
++    const/4 v9, 0x6
++
++    aput-object v2, v1, v9
++
++    const-string/jumbo v2, "encryption_spoof"
++
++    const/4 v10, 0x7
++
++    aput-object v2, v1, v10
++
++    sput-object v1, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->APP_KEYS:[Ljava/lang/String;
++
++    .line 30
++    new-array v1, v0, [Ljava/lang/String;
++
++    const-string/jumbo v2, "Accessibility apps"
++
++    aput-object v2, v1, v3
 +
 +    const-string/jumbo v2, "Custom ROM apps"
 +
-+    const-string/jumbo v3, "Detector / checker apps"
++    aput-object v2, v1, v4
 +
-+    const-string/jumbo v4, "Root managers and rooted apps"
++    const-string/jumbo v2, "Detector / checker apps"
 +
-+    const-string/jumbo v5, "Shizuku / Dhizuku apps"
++    aput-object v2, v1, v5
 +
-+    filled-new-array/range {v1 .. v7}, [Ljava/lang/String;
++    const-string/jumbo v2, "Root managers and rooted apps"
 +
-+    move-result-object v0
++    aput-object v2, v1, v6
 +
-+    sput-object v0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->APP_LABELS:[Ljava/lang/String;
++    const-string/jumbo v2, "Shizuku / Dhizuku apps"
 +
-+    .line 28
-+    const-string/jumbo v0, "dev_options"
++    aput-object v2, v1, v7
 +
-+    const-string/jumbo v1, "input_method"
++    const-string/jumbo v2, "Suspicious apps"
++
++    aput-object v2, v1, v8
++
++    const-string/jumbo v2, "LSPosed / Xposed modules"
++
++    aput-object v2, v1, v9
++
++    const-string/jumbo v2, "Encryption Spoof"
++
++    aput-object v2, v1, v10
++
++    sput-object v1, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->APP_LABELS:[Ljava/lang/String;
++
++    .line 31
++    new-array v1, v6, [Ljava/lang/String;
 +
 +    const-string/jumbo v2, "accessibility"
 +
-+    filled-new-array {v2, v0, v1}, [Ljava/lang/String;
++    aput-object v2, v1, v3
 +
-+    move-result-object v0
++    const-string/jumbo v2, "dev_options"
 +
-+    sput-object v0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->SETTING_KEYS:[Ljava/lang/String;
++    aput-object v2, v1, v4
 +
-+    .line 29
-+    const-string/jumbo v0, "Developer options \u2014 hide ADB, developer and mock-location settings"
++    const-string/jumbo v2, "input_method"
 +
-+    const-string/jumbo v1, "Input method \u2014 report Gboard and Google TTS; filter keyboard lists"
++    aput-object v2, v1, v5
++
++    sput-object v1, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->SETTING_KEYS:[Ljava/lang/String;
++
++    .line 32
++    new-array v1, v6, [Ljava/lang/String;
 +
 +    const-string/jumbo v2, "Accessibility \u2014 hide settings and service lists"
 +
-+    filled-new-array {v2, v0, v1}, [Ljava/lang/String;
++    aput-object v2, v1, v3
 +
-+    move-result-object v0
++    const-string/jumbo v2, "Developer options \u2014 hide ADB, developer and mock-location settings"
 +
-+    sput-object v0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->SETTING_LABELS:[Ljava/lang/String;
++    aput-object v2, v1, v4
 +
-+    .line 30
-+    const-string/jumbo v7, "3003"
++    const-string/jumbo v2, "Input method \u2014 report Gboard and Google TTS; filter keyboard lists"
 +
-+    const-string/jumbo v8, "9997"
++    aput-object v2, v1, v5
 +
-+    const-string/jumbo v1, "1015"
++    sput-object v1, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->SETTING_LABELS:[Ljava/lang/String;
++
++    .line 33
++    new-array v1, v0, [Ljava/lang/String;
++
++    const-string/jumbo v2, "1015"
++
++    aput-object v2, v1, v3
 +
 +    const-string/jumbo v2, "1023"
 +
-+    const-string/jumbo v3, "1032"
++    aput-object v2, v1, v4
 +
-+    const-string/jumbo v4, "1077"
++    const-string/jumbo v2, "1032"
 +
-+    const-string/jumbo v5, "1078"
++    aput-object v2, v1, v5
 +
-+    const-string/jumbo v6, "1079"
++    const-string/jumbo v2, "1077"
 +
-+    filled-new-array/range {v1 .. v8}, [Ljava/lang/String;
++    aput-object v2, v1, v6
 +
-+    move-result-object v0
++    const-string/jumbo v2, "1078"
 +
-+    sput-object v0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->GID_KEYS:[Ljava/lang/String;
++    aput-object v2, v1, v7
 +
-+    .line 31
-+    const-string/jumbo v7, "INET (3003) \u2014 removes network access; apps may crash"
++    const-string/jumbo v2, "1079"
 +
-+    const-string/jumbo v8, "SHARED_USER (9997) \u2014 may block all shared storage access"
++    aput-object v2, v1, v8
++
++    const-string/jumbo v2, "3003"
++
++    aput-object v2, v1, v9
++
++    const-string/jumbo v2, "9997"
++
++    aput-object v2, v1, v10
++
++    sput-object v1, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->GID_KEYS:[Ljava/lang/String;
++
++    .line 34
++    new-array v0, v0, [Ljava/lang/String;
 +
 +    const-string/jumbo v1, "SDCARD_RW (1015) \u2014 media write access"
 +
-+    const-string/jumbo v2, "MEDIA_RW (1023) \u2014 media write access"
++    aput-object v1, v0, v3
 +
-+    const-string/jumbo v3, "PACKAGE_INFO (1032) \u2014 package details"
++    const-string/jumbo v1, "MEDIA_RW (1023) \u2014 media write access"
 +
-+    const-string/jumbo v4, "EXTERNAL_STORAGE (1077) \u2014 USB storage access"
++    aput-object v1, v0, v4
 +
-+    const-string/jumbo v5, "EXT_DATA_RW (1078) \u2014 external app data"
++    const-string/jumbo v1, "PACKAGE_INFO (1032) \u2014 package details"
 +
-+    const-string/jumbo v6, "EXT_OBB_RW (1079) \u2014 external OBB data"
++    aput-object v1, v0, v5
 +
-+    filled-new-array/range {v1 .. v8}, [Ljava/lang/String;
++    const-string/jumbo v1, "EXTERNAL_STORAGE (1077) \u2014 USB storage access"
 +
-+    move-result-object v0
++    aput-object v1, v0, v6
++
++    const-string/jumbo v1, "EXT_DATA_RW (1078) \u2014 external app data"
++
++    aput-object v1, v0, v7
++
++    const-string/jumbo v1, "EXT_OBB_RW (1079) \u2014 external OBB data"
++
++    aput-object v1, v0, v8
++
++    const-string/jumbo v1, "INET (3003) \u2014 removes network access; apps may crash"
++
++    aput-object v1, v0, v9
++
++    const-string/jumbo v1, "SHARED_USER (9997) \u2014 may block all shared storage access"
++
++    aput-object v1, v0, v10
 +
 +    sput-object v0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->GID_LABELS:[Ljava/lang/String;
 +
-+    .line 33
-+    const-string/jumbo v0, "com.android.vending"
++    .line 36
++    new-array v0, v5, [Ljava/lang/String;
++
++    const-string/jumbo v1, "com.android.vending"
++
++    aput-object v1, v0, v3
 +
 +    const-string/jumbo v1, "com.sec.android.app.samsungapps"
 +
-+    filled-new-array {v0, v1}, [Ljava/lang/String;
-+
-+    move-result-object v0
++    aput-object v1, v0, v4
 +
 +    sput-object v0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->STORE_KEYS:[Ljava/lang/String;
 +
-+    .line 34
-+    const-string/jumbo v0, "Google Play Store"
++    .line 37
++    new-array v0, v5, [Ljava/lang/String;
++
++    const-string/jumbo v1, "Google Play Store"
++
++    aput-object v1, v0, v3
 +
 +    const-string/jumbo v1, "Samsung Galaxy Store"
 +
-+    filled-new-array {v0, v1}, [Ljava/lang/String;
-+
-+    move-result-object v0
++    aput-object v1, v0, v4
 +
 +    sput-object v0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->STORE_LABELS:[Ljava/lang/String;
 +
@@ -3274,7 +3370,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 -    invoke-direct {v0}, Lio/mesalabs/unica/HideDeveloperStatusUtils;-><init>()V
 -
 -    iput-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->mHideDeveloperStatusUtils:Lio/mesalabs/unica/HideDeveloperStatusUtils;
-+    .line 25
++    .line 28
 +    new-instance v0, Landroid/os/Handler;
 +
 +    invoke-static {}, Landroid/os/Looper;->getMainLooper()Landroid/os/Looper;
@@ -3406,7 +3502,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 383
++    .line 429
 +    const/4 v0, 0x0
 +
 +    :goto_1
@@ -3439,7 +3535,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_1
 +
-+    .line 384
++    .line 430
 +    :cond_1c
 +    return-void
 +.end method
@@ -3447,24 +3543,24 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method private appChoices(Ljava/lang/String;)V
 +    .registers 10
 +
-+    .line 180
++    .line 226
 +    invoke-virtual {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
 +
 +    move-result-object v2
 +
-+    .line 181
++    .line 227
 +    const-string/jumbo v0, "targets"
 +
 +    invoke-direct {p0, v0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->selected(Ljava/lang/String;)Ljava/util/Set;
 +
 +    move-result-object v4
 +
-+    .line 182
++    .line 228
 +    invoke-direct {p0, p1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->selected(Ljava/lang/String;)Ljava/util/Set;
 +
 +    move-result-object v5
 +
-+    .line 183
++    .line 229
 +    new-instance v6, Ljava/lang/Thread;
 +
 +    new-instance v7, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$9;
@@ -3481,17 +3577,17 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {v6, v7, p1}, Ljava/lang/Thread;-><init>(Ljava/lang/Runnable;Ljava/lang/String;)V
 +
-+    .line 201
++    .line 247
 +    invoke-virtual {v6}, Ljava/lang/Thread;->start()V
 +
-+    .line 202
++    .line 248
 +    return-void
 +.end method
 +
 +.method private array(Lorg/json/JSONObject;Ljava/lang/String;)Lorg/json/JSONArray;
 +    .registers 3
 +
-+    .line 371
++    .line 417
 +    invoke-virtual {p1, p2}, Lorg/json/JSONObject;->optJSONArray(Ljava/lang/String;)Lorg/json/JSONArray;
 +
 +    move-result-object p1
@@ -3506,7 +3602,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method private backupConfig()V
 +    .registers 7
 +
-+    .line 221
++    .line 267
 +    :try_start_0
 +    new-instance v0, Landroid/content/Intent;
 +
@@ -3514,17 +3610,17 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
 +
-+    .line 222
++    .line 268
 +    const-string/jumbo v1, "android.intent.category.OPENABLE"
 +
 +    invoke-virtual {v0, v1}, Landroid/content/Intent;->addCategory(Ljava/lang/String;)Landroid/content/Intent;
 +
-+    .line 223
++    .line 269
 +    const-string/jumbo v1, "application/json"
 +
 +    invoke-virtual {v0, v1}, Landroid/content/Intent;->setType(Ljava/lang/String;)Landroid/content/Intent;
 +
-+    .line 224
++    .line 270
 +    const-string/jumbo v1, "android.intent.extra.TITLE"
 +
 +    new-instance v2, Ljava/lang/StringBuilder;
@@ -3569,21 +3665,21 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
 +
-+    .line 225
++    .line 271
 +    const/16 v1, 0x238d
 +
 +    invoke-virtual {p0, v0, v1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->startActivityForResult(Landroid/content/Intent;I)V
 +    :try_end_46
 +    .catch Ljava/lang/RuntimeException; {:try_start_0 .. :try_end_46} :catch_47
 +
-+    .line 228
++    .line 274
 +    goto :goto_6a
 +
-+    .line 226
++    .line 272
 +    :catch_47
 +    move-exception v0
 +
-+    .line 227
++    .line 273
 +    new-instance v1, Landroid/app/AlertDialog$Builder;
 +
 +    invoke-virtual {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
@@ -3616,7 +3712,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
 +
-+    .line 229
++    .line 275
 +    :goto_6a
 +    return-void
 +.end method
@@ -3638,7 +3734,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 121
++    .line 167
 +    const/4 v6, 0x0
 +
 +    move-object v0, p0
@@ -3655,7 +3751,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct/range {v0 .. v6}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->choices(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;[Ljava/lang/String;Ljava/util/Set;Z)V
 +
-+    .line 122
++    .line 168
 +    return-void
 +.end method
 +
@@ -3676,7 +3772,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 124
++    .line 170
 +    const/4 v7, 0x0
 +
 +    move-object v0, p0
@@ -3695,7 +3791,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct/range {v0 .. v7}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->choices(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;[Ljava/lang/String;Ljava/util/Set;ZZ)V
 +
-+    .line 125
++    .line 171
 +    return-void
 +.end method
 +
@@ -3716,7 +3812,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 127
++    .line 173
 +    move-object/from16 v10, p0
 +
 +    move-object/from16 v11, p2
@@ -3729,12 +3825,12 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object v0
 +
-+    .line 128
++    .line 174
 +    array-length v1, v12
 +
 +    new-array v14, v1, [Z
 +
-+    .line 129
++    .line 175
 +    const/4 v1, 0x0
 +
 +    move v2, v1
@@ -3780,7 +3876,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_11
 +
-+    .line 130
++    .line 176
 +    :cond_32
 +    const-string/jumbo v15, "Apply"
 +
@@ -3788,7 +3884,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    if-eqz p7, :cond_113
 +
-+    .line 131
++    .line 177
 +    new-instance v7, Landroid/widget/EditText;
 +
 +    invoke-virtual/range {p0 .. p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
@@ -3797,15 +3893,15 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {v7, v0}, Landroid/widget/EditText;-><init>(Landroid/content/Context;)V
 +
-+    .line 132
++    .line 178
 +    invoke-virtual {v7, v4}, Landroid/widget/EditText;->setSingleLine(Z)V
 +
-+    .line 133
++    .line 179
 +    const-string/jumbo v0, "Search apps"
 +
 +    invoke-virtual {v7, v0}, Landroid/widget/EditText;->setHint(Ljava/lang/CharSequence;)V
 +
-+    .line 134
++    .line 180
 +    new-instance v6, Landroid/widget/ListView;
 +
 +    invoke-virtual/range {p0 .. p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
@@ -3814,22 +3910,22 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {v6, v0}, Landroid/widget/ListView;-><init>(Landroid/content/Context;)V
 +
-+    .line 135
++    .line 181
 +    const/4 v0, 0x2
 +
 +    invoke-virtual {v6, v0}, Landroid/widget/ListView;->setChoiceMode(I)V
 +
-+    .line 136
++    .line 182
 +    new-instance v16, Ljava/util/ArrayList;
 +
 +    invoke-direct/range {v16 .. v16}, Ljava/util/ArrayList;-><init>()V
 +
-+    .line 137
++    .line 183
 +    new-instance v5, Ljava/util/ArrayList;
 +
 +    invoke-direct {v5}, Ljava/util/ArrayList;-><init>()V
 +
-+    .line 138
++    .line 184
 +    new-instance v3, Landroid/widget/ArrayAdapter;
 +
 +    invoke-virtual/range {p0 .. p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
@@ -3840,10 +3936,10 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {v3, v0, v2, v5}, Landroid/widget/ArrayAdapter;-><init>(Landroid/content/Context;ILjava/util/List;)V
 +
-+    .line 139
++    .line 185
 +    invoke-virtual {v6, v3}, Landroid/widget/ListView;->setAdapter(Landroid/widget/ListAdapter;)V
 +
-+    .line 140
++    .line 186
 +    new-instance v2, Landroid/widget/LinearLayout;
 +
 +    invoke-virtual/range {p0 .. p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
@@ -3852,10 +3948,10 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {v2, v0}, Landroid/widget/LinearLayout;-><init>(Landroid/content/Context;)V
 +
-+    .line 141
++    .line 187
 +    invoke-virtual {v2, v4}, Landroid/widget/LinearLayout;->setOrientation(I)V
 +
-+    .line 142
++    .line 188
 +    invoke-virtual/range {p0 .. p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
 +
 +    move-result-object v0
@@ -3876,10 +3972,10 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    float-to-int v0, v0
 +
-+    .line 143
++    .line 189
 +    invoke-virtual {v2, v0, v1, v0, v1}, Landroid/widget/LinearLayout;->setPadding(IIII)V
 +
-+    .line 144
++    .line 190
 +    new-instance v0, Landroid/widget/LinearLayout$LayoutParams;
 +
 +    const/4 v4, -0x2
@@ -3890,7 +3986,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v2, v7, v0}, Landroid/widget/LinearLayout;->addView(Landroid/view/View;Landroid/view/ViewGroup$LayoutParams;)V
 +
-+    .line 145
++    .line 191
 +    new-instance v0, Landroid/widget/LinearLayout$LayoutParams;
 +
 +    const/high16 v4, 0x3f800000    # 1.0f
@@ -3899,7 +3995,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v2, v6, v0}, Landroid/widget/LinearLayout;->addView(Landroid/view/View;Landroid/view/ViewGroup$LayoutParams;)V
 +
-+    .line 146
++    .line 192
 +    new-instance v8, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$2;
 +
 +    move-object v0, v8
@@ -3938,14 +4034,14 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct/range {v0 .. v9}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$2;-><init>(Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;Landroid/widget/EditText;Ljava/util/ArrayList;Ljava/util/ArrayList;[Ljava/lang/String;ZLandroid/widget/ArrayAdapter;Landroid/widget/ListView;[Z)V
 +
-+    .line 153
++    .line 199
 +    new-instance v0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$3;
 +
 +    invoke-direct {v0, v10, v15}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$3;-><init>(Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;Ljava/lang/Runnable;)V
 +
 +    invoke-virtual {v13, v0}, Landroid/widget/EditText;->addTextChangedListener(Landroid/text/TextWatcher;)V
 +
-+    .line 154
++    .line 200
 +    new-instance v7, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$4;
 +
 +    move-object v0, v7
@@ -3966,10 +4062,10 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0, v7}, Landroid/widget/ListView;->setOnItemClickListener(Landroid/widget/AdapterView$OnItemClickListener;)V
 +
-+    .line 161
++    .line 207
 +    invoke-interface {v15}, Ljava/lang/Runnable;->run()V
 +
-+    .line 162
++    .line 208
 +    new-instance v0, Landroid/app/AlertDialog$Builder;
 +
 +    invoke-virtual/range {p0 .. p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
@@ -4018,13 +4114,13 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object v0
 +
-+    .line 166
++    .line 212
 +    invoke-virtual {v0}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
 +
-+    .line 167
++    .line 213
 +    return-void
 +
-+    .line 169
++    .line 215
 +    :cond_113
 +    move-object v1, v9
 +
@@ -4080,7 +4176,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object v0
 +
-+    .line 173
++    .line 219
 +    invoke-virtual {v0}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
 +
 +    move-result-object v0
@@ -4097,19 +4193,116 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0, v1}, Landroid/widget/ListView;->setOnItemClickListener(Landroid/widget/AdapterView$OnItemClickListener;)V
 +
-+    .line 178
++    .line 224
++    return-void
++.end method
++
++.method private chunkCount(Ljava/lang/String;)I
++    .registers 4
++
++    .line 129
++    const/4 v0, 0x0
++
++    :try_start_1
++    new-instance v1, Lorg/json/JSONObject;
++
++    if-nez p1, :cond_7
++
++    const-string/jumbo p1, "{}"
++
++    :cond_7
++    invoke-direct {v1, p1}, Lorg/json/JSONObject;-><init>(Ljava/lang/String;)V
++
++    const-string/jumbo p1, "_hma_chunked"
++
++    invoke-virtual {v1, p1, v0}, Lorg/json/JSONObject;->optBoolean(Ljava/lang/String;Z)Z
++
++    move-result p1
++
++    if-eqz p1, :cond_18
++
++    const-string/jumbo p1, "chunks"
++
++    invoke-virtual {v1, p1, v0}, Lorg/json/JSONObject;->optInt(Ljava/lang/String;I)I
++
++    move-result v0
++    :try_end_18
++    .catch Lorg/json/JSONException; {:try_start_1 .. :try_end_18} :catch_19
++
++    :cond_18
++    return v0
++
++    .line 130
++    :catch_19
++    move-exception p1
++
++    return v0
++.end method
++
++.method private clearChunks(Landroid/content/ContentResolver;I)V
++    .registers 4
++
++    .line 132
++    const/4 v0, 0x0
++
++    invoke-direct {p0, p1, p2, v0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->clearChunks(Landroid/content/ContentResolver;II)V
++
++    return-void
++.end method
++
++.method private clearChunks(Landroid/content/ContentResolver;II)V
++    .registers 7
++
++    .line 134
++    move v0, p3
++
++    :goto_1
++    add-int v1, p3, p2
++
++    add-int/lit8 v1, v1, 0x4
++
++    if-ge v0, v1, :cond_21
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string/jumbo v2, "unica_hma_policy_chunk_"
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    const/4 v2, 0x0
++
++    invoke-static {p1, v1, v2}, Landroid/provider/Settings$Secure;->putString(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;)Z
++
++    add-int/lit8 v0, v0, 0x1
++
++    goto :goto_1
++
++    .line 135
++    :cond_21
 +    return-void
 +.end method
 +
 +.method private cloneArray(Lorg/json/JSONArray;)Lorg/json/JSONArray;
 +    .registers 6
 +
-+    .line 373
++    .line 419
 +    new-instance v0, Lorg/json/JSONArray;
 +
 +    invoke-direct {v0}, Lorg/json/JSONArray;-><init>()V
 +
-+    .line 374
++    .line 420
 +    const/4 v1, 0x0
 +
 +    :goto_6
@@ -4142,7 +4335,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_6
 +
-+    .line 375
++    .line 421
 +    :cond_21
 +    return-object v0
 +.end method
@@ -4150,7 +4343,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method private closeQuietly(Ljava/io/Closeable;)V
 +    .registers 2
 +
-+    .line 272
++    .line 318
 +    if-eqz p1, :cond_7
 +
 +    :try_start_2
@@ -4163,7 +4356,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    :catch_6
 +    move-exception p1
 +
-+    .line 273
++    .line 319
 +    :cond_7
 +    :goto_7
 +    return-void
@@ -4172,12 +4365,12 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method private csv(Ljava/lang/String;)Lorg/json/JSONArray;
 +    .registers 7
 +
-+    .line 57
++    .line 60
 +    new-instance v0, Lorg/json/JSONArray;
 +
 +    invoke-direct {v0}, Lorg/json/JSONArray;-><init>()V
 +
-+    .line 58
++    .line 61
 +    if-eqz p1, :cond_27
 +
 +    const-string/jumbo v1, ","
@@ -4216,7 +4409,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_f
 +
-+    .line 59
++    .line 62
 +    :cond_27
 +    return-object v0
 +.end method
@@ -4224,7 +4417,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method private defaultOn(Ljava/lang/String;)Z
 +    .registers 3
 +
-+    .line 78
++    .line 81
 +    const-string/jumbo v0, "activity"
 +
 +    invoke-virtual {v0, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
@@ -4256,6 +4449,77 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    return p1
 +.end method
 +
++.method private expandPolicyString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;
++    .registers 8
++
++    .line 118
++    invoke-direct {p0, p2}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->chunkCount(Ljava/lang/String;)I
++
++    move-result v0
++
++    .line 119
++    if-gtz v0, :cond_7
++
++    return-object p2
++
++    .line 120
++    :cond_7
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    .line 121
++    const/4 v2, 0x0
++
++    :goto_d
++    if-ge v2, v0, :cond_2f
++
++    .line 122
++    new-instance v3, Ljava/lang/StringBuilder;
++
++    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string/jumbo v4, "unica_hma_policy_chunk_"
++
++    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v3
++
++    invoke-virtual {v3, v2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    move-result-object v3
++
++    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v3
++
++    invoke-static {p1, v3}, Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v3
++
++    .line 123
++    if-nez v3, :cond_29
++
++    return-object p2
++
++    .line 124
++    :cond_29
++    invoke-virtual {v1, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    .line 121
++    add-int/lit8 v2, v2, 0x1
++
++    goto :goto_d
++
++    .line 126
++    :cond_2f
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p1
++
++    return-object p1
++.end method
++
 +.method private exportPayload()Lorg/json/JSONObject;
 +    .registers 9
 +    .annotation system Ldalvik/annotation/Throws;
@@ -4264,57 +4528,57 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 275
++    .line 321
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
 +
 +    invoke-direct {p0, v0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->normalize(Lorg/json/JSONObject;)Lorg/json/JSONObject;
 +
 +    move-result-object v0
 +
-+    .line 276
++    .line 322
 +    const-string/jumbo v1, "hidden"
 +
 +    invoke-direct {p0, v0, v1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->array(Lorg/json/JSONObject;Ljava/lang/String;)Lorg/json/JSONArray;
 +
 +    move-result-object v1
 +
-+    .line 277
++    .line 323
 +    new-instance v2, Lorg/json/JSONObject;
 +
 +    invoke-direct {v2}, Lorg/json/JSONObject;-><init>()V
 +
-+    .line 278
++    .line 324
 +    const-string/jumbo v3, "configVersion"
 +
 +    const/16 v4, 0x5d
 +
 +    invoke-virtual {v2, v3, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
 +
-+    .line 279
++    .line 325
 +    const-string/jumbo v3, "detailLog"
 +
 +    const/4 v4, 0x0
 +
 +    invoke-virtual {v2, v3, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 280
++    .line 326
 +    const-string/jumbo v3, "errorOnlyLog"
 +
 +    invoke-virtual {v2, v3, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 281
++    .line 327
 +    const-string/jumbo v3, "maxLogSize"
 +
 +    const/16 v5, 0x100
 +
 +    invoke-virtual {v2, v3, v5}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
 +
-+    .line 282
++    .line 328
 +    const-string/jumbo v3, "forceMountData"
 +
 +    invoke-virtual {v2, v3, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 283
++    .line 329
 +    const-string/jumbo v3, "activity"
 +
 +    const/4 v5, 0x1
@@ -4329,44 +4593,44 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v2, v6, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 284
++    .line 330
 +    const-string/jumbo v3, "altAppDataIsolation"
 +
 +    invoke-virtual {v2, v3, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 285
++    .line 331
 +    const-string/jumbo v3, "altVoldAppDataIsolation"
 +
 +    invoke-virtual {v2, v3, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 286
++    .line 332
 +    const-string/jumbo v3, "skipSystemAppDataIsolation"
 +
 +    invoke-virtual {v2, v3, v5}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 287
++    .line 333
 +    const-string/jumbo v3, "packageQueryWorkaround"
 +
 +    invoke-virtual {v2, v3, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 288
++    .line 334
 +    const-string/jumbo v3, "webViewProtection"
 +
 +    invoke-virtual {v2, v3, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 289
++    .line 335
 +    const-string/jumbo v3, "defaultConfig"
 +
 +    sget-object v6, Lorg/json/JSONObject;->NULL:Ljava/lang/Object;
 +
 +    invoke-virtual {v2, v3, v6}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 290
++    .line 336
 +    new-instance v3, Lorg/json/JSONObject;
 +
 +    invoke-direct {v3}, Lorg/json/JSONObject;-><init>()V
 +
-+    .line 291
++    .line 337
 +    invoke-virtual {v1}, Lorg/json/JSONArray;->length()I
 +
 +    move-result v6
@@ -4393,13 +4657,13 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v3, v1, v6}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 292
++    .line 338
 +    :cond_7f
 +    const-string/jumbo v1, "templates"
 +
 +    invoke-virtual {v2, v1, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 293
++    .line 339
 +    new-instance v1, Lorg/json/JSONObject;
 +
 +    invoke-direct {v1}, Lorg/json/JSONObject;-><init>()V
@@ -4408,7 +4672,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v2, v3, v1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 294
++    .line 340
 +    new-instance v1, Lorg/json/JSONArray;
 +
 +    invoke-direct {v1}, Lorg/json/JSONArray;-><init>()V
@@ -4417,19 +4681,19 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v2, v3, v1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 295
++    .line 341
 +    new-instance v1, Lorg/json/JSONObject;
 +
 +    invoke-direct {v1}, Lorg/json/JSONObject;-><init>()V
 +
-+    .line 296
++    .line 342
 +    const-string/jumbo v3, "targets"
 +
 +    invoke-direct {p0, v0, v3}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->array(Lorg/json/JSONObject;Ljava/lang/String;)Lorg/json/JSONArray;
 +
 +    move-result-object v3
 +
-+    .line 297
++    .line 343
 +    nop
 +
 +    :goto_a4
@@ -4457,23 +4721,23 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_a4
 +
-+    .line 298
++    .line 344
 +    :cond_bc
 +    const-string/jumbo v3, "scope"
 +
 +    invoke-virtual {v2, v3, v1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 299
++    .line 345
 +    const-string/jumbo v1, "unicaPolicyVersion"
 +
 +    invoke-virtual {v2, v1, v5}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
 +
-+    .line 300
++    .line 346
 +    const-string/jumbo v1, "unica_hma_policy"
 +
 +    invoke-virtual {v2, v1, v0}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 301
++    .line 347
 +    return-object v2
 +.end method
 +
@@ -4485,7 +4749,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 324
++    .line 370
 +    new-instance v0, Ljava/util/TreeSet;
 +
 +    invoke-direct {v0}, Ljava/util/TreeSet;-><init>()V
@@ -4510,31 +4774,31 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {v5}, Ljava/util/TreeSet;-><init>()V
 +
-+    .line 325
++    .line 371
 +    const-string/jumbo v6, "templates"
 +
 +    invoke-virtual {p1, v6}, Lorg/json/JSONObject;->optJSONObject(Ljava/lang/String;)Lorg/json/JSONObject;
 +
 +    move-result-object v6
 +
-+    .line 326
++    .line 372
 +    const-string/jumbo v7, "scope"
 +
 +    invoke-virtual {p1, v7}, Lorg/json/JSONObject;->optJSONObject(Ljava/lang/String;)Lorg/json/JSONObject;
 +
 +    move-result-object v7
 +
-+    .line 327
++    .line 373
 +    const/4 v8, 0x0
 +
 +    if-eqz v7, :cond_a0
 +
-+    .line 328
++    .line 374
 +    invoke-virtual {v7}, Lorg/json/JSONObject;->keys()Ljava/util/Iterator;
 +
 +    move-result-object v9
 +
-+    .line 329
++    .line 375
 +    :goto_31
 +    invoke-interface {v9}, Ljava/util/Iterator;->hasNext()Z
 +
@@ -4542,7 +4806,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    if-eqz v10, :cond_a0
 +
-+    .line 330
++    .line 376
 +    invoke-interface {v9}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 +
 +    move-result-object v10
@@ -4551,17 +4815,17 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-interface {v0, v10}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
 +
-+    .line 331
++    .line 377
 +    invoke-virtual {v7, v10}, Lorg/json/JSONObject;->optJSONObject(Ljava/lang/String;)Lorg/json/JSONObject;
 +
 +    move-result-object v11
 +
-+    .line 332
++    .line 378
 +    if-nez v11, :cond_47
 +
 +    goto :goto_31
 +
-+    .line 333
++    .line 379
 +    :cond_47
 +    const-string/jumbo v12, "invertActivityLaunchProtection"
 +
@@ -4573,7 +4837,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-interface {v5, v10}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
 +
-+    .line 334
++    .line 380
 +    :cond_52
 +    const-string/jumbo v10, "extraAppList"
 +
@@ -4583,7 +4847,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {p0, v1, v10}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->addStrings(Ljava/util/Set;Lorg/json/JSONArray;)V
 +
-+    .line 335
++    .line 381
 +    const-string/jumbo v10, "applyPresets"
 +
 +    invoke-virtual {v11, v10}, Lorg/json/JSONObject;->optJSONArray(Ljava/lang/String;)Lorg/json/JSONArray;
@@ -4592,7 +4856,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {p0, v2, v10}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->addStrings(Ljava/util/Set;Lorg/json/JSONArray;)V
 +
-+    .line 336
++    .line 382
 +    const-string/jumbo v10, "applySettingsPresets"
 +
 +    invoke-virtual {v11, v10}, Lorg/json/JSONObject;->optJSONArray(Ljava/lang/String;)Lorg/json/JSONArray;
@@ -4601,7 +4865,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {p0, v3, v10}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->addStrings(Ljava/util/Set;Lorg/json/JSONArray;)V
 +
-+    .line 337
++    .line 383
 +    const-string/jumbo v10, "restrictedZygotePermissions"
 +
 +    invoke-virtual {v11, v10}, Lorg/json/JSONObject;->optJSONArray(Ljava/lang/String;)Lorg/json/JSONArray;
@@ -4610,14 +4874,14 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {p0, v4, v10}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->addStrings(Ljava/util/Set;Lorg/json/JSONArray;)V
 +
-+    .line 338
++    .line 384
 +    const-string/jumbo v10, "applyTemplates"
 +
 +    invoke-virtual {v11, v10}, Lorg/json/JSONObject;->optJSONArray(Ljava/lang/String;)Lorg/json/JSONArray;
 +
 +    move-result-object v10
 +
-+    .line 339
++    .line 385
 +    move v11, v8
 +
 +    :goto_7d
@@ -4629,7 +4893,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    if-ge v11, v12, :cond_9f
 +
-+    .line 340
++    .line 386
 +    if-nez v6, :cond_89
 +
 +    const/4 v12, 0x0
@@ -4645,7 +4909,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object v12
 +
-+    .line 341
++    .line 387
 +    :goto_91
 +    if-eqz v12, :cond_9c
 +
@@ -4657,23 +4921,23 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {p0, v1, v12}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->addStrings(Ljava/util/Set;Lorg/json/JSONArray;)V
 +
-+    .line 339
++    .line 385
 +    :cond_9c
 +    add-int/lit8 v11, v11, 0x1
 +
 +    goto :goto_7d
 +
-+    .line 343
++    .line 389
 +    :cond_9f
 +    goto :goto_31
 +
-+    .line 345
++    .line 391
 +    :cond_a0
 +    new-instance v6, Lorg/json/JSONObject;
 +
 +    invoke-direct {v6}, Lorg/json/JSONObject;-><init>()V
 +
-+    .line 346
++    .line 392
 +    invoke-interface {v0}, Ljava/util/Set;->size()I
 +
 +    move-result v7
@@ -4694,7 +4958,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v6, v10, v7}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 347
++    .line 393
 +    new-instance v7, Lorg/json/JSONArray;
 +
 +    invoke-direct {v7, v0}, Lorg/json/JSONArray;-><init>(Ljava/util/Collection;)V
@@ -4703,7 +4967,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v6, v0, v7}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 348
++    .line 394
 +    new-instance v0, Lorg/json/JSONArray;
 +
 +    invoke-direct {v0, v1}, Lorg/json/JSONArray;-><init>(Ljava/util/Collection;)V
@@ -4712,7 +4976,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v6, v1, v0}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 349
++    .line 395
 +    new-instance v0, Lorg/json/JSONArray;
 +
 +    invoke-direct {v0}, Lorg/json/JSONArray;-><init>()V
@@ -4721,7 +4985,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v6, v1, v0}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 350
++    .line 396
 +    new-instance v0, Lorg/json/JSONObject;
 +
 +    invoke-direct {v0}, Lorg/json/JSONObject;-><init>()V
@@ -4730,7 +4994,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v6, v1, v0}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 351
++    .line 397
 +    const-string/jumbo v0, "disableActivityLaunchProtection"
 +
 +    invoke-virtual {p1, v0, v8}, Lorg/json/JSONObject;->optBoolean(Ljava/lang/String;Z)Z
@@ -4743,7 +5007,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v6, v0, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 352
++    .line 398
 +    new-instance p1, Lorg/json/JSONArray;
 +
 +    invoke-direct {p1, v5}, Lorg/json/JSONArray;-><init>(Ljava/util/Collection;)V
@@ -4752,7 +5016,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v6, v0, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 353
++    .line 399
 +    new-instance p1, Lorg/json/JSONArray;
 +
 +    invoke-direct {p1, v2}, Lorg/json/JSONArray;-><init>(Ljava/util/Collection;)V
@@ -4761,7 +5025,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v6, v0, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 354
++    .line 400
 +    new-instance p1, Lorg/json/JSONArray;
 +
 +    invoke-direct {p1, v3}, Lorg/json/JSONArray;-><init>(Ljava/util/Collection;)V
@@ -4770,12 +5034,12 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v6, v0, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 355
++    .line 401
 +    const-string/jumbo p1, "risky"
 +
 +    invoke-virtual {v6, p1, v9}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 356
++    .line 402
 +    new-instance p1, Lorg/json/JSONArray;
 +
 +    invoke-direct {p1, v4}, Lorg/json/JSONArray;-><init>(Ljava/util/Collection;)V
@@ -4784,14 +5048,40 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v6, v0, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 357
++    .line 403
 +    return-object v6
++.end method
++
++.method private getPolicyString()Ljava/lang/String;
++    .registers 3
++
++    .line 94
++    invoke-virtual {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Landroidx/fragment/app/FragmentActivity;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    .line 95
++    const-string/jumbo v1, "unica_hma_policy"
++
++    invoke-static {v0, v1}, Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-direct {p0, v0, v1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->expandPolicyString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    return-object v0
 +.end method
 +
 +.method private installSource(Landroid/content/pm/PackageManager;Ljava/lang/String;)Ljava/lang/String;
 +    .registers 8
 +
-+    .line 205
++    .line 251
 +    :try_start_0
 +    invoke-virtual {p1}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
 +
@@ -4821,14 +5111,14 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object p1
 +
-+    .line 206
++    .line 252
 +    const/4 p2, 0x0
 +
 +    if-nez p1, :cond_1e
 +
 +    return-object p2
 +
-+    .line 207
++    .line 253
 +    :cond_1e
 +    invoke-virtual {p1}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
 +
@@ -4848,7 +5138,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object v0
 +
-+    .line 208
++    .line 254
 +    invoke-virtual {p1}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
 +
 +    move-result-object v1
@@ -4867,7 +5157,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object p1
 +
-+    .line 209
++    .line 255
 +    instance-of v1, v0, Ljava/lang/String;
 +
 +    if-eqz v1, :cond_4a
@@ -4893,7 +5183,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    :goto_51
 +    return-object p2
 +
-+    .line 210
++    .line 256
 +    :catch_52
 +    move-exception p1
 +
@@ -4903,9 +5193,9 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.end method
 +
 +.method private legacyList(Ljava/lang/String;Ljava/lang/String;)Lorg/json/JSONArray;
-+    .registers 8
++    .registers 7
 +
-+    .line 63
++    .line 66
 +    :try_start_0
 +    new-instance v0, Ljava/lang/StringBuilder;
 +
@@ -4933,29 +5223,29 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    const/4 v1, 0x1
 +
-+    new-array v2, v1, [Ljava/lang/Class;
++    new-array v1, v1, [Ljava/lang/Class;
 +
-+    const-class v3, Landroid/content/ContentResolver;
++    const-class v2, Landroid/content/ContentResolver;
 +
-+    const/4 v4, 0x0
++    const/4 v3, 0x0
 +
-+    aput-object v3, v2, v4
++    aput-object v2, v1, v3
 +
-+    invoke-virtual {p1, v0, v2}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
++    invoke-virtual {p1, v0, v1}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
 +
 +    move-result-object p1
 +
-+    new-array v0, v1, [Ljava/lang/Object;
-+
 +    invoke-virtual {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
 +
-+    move-result-object v1
++    move-result-object v0
 +
-+    invoke-virtual {v1}, Landroidx/fragment/app/FragmentActivity;->getContentResolver()Landroid/content/ContentResolver;
++    invoke-virtual {v0}, Landroidx/fragment/app/FragmentActivity;->getContentResolver()Landroid/content/ContentResolver;
 +
-+    move-result-object v1
++    move-result-object v0
 +
-+    aput-object v1, v0, v4
++    filled-new-array {v0}, [Ljava/lang/Object;
++
++    move-result-object v0
 +
 +    const/4 v1, 0x0
 +
@@ -4963,7 +5253,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object p1
 +
-+    .line 64
++    .line 67
 +    new-instance v0, Lorg/json/JSONArray;
 +
 +    check-cast p1, Ljava/util/Collection;
@@ -4974,7 +5264,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    return-object v0
 +
-+    .line 65
++    .line 68
 +    :catch_3e
 +    move-exception p1
 +
@@ -5000,14 +5290,14 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method private map(Ljava/lang/String;)Lorg/json/JSONObject;
 +    .registers 3
 +
-+    .line 74
++    .line 77
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
 +
 +    invoke-virtual {v0, p1}, Lorg/json/JSONObject;->optJSONObject(Ljava/lang/String;)Lorg/json/JSONObject;
 +
 +    move-result-object p1
 +
-+    .line 75
++    .line 78
 +    if-nez p1, :cond_d
 +
 +    new-instance p1, Lorg/json/JSONObject;
@@ -5019,19 +5309,19 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.end method
 +
 +.method private normalize(Lorg/json/JSONObject;)Lorg/json/JSONObject;
-+    .registers 13
++    .registers 9
 +    .annotation system Ldalvik/annotation/Throws;
 +        value = {
 +            Lorg/json/JSONException;
 +        }
 +    .end annotation
 +
-+    .line 360
++    .line 406
 +    new-instance v0, Lorg/json/JSONObject;
 +
 +    invoke-direct {v0}, Lorg/json/JSONObject;-><init>()V
 +
-+    .line 361
++    .line 407
 +    const-string/jumbo v1, "enabled"
 +
 +    const/4 v2, 0x0
@@ -5042,7 +5332,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0, v1, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 362
++    .line 408
 +    const-string/jumbo v1, "activity"
 +
 +    const/4 v3, 0x1
@@ -5053,82 +5343,104 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0, v1, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 363
++    .line 409
 +    const-string/jumbo v1, "risky"
 +
 +    invoke-virtual {p1, v1, v3}, Lorg/json/JSONObject;->optBoolean(Ljava/lang/String;Z)Z
 +
-+    move-result v3
++    move-result v4
 +
-+    invoke-virtual {v0, v1, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
++    invoke-virtual {v0, v1, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 364
-+    const-string/jumbo v9, "settings"
++    .line 410
++    const/4 v1, 0x7
 +
-+    const-string/jumbo v10, "gids"
++    new-array v4, v1, [Ljava/lang/String;
 +
-+    const-string/jumbo v4, "targets"
++    const-string/jumbo v5, "targets"
++
++    aput-object v5, v4, v2
 +
 +    const-string/jumbo v5, "hidden"
 +
-+    const-string/jumbo v6, "playUpdate"
++    aput-object v5, v4, v3
 +
-+    const-string/jumbo v7, "invertActivity"
++    const/4 v3, 0x2
 +
-+    const-string/jumbo v8, "apps"
++    const-string/jumbo v5, "playUpdate"
 +
-+    filled-new-array/range {v4 .. v10}, [Ljava/lang/String;
++    aput-object v5, v4, v3
 +
-+    move-result-object v1
++    const/4 v3, 0x3
 +
-+    :goto_34
-+    const/4 v3, 0x7
++    const-string/jumbo v5, "invertActivity"
 +
-+    if-ge v2, v3, :cond_47
++    aput-object v5, v4, v3
 +
-+    aget-object v3, v1, v2
++    const/4 v3, 0x4
++
++    const-string/jumbo v5, "apps"
++
++    aput-object v5, v4, v3
++
++    const/4 v3, 0x5
++
++    const-string/jumbo v5, "settings"
++
++    aput-object v5, v4, v3
++
++    const/4 v3, 0x6
++
++    const-string/jumbo v5, "gids"
++
++    aput-object v5, v4, v3
++
++    :goto_46
++    if-ge v2, v1, :cond_58
++
++    aget-object v3, v4, v2
 +
 +    invoke-virtual {p1, v3}, Lorg/json/JSONObject;->optJSONArray(Ljava/lang/String;)Lorg/json/JSONArray;
 +
-+    move-result-object v4
++    move-result-object v5
 +
-+    invoke-direct {p0, v4}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->cloneArray(Lorg/json/JSONArray;)Lorg/json/JSONArray;
++    invoke-direct {p0, v5}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->cloneArray(Lorg/json/JSONArray;)Lorg/json/JSONArray;
 +
-+    move-result-object v4
++    move-result-object v5
 +
-+    invoke-virtual {v0, v3, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
++    invoke-virtual {v0, v3, v5}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
 +    add-int/lit8 v2, v2, 0x1
 +
-+    goto :goto_34
++    goto :goto_46
 +
-+    .line 365
-+    :cond_47
++    .line 411
++    :cond_58
 +    new-instance v1, Lorg/json/JSONObject;
 +
 +    invoke-direct {v1}, Lorg/json/JSONObject;-><init>()V
 +
-+    .line 366
++    .line 412
 +    const-string/jumbo v2, "installerSpoof"
 +
 +    invoke-virtual {p1, v2}, Lorg/json/JSONObject;->optJSONObject(Ljava/lang/String;)Lorg/json/JSONObject;
 +
 +    move-result-object p1
 +
-+    .line 367
-+    if-eqz p1, :cond_72
++    .line 413
++    if-eqz p1, :cond_83
 +
 +    invoke-virtual {p1}, Lorg/json/JSONObject;->keys()Ljava/util/Iterator;
 +
 +    move-result-object v3
 +
-+    :cond_58
-+    :goto_58
++    :cond_69
++    :goto_69
 +    invoke-interface {v3}, Ljava/util/Iterator;->hasNext()Z
 +
 +    move-result v4
 +
-+    if-eqz v4, :cond_72
++    if-eqz v4, :cond_83
 +
 +    invoke-interface {v3}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 +
@@ -5142,20 +5454,197 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    instance-of v6, v5, Ljava/lang/String;
 +
-+    if-eqz v6, :cond_58
++    if-eqz v6, :cond_69
 +
 +    check-cast v5, Ljava/lang/String;
 +
 +    invoke-virtual {v1, v4, v5}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    goto :goto_58
++    goto :goto_69
 +
-+    .line 368
-+    :cond_72
++    .line 414
++    :cond_83
 +    invoke-virtual {v0, v2, v1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 369
++    .line 415
 +    return-object v0
++.end method
++
++.method private putPolicyString(Ljava/lang/String;)Z
++    .registers 13
++
++    .line 98
++    invoke-virtual {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Landroidx/fragment/app/FragmentActivity;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    .line 99
++    const-string/jumbo v1, "unica_hma_policy"
++
++    invoke-static {v0, v1}, Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-direct {p0, v2}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->chunkCount(Ljava/lang/String;)I
++
++    move-result v2
++
++    .line 100
++    if-eqz p1, :cond_82
++
++    invoke-virtual {p1}, Ljava/lang/String;->length()I
++
++    move-result v3
++
++    const/16 v4, 0x7530
++
++    if-gt v3, v4, :cond_1d
++
++    goto :goto_82
++
++    .line 105
++    :cond_1d
++    invoke-virtual {p1}, Ljava/lang/String;->length()I
++
++    move-result v3
++
++    add-int/2addr v3, v4
++
++    const/4 v5, 0x1
++
++    sub-int/2addr v3, v5
++
++    div-int/2addr v3, v4
++
++    .line 106
++    const/4 v4, 0x0
++
++    move v6, v4
++
++    :cond_27
++    if-ge v6, v3, :cond_55
++
++    new-instance v7, Ljava/lang/StringBuilder;
++
++    invoke-direct {v7}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string/jumbo v8, "unica_hma_policy_chunk_"
++
++    invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v7
++
++    invoke-virtual {v7, v6}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    move-result-object v7
++
++    invoke-virtual {v7}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v7
++
++    mul-int/lit16 v8, v6, 0x7530
++
++    invoke-virtual {p1}, Ljava/lang/String;->length()I
++
++    move-result v9
++
++    add-int/lit8 v6, v6, 0x1
++
++    mul-int/lit16 v10, v6, 0x7530
++
++    invoke-static {v9, v10}, Ljava/lang/Math;->min(II)I
++
++    move-result v9
++
++    invoke-virtual {p1, v8, v9}, Ljava/lang/String;->substring(II)Ljava/lang/String;
++
++    move-result-object v8
++
++    invoke-static {v0, v7, v8}, Landroid/provider/Settings$Secure;->putString(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;)Z
++
++    move-result v7
++
++    if-nez v7, :cond_27
++
++    return v4
++
++    .line 108
++    :cond_55
++    :try_start_55
++    new-instance v6, Lorg/json/JSONObject;
++
++    invoke-direct {v6}, Lorg/json/JSONObject;-><init>()V
++
++    .line 109
++    const-string/jumbo v7, "_hma_chunked"
++
++    invoke-virtual {v6, v7, v5}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
++
++    .line 110
++    const-string/jumbo v5, "chunks"
++
++    invoke-virtual {v6, v5, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
++
++    .line 111
++    const-string/jumbo v5, "length"
++
++    invoke-virtual {p1}, Ljava/lang/String;->length()I
++
++    move-result p1
++
++    invoke-virtual {v6, v5, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;I)Lorg/json/JSONObject;
++
++    .line 112
++    invoke-virtual {v6}, Lorg/json/JSONObject;->toString()Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-static {v0, v1, p1}, Landroid/provider/Settings$Secure;->putString(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;)Z
++
++    move-result p1
++
++    .line 113
++    if-eqz p1, :cond_7f
++
++    invoke-static {v2, v3}, Ljava/lang/Math;->max(II)I
++
++    move-result v1
++
++    sub-int/2addr v1, v3
++
++    invoke-direct {p0, v0, v1, v3}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->clearChunks(Landroid/content/ContentResolver;II)V
++    :try_end_7f
++    .catch Lorg/json/JSONException; {:try_start_55 .. :try_end_7f} :catch_80
++
++    .line 114
++    :cond_7f
++    return p1
++
++    .line 115
++    :catch_80
++    move-exception p1
++
++    return v4
++
++    .line 101
++    :cond_82
++    :goto_82
++    invoke-static {v0, v1, p1}, Landroid/provider/Settings$Secure;->putString(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;)Z
++
++    move-result p1
++
++    .line 102
++    if-eqz p1, :cond_8b
++
++    invoke-direct {p0, v0, v2}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->clearChunks(Landroid/content/ContentResolver;I)V
++
++    .line 103
++    :cond_8b
++    return p1
 +.end method
 +
 +.method private readAll(Ljava/io/InputStream;)Ljava/lang/String;
@@ -5166,17 +5655,17 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 266
++    .line 312
 +    new-instance v0, Ljava/io/ByteArrayOutputStream;
 +
 +    invoke-direct {v0}, Ljava/io/ByteArrayOutputStream;-><init>()V
 +
-+    .line 267
++    .line 313
 +    const/16 v1, 0x2000
 +
 +    new-array v1, v1, [B
 +
-+    .line 268
++    .line 314
 +    :goto_9
 +    invoke-virtual {p1, v1}, Ljava/io/InputStream;->read([B)I
 +
@@ -5192,7 +5681,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_9
 +
-+    .line 269
++    .line 315
 +    :cond_15
 +    new-instance p1, Ljava/lang/String;
 +
@@ -5210,10 +5699,10 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method private readBackup(Landroid/net/Uri;)V
 +    .registers 7
 +
-+    .line 252
++    .line 298
 +    nop
 +
-+    .line 254
++    .line 300
 +    const v0, 0x104000a
 +
 +    const/4 v1, 0x0
@@ -5234,10 +5723,10 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    .catch Ljava/lang/Exception; {:try_start_5 .. :try_end_11} :catch_6e
 +    .catchall {:try_start_5 .. :try_end_11} :catchall_6c
 +
-+    .line 255
++    .line 301
 +    if-eqz p1, :cond_64
 +
-+    .line 256
++    .line 302
 +    :try_start_13
 +    new-instance v2, Lorg/json/JSONObject;
 +
@@ -5247,14 +5736,14 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {v2, v3}, Lorg/json/JSONObject;-><init>(Ljava/lang/String;)V
 +
-+    .line 257
++    .line 303
 +    const-string/jumbo v3, "unica_hma_policy"
 +
 +    invoke-virtual {v2, v3}, Lorg/json/JSONObject;->optJSONObject(Ljava/lang/String;)Lorg/json/JSONObject;
 +
 +    move-result-object v3
 +
-+    .line 258
++    .line 304
 +    if-nez v3, :cond_39
 +
 +    const-string/jumbo v3, "scope"
@@ -5281,7 +5770,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    :cond_38
 +    move-object v3, v2
 +
-+    .line 259
++    .line 305
 +    :cond_39
 +    invoke-direct {p0, v3}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->normalize(Lorg/json/JSONObject;)Lorg/json/JSONObject;
 +
@@ -5289,7 +5778,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    iput-object v2, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
 +
-+    .line 260
++    .line 306
 +    invoke-direct {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->save()Z
 +
 +    move-result v2
@@ -5324,13 +5813,13 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_8e
 +
-+    .line 261
++    .line 307
 +    :catch_62
 +    move-exception v2
 +
 +    goto :goto_70
 +
-+    .line 255
++    .line 301
 +    :cond_64
 +    new-instance v2, Ljava/io/IOException;
 +
@@ -5343,19 +5832,19 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    .catch Ljava/lang/Exception; {:try_start_13 .. :try_end_6c} :catch_62
 +    .catchall {:try_start_13 .. :try_end_6c} :catchall_92
 +
-+    .line 263
++    .line 309
 +    :catchall_6c
 +    move-exception v0
 +
 +    goto :goto_94
 +
-+    .line 261
++    .line 307
 +    :catch_6e
 +    move-exception v2
 +
 +    move-object p1, v1
 +
-+    .line 262
++    .line 308
 +    :goto_70
 +    :try_start_70
 +    new-instance v3, Landroid/app/AlertDialog$Builder;
@@ -5388,15 +5877,15 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    :try_end_8e
 +    .catchall {:try_start_70 .. :try_end_8e} :catchall_92
 +
-+    .line 263
++    .line 309
 +    :cond_8e
 +    :goto_8e
 +    invoke-direct {p0, p1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->closeQuietly(Ljava/io/Closeable;)V
 +
-+    .line 264
++    .line 310
 +    return-void
 +
-+    .line 263
++    .line 309
 +    :catchall_92
 +    move-exception v0
 +
@@ -5409,126 +5898,152 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.end method
 +
 +.method private refresh()V
-+    .registers 12
++    .registers 11
 +
-+    .line 91
-+    const-string/jumbo v0, "activity"
++    .line 137
++    const/4 v0, 0x3
 +
-+    const-string/jumbo v1, "risky"
++    new-array v1, v0, [Ljava/lang/String;
 +
 +    const-string/jumbo v2, "enabled"
 +
-+    filled-new-array {v2, v0, v1}, [Ljava/lang/String;
++    const/4 v3, 0x0
 +
-+    move-result-object v0
++    aput-object v2, v1, v3
 +
-+    const/4 v1, 0x0
++    const-string/jumbo v2, "activity"
 +
-+    move v2, v1
++    const/4 v4, 0x1
 +
-+    :goto_c
-+    const-string/jumbo v3, "hma_"
++    aput-object v2, v1, v4
 +
-+    const/4 v4, 0x3
++    const-string/jumbo v2, "risky"
 +
-+    if-ge v2, v4, :cond_48
++    const/4 v5, 0x2
 +
-+    aget-object v4, v0, v2
++    aput-object v2, v1, v5
 +
-+    .line 92
-+    new-instance v5, Ljava/lang/StringBuilder;
++    move v2, v3
 +
-+    invoke-direct {v5}, Ljava/lang/StringBuilder;-><init>()V
++    :goto_13
++    const-string/jumbo v6, "hma_"
 +
-+    invoke-virtual {v5, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    if-ge v2, v0, :cond_4e
 +
-+    move-result-object v3
++    aget-object v7, v1, v2
 +
-+    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    .line 138
++    new-instance v8, Ljava/lang/StringBuilder;
 +
-+    move-result-object v3
++    invoke-direct {v8}, Ljava/lang/StringBuilder;-><init>()V
 +
-+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {v8, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v3
++    move-result-object v6
 +
-+    invoke-virtual {p0, v3}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
++    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v3
++    move-result-object v6
 +
-+    .line 93
-+    iget-object v5, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
++    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 +
-+    invoke-direct {p0, v4}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->defaultOn(Ljava/lang/String;)Z
++    move-result-object v6
 +
-+    move-result v6
++    invoke-virtual {p0, v6}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
 +
-+    invoke-virtual {v5, v4, v6}, Lorg/json/JSONObject;->optBoolean(Ljava/lang/String;Z)Z
++    move-result-object v6
 +
-+    move-result v4
++    .line 139
++    iget-object v8, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
 +
-+    .line 94
-+    if-eqz v4, :cond_37
++    invoke-direct {p0, v7}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->defaultOn(Ljava/lang/String;)Z
 +
-+    const-string/jumbo v5, "On"
++    move-result v9
 +
-+    goto :goto_39
++    invoke-virtual {v8, v7, v9}, Lorg/json/JSONObject;->optBoolean(Ljava/lang/String;Z)Z
 +
-+    :cond_37
-+    const-string/jumbo v5, "Off"
++    move-result v7
 +
-+    :goto_39
-+    invoke-virtual {v3, v5}, Landroidx/preference/Preference;->setSummary(Ljava/lang/CharSequence;)V
++    .line 140
++    if-eqz v7, :cond_3d
 +
-+    .line 95
-+    instance-of v5, v3, Landroidx/preference/TwoStatePreference;
++    const-string/jumbo v8, "On"
 +
-+    if-eqz v5, :cond_45
++    goto :goto_3f
 +
-+    check-cast v3, Landroidx/preference/TwoStatePreference;
++    :cond_3d
++    const-string/jumbo v8, "Off"
 +
-+    invoke-virtual {v3, v4}, Landroidx/preference/TwoStatePreference;->setChecked(Z)V
++    :goto_3f
++    invoke-virtual {v6, v8}, Landroidx/preference/Preference;->setSummary(Ljava/lang/CharSequence;)V
 +
-+    .line 91
-+    :cond_45
++    .line 141
++    instance-of v8, v6, Landroidx/preference/TwoStatePreference;
++
++    if-eqz v8, :cond_4b
++
++    check-cast v6, Landroidx/preference/TwoStatePreference;
++
++    invoke-virtual {v6, v7}, Landroidx/preference/TwoStatePreference;->setChecked(Z)V
++
++    .line 137
++    :cond_4b
 +    add-int/lit8 v2, v2, 0x1
 +
-+    goto :goto_c
++    goto :goto_13
 +
-+    .line 97
-+    :cond_48
-+    const-string/jumbo v9, "settings"
++    .line 143
++    :cond_4e
++    const/4 v1, 0x7
 +
-+    const-string/jumbo v10, "gids"
++    new-array v2, v1, [Ljava/lang/String;
 +
-+    const-string/jumbo v4, "targets"
++    const-string/jumbo v7, "targets"
 +
-+    const-string/jumbo v5, "hidden"
++    aput-object v7, v2, v3
 +
-+    const-string/jumbo v6, "playUpdate"
++    const-string/jumbo v7, "hidden"
 +
-+    const-string/jumbo v7, "invertActivity"
++    aput-object v7, v2, v4
 +
-+    const-string/jumbo v8, "apps"
++    const-string/jumbo v4, "playUpdate"
 +
-+    filled-new-array/range {v4 .. v10}, [Ljava/lang/String;
++    aput-object v4, v2, v5
 +
-+    move-result-object v0
++    const-string/jumbo v4, "invertActivity"
 +
-+    :goto_5a
-+    const-string/jumbo v2, " selected"
++    aput-object v4, v2, v0
 +
-+    const/4 v4, 0x7
++    const/4 v0, 0x4
 +
-+    if-ge v1, v4, :cond_95
++    const-string/jumbo v4, "apps"
 +
-+    aget-object v4, v0, v1
++    aput-object v4, v2, v0
++
++    const/4 v0, 0x5
++
++    const-string/jumbo v4, "settings"
++
++    aput-object v4, v2, v0
++
++    const/4 v0, 0x6
++
++    const-string/jumbo v4, "gids"
++
++    aput-object v4, v2, v0
++
++    :goto_70
++    const-string/jumbo v0, " selected"
++
++    if-ge v3, v1, :cond_aa
++
++    aget-object v4, v2, v3
 +
 +    new-instance v5, Ljava/lang/StringBuilder;
 +
 +    invoke-direct {v5}, Ljava/lang/StringBuilder;-><init>()V
 +
-+    invoke-virtual {v5, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v5, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
 +    move-result-object v5
 +
@@ -5544,9 +6059,9 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object v5
 +
-+    new-instance v6, Ljava/lang/StringBuilder;
++    new-instance v7, Ljava/lang/StringBuilder;
 +
-+    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
++    invoke-direct {v7}, Ljava/lang/StringBuilder;-><init>()V
 +
 +    invoke-direct {p0, v4}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->selected(Ljava/lang/String;)Ljava/util/Set;
 +
@@ -5556,35 +6071,35 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result v4
 +
-+    invoke-virtual {v6, v4}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++    invoke-virtual {v7, v4}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
 +
 +    move-result-object v4
 +
-+    invoke-virtual {v4, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v2
-+
-+    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-+
-+    move-result-object v2
-+
-+    invoke-virtual {v5, v2}, Landroidx/preference/Preference;->setSummary(Ljava/lang/CharSequence;)V
-+
-+    add-int/lit8 v1, v1, 0x1
-+
-+    goto :goto_5a
-+
-+    .line 98
-+    :cond_95
-+    const-string/jumbo v0, "hma_unknown"
-+
-+    invoke-virtual {p0, v0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
++    invoke-virtual {v4, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
 +    move-result-object v0
 +
-+    new-instance v1, Ljava/lang/StringBuilder;
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 +
-+    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++    move-result-object v0
++
++    invoke-virtual {v5, v0}, Landroidx/preference/Preference;->setSummary(Ljava/lang/CharSequence;)V
++
++    add-int/lit8 v3, v3, 0x1
++
++    goto :goto_70
++
++    .line 144
++    :cond_aa
++    const-string/jumbo v1, "hma_unknown"
++
++    invoke-virtual {p0, v1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
++
++    move-result-object v1
++
++    new-instance v2, Ljava/lang/StringBuilder;
++
++    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
 +
 +    const-string/jumbo v3, "installerSpoof"
 +
@@ -5596,28 +6111,28 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result v3
 +
-+    invoke-virtual {v1, v3}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object v2
 +
-+    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v1
++    move-result-object v0
 +
-+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 +
-+    move-result-object v1
++    move-result-object v0
 +
-+    invoke-virtual {v0, v1}, Landroidx/preference/Preference;->setSummary(Ljava/lang/CharSequence;)V
++    invoke-virtual {v1, v0}, Landroidx/preference/Preference;->setSummary(Ljava/lang/CharSequence;)V
 +
-+    .line 99
++    .line 145
 +    return-void
 +.end method
 +
 +.method private restoreConfig()V
 +    .registers 4
 +
-+    .line 232
++    .line 278
 +    :try_start_0
 +    new-instance v0, Landroid/content/Intent;
 +
@@ -5625,31 +6140,31 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
 +
-+    .line 233
++    .line 279
 +    const-string/jumbo v1, "android.intent.category.OPENABLE"
 +
 +    invoke-virtual {v0, v1}, Landroid/content/Intent;->addCategory(Ljava/lang/String;)Landroid/content/Intent;
 +
-+    .line 234
++    .line 280
 +    const-string/jumbo v1, "application/json"
 +
 +    invoke-virtual {v0, v1}, Landroid/content/Intent;->setType(Ljava/lang/String;)Landroid/content/Intent;
 +
-+    .line 235
++    .line 281
 +    const/16 v1, 0x238e
 +
 +    invoke-virtual {p0, v0, v1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->startActivityForResult(Landroid/content/Intent;I)V
 +    :try_end_16
 +    .catch Ljava/lang/RuntimeException; {:try_start_0 .. :try_end_16} :catch_17
 +
-+    .line 238
++    .line 284
 +    goto :goto_3a
 +
-+    .line 236
++    .line 282
 +    :catch_17
 +    move-exception v0
 +
-+    .line 237
++    .line 283
 +    new-instance v1, Landroid/app/AlertDialog$Builder;
 +
 +    invoke-virtual {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
@@ -5682,7 +6197,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
 +
-+    .line 239
++    .line 285
 +    :goto_3a
 +    return-void
 +.end method
@@ -5690,29 +6205,19 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method private save()Z
 +    .registers 5
 +
-+    .line 85
-+    invoke-virtual {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
++    .line 88
++    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
++
++    invoke-virtual {v0}, Lorg/json/JSONObject;->toString()Ljava/lang/String;
 +
 +    move-result-object v0
 +
-+    invoke-virtual {v0}, Landroidx/fragment/app/FragmentActivity;->getContentResolver()Landroid/content/ContentResolver;
-+
-+    move-result-object v0
-+
-+    iget-object v1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
-+
-+    invoke-virtual {v1}, Lorg/json/JSONObject;->toString()Ljava/lang/String;
-+
-+    move-result-object v1
-+
-+    const-string/jumbo v2, "unica_hma_policy"
-+
-+    invoke-static {v0, v2, v1}, Landroid/provider/Settings$Secure;->putString(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;)Z
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->putPolicyString(Ljava/lang/String;)Z
 +
 +    move-result v0
 +
-+    .line 86
-+    if-nez v0, :cond_36
++    .line 89
++    if-nez v0, :cond_2c
 +
 +    new-instance v1, Landroid/app/AlertDialog$Builder;
 +
@@ -5744,11 +6249,11 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v1}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
 +
-+    .line 87
-+    :cond_36
++    .line 90
++    :cond_2c
 +    invoke-direct {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->refresh()V
 +
-+    .line 88
++    .line 91
 +    return v0
 +.end method
 +
@@ -5760,39 +6265,39 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 304
++    .line 350
 +    new-instance v0, Lorg/json/JSONObject;
 +
 +    invoke-direct {v0}, Lorg/json/JSONObject;-><init>()V
 +
-+    .line 305
++    .line 351
 +    const-string/jumbo v1, "useWhitelist"
 +
 +    const/4 v2, 0x0
 +
 +    invoke-virtual {v0, v1, v2}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 306
++    .line 352
 +    const-string/jumbo v1, "excludeSystemApps"
 +
 +    invoke-virtual {v0, v1, v2}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 307
++    .line 353
 +    const-string/jumbo v1, "hideInstallationSource"
 +
 +    invoke-virtual {v0, v1, v2}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 308
++    .line 354
 +    const-string/jumbo v1, "hideSystemInstallationSource"
 +
 +    invoke-virtual {v0, v1, v2}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 309
++    .line 355
 +    const-string/jumbo v1, "excludeTargetInstallationSource"
 +
 +    invoke-virtual {v0, v1, v2}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 310
++    .line 356
 +    const-string/jumbo v1, "invertActivity"
 +
 +    invoke-direct {p0, p2, v1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->array(Lorg/json/JSONObject;Ljava/lang/String;)Lorg/json/JSONArray;
@@ -5811,12 +6316,12 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0, v1, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 311
++    .line 357
 +    const-string/jumbo p1, "excludeVoldIsolation"
 +
 +    invoke-virtual {v0, p1, v2}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 312
++    .line 358
 +    const-string/jumbo p1, "gids"
 +
 +    invoke-direct {p0, p2, p1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->array(Lorg/json/JSONObject;Ljava/lang/String;)Lorg/json/JSONArray;
@@ -5831,12 +6336,12 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0, v1, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 313
++    .line 359
 +    new-instance p1, Lorg/json/JSONArray;
 +
 +    invoke-direct {p1}, Lorg/json/JSONArray;-><init>()V
 +
-+    .line 314
++    .line 360
 +    const-string/jumbo v1, "hidden"
 +
 +    invoke-direct {p0, p2, v1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->array(Lorg/json/JSONObject;Ljava/lang/String;)Lorg/json/JSONArray;
@@ -5853,13 +6358,13 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {p1, v2}, Lorg/json/JSONArray;->put(Ljava/lang/Object;)Lorg/json/JSONArray;
 +
-+    .line 315
++    .line 361
 +    :cond_5c
 +    const-string/jumbo v2, "applyTemplates"
 +
 +    invoke-virtual {v0, v2, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 316
++    .line 362
 +    const-string/jumbo p1, "apps"
 +
 +    invoke-direct {p0, p2, p1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->array(Lorg/json/JSONObject;Ljava/lang/String;)Lorg/json/JSONArray;
@@ -5874,7 +6379,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0, v2, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 317
++    .line 363
 +    new-instance p1, Lorg/json/JSONArray;
 +
 +    invoke-direct {p1}, Lorg/json/JSONArray;-><init>()V
@@ -5883,7 +6388,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0, v2, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 318
++    .line 364
 +    const-string/jumbo p1, "settings"
 +
 +    invoke-direct {p0, p2, p1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->array(Lorg/json/JSONObject;Ljava/lang/String;)Lorg/json/JSONArray;
@@ -5898,7 +6403,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0, v2, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 319
++    .line 365
 +    invoke-direct {p0, p2, v1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->array(Lorg/json/JSONObject;Ljava/lang/String;)Lorg/json/JSONArray;
 +
 +    move-result-object p1
@@ -5911,7 +6416,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0, p2, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 320
++    .line 366
 +    new-instance p1, Lorg/json/JSONArray;
 +
 +    invoke-direct {p1}, Lorg/json/JSONArray;-><init>()V
@@ -5920,7 +6425,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {v0, p2, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
-+    .line 321
++    .line 367
 +    return-object v0
 +.end method
 +
@@ -5937,19 +6442,19 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 68
++    .line 71
 +    new-instance v0, Ljava/util/HashSet;
 +
 +    invoke-direct {v0}, Ljava/util/HashSet;-><init>()V
 +
-+    .line 69
++    .line 72
 +    iget-object v1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
 +
 +    invoke-virtual {v1, p1}, Lorg/json/JSONObject;->optJSONArray(Ljava/lang/String;)Lorg/json/JSONArray;
 +
 +    move-result-object p1
 +
-+    .line 70
++    .line 73
 +    if-eqz p1, :cond_1e
 +
 +    const/4 v1, 0x0
@@ -5971,7 +6476,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_e
 +
-+    .line 71
++    .line 74
 +    :cond_1e
 +    return-object v0
 +.end method
@@ -5989,22 +6494,22 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +        }
 +    .end annotation
 +
-+    .line 378
++    .line 424
 +    new-instance v0, Ljava/util/HashSet;
 +
 +    invoke-direct {v0}, Ljava/util/HashSet;-><init>()V
 +
-+    .line 379
++    .line 425
 +    invoke-direct {p0, v0, p1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->addStrings(Ljava/util/Set;Lorg/json/JSONArray;)V
 +
-+    .line 380
++    .line 426
 +    return-object v0
 +.end method
 +
 +.method private toggle(Ljava/lang/String;Landroidx/preference/Preference;)V
 +    .registers 4
 +
-+    .line 102
++    .line 148
 +    :try_start_0
 +    instance-of v0, p2, Landroidx/preference/TwoStatePreference;
 +
@@ -6038,46 +6543,46 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    :cond_19
 +    const/4 p2, 0x0
 +
-+    .line 103
++    .line 149
 +    :goto_1a
 +    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
 +
 +    invoke-virtual {v0, p1, p2}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
-+    .line 104
++    .line 150
 +    invoke-direct {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->save()Z
 +    :try_end_22
 +    .catch Lorg/json/JSONException; {:try_start_0 .. :try_end_22} :catch_23
 +
 +    goto :goto_24
 +
-+    .line 106
++    .line 152
 +    :catch_23
 +    move-exception p1
 +
 +    :goto_24
 +    nop
 +
-+    .line 107
++    .line 153
 +    return-void
 +.end method
 +
 +.method private unknownChoices()V
 +    .registers 5
 +
-+    .line 386
++    .line 432
 +    invoke-virtual {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
 +
 +    move-result-object v0
 +
-+    .line 387
++    .line 433
 +    const-string/jumbo v1, "installerSpoof"
 +
 +    invoke-direct {p0, v1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->map(Ljava/lang/String;)Lorg/json/JSONObject;
 +
 +    move-result-object v1
 +
-+    .line 388
++    .line 434
 +    new-instance v2, Ljava/lang/Thread;
 +
 +    new-instance v3, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$10;
@@ -6088,24 +6593,24 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {v2, v3, v0}, Ljava/lang/Thread;-><init>(Ljava/lang/Runnable;Ljava/lang/String;)V
 +
-+    .line 406
++    .line 452
 +    invoke-virtual {v2}, Ljava/lang/Thread;->start()V
 +
-+    .line 407
++    .line 453
 +    return-void
 +.end method
 +
 +.method private userApp(Landroid/content/pm/ApplicationInfo;)Z
 +    .registers 4
 +
-+    .line 81
++    .line 84
 +    iget v0, p1, Landroid/content/pm/ApplicationInfo;->uid:I
 +
 +    const v1, 0x186a0
 +
 +    rem-int/2addr v0, v1
 +
-+    .line 82
++    .line 85
 +    const/16 v1, 0x2710
 +
 +    if-lt v0, v1, :cond_2a
@@ -6154,10 +6659,10 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method private writeBackup(Landroid/net/Uri;)V
 +    .registers 7
 +
-+    .line 241
++    .line 287
 +    nop
 +
-+    .line 243
++    .line 289
 +    const v0, 0x104000a
 +
 +    const/4 v1, 0x0
@@ -6178,10 +6683,10 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    .catch Ljava/lang/Exception; {:try_start_5 .. :try_end_11} :catch_4e
 +    .catchall {:try_start_5 .. :try_end_11} :catchall_4c
 +
-+    .line 244
++    .line 290
 +    if-eqz p1, :cond_44
 +
-+    .line 245
++    .line 291
 +    :try_start_13
 +    invoke-direct {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->exportPayload()Lorg/json/JSONObject;
 +
@@ -6201,7 +6706,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-virtual {p1, v2}, Ljava/io/OutputStream;->write([B)V
 +
-+    .line 246
++    .line 292
 +    new-instance v2, Landroid/app/AlertDialog$Builder;
 +
 +    invoke-virtual {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
@@ -6230,13 +6735,13 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_6e
 +
-+    .line 247
++    .line 293
 +    :catch_42
 +    move-exception v2
 +
 +    goto :goto_50
 +
-+    .line 244
++    .line 290
 +    :cond_44
 +    new-instance v2, Ljava/io/IOException;
 +
@@ -6249,19 +6754,19 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    .catch Ljava/lang/Exception; {:try_start_13 .. :try_end_4c} :catch_42
 +    .catchall {:try_start_13 .. :try_end_4c} :catchall_72
 +
-+    .line 249
++    .line 295
 +    :catchall_4c
 +    move-exception v0
 +
 +    goto :goto_74
 +
-+    .line 247
++    .line 293
 +    :catch_4e
 +    move-exception v2
 +
 +    move-object p1, v1
 +
-+    .line 248
++    .line 294
 +    :goto_50
 +    :try_start_50
 +    new-instance v3, Landroid/app/AlertDialog$Builder;
@@ -6294,14 +6799,14 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +    :try_end_6e
 +    .catchall {:try_start_50 .. :try_end_6e} :catchall_72
 +
-+    .line 249
++    .line 295
 +    :goto_6e
 +    invoke-direct {p0, p1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->closeQuietly(Ljava/io/Closeable;)V
 +
-+    .line 250
++    .line 296
 +    return-void
 +
-+    .line 249
++    .line 295
 +    :catchall_72
 +    move-exception v0
 +
@@ -6334,7 +6839,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public getMetricsCategory()I
 +    .registers 2
 +
-+    .line 37
++    .line 40
 +    const/16 v0, 0x2e8
 +
 +    return v0
@@ -6343,10 +6848,10 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +.method public onActivityResult(IILandroid/content/Intent;)V
 +    .registers 5
 +
-+    .line 214
++    .line 260
 +    invoke-super {p0, p1, p2, p3}, Lcom/android/settings/SettingsPreferenceFragment;->onActivityResult(IILandroid/content/Intent;)V
 +
-+    .line 215
++    .line 261
 +    const/4 v0, -0x1
 +
 +    if-ne p2, v0, :cond_27
@@ -6361,7 +6866,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_27
 +
-+    .line 216
++    .line 262
 +    :cond_f
 +    const/16 p2, 0x238d
 +
@@ -6378,7 +6883,7 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    goto :goto_26
 +
-+    .line 217
++    .line 263
 +    :cond_1b
 +    const/16 p2, 0x238e
 +
@@ -6391,219 +6896,245 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 -    invoke-interface {p1}, Ljava/util/List;->iterator()Ljava/util/Iterator;
 +    invoke-direct {p0, p1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->readBackup(Landroid/net/Uri;)V
 +
-+    .line 218
++    .line 264
 +    :cond_26
 +    :goto_26
 +    return-void
 +
-+    .line 215
++    .line 261
 +    :cond_27
 +    :goto_27
 +    return-void
 +.end method
 +
 +.method public onCreate(Landroid/os/Bundle;)V
-+    .registers 16
++    .registers 11
 +
-+    .line 39
++    .line 42
++    const-string/jumbo v0, "risky"
++
++    const-string/jumbo v1, "activity"
++
++    const-string/jumbo v2, "hidden"
++
++    const-string/jumbo v3, "targets"
++
++    const-string/jumbo v4, "enabled"
++
 +    invoke-super {p0, p1}, Lcom/android/settings/SettingsPreferenceFragment;->onCreate(Landroid/os/Bundle;)V
 +
-+    .line 40
++    .line 43
 +    const-string/jumbo p1, "xml"
 +
-+    const-string/jumbo v0, "unica_hma_privacy_settings"
++    const-string/jumbo v5, "unica_hma_privacy_settings"
 +
-+    invoke-static {p1, v0}, Lio/mesalabs/unica/utils/Utils;->getResourceId(Ljava/lang/String;Ljava/lang/String;)I
++    invoke-static {p1, v5}, Lio/mesalabs/unica/utils/Utils;->getResourceId(Ljava/lang/String;Ljava/lang/String;)I
 +
 +    move-result p1
 +
 +    invoke-virtual {p0, p1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->addPreferencesFromResource(I)V
 +
-+    .line 42
++    .line 45
 +    const/4 p1, 0x0
 +
-+    :try_start_f
-+    invoke-virtual {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getActivity()Landroidx/fragment/app/FragmentActivity;
++    const/4 v5, 0x1
 +
-+    move-result-object v0
++    :try_start_1a
++    invoke-direct {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->getPolicyString()Ljava/lang/String;
 +
-+    invoke-virtual {v0}, Landroidx/fragment/app/FragmentActivity;->getContentResolver()Landroid/content/ContentResolver;
-+
-+    move-result-object v0
-+
-+    const-string/jumbo v1, "unica_hma_policy"
-+
-+    invoke-static {v0, v1}, Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;
-+
-+    move-result-object v0
-+
-+    .line 43
-+    new-instance v1, Lorg/json/JSONObject;
-+
-+    if-nez v0, :cond_24
-+
-+    const-string/jumbo v2, "{}"
-+
-+    goto :goto_25
-+
-+    :cond_24
-+    move-object v2, v0
-+
-+    :goto_25
-+    invoke-direct {v1, v2}, Lorg/json/JSONObject;-><init>(Ljava/lang/String;)V
-+
-+    iput-object v1, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
-+
-+    .line 44
-+    if-nez v0, :cond_60
++    move-result-object v6
 +
 +    .line 46
-+    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
++    new-instance v7, Lorg/json/JSONObject;
 +
-+    const-string/jumbo v1, "targets"
++    if-nez v6, :cond_25
 +
-+    const-string/jumbo v2, "HideDeveloperStatusUtils"
++    const-string/jumbo v8, "{}"
 +
-+    const-string/jumbo v3, "unica_hide_dev_list"
++    goto :goto_26
 +
-+    invoke-direct {p0, v2, v3}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->legacyList(Ljava/lang/String;Ljava/lang/String;)Lorg/json/JSONArray;
++    :cond_25
++    move-object v8, v6
 +
-+    move-result-object v2
++    :goto_26
++    invoke-direct {v7, v8}, Lorg/json/JSONObject;-><init>(Ljava/lang/String;)V
 +
-+    invoke-virtual {v0, v1, v2}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
++    iput-object v7, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
 +
 +    .line 47
-+    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
-+
-+    const-string/jumbo v1, "hidden"
-+
-+    const-string/jumbo v2, "HideAppListUtils"
-+
-+    const-string/jumbo v3, "unica_hma_list"
-+
-+    invoke-direct {p0, v2, v3}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->legacyList(Ljava/lang/String;Ljava/lang/String;)Lorg/json/JSONArray;
-+
-+    move-result-object v2
-+
-+    invoke-virtual {v0, v1, v2}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
-+
-+    .line 48
-+    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
-+
-+    const-string/jumbo v1, "enabled"
-+
-+    invoke-virtual {v0, v1, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
++    if-nez v6, :cond_56
 +
 +    .line 49
-+    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
++    iget-object v6, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
 +
-+    const-string/jumbo v1, "activity"
++    const-string/jumbo v7, "HideDeveloperStatusUtils"
 +
-+    const/4 v2, 0x1
++    const-string/jumbo v8, "unica_hide_dev_list"
 +
-+    invoke-virtual {v0, v1, v2}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
++    invoke-direct {p0, v7, v8}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->legacyList(Ljava/lang/String;Ljava/lang/String;)Lorg/json/JSONArray;
++
++    move-result-object v7
++
++    invoke-virtual {v6, v3, v7}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 +
 +    .line 50
-+    iget-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
++    iget-object v6, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
 +
-+    const-string/jumbo v1, "risky"
++    const-string/jumbo v7, "HideAppListUtils"
 +
-+    invoke-virtual {v0, v1, v2}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
-+    :try_end_60
-+    .catch Lorg/json/JSONException; {:try_start_f .. :try_end_60} :catch_61
++    const-string/jumbo v8, "unica_hma_list"
++
++    invoke-direct {p0, v7, v8}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->legacyList(Ljava/lang/String;Ljava/lang/String;)Lorg/json/JSONArray;
++
++    move-result-object v7
++
++    invoke-virtual {v6, v2, v7}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
++
++    .line 51
++    iget-object v6, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
++
++    invoke-virtual {v6, v4, p1}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
 +    .line 52
-+    :cond_60
-+    goto :goto_69
++    iget-object v6, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
 +
-+    :catch_61
-+    move-exception v0
-+
-+    new-instance v0, Lorg/json/JSONObject;
-+
-+    invoke-direct {v0}, Lorg/json/JSONObject;-><init>()V
-+
-+    iput-object v0, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
++    invoke-virtual {v6, v1, v5}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
 +
 +    .line 53
-+    :goto_69
-+    const-string/jumbo v12, "backup"
++    iget-object v6, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
 +
-+    const-string/jumbo v13, "restore"
++    invoke-virtual {v6, v0, v5}, Lorg/json/JSONObject;->put(Ljava/lang/String;Z)Lorg/json/JSONObject;
++    :try_end_56
++    .catch Lorg/json/JSONException; {:try_start_1a .. :try_end_56} :catch_57
 +
-+    const-string/jumbo v1, "enabled"
++    .line 55
++    :cond_56
++    goto :goto_5f
 +
-+    const-string/jumbo v2, "targets"
++    :catch_57
++    move-exception v6
 +
-+    const-string/jumbo v3, "hidden"
++    new-instance v6, Lorg/json/JSONObject;
 +
-+    const-string/jumbo v4, "playUpdate"
++    invoke-direct {v6}, Lorg/json/JSONObject;-><init>()V
 +
-+    const-string/jumbo v5, "unknown"
++    iput-object v6, p0, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->config:Lorg/json/JSONObject;
 +
-+    const-string/jumbo v6, "activity"
++    .line 56
++    :goto_5f
++    const/16 v6, 0xd
 +
-+    const-string/jumbo v7, "invertActivity"
++    new-array v7, v6, [Ljava/lang/String;
 +
-+    const-string/jumbo v8, "apps"
++    aput-object v4, v7, p1
 +
-+    const-string/jumbo v9, "settings"
++    aput-object v3, v7, v5
 +
-+    const-string/jumbo v10, "risky"
++    const/4 v3, 0x2
 +
-+    const-string/jumbo v11, "gids"
++    aput-object v2, v7, v3
 +
-+    filled-new-array/range {v1 .. v13}, [Ljava/lang/String;
++    const/4 v2, 0x3
++
++    const-string/jumbo v3, "playUpdate"
++
++    aput-object v3, v7, v2
++
++    const/4 v2, 0x4
++
++    const-string/jumbo v3, "unknown"
++
++    aput-object v3, v7, v2
++
++    const/4 v2, 0x5
++
++    aput-object v1, v7, v2
++
++    const/4 v1, 0x6
++
++    const-string/jumbo v2, "invertActivity"
++
++    aput-object v2, v7, v1
++
++    const/4 v1, 0x7
++
++    const-string/jumbo v2, "apps"
++
++    aput-object v2, v7, v1
++
++    const/16 v1, 0x8
++
++    const-string/jumbo v2, "settings"
++
++    aput-object v2, v7, v1
++
++    const/16 v1, 0x9
++
++    aput-object v0, v7, v1
++
++    const/16 v0, 0xa
++
++    const-string/jumbo v1, "gids"
++
++    aput-object v1, v7, v0
++
++    const/16 v0, 0xb
++
++    const-string/jumbo v1, "backup"
++
++    aput-object v1, v7, v0
++
++    const/16 v0, 0xc
++
++    const-string/jumbo v1, "restore"
++
++    aput-object v1, v7, v0
++
++    :goto_9d
++    if-ge p1, v6, :cond_be
++
++    aget-object v0, v7, p1
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string/jumbo v2, "hma_"
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
 +    move-result-object v0
 +
-+    :goto_87
-+    const/16 v1, 0xd
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 +
-+    if-ge p1, v1, :cond_aa
++    move-result-object v0
 +
-+    aget-object v1, v0, p1
++    invoke-virtual {p0, v0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
 +
-+    new-instance v2, Ljava/lang/StringBuilder;
++    move-result-object v0
 +
-+    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
-+
-+    const-string/jumbo v3, "hma_"
-+
-+    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v2
-+
-+    invoke-virtual {v2, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v1
-+
-+    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-+
-+    move-result-object v1
-+
-+    invoke-virtual {p0, v1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
-+
-+    move-result-object v1
-+
-+    invoke-virtual {v1, p0}, Landroidx/preference/Preference;->setOnPreferenceClickListener(Landroidx/preference/Preference$OnPreferenceClickListener;)V
++    invoke-virtual {v0, p0}, Landroidx/preference/Preference;->setOnPreferenceClickListener(Landroidx/preference/Preference$OnPreferenceClickListener;)V
 +
 +    add-int/lit8 p1, p1, 0x1
 +
-+    goto :goto_87
++    goto :goto_9d
 +
-+    .line 54
-+    :cond_aa
++    .line 57
++    :cond_be
 +    invoke-direct {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->refresh()V
 +
-+    .line 55
++    .line 58
 +    return-void
 +.end method
 +
 +.method public onPreferenceClick(Landroidx/preference/Preference;)Z
 +    .registers 10
 +
-+    .line 109
++    .line 155
 +    invoke-virtual {p1}, Landroidx/preference/Preference;->getKey()Ljava/lang/String;
 +
 +    move-result-object v0
@@ -6614,44 +7145,56 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result-object v3
 +
-+    .line 110
++    .line 156
 +    const-string/jumbo v0, "backup"
 +
 +    invoke-virtual {v0, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result v0
 +
-+    if-eqz v0, :cond_16
++    const/4 v1, 0x1
++
++    if-eqz v0, :cond_17
 +
 +    invoke-direct {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->backupConfig()V
 +
-+    goto/16 :goto_a5
++    goto/16 :goto_ad
 +
-+    .line 111
-+    :cond_16
++    .line 157
++    :cond_17
 +    const-string/jumbo v0, "restore"
 +
 +    invoke-virtual {v0, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result v0
 +
-+    if-eqz v0, :cond_23
++    if-eqz v0, :cond_24
 +
 +    invoke-direct {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->restoreConfig()V
 +
-+    goto/16 :goto_a5
++    goto/16 :goto_ad
 +
-+    .line 112
-+    :cond_23
-+    const-string/jumbo v0, "activity"
++    .line 158
++    :cond_24
++    const/4 v0, 0x3
 +
-+    const-string/jumbo v1, "risky"
++    new-array v0, v0, [Ljava/lang/String;
 +
-+    const-string/jumbo v2, "enabled"
++    const/4 v2, 0x0
 +
-+    filled-new-array {v2, v0, v1}, [Ljava/lang/String;
++    const-string/jumbo v4, "enabled"
 +
-+    move-result-object v0
++    aput-object v4, v0, v2
++
++    const-string/jumbo v2, "activity"
++
++    aput-object v2, v0, v1
++
++    const/4 v2, 0x2
++
++    const-string/jumbo v4, "risky"
++
++    aput-object v4, v0, v2
 +
 +    invoke-static {v0}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
 +
@@ -6661,21 +7204,21 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    move-result v0
 +
-+    if-eqz v0, :cond_3b
++    if-eqz v0, :cond_43
 +
 +    invoke-direct {p0, v3, p1}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->toggle(Ljava/lang/String;Landroidx/preference/Preference;)V
 +
-+    goto :goto_a5
++    goto :goto_ad
 +
-+    .line 113
-+    :cond_3b
++    .line 159
++    :cond_43
 +    const-string/jumbo p1, "apps"
 +
 +    invoke-virtual {p1, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result p1
 +
-+    if-eqz p1, :cond_4f
++    if-eqz p1, :cond_57
 +
 +    sget-object v5, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->APP_KEYS:[Ljava/lang/String;
 +
@@ -6689,17 +7232,17 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct/range {v2 .. v7}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->choices(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;[Ljava/lang/String;Ljava/util/Set;)V
 +
-+    goto :goto_a5
++    goto :goto_ad
 +
-+    .line 114
-+    :cond_4f
++    .line 160
++    :cond_57
 +    const-string/jumbo p1, "settings"
 +
 +    invoke-virtual {p1, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result p1
 +
-+    if-eqz p1, :cond_63
++    if-eqz p1, :cond_6b
 +
 +    sget-object v5, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->SETTING_KEYS:[Ljava/lang/String;
 +
@@ -6713,17 +7256,17 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct/range {v2 .. v7}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->choices(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;[Ljava/lang/String;Ljava/util/Set;)V
 +
-+    goto :goto_a5
++    goto :goto_ad
 +
-+    .line 115
-+    :cond_63
++    .line 161
++    :cond_6b
 +    const-string/jumbo p1, "gids"
 +
 +    invoke-virtual {p1, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result p1
 +
-+    if-eqz p1, :cond_96
++    if-eqz p1, :cond_9e
 +
 +    new-instance p1, Landroid/app/AlertDialog$Builder;
 +
@@ -6800,9 +7343,9 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    const/high16 v0, 0x1040000
 +
-+    const/4 v1, 0x0
++    const/4 v2, 0x0
 +
-+    invoke-virtual {p1, v0, v1}, Landroid/app/AlertDialog$Builder;->setNegativeButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++    invoke-virtual {p1, v0, v2}, Landroid/app/AlertDialog$Builder;->setNegativeButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
 +
 +    move-result-object p1
 +
@@ -6810,18 +7353,18 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 +
 +    invoke-direct {v0, p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$1;-><init>(Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;)V
 +
-+    const-string/jumbo v1, "Continue"
++    const-string/jumbo v2, "Continue"
 +
-+    invoke-virtual {p1, v1, v0}, Landroid/app/AlertDialog$Builder;->setPositiveButton(Ljava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++    invoke-virtual {p1, v2, v0}, Landroid/app/AlertDialog$Builder;->setPositiveButton(Ljava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
 +
 +    move-result-object p1
 +
 +    invoke-virtual {p1}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
 +
-+    goto :goto_a5
++    goto :goto_ad
 +
-+    .line 116
-+    :cond_96
++    .line 162
++    :cond_9e
 +    const-string/jumbo p1, "unknown"
 +
 +    invoke-virtual {p1, v3}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
@@ -7034,21 +7577,19 @@ diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatus
 -
 -    return-void
 -.end method
-+    if-eqz p1, :cond_a2
++    if-eqz p1, :cond_aa
 +
 +    invoke-direct {p0}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->unknownChoices()V
 +
-+    goto :goto_a5
++    goto :goto_ad
 +
-+    .line 117
-+    :cond_a2
++    .line 163
++    :cond_aa
 +    invoke-direct {p0, v3}, Lio/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment;->appChoices(Ljava/lang/String;)V
 +
-+    .line 118
-+    :goto_a5
-+    const/4 p1, 0x1
-+
-+    return p1
++    .line 164
++    :goto_ad
++    return v1
 +.end method
 diff --git a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$$ExternalSyntheticLambda0.smali b/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$$ExternalSyntheticLambda0.smali
 --- a/smali_classes4/io/mesalabs/unica/settings/spoof/HideDeveloperStatusFragment$$ExternalSyntheticLambda0.smali

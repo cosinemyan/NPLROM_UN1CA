@@ -1,0 +1,46 @@
+--- a/examples/qualcomm/oss_scripts/llama/runner/runner.cpp
++++ b/examples/qualcomm/oss_scripts/llama/runner/runner.cpp
+@@ -237,7 +237,9 @@
+   ET_CHECK_MSG(num_layers != -1, "Could not retrieve num layers");
+   // k_cache: [1, n_heads, head_dim, seq_len]
+   auto k_cache_shape = method_meta->output_tensor_meta(1)->sizes();
+-  int64_t num_heads = k_cache_shape[1];
++  const bool legacy_heads = k_cache_shape.size() == 3;
++  if (legacy_heads) num_layers = (method_meta->num_outputs() - 1) / 2;
++  int64_t num_heads = legacy_heads ? 1 : k_cache_shape[1];
+   bool use_int64_token = method_meta->input_tensor_meta(0)->scalar_type() ==
+       executorch::aten::ScalarType::Long;
+ 
+@@ -249,8 +251,8 @@
+   int32_t max_ar_len = 0;
+   // atten mask: [1, 1, AR-N, CL]
+   auto atten_mask_meta_token = method_meta->input_tensor_meta(1);
+-  token_generator_ar_len = atten_mask_meta_token->sizes()[2];
+-  context_len_ = atten_mask_meta_token->sizes()[3];
++  token_generator_ar_len = atten_mask_meta_token->sizes()[atten_mask_meta_token->sizes().size()-2];
++  context_len_ = atten_mask_meta_token->sizes()[atten_mask_meta_token->sizes().size()-1];
+   if (eval_mode_ == EvalMode::kKVCached) {
+     prompt_processor_ar_len = token_generator_ar_len;
+   } else if (
+@@ -259,7 +261,7 @@
+     auto atten_mask_meta_prompt =
+         module_->method_meta(prompt_processor_method_name)
+             ->input_tensor_meta(1);
+-    prompt_processor_ar_len = atten_mask_meta_prompt->sizes()[2];
++    prompt_processor_ar_len = atten_mask_meta_prompt->sizes()[atten_mask_meta_prompt->sizes().size()-2];
+   }
+   if (prompt_processor_ar_len == context_len_)
+     max_cache_len = context_len_;
+--- a/examples/qualcomm/oss_scripts/llama/runner/kv_manager.cpp
++++ b/examples/qualcomm/oss_scripts/llama/runner/kv_manager.cpp
+@@ -154,8 +154,8 @@
+ 
+     // k_cache shape: [1, n_kv, head_dim, ar_len] -> head_dim at dim 2
+     // v_cache shape: [1, n_kv, ar_len, head_dim] -> head_dim at dim 3
+-    const int64_t k_head_dim = k_out->sizes()[2];
+-    const int64_t v_head_dim = v_out->sizes()[3];
++    const int64_t k_head_dim = k_out->sizes()[k_out->sizes().size()-2];
++    const int64_t v_head_dim = v_out->sizes()[v_out->sizes().size()-1];
+     ET_CHECK_MSG(
+         k_head_dim == v_head_dim,
+         "K/V head_dim mismatch at layer %d (k %d, v %d). Expected output order [logits, k_0..n-1, v_0..n-1] with k [1, n_kv, head_dim, ar_len] and v [1, n_kv, ar_len, head_dim]",

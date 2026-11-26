@@ -1,0 +1,38 @@
+--- a/smali_classes15/com/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler.smali
++++ b/smali_classes15/com/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler.smali
+@@ -1237,7 +1237,11 @@
+ 
+     const/16 v31, 0x0
+ 
+-    const/4 v14, 0x0
++    iget-object v14, v0, Lcom/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler;->context:Landroid/content/Context;
++
++    invoke-static {v14}, Lio/mesalabs/rezoss/ai/NativeNowNudgeRoute;->enabled(Landroid/content/Context;)Z
++
++    move-result v14
+ 
+     move-object v10, v15
+ 
+@@ -1293,8 +1297,22 @@
+ 
+     move-object v10, v15
+ 
++    iget-object v1, v0, Lcom/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler;->context:Landroid/content/Context;
++
++    invoke-static {v1}, Lio/mesalabs/rezoss/ai/NativeNowNudgeRoute;->enabled(Landroid/content/Context;)Z
++
++    move-result v1
++
++    if-eqz v1, :rezoss_original_notification_timeout
++
++    const-wide/16 v11, 0x1e
++
++    goto :rezoss_notification_timeout_ready
++
++    :rezoss_original_notification_timeout
+     const-wide/16 v11, 0x3
+ 
++    :rezoss_notification_timeout_ready
+     sget-object v1, Ljava/util/concurrent/TimeUnit;->SECONDS:Ljava/util/concurrent/TimeUnit;
+ 
+     invoke-virtual {v2, v11, v12, v1}, Ljava/util/concurrent/CountDownLatch;->await(JLjava/util/concurrent/TimeUnit;)Z

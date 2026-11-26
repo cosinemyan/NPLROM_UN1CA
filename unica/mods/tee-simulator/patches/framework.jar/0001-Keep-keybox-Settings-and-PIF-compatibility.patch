@@ -1,0 +1,54 @@
+From: Rezoss
+Subject: [PATCH] Keep Settings and PIF APIs for the native KeyMint backend
+
+diff --git a/smali_classes6/io/mesalabs/unica/KeyboxImitationHooks.smali b/smali_classes6/io/mesalabs/unica/KeyboxImitationHooks.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes6/io/mesalabs/unica/KeyboxImitationHooks.smali
+@@ -0,0 +1,5 @@
++# Compatibility marker for the existing Settings menu and PIF build check.
++# Keystore interception is entirely native; no Java proxy methods are installed.
++.class public final Lio/mesalabs/unica/KeyboxImitationHooks;
++.super Ljava/lang/Object;
++.source "TeeSimulatorCompatibility.java"
+diff --git a/smali_classes6/io/mesalabs/unica/KeyProviderManager.smali b/smali_classes6/io/mesalabs/unica/KeyProviderManager.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes6/io/mesalabs/unica/KeyProviderManager.smali
+@@ -0,0 +1,36 @@
++# PIF compatibility API. A recent successful native commit is required.
++.class public final Lio/mesalabs/unica/KeyProviderManager;
++.super Ljava/lang/Object;
++.source "TeeSimulatorCompatibility.java"
++
++.method public static blacklist isKeyboxAvailable()Z
++    .locals 6
++
++    const-string v0, "persist.sys.unica.keybox"
++    const/4 v1, 0x0
++    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++    move-result v0
++    if-eqz v0, :unavailable
++
++    const-string v0, "sys.unica.teesim.ready"
++    const-wide/16 v2, 0x0
++    invoke-static {v0, v2, v3}, Landroid/os/SemSystemProperties;->getLong(Ljava/lang/String;J)J
++    move-result-wide v4
++    cmp-long v0, v4, v2
++    if-lez v0, :unavailable
++
++    invoke-static {}, Landroid/os/SystemClock;->elapsedRealtime()J
++    move-result-wide v0
++    sub-long/2addr v0, v4
++    cmp-long v4, v0, v2
++    if-ltz v4, :unavailable
++    const-wide/32 v2, 0xafc8
++    cmp-long v4, v0, v2
++    if-gez v4, :unavailable
++    const/4 v0, 0x1
++    return v0
++
++    :unavailable
++    const/4 v0, 0x0
++    return v0
++.end method

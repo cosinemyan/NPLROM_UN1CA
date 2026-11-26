@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unica_quick_tiles_title">Quick Tiles</string>
+    <string name="unica_quick_tiles_summary">Configure eight independent Quick Settings shortcuts</string>
+</resources>

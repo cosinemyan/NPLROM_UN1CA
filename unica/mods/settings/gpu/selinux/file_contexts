@@ -1,0 +1,8 @@
+/system/bin/unica-gpu u:object_r:unica_gpu_exec:s0
+/data/misc/unica_gpu(/.*)? u:object_r:unica_gpu_data:s0
+/data/misc/unica_gpu/requests(/.*)? u:object_r:unica_gpu_request:s0
+/data/misc/unica_gpu/responses(/.*)? u:object_r:unica_gpu_response:s0
+/data/misc/unica_gpu/archives(/.*)? u:object_r:unica_gpu_archive:s0
+/cache/unica-gpu(/.*)? u:object_r:unica_gpu_backup:s0
+/dev/block/sda28 u:object_r:unica_gpu_block:s0
+/dev/block/sde20 u:object_r:unica_gpu_vbmeta:s0

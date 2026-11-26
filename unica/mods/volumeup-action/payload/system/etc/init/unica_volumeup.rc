@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+service unica_volumeup /system/bin/unica-volumeup
+    user root
+    group input
+    capabilities
+    seclabel u:r:unica_volumeup:s0
+    disabled
+    oneshot
+    timeout_period 9
+
+on post-fs
+    start unica_volumeup
+
+# Fixed request from the detector; only init writes the power-control property.
+on property:sys.unica.volumeup.recovery=1
+    setprop sys.powerctl reboot,recovery

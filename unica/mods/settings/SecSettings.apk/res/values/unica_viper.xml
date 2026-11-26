@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unica_viper_title">ViPER4Android</string>
+    <string name="unica_viper_on">Audio processing enabled. Tune effects and profiles in ViPER4Android.</string>
+    <string name="unica_viper_off">Audio processing disabled. Your profiles are saved.</string>
+    <string name="unica_viper_options_title">ViPER effects and profiles</string>
+    <string name="unica_viper_options_summary">Open the equalizer, audio effects and device profiles.</string>
+    <string name="unica_viper_error">Could not connect to ViPER4Android. Open the app and try again.</string>
+</resources>

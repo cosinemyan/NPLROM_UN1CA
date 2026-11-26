@@ -1,0 +1,12 @@
+{
+  "kotlin-compiler-embeddable-2.2.10.jar": "79628fd5d64b4692a62f98962baab00e9076a37e2cffd6ace33cd0b7be7d1cdf",
+  "kotlin-stdlib-2.2.10.jar": "9c67cc79efd6b9215b49d2a4308f5f3433537376c7c88e89bdd6729bd096e61a",
+  "kotlin-script-runtime-2.2.10.jar": "c304a67dba6a61dde560e6310920bed746307c3854f6675c29ac29114731b6b0",
+  "kotlin-reflect-1.6.10.jar": "3277ac102ae17aad10a55abec75ff5696c8d109790396434b496e75087854203",
+  "kotlin-daemon-embeddable-2.2.10.jar": "b31573d418961fa080760fedcfc90d68ad67a85eafa245c73fe3d551476777ba",
+  "kotlinx-coroutines-core-jvm-1.8.0.jar": "9860906a1937490bf5f3b06d2f0e10ef451e65b95b269f22daf68a3d1f5065c5",
+  "annotations-13.0.jar": "ace2a10dc8e2d5fd34925ecac03e4988b2c0f851650c94b8cef49ba1bd111478",
+  "bcpkix-jdk18on-1.85.jar": "c9f82b2d4e99c4bbdfccf684e52cc06ea06a0b567bfd0d08f9c5a3f417055996",
+  "bcprov-jdk18on-1.85.jar": "20af26bf6060bb8005cc2389916812c1e0e998dc48d2ced7131b89461b54cff7",
+  "bcutil-jdk18on-1.85.jar": "590f55ed5d68529239898a4a5c4f730b6e37f45d1cfa3fbe51f8485abe32c42d"
+}

@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "updated": "2026-11-07",
+  "catalog_entries": 61,
+  "verified_entries": 60,
+  "pending_entries": 0,
+  "not_applicable_entries": 0,
+  "unverified_identity_entries": 1,
+  "user_classified_conflict_entries": 28,
+  "root_rules": 123,
+  "lsposed_purpose_rules": 21,
+  "lsposed_confirmed_conflict_rules": 0
+}

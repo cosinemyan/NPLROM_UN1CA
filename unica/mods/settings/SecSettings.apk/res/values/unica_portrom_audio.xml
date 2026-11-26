@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unica_portrom_audio_title">PortROM audio by Lindir Music</string>
+    <string name="unica_portrom_audio_off">Original ROM sounds. PortROM By Lindir Music.</string>
+    <string name="unica_portrom_audio_active">PortROM sounds are active. By Lindir Music.</string>
+    <string name="unica_portrom_audio_pending_on">PortROM selected. Restart to apply sounds. If already restarted, the sound overlay did not load.</string>
+    <string name="unica_portrom_audio_pending_off">Original sounds selected. Restart to restore them.</string>
+    <string name="unica_portrom_audio_error">Could not save the PortROM audio selection.</string>
+    <string name="unica_portrom_audio_reboot_title">Restart required</string>
+    <string name="unica_portrom_audio_reboot_message">Restart your phone to apply the selected sound pack.</string>
+    <string name="unica_portrom_audio_reboot_now">Reboot Now</string>
+    <string name="unica_portrom_audio_reboot_later">Later</string>
+    <string name="unica_portrom_audio_reboot_error">Could not restart. Your selection is saved; restart your phone manually.</string>
+</resources>

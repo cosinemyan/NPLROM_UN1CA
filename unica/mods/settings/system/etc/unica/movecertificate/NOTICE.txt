@@ -1,0 +1,11 @@
+Move Certificate by ys1231 — UN1CA ROM adaptation
+Upstream: https://github.com/ys1231/MoveCertificate
+Upstream license: Apache License 2.0
+
+The original module's temporary certificate-store mount approach and AdGuard
+intermediate exclusion informed this independently implemented ROM port.
+The ROM port replaces Magisk/KernelSU/APatch scripts and WebUI with a native
+init worker and a Settings activity. Only explicitly imported certificates
+are promoted; Android user certificates are never moved or deleted.
+
+UN1CA adaptation Copyright (c) 2026 Rezoss, GPL-3.0-or-later.

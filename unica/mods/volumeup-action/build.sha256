@@ -1,0 +1,4 @@
+343de192126c6750fd27cf2a6e8ee9f0840e1cc3df665fbcff301c7affb7b4a9  build.sh
+dfac15a93309061940513e344842f8f5c158f1a6ad35f48d61db3b4cc366c2ff  native/detector.cpp
+c30a0fc4e3f6f4166fb2c63ca10b07f3a1a4a374b6abefacc0da2fc8051e49ad  native/hold.h
+48628d7e1174169da7cedd2cba3a5221dbd8839e4272d719b6a02c87647e9b49  payload/system/bin/unica-volumeup

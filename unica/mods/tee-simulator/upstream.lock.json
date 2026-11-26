@@ -1,0 +1,31 @@
+{
+  "repository": "https://github.com/JingMatrix/TEESimulator.git",
+  "revision": "06f9f2ee11b86c5144a1f345f70f8fb23cae4493",
+  "dependencies": [
+    {
+      "path": "third_party/lsplt",
+      "url": "https://github.com/JingMatrix/LSPlt",
+      "revision": "9df80d48ac9084d614c2c81a52614ed78a434a9d"
+    },
+    {
+      "path": "third_party/keymint",
+      "url": "https://android.googlesource.com/platform/system/keymint",
+      "revision": "cfeefc94bf8c4f19d19dca193d376a1fc05e8e3e"
+    },
+    {
+      "path": "third_party/interfaces",
+      "url": "https://android.googlesource.com/platform/hardware/interfaces",
+      "revision": "0162af698935100a590b7359581ac8b1b80693e5"
+    },
+    {
+      "path": "third_party/frameworks-native",
+      "url": "https://android.googlesource.com/platform/frameworks/native",
+      "revision": "ae266dcb706d083868578cfedce381ef44488a07"
+    },
+    {
+      "path": "third_party/boringssl",
+      "url": "https://boringssl.googlesource.com/boringssl",
+      "revision": "423b1aa3b1dc62f01e46bbd51affee5f5e021db0"
+    }
+  ]
+}

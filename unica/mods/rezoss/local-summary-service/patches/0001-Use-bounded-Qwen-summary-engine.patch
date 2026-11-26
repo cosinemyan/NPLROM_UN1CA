@@ -1,0 +1,10 @@
+--- a/io/mesalabs/unica/localsummary/LocalSummaryProvider.smali
++++ b/io/mesalabs/unica/localsummary/LocalSummaryProvider.smali
+@@ -319,7 +319,7 @@
+     return-object v0
+
+     :cond_start
+-    invoke-static {v1}, Lio/mesalabs/unica/localsummary/LocalSummaryProvider;->summarizeWithServer(Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {v1}, Lio/mesalabs/unica/localsummary/QwenEngine;->summary(Ljava/lang/String;)Ljava/lang/String;
+
+     move-result-object v0

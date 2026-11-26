@@ -1,0 +1,10 @@
+--- a/io/mesalabs/unica/localsummary/LocalSummaryProvider.smali
++++ b/io/mesalabs/unica/localsummary/LocalSummaryProvider.smali
+@@ -479,7 +479,7 @@
+
+     invoke-virtual {v0, v1}, Ljava/lang/ProcessBuilder;->redirectErrorStream(Z)Ljava/lang/ProcessBuilder;
+
+-    invoke-virtual {v0}, Ljava/lang/ProcessBuilder;->start()Ljava/lang/Process;
++    invoke-static {v0}, Lio/mesalabs/unica/localsummary/QwenEngine;->startServer(Ljava/lang/ProcessBuilder;)V
+     :try_end_0
+     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0

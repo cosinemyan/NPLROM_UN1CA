@@ -1,0 +1,177 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: UN1CA <noreply@unica.local>
+Date: Sun, 20 Sep 2026 11:34:00 +0200
+Subject: [PATCH] Route notification-assistant requests to Now Nudge
+
+Samsung's native Now Nudge TextClassifier path only enters
+NowNudgeConversationActionsHandler when the conversation-action request is
+treated as a NotificationManager request and carries the now_nudge extra.
+
+On the current port, notification conversation-action requests from the
+assistant path are delegated back to the default classifier before the Now
+Nudge branch is evaluated.  When Samsung's package extras are already present,
+or when the framework only provides notificationKey, synthesize the Now Nudge
+extras and route the request to the native Now Nudge handler.
+
+diff --git a/smali_classes14/com/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService.smali b/smali_classes14/com/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService.smali
+--- a/smali_classes14/com/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService.smali
++++ b/smali_classes14/com/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService.smali
+@@ -886,6 +886,156 @@
+
+     if-eqz v1, :cond_0
+
++    iget-object v1, p0, Lcom/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService;->mPolicy:Lcom/samsung/android/smartsuggestions/service/textclassifier/CustomTextClassifierPolicy;
++
++    invoke-virtual {v1, p1}, Lcom/samsung/android/smartsuggestions/service/textclassifier/CustomTextClassifierPolicy;->getNowNudgeExtraValue(Landroid/view/textclassifier/ConversationActions$Request;)Z
++
++    move-result v1
++
++    if-nez v1, :rezoss_assistant_existing_now_nudge
++
++    invoke-virtual {p1}, Landroid/view/textclassifier/ConversationActions$Request;->getExtras()Landroid/os/Bundle;
++
++    move-result-object v1
++
++    if-eqz v1, :rezoss_assistant_default
++
++    const-string/jumbo v3, "PACKAGE_NAME"
++
++    invoke-virtual {v1, v3}, Landroid/os/BaseBundle;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v3
++
++    if-eqz v3, :rezoss_assistant_from_key
++
++    invoke-virtual {v3}, Ljava/lang/String;->length()I
++
++    move-result v4
++
++    if-lez v4, :rezoss_assistant_from_key
++
++    const-string/jumbo v5, "PACKAGE_NAME"
++
++    goto :rezoss_assistant_have_package
++
++    :rezoss_assistant_from_key
++    const-string/jumbo v3, "notificationKey"
++
++    invoke-virtual {v1, v3}, Landroid/os/BaseBundle;->get(Ljava/lang/String;)Ljava/lang/Object;
++
++    move-result-object v3
++
++    if-eqz v3, :rezoss_assistant_default
++
++    invoke-static {v3}, Ljava/lang/String;->valueOf(Ljava/lang/Object;)Ljava/lang/String;
++
++    move-result-object v3
++
++    invoke-virtual {v3}, Ljava/lang/String;->length()I
++
++    move-result v4
++
++    if-lez v4, :rezoss_assistant_default
++
++    const-string/jumbo v4, "\\|"
++
++    invoke-virtual {v3, v4}, Ljava/lang/String;->split(Ljava/lang/String;)[Ljava/lang/String;
++
++    move-result-object v3
++
++    array-length v4, v3
++
++    const/4 v5, 0x1
++
++    if-le v4, v5, :rezoss_assistant_default
++
++    aget-object v3, v3, v5
++
++    if-eqz v3, :rezoss_assistant_default
++
++    invoke-virtual {v3}, Ljava/lang/String;->length()I
++
++    move-result v4
++
++    if-lez v4, :rezoss_assistant_default
++
++    const-string/jumbo v4, "PACKAGE_NAME"
++
++    invoke-virtual {v1, v4, v3}, Landroid/os/BaseBundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
++
++    const-string/jumbo v5, "notificationKey"
++
++    :rezoss_assistant_have_package
++    const-string/jumbo v4, "TITLE"
++
++    invoke-virtual {v1, v4}, Landroid/os/BaseBundle;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v6
++
++    if-eqz v6, :rezoss_assistant_put_title
++
++    invoke-virtual {v6}, Ljava/lang/String;->length()I
++
++    move-result v7
++
++    if-lez v7, :rezoss_assistant_put_title
++
++    goto :rezoss_assistant_have_title
++
++    :rezoss_assistant_put_title
++    invoke-virtual {v1, v4, v3}, Landroid/os/BaseBundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
++
++    :rezoss_assistant_have_title
++    const-string/jumbo v3, "now_nudge"
++
++    const/4 v4, 0x1
++
++    invoke-virtual {v1, v3, v4}, Landroid/os/BaseBundle;->putBoolean(Ljava/lang/String;Z)V
++
++    goto :rezoss_assistant_log_reason
++
++    :rezoss_assistant_existing_now_nudge
++    const-string/jumbo v5, "now_nudge"
++
++    :rezoss_assistant_log_reason
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    const-string/jumbo v3, "onSuggestConversationActions, route AssistantService request to Now Nudge, reason="
++
++    invoke-direct {v1, v3}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
++
++    invoke-virtual {v1, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v2, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    :rezoss_assistant_now_nudge
++    const-string/jumbo v1, "onSuggestConversationActions, route AssistantService request to Now Nudge."
++
++    invoke-static {v2, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    new-instance v1, Lcom/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler;
++
++    invoke-virtual {p0}, Lcom/samsung/android/smartsuggestions/extservice/services/CustomTextClassifierService;->getApplicationContext()Landroid/content/Context;
++
++    move-result-object p0
++
++    invoke-direct {v1, p0}, Lcom/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler;-><init>(Landroid/content/Context;)V
++
++    invoke-virtual {v1, p2, p1, p3}, Lcom/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler;->suggestConversationActions(Landroid/view/textclassifier/TextClassificationSessionId;Landroid/view/textclassifier/ConversationActions$Request;Landroid/os/CancellationSignal;)Landroid/view/textclassifier/ConversationActions;
++
++    move-result-object p0
++
++    invoke-static {v0}, Lnd/a;->b(Ljava/lang/String;)V
++
++    return-object p0
++
++    :rezoss_assistant_default
+     const-string p2, "onSuggestConversationActions, return to the AssistantService."
+
+     invoke-static {v2, p2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
+--
+2.43.0

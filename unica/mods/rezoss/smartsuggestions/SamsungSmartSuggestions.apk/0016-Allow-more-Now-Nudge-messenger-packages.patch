@@ -1,0 +1,74 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: @rezoss_reza <rezoss79@users.noreply.github.com>
+Date: Sun, 19 Jul 2026 00:00:00 +0200
+Subject: [PATCH] Allow more Now Nudge messenger packages
+
+Samsung's PDE notification classifier only lets KakaoTalk pass the final
+package gate used by PdeNotificationListenerService.filterOutByClassifier().
+Keep KakaoTalk and add common messenger package names used on this ROM so
+valid classified notifications can reach the downstream Now Nudge path.
+
+---
+diff --git a/smali_classes12/com/samsung/android/moneta/mlkit/adapter/a.smali b/smali_classes12/com/samsung/android/moneta/mlkit/adapter/a.smali
+--- a/smali_classes12/com/samsung/android/moneta/mlkit/adapter/a.smali
++++ b/smali_classes12/com/samsung/android/moneta/mlkit/adapter/a.smali
+@@ -100,13 +100,57 @@
+     return-object p0
+
+     :pswitch_9
+-    const-string p0, "com.kakao.talk"
++    const/4 p0, 0x7
+
+-    invoke-static {p0}, Lkotlin/collections/u;->listOf(Ljava/lang/Object;)Ljava/util/List;
++    new-array p0, p0, [Ljava/lang/Object;
++
++    const/4 v0, 0x0
++
++    const-string v1, "com.kakao.talk"
++
++    aput-object v1, p0, v0
++
++    const/4 v0, 0x1
++
++    const-string v1, "com.whatsapp"
++
++    aput-object v1, p0, v0
++
++    const/4 v0, 0x2
++
++    const-string v1, "com.whatsapp.w4b"
++
++    aput-object v1, p0, v0
++
++    const/4 v0, 0x3
++
++    const-string v1, "org.telegram.messenger.web"
++
++    aput-object v1, p0, v0
++
++    const/4 v0, 0x4
++
++    const-string v1, "org.telegram.messenger"
++
++    aput-object v1, p0, v0
++
++    const/4 v0, 0x5
++
++    const-string v1, "com.samsung.android.messaging"
++
++    aput-object v1, p0, v0
++
++    const/4 v0, 0x6
++
++    const-string v1, "com.google.android.apps.messaging"
++
++    aput-object v1, p0, v0
++
++    invoke-static {p0}, Lkotlin/collections/u;->listOf([Ljava/lang/Object;)Ljava/util/List;
+
+     move-result-object p0
+
+     return-object p0
+
+     :pswitch_a
+     invoke-static {}, Lcom/samsung/android/pde/feature/notification/analyzer/InferenceFeatureAnalyzer;->a()Ljava/util/List;

@@ -1,0 +1,286 @@
+From: UN1CA <unica@local>
+Subject: [PATCH] Trial dm3q wide-pair Portrait digital zoom from1x to3x
+
+Scope the seamless Portrait UI to dm3 devices with the feature enabled.
+Pin rear Portrait routing to existing camera23 and retain DualBokehPhotoMaker.
+Override only camera23 PORTRAIT bounds to1..3; keep the existing live/capture
+CONTROL_ZOOM_RATIO and center-crop request path. Omit the second-tele shortcut
+and clamp remembered rear Portrait zoom. Existing registers are unchanged.
+Experimental: HAL crop acceptance, saved framing and depth/refocus alignment
+above2x require flashed-device validation. This does not implement new native
+crop commands, rewrite calibration or enable lens handoff. Existing disabled
+Portrait patches remain disabled. Disable the feature flag to roll back.
+
+--- a/smali_classes2/te/l0.smali
++++ b/smali_classes2/te/l0.smali
+@@ -1450,6 +1450,24 @@
+ .method public static g(Ll9/j0;IIZ)Ll9/x;
+     .locals 3
+
++    if-nez p1, :cond_wide_trial_original
++
++    sget-object v0, Ll9/j0;->SHOOTING_MODE_PORTRAIT:Ll9/j0;
++
++    if-ne p0, v0, :cond_wide_trial_original
++
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideTrial;->enabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_trial_original
++
++    sget-object v0, Ll9/x;->BACK_NORMAL_DUAL_PORTRAIT:Ll9/x;
++
++    return-object v0
++
++    :cond_wide_trial_original
++
+     if-eqz p1, :cond_4
+
+     const/4 p2, 0x1
+--- a/smali_classes2/te/f1.smali
++++ b/smali_classes2/te/f1.smali
+@@ -466,7 +466,20 @@
+
+     if-eqz v7, :cond_b
+
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideTrial;->enabled()Z
++
++    move-result v7
++
++    if-eqz v7, :cond_wide_trial_table_default
++
++    sget-object v7, Ll9/x;->BACK_NORMAL_DUAL_PORTRAIT:Ll9/x;
++
++    goto :goto_wide_trial_table
++
++    :cond_wide_trial_table_default
+     sget-object v7, Ll9/x;->BACK_SEAMLESS_ZOOM:Ll9/x;
++
++    :goto_wide_trial_table
+
+     invoke-virtual {v1, v14, v7}, Landroid/util/SparseArray;->put(ILjava/lang/Object;)V
+
+--- a/smali_classes2/u8/g.smali
++++ b/smali_classes2/u8/g.smali
+@@ -559,6 +559,17 @@
+
+     if-eqz p0, :cond_5
+
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideTrial;->enabled()Z
++
++    move-result p0
++
++    if-eqz p0, :cond_wide_trial_original_maker
++
++    sget-object p0, Lcom/samsung/android/camera/core2/maker/MakerFactory;->MAKER_DUAL_BOKEH_PHOTO:Ljava/lang/Class;
++
++    goto :goto_0
++
++    :cond_wide_trial_original_maker
+     check-cast p1, Lp8/e0;
+
+     iget-object p0, p1, Lp8/e0;->v:Lcom/sec/android/app/camera/Camera;
+--- a/smali_classes2/u8/e.smali
++++ b/smali_classes2/u8/e.smali
+@@ -684,6 +684,36 @@
+
+     iget-object v0, p0, Lu8/e;->s:Lcom/samsung/android/camera/core2/CamCapability;
+
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideTrial;->enabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_trial_f_original
++
++    sget-object v0, Ll9/g3;->PORTRAIT:Ll9/g3;
++
++    if-ne p1, v0, :cond_wide_trial_f_original
++
++    iget-object v0, p0, Lu8/e;->s:Lcom/samsung/android/camera/core2/CamCapability;
++
++    iget-object v0, v0, Lcom/samsung/android/camera/core2/CamCapability;->c:Ljava/lang/String;
++
++    const-string v1, "23"
++
++    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_trial_f_original
++
++    const/high16 v0, 0x40400000
++
++    return v0
++
++    :cond_wide_trial_f_original
++
++    iget-object v0, p0, Lu8/e;->s:Lcom/samsung/android/camera/core2/CamCapability;
++
+     sget-object v1, Ll9/g3;->NOT_SUPPORTED:Ll9/g3;
+
+     if-ne p1, v1, :cond_0
+@@ -850,6 +880,36 @@
+
+ .method public final g(Ll9/g3;Ll9/a2;)F
+     .locals 2
++
++    iget-object v0, p0, Lu8/e;->s:Lcom/samsung/android/camera/core2/CamCapability;
++
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideTrial;->enabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_trial_g_original
++
++    sget-object v0, Ll9/g3;->PORTRAIT:Ll9/g3;
++
++    if-ne p1, v0, :cond_wide_trial_g_original
++
++    iget-object v0, p0, Lu8/e;->s:Lcom/samsung/android/camera/core2/CamCapability;
++
++    iget-object v0, v0, Lcom/samsung/android/camera/core2/CamCapability;->c:Ljava/lang/String;
++
++    const-string v1, "23"
++
++    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_trial_g_original
++
++    const/high16 v0, 0x3f800000
++
++    return v0
++
++    :cond_wide_trial_g_original
+
+     iget-object v0, p0, Lu8/e;->s:Lcom/samsung/android/camera/core2/CamCapability;
+
+--- a/smali_classes2/ud/z.smali
++++ b/smali_classes2/ud/z.smali
+@@ -88,6 +88,12 @@
+     invoke-virtual {v6, v1, v0}, Lv/c;->a(ILl9/j0;)V
+
+     :cond_2
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideTrial;->enabled()Z
++
++    move-result v0
++
++    if-nez v0, :cond_3
++
+     sget-object v0, Le5/d;->SUPPORT_BACK_SECOND_TELE_CAMERA:Le5/d;
+
+     invoke-static {v0}, Le5/g;->o(Le5/d;)Z
+@@ -243,6 +249,26 @@
+ .method public final l(I)I
+     .locals 2
+
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideTrial;->enabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_trial_rear_zoom
++
++    iget-object v0, p0, Lcd/a;->a:Ll9/s;
++
++    check-cast v0, Lcom/sec/android/app/camera/Camera;
++
++    invoke-virtual {v0}, Lcom/sec/android/app/camera/Camera;->U()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_trial_rear_zoom
++
++    return p1
++
++    :cond_wide_trial_rear_zoom
++
+     sget-object v0, Le5/d;->SUPPORT_PORTRAIT_SEAMLESS_ZOOM:Le5/d;
+
+     invoke-static {v0}, Le5/g;->o(Le5/d;)Z
+@@ -259,6 +285,25 @@
+
+     if-eq p0, p1, :cond_0
+
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideTrial;->enabled()Z
++
++    move-result v0
++
++    if-eqz v0, :wide_trial_return_0
++
++    const/16 v0, 0x3e8
++
++    invoke-static {p0, v0}, Ljava/lang/Math;->max(II)I
++
++    move-result p0
++
++    const/16 v0, 0xbb8
++
++    invoke-static {p0, v0}, Ljava/lang/Math;->min(II)I
++
++    move-result p0
++
++    :wide_trial_return_0
+     return p0
+
+     :cond_0
+@@ -268,6 +313,25 @@
+
+     move-result p0
+
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideTrial;->enabled()Z
++
++    move-result v0
++
++    if-eqz v0, :wide_trial_return_1
++
++    const/16 v0, 0x3e8
++
++    invoke-static {p0, v0}, Ljava/lang/Math;->max(II)I
++
++    move-result p0
++
++    const/16 v0, 0xbb8
++
++    invoke-static {p0, v0}, Ljava/lang/Math;->min(II)I
++
++    move-result p0
++
++    :wide_trial_return_1
+     return p0
+
+     :cond_1
+--- /dev/null
++++ b/smali_classes5/com/rezoss/camera/PortraitWideTrial.smali
+@@ -0,0 +1,30 @@
++.class public final Lcom/rezoss/camera/PortraitWideTrial;
++.super Ljava/lang/Object;
++
++.method public static enabled()Z
++    .locals 2
++
++    sget-object v0, Landroid/os/Build;->DEVICE:Ljava/lang/String;
++
++    const-string v1, "dm3"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
++
++    move-result v0
++
++    if-eqz v0, :disabled
++
++    sget-object v0, Le5/d;->SUPPORT_PORTRAIT_SEAMLESS_ZOOM:Le5/d;
++
++    invoke-static {v0}, Le5/g;->o(Le5/d;)Z
++
++    move-result v0
++
++    return v0
++
++    :disabled
++    const/4 v0, 0x0
++
++    return v0
++.end method
++

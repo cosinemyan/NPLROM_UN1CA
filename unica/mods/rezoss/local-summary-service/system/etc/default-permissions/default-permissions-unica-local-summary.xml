@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<exceptions>
+    <exception package="io.mesalabs.unica.localsummary">
+        <permission name="android.permission.READ_CALENDAR" fixed="false" />
+    </exception>
+</exceptions>

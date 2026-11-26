@@ -1,0 +1,22 @@
+{
+  "ndk": "28.2.13676358",
+  "source_sdk": 37,
+  "sources": {
+    "native/build_native.py": "c4f95ae9cb89019b75a509266b577898b419f2112da9b76c0a3d10456703a19d",
+    "framework.jar/0001-Introduce-PlayIntegrityHooks.patch": "eea6ac6496a0f58aa3bb6fa20dea75c8086e9ae33fdabfa79dba2754d2ec85c3",
+    "framework.jar/0002-Spoof-PIF-system-properties.patch": "345442f0cf26ff1eb3eab4d7860c9e9964b93f452a5d6b5c1345560df421092b",
+    "native/source/bridge.cpp": "326274f85b02665414915337cb2bdbc7c0459bf3f9874f131c1d5c49cdfe0609",
+    "native/source/java/io/mesalabs/unica/PifProcessHooks.java": "aa23147ada658b430a85b5c7896b1dfb0ac9dd049659e895c93484294623298f",
+    "native/source/profile.hpp": "19017e7eb09107c6ab9109dd20bdfd269934ef32a75d417cfd28d40a33f8c4e1",
+    "native/source/vendor/LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    "native/source/vendor/UPSTREAM": "f8d6b6094c1ce90a00d85521e1ad23d3007f620a9e1986b775fc6f4abdf4ff4f",
+    "native/source/vendor/pif_config.hpp": "e2e52a6f4ba88a232b50135c25daaacb2d8f250fc1444b08398c7c05bf6c9689",
+    "native/source/vendor/property_virtualizer.cpp": "93504a4aa36440fef1741c8009f82de940230b72d4fc541ce62666e641b24d26",
+    "native/source/vendor/property_virtualizer.hpp": "60abe1a209ac9987494788fd34bb2d5cd7ebbacc55aa15963a26d2d4e0488531"
+  },
+  "outputs": {
+    "framework.jar/0003-Initialize-native-PIF-in-app-child.patch": "be728338e7b009b8891f834260cda2cc9cc777ab99078a5066802fa4834f8e81",
+    "native/payload/system/lib/libunica_pif.so": "419bbc32e0ab027d13507ba38f73611fccb4f98d6c9b9412992d0e7c22996c3b",
+    "native/payload/system/lib64/libunica_pif.so": "cf06d8afc5dbb3f65618468a22fcda83f54e862b4f0b8130d6fb5c21c8140c15"
+  }
+}

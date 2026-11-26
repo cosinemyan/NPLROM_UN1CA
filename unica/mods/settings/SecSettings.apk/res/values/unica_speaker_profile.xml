@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unica_speaker_profile_title">Speaker profile</string>
+    <string name="unica_speaker_profile_off">Original speaker processing. Restart required after changing this option.</string>
+    <string name="unica_speaker_profile_active">Adaptive26 speaker profile is active.</string>
+    <string name="unica_speaker_profile_pending_on">Speaker profile selected. Restart to apply. If already restarted, the complete profile did not load.</string>
+    <string name="unica_speaker_profile_pending_off">Original speaker processing selected. Restart to restore it.</string>
+    <string name="unica_speaker_profile_error">Could not save the speaker profile selection.</string>
+    <string name="unica_speaker_profile_reboot_title">Restart required</string>
+    <string name="unica_speaker_profile_reboot_message">Restart your phone to apply the selected speaker processing.</string>
+    <string name="unica_speaker_profile_reboot_now">Reboot Now</string>
+    <string name="unica_speaker_profile_reboot_later">Later</string>
+    <string name="unica_speaker_profile_reboot_error">Could not restart. Your selection is saved; restart your phone manually.</string>
+</resources>

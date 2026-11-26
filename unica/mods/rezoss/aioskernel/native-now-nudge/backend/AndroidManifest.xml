@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.samsung.android.aioskernelservice" android:versionCode="142801204" android:versionName="1.4.28">
+ <uses-sdk android:minSdkVersion="30" android:targetSdkVersion="36"/>
+ <permission android:name="com.samsung.android.aioskernelservice.EXECUTE_GENAI" android:protectionLevel="signature"/>
+ <uses-permission android:name="com.samsung.android.aioskernelservice.EXECUTE_GENAI"/>
+ <uses-permission android:name="io.mesalabs.rezoss.permission.QWEN_API"/>
+ <uses-permission android:name="io.mesalabs.rezoss.permission.V73_MODELS"/>
+ <queries><package android:name="com.samsung.android.app.memory"/><package android:name="io.mesalabs.rezoss.qwen"/><package android:name="io.mesalabs.unica.localsummary"/><package android:name="com.samsung.android.ssco"/></queries>
+ <application android:label="AIOS V73 reply POC" android:allowBackup="false" android:extractNativeLibs="true" android:largeHeap="true">
+  <service android:name="com.samsung.android.aioskernelservice.AIOSKernelService" android:exported="true" android:permission="com.samsung.android.aioskernelservice.EXECUTE_GENAI">
+   <intent-filter><action android:name="AIOSKernelService.AIDL"/></intent-filter>
+  </service>
+  <service android:name="io.mesalabs.rezoss.nudge.LocalInferenceService" android:exported="true" android:permission="io.mesalabs.rezoss.permission.QWEN_ENGINE"/>
+  <uses-native-library android:name="libcdsprpc.so" android:required="true"/>
+ </application>
+</manifest>

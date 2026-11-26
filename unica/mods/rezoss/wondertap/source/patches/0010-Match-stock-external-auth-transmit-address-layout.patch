@@ -1,0 +1,10 @@
+--- a/include/net/cfg80211.h
++++ b/include/net/cfg80211.h
+@@ -3857,6 +3857,7 @@
+ 	u16 status;
+ 	const u8 *pmkid;
+ 	u8 mld_addr[ETH_ALEN] __aligned(2);
++	u8 tx_addr[ETH_ALEN];
+ 
+ 	ANDROID_BACKPORT_RESERVED(1);
+ 	ANDROID_BACKPORT_RESERVED(2);

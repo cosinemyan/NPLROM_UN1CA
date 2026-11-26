@@ -1,0 +1,10 @@
+{
+  "system/etc/unica/now-nudge-v73/hybrid_llama_qnn.pte": {
+    "size": 712439316,
+    "sha256": "59e727d3174d84cd198a9707c2e52e9866e1c9fe0db63039474f32c71cdb009e"
+  },
+  "system/etc/unica/now-nudge-v73/tokenizer.json": {
+    "size": 11422654,
+    "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+  }
+}

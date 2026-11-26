@@ -1,0 +1,25 @@
+Subject: [PATCH] Opt-in bounded photo/calendar parameters after Samsung recall gating
+
+Apply after 0001-0004. Keep Samsung's provider intent/safety gate, actual
+Gallery lookup, action replacement, date resolver, encrypted intents and UI.
+Only recognized English requests use the replacement parameter extractor;
+unsupported or disabled requests retain the existing SSCO path. No register
+count change. This does not undo paradigm's incompatible MT5 native bypass.
+
+--- a/smali_classes15/com/samsung/android/smartsuggestions/feature/recall/model/SscoActionParamModel.smali
++++ b/smali_classes15/com/samsung/android/smartsuggestions/feature/recall/model/SscoActionParamModel.smali
+@@ -354,5 +354,14 @@
+     .end annotation
+ 
++    invoke-static {p1, p2, p3}, Lio/mesalabs/rezoss/ai/NativeContextActions;->extract(Ljava/lang/String;ZLjava/lang/String;)Ljava/util/List;
++
++    move-result-object v0
++
++    if-eqz v0, :rezoss_original_action_parameters
++
++    return-object v0
++
++    :rezoss_original_action_parameters
+     const-string/jumbo p2, "inputText"
+ 
+     invoke-static {p1, p2}, Lbl0/c;->m(Ljava/lang/Object;Ljava/lang/String;)V

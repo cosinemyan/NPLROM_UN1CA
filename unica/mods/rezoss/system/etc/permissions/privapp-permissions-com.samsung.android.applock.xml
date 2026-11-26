@@ -13,5 +13,6 @@
         <permission name="android.permission.INTERACT_ACROSS_USERS" />
         <permission name="android.permission.USE_FINGERPRINT" />
         <permission name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+        <permission name="com.samsung.android.permission.ACCESS_SYSTEM_KEY_DISPATCHING" />
     </privapp-permissions>
 </permissions>

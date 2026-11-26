@@ -1,0 +1,22 @@
+AUTHOR Rezoss
+Subject: [PATCH] Remove Style-tab Depth Effect toggle
+
+--- a/res/layout/clock_panel_layout.xml
++++ b/res/layout/clock_panel_layout.xml
+@@ -29,7 +29,6 @@
+                 <androidx.appcompat.widget.SwitchCompat android:textSize="@dimen/clock_panel_show_weather_info_text_size" android:textColor="?android:textColorPrimary" android:tag="binding_9" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/clock_panel_show_weather_info_height" android:text="@string/show_weather_information" android:fontFamily="sec" android:textFontWeight="400" />
+                 <androidx.appcompat.widget.AppCompatTextView android:textSize="@dimen/clock_panel_show_weather_info_text_size" android:textColor="?android:textColorPrimary" android:gravity="center_vertical" android:tag="binding_10" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/clock_panel_show_weather_info_height" android:text="@string/show_weather_information" android:fontFamily="sec" android:textFontWeight="400" />
+                 <androidx.appcompat.widget.SwitchCompat android:textSize="@dimen/clock_panel_show_weather_info_text_size" android:textColor="?android:textColorPrimary" android:id="@id/date_info" android:tag="binding_11" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/clock_panel_show_weather_info_height" android:text="@string/show_date_info_first" android:fontFamily="sec" android:textFontWeight="400" />
+-                <androidx.appcompat.widget.SwitchCompat android:textSize="@dimen/clock_panel_show_weather_info_text_size" android:textColor="?android:textColorPrimary" android:tag="unica_depth_effect" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="@dimen/clock_panel_show_weather_info_height" android:text="Depth Effect" android:fontFamily="sec" android:textFontWeight="400" />
+             </LinearLayout>
+         </LinearLayout>
+     </LinearLayout>
+--- a/smali_classes2/vo/x.smali
++++ b/smali_classes2/vo/x.smali
+@@ -1503,7 +1503,6 @@
+
+     invoke-static {v2, v7}, Lio/mesalabs/unica/lockscreen/EditorHooks;->clock(Ljava/lang/Object;Ljava/lang/Object;)V
+
+-    invoke-static {v2}, Lio/mesalabs/unica/depth/DepthEffectToggle;->bind(Landroid/view/View;)V
+
+     iget-object v7, v0, Lvo/x;->a:Landroidx/lifecycle/LifecycleOwner;

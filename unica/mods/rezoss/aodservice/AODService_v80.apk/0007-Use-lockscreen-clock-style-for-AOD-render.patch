@@ -1,0 +1,24 @@
+AUTHOR Rezoss
+
+diff --git a/smali/com/samsung/android/app/facewidget/utils/KeyguardClockProvider.smali b/smali/com/samsung/android/app/facewidget/utils/KeyguardClockProvider.smali
+--- a/smali/com/samsung/android/app/facewidget/utils/KeyguardClockProvider.smali
++++ b/smali/com/samsung/android/app/facewidget/utils/KeyguardClockProvider.smali
+@@ -5713,6 +5713,18 @@
+ .method public final getAODClockType()I
+     .locals 4
+
++    invoke-virtual {p0}, Lcom/samsung/android/app/facewidget/utils/KeyguardClockProvider;->getLockClockType()I
++
++    move-result v1
++
++    const-string v0, "KeyguardClockProvider"
++
++    const-string v2, "AOD clock style forced to lockscreen"
++
++    invoke-static {v0, v2}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    return v1
++
+     iget-object v0, p0, Lcom/samsung/android/app/facewidget/utils/KeyguardClockProvider;->faceWidgetController:Lcom/samsung/android/app/facewidget/FaceWidgetController;
+
+     invoke-virtual {v0}, Lcom/samsung/android/app/facewidget/FaceWidgetController;->b()Laod/x89;

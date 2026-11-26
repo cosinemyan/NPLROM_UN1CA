@@ -91,14 +91,15 @@ apply_noti_json() {
     cat > "$NOTI_FILE" <<EOF
 {
   "policy_version": 1000000000,
+  "aiNotificationNudgeEnabled": true,
   "summary_policies": [10, 3, 3, 9, 12, 40],
   "summary_exclude_keywords": "\uBD80\uACE0, \u8A03\u544A, \uC0AC\uB9DD, \uBCC4\uC138",
   "summary_allow_list": $NOTI_JSON,
   "except_scenarios": []
 }
 EOF
-    chown system system "$NOTI_FILE"
-    chown system system "$NOTI_PKG_FILE"
+    chown system:system "$NOTI_FILE"
+    chown system:system "$NOTI_PKG_FILE"
     chmod 0600 "$NOTI_FILE"
     chmod 0600 "$NOTI_PKG_FILE"
     restorecon "$NOTI_FILE" 2>/dev/null
@@ -126,7 +127,7 @@ log_msg "start region_bypass=$REGION_ENABLED"
 cat > "$FLAGS_FILE" <<EOF
 region_bypass=$REGION_ENABLED
 EOF
-chown system system "$FLAGS_FILE"
+chown system:system "$FLAGS_FILE"
 chmod 0600 "$FLAGS_FILE"
 restorecon "$FLAGS_FILE" 2>/dev/null
 
@@ -152,7 +153,7 @@ if [ ! -s "$PKG_FILE" ]; then
 fi
 
 PKG_COUNT="$(wc -l < "$PKG_FILE" 2>/dev/null)"
-chown system system "$PKG_FILE"
+chown system:system "$PKG_FILE"
 chmod 0600 "$PKG_FILE"
 restorecon "$PKG_FILE" 2>/dev/null
 log_msg "prepared $PKG_COUNT packages"
@@ -164,7 +165,7 @@ JSON="$(packages_to_json "$PKG_FILE")"
 cat > "$AUDIO_JSON" <<EOF
 $JSON
 EOF
-chown system system "$AUDIO_JSON"
+chown system:system "$AUDIO_JSON"
 chmod 0600 "$AUDIO_JSON"
 restorecon "$AUDIO_JSON" 2>/dev/null
 

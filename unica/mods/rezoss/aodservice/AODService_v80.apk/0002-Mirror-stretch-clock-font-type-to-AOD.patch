@@ -55,3 +55,16 @@ diff --git a/smali/com/samsung/android/app/clockpack/provider/LockContentProvide
      new-instance v2, Ljava/lang/StringBuilder;
 
      const-string/jumbo v3, "updateLockClockFontType() : fontType="
+@@ -5139,6 +5184,12 @@
+
+     invoke-virtual {p0}, Landroid/content/ContentProvider;->getContext()Landroid/content/Context;
+
++    move-result-object v0
++
++    invoke-static {v0}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->syncAodLockClockStyle(Landroid/content/Context;)V
++
++    invoke-virtual {p0}, Landroid/content/ContentProvider;->getContext()Landroid/content/Context;
++
+     move-result-object p0
+
+     invoke-static {p0, p1}, Lcom/samsung/android/app/clockpack/provider/LockContentProvider;->h(Landroid/content/Context;Z)V

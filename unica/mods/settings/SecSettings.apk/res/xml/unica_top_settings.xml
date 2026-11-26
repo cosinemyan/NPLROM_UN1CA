@@ -1,18 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen android:title="@string/unica_settings_title" settings:hierarchicalParentFragment="com.android.settings.homepage.TopLevelSettings" settings:keywords="@string/keywords_unica_settings" settings:topLevelPreferenceKey="top_level_unica"
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto" android:title="@string/unica_settings_title" settings:hierarchicalParentFragment="com.android.settings.homepage.TopLevelSettings" settings:keywords="@string/keywords_unica_settings" settings:topLevelPreferenceKey="top_level_unica">
     <com.android.settingslib.widget.LayoutPreference android:layout="@layout/unica_settings_logo_layout" android:selectable="false" android:key="unica_logo" />
     <com.samsung.android.settings.widget.SecInsetCategoryPreference />
-    <Preference android:title="@string/unica_rom_version_title" android:key="unica_rom_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.ROMVersionPreferenceController" />
-    <Preference android:title="@string/unica_device_name_title" android:key="unica_device_name" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.DeviceNamePreferenceController" />
+    <SecPreferenceCategory android:key="unica_design_141126_unica_top_settings_0" android:title="@string/unica_design_141126_unica_top_settings_group_0" />
+    <Preference android:icon="@drawable/ic_settings_about_device_filled" android:title="@string/unica_rom_version_title" android:key="unica_rom_version" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.ROMVersionPreferenceController" />
+    <Preference android:icon="@drawable/ic_settings_about_device" android:title="@string/unica_device_name_title" android:key="unica_device_name" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.DeviceNamePreferenceController" />
     <Preference android:title="@string/unica_rom_maintainers_title" android:key="unica_rom_maintainers" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.MaintainerPreferenceController" />
     <Preference android:title="@string/unica_rom_build_date_title" android:key="unica_rom_build_date" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.BuildDatePreferenceController" />
     <Preference android:selectable="false" android:title="@string/npl_nepal_fact_title" android:key="npl_nepal_fact" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.NepalFactPreferenceController" />
     <com.samsung.android.settings.widget.SecInsetCategoryPreference />
-    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_unica_settings_ui" android:title="@string/unica_ui_settings_title" android:key="unica_ui_settings" android:fragment="io.mesalabs.unica.settings.ui.UISettingsFragment" settings:controller="io.mesalabs.unica.settings.ui.UISettingsPreferenceController" />
-    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_unica_settings_camera" android:title="@string/unica_camera_feature_title" android:key="unica_camera_feature" android:summary="@string/unica_camera_feature_summary" android:fragment="io.mesalabs.unica.settings.spoof.CameraFeatureFragment" />
-    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_unica_settings_font" android:title="@string/unica_font_selector_title" android:key="unica_font_selector" android:summary="@string/unica_font_selector_summary" android:fragment="io.mesalabs.unica.settings.font.FontSelectorFragment" />
+    <SecPreferenceCategory android:key="unica_design_141126_unica_top_settings_1" android:title="@string/unica_design_141126_unica_top_settings_group_1" />
+    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_settings_sync" android:title="@string/unica_ota_title" android:key="unica_ota" android:summary="@string/unica_ota_summary">
+        <intent android:targetPackage="com.android.settings" android:targetClass="io.mesalabs.unica.ota.OtaActivity" />
+    </io.mesalabs.unica.settings.preference.IconPreference>
     <com.samsung.android.settings.widget.SecInsetCategoryPreference />
+    <SecPreferenceCategory android:key="unica_design_141126_unica_top_settings_2" android:title="@string/unica_design_141126_unica_top_settings_group_2" />
+    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_unica_settings_ui" android:title="@string/unica_ui_settings_title" android:key="unica_ui_settings" android:fragment="io.mesalabs.unica.settings.ui.UISettingsFragment" settings:controller="io.mesalabs.unica.settings.ui.UISettingsPreferenceController" />
+    <io.mesalabs.unica.settings.preference.IconPreference android:key="custom_mwgrb8x4_entry" android:title="@string/unica_audio_tweaks_settings_title" android:fragment="io.mesalabs.unica.settings.design.AudioTweaksFragment" android:icon="@drawable/ic_unica_design_music" />
+    <io.mesalabs.unica.settings.preference.IconPreference android:key="custom_mwgscg03_entry" android:title="@string/unica_battery_performance_settings_title" android:fragment="io.mesalabs.unica.settings.design.BatteryPerformanceFragment" android:icon="@drawable/ic_unica_settings_battery" />
+    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_settings_camera" android:title="@string/unica_camera_feature_title" android:key="unica_camera_feature" android:summary="@string/unica_camera_feature_summary" android:fragment="io.mesalabs.unica.settings.spoof.CameraFeatureFragment" />
+    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
+    <SecPreferenceCategory android:key="unica_design_141126_unica_top_settings_3" android:title="@string/unica_design_141126_unica_top_settings_group_3" />
     <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_unica_settings_spoof" android:title="@string/unica_spoof_settings_title" android:key="unica_spoof_settings" android:fragment="io.mesalabs.unica.settings.spoof.SpoofSettingsFragment" settings:controller="io.mesalabs.unica.settings.spoof.SpoofSettingsPreferenceController" />
-    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_unica_settings_extra" android:title="@string/unica_extra_settings_title" android:key="unica_extra_settings" android:fragment="io.mesalabs.unica.settings.extra.ExtraSettingsFragment" settings:controller="io.mesalabs.unica.settings.extra.ExtraSettingsPreferenceController" />
+    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_unica_design_lips" android:title="@string/unica_extra_settings_title" android:key="unica_extra_settings" android:fragment="io.mesalabs.unica.settings.extra.ExtraSettingsFragment" settings:controller="io.mesalabs.unica.settings.extra.ExtraSettingsPreferenceController" />
+    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
+    <SecPreferenceCategory android:key="unica_design_141126_unica_top_settings_4" android:title="@string/unica_design_141126_unica_top_settings_group_4" />
+    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_unica_design_poop" android:title="@string/unica_troubleshooting_title" android:key="unica_troubleshooting" android:summary="@string/unica_troubleshooting_summary">
+        <intent android:targetPackage="com.android.settings" android:targetClass="io.mesalabs.unica.troubleshooting.TroubleshootingActivity" />
+    </io.mesalabs.unica.settings.preference.IconPreference>
 </PreferenceScreen>

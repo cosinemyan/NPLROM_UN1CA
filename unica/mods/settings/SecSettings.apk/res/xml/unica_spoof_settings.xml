@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen android:title="@string/unica_spoof_settings_title" settings:hierarchicalParentFragment="io.mesalabs.unica.settings.UnicaSettingsFragment" settings:topLevelPreferenceKey="unica_spoof_settings"
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto" android:title="@string/unica_spoof_settings_title" settings:hierarchicalParentFragment="io.mesalabs.unica.settings.UnicaSettingsFragment" settings:topLevelPreferenceKey="unica_spoof_settings">
+    <SecPreferenceCategory android:key="unica_design_141126_unica_spoof_settings_0" android:title="@string/unica_design_141126_unica_spoof_settings_group_0" />
     <SecSwitchPreference android:title="@string/unica_keybox_title" android:key="unica_keybox" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.keybox.KeyboxPreferenceController" />
-    <SecPreference android:title="@string/unica_keybox_load_title" android:key="unica_keybox_load" />
-    <SecPreference android:title="@string/unica_keybox_clear_title" android:key="unica_keybox_clear" settings:controller="io.mesalabs.unica.settings.keybox.KeyboxClearPreferenceController" />
+    <SecPreference android:icon="@drawable/ic_settings_emergency_filled" android:title="Manage Keybox" android:key="unica_keybox_settings" android:summary="Keyboxes, app profiles and backend status">
+        <intent android:targetPackage="com.android.settings" android:targetClass="io.mesalabs.unica.keybox.KeyboxActivity" />
+    </SecPreference>
     <com.samsung.android.settings.widget.SecInsetCategoryPreference />
+    <SecPreferenceCategory android:key="unica_design_141126_unica_spoof_settings_1" android:title="@string/unica_design_141126_unica_spoof_settings_group_1" />
     <SecSwitchPreference android:title="@string/unica_pif_title" android:key="unica_pif" android:summary="@string/summary_placeholder" settings:controller="io.mesalabs.unica.settings.pif.PIFPreferenceController" />
     <SecPreference android:title="@string/unica_pif_update_title" android:key="unica_pif_update" settings:controller="io.mesalabs.unica.settings.pif.PIFUpdatePreferenceController" />
     <SecPreference android:title="@string/unica_pif_custom_title" android:key="unica_pif_custom" />
+    <SecPreference android:icon="@drawable/ic_settings_battery_usage_others" android:title="Play Integrity Fix settings" android:key="unica_pif_settings" android:summary="Pixel profiles, spoof configuration and current profile">
+        <intent android:targetPackage="com.android.settings" android:targetClass="io.mesalabs.unica.pif.PifActivity" />
+    </SecPreference>
     <com.samsung.android.settings.widget.SecInsetCategoryPreference />
-    <SecPreference android:title="@string/unica_hma_privacy_title" android:key="unica_hma_privacy" android:summary="@string/unica_hma_privacy_summary" android:fragment="io.mesalabs.unica.settings.spoof.HideDeveloperStatusFragment" />
+    <SecPreferenceCategory android:key="unica_design_141126_unica_spoof_settings_2" android:title="@string/unica_design_141126_unica_spoof_settings_group_2" />
+    <SecPreference android:icon="@drawable/ic_settings_privacy" android:title="@string/unica_hma_privacy_title" android:key="unica_hma_privacy" android:summary="@string/unica_hma_privacy_summary" android:fragment="io.mesalabs.unica.settings.spoof.HideDeveloperStatusFragment" />
+    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
+    <SecPreferenceCategory android:key="unica_design_141126_unica_spoof_settings_3" android:title="@string/unica_design_141126_unica_spoof_settings_group_3" />
+    <SecSwitchPreference android:icon="@drawable/ic_settings_wireless_filled" android:title="@string/unica_adcert_title" android:key="unica_adcert" android:persistent="false" settings:controller="io.mesalabs.unica.movecertificate.AdcertController" />
 </PreferenceScreen>

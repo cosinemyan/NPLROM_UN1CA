@@ -2,14 +2,28 @@ SKIPUNZIP=1
 
 LOG_STEP_IN "- Rezoss experimental mods"
 
+source "$MODPATH/scheduled-power-on/integrate.sh" || return 1
+
+# This POC is restricted to the tested S23U target and retains Qwen fallback.
+source "$MODPATH/aioskernel/native-now-nudge/config.sh" || return 1
+if [[ "$UNICA_ENABLE_NATIVE_NOW_NUDGE" == "true" ]]; then
+    [[ "$TARGET_CODENAME" == "dm3q" ]] || ABORT "Native Now Nudge is tested only on dm3q"
+    [[ "${UNICA_ENABLE_SAMSUNG_AICORE:-true}" == "true" ]] || ABORT "Native Now Nudge requires SamsungAiCore"
+    [[ "${UNICA_ENABLE_UNSAFE_S26U_QNN_EXPERIMENT:-false}" != "true" ]] || ABORT "Do not combine native Now Nudge with the donor QNN experiment"
+fi
+
 # =============================================================================
 # Base Overlay
 # =============================================================================
 ADD_TO_WORK_DIR "$MODPATH" "system" "." 0 0 755 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "$MODPATH" "system_ext" "." 0 0 755 "u:object_r:system_file:s0"
+source "$MODPATH/memory/integrate.sh" || return 1
 LOG "- Adding mountless AOSP zip boot animation support"
 ADD_TO_WORK_DIR "$MODPATH/bootanimation_zip" "system" \
     "system/bin/bootanimation_zip" 0 2000 755 "u:object_r:bootanim_exec:s0"
+# The branded payload retains the stock SONAME through its loader alias.
+ADD_TO_WORK_DIR "$MODPATH/bootanimation_zip" "system" \
+    "system/lib64/libbootanimation_rezoss_custom.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "$MODPATH/bootanimation_zip" "system" \
     "system/lib64/libbootanimation.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" \
@@ -74,6 +88,37 @@ APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSugges
     "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0014-Allow-Now-Brief-recall-calendar-reminder-fallback.patch"
 APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
     "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0015-Force-Now-Brief-non-empty-fallback.patch"
+APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
+    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0016-Allow-more-Now-Nudge-messenger-packages.patch"
+APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
+    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0017-Preserve-Now-Nudge-pass-package-message.patch"
+APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
+    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0018-Route-notification-assistant-requests-to-Now-Nudge.patch"
+APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
+    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0019-Log-Now-Nudge-assistant-request-extra-keys.patch"
+APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
+    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0020-Route-Now-Nudge-replies-through-UN1CA-Qwen-provider.patch"
+APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
+    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0026-Connect-in-app-and-notification-replies-to-RezossAI.patch"
+APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
+    "$MODPATH/smartsuggestions/SamsungSmartSuggestions.apk/0027-Preserve-WhatsApp-conversation-nudge-on-unknown-autofill.patch"
+if [[ "$UNICA_ENABLE_NATIVE_NOW_NUDGE" == "true" ]]; then
+    LOG "- Integrating native V73 Now Nudge after Rezoss patch 0026"
+    for REZOSS_NUDGE_PATCH in "$MODPATH/aioskernel/native-now-nudge/"000[123456789]-*.patch; do
+        APPLY_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" "$REZOSS_NUDGE_PATCH"
+    done
+    EVAL "bash \"$MODPATH/aioskernel/native-now-nudge/build_client_helper.sh\" \"$APKTOOL_DIR/system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk\"" || return 1
+    # Paradigm applied its incompatible native-model bypass before this mod.
+    # Supply recall-specific inference while keeping Samsung's parser/validators.
+    APPLY_PATCH "system" "system/priv-app/SemanticSearchCore/SemanticSearchCore.apk" \
+        "$MODPATH/aioskernel/native-now-nudge/ssco-patches/0001-Use-compatible-recall-inference.patch"
+    EVAL "bash \"$MODPATH/aioskernel/native-now-nudge/build_ssco_helper.sh\" \"$APKTOOL_DIR/system/priv-app/SemanticSearchCore/SemanticSearchCore.apk\"" || return 1
+    DECODE_APK "system_ext" "priv-app/SystemUI/SystemUI.apk" || return 1
+    APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+        "$MODPATH/aioskernel/native-now-nudge/shade-reply/0001-Stamp-active-RemoteInput-editor-identity.patch"
+    EVAL "bash \"$MODPATH/aioskernel/native-now-nudge/shade-reply/build_systemui_helper.sh\" \"$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk\"" || return 1
+    unset REZOSS_NUDGE_PATCH
+fi
 # Temporarily disabled for CHN SmartSuggestions testing.
 # LOG "- Patching SmartSuggestions China custom-card feature gates"
 # SMALI_PATCH "system" "system/priv-app/SamsungSmartSuggestions/SamsungSmartSuggestions.apk" \
@@ -144,7 +189,8 @@ SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_SUPPORT_NAL_PRELOADAPP_
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_AFSENSITIVITY" "FALSE"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_AFSMARTTRACKING" "FALSE"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_AFSPEED" "FALSE"
-SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_CINEMATIC_PORTRAITVIDEO" "FALSE"
+# Experimental cinematic/natural-blur controls; retain the stock S23U portrait backend.
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_CINEMATIC_PORTRAITVIDEO" "TRUE"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_FUSION_HIGH_RESOLUTION" "FALSE"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_CAMERA_SUPPORT_HIGH_RESOLUTION_SWBINNING" "FALSE"
 # These S26U capture pipelines are not exposed by the stock dm3q camera stack.
@@ -181,6 +227,7 @@ SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_HDR2SDR_MAX_8K" "
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_HIERARCHICAL_B_ENCODING" "TRUE"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_LONGEXPOSURE_EFFECT_10BIT" "TRUE"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_PHOTOHDR" "TRUE"
+SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_MMFW_SUPPORT_TARGET_TRACKING" "TRUE"
 # WARNING: The S26U FM/unified clipper route previously crashed PhotoEditor_AIFull
 # on the S23U SNAP/vendor stack during contour/lasso execution.
 # SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_VIDEO_CONFIG_VIDEO_CLIPPING_MODE" "NPU,unifiedclipper,foundational_segmentation"
@@ -449,6 +496,7 @@ fi
 LOG "- Adding S26U Privacy Display, Gallery LOG, Camera LOG/LUT, and Horizon Lock support files"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/cameradata/logCubefiles" 0 0 755 "u:object_r:system_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libcontextanalyzer_jni.media.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
+ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libauto-reframing-arm64-v8a.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libmediacontextanalyzer.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libmpp.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libmpp_common.so" 0 0 644 "u:object_r:system_lib_file:s0"
@@ -549,6 +597,7 @@ ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libDocScannerFilterV2.camera.sam
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libDocShadowRemoval.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/lib64/libMoireFilterV2.camera.samsung.so" 0 0 644 "u:object_r:system_lib_file:s0"
 for f in \
+    "libauto-reframing-arm64-v8a.so" \
     "libcontextanalyzer_jni.media.samsung.so" \
     "libmediacontextanalyzer.so" \
     "libmpp.so" \
@@ -595,11 +644,95 @@ done
 # =============================================================================
 LOG "- Adding S26U video clipping and document-scan model files"
 _REZOSS_ENSURE_VENDOR_CONFIG_FILE_CONTEXTS
+LOG "- Adding S26U MediaContextAnalyzer My FanCam model files"
+for f in \
+    "07-03_Video_HumanPetDetection_v2.0.1_SM8850_SNPE238.dlc" \
+    "07-04_Video_HumanPetPose_v3.1.1_SM8850-SNPE238.dlc" \
+    "07-05_Video_KeywordClassification_v1.1.0_SM8850_SNPE238.dlc" \
+    "Detection.dlc" \
+    "Keyword.dlc" \
+    "Pose.dlc"; do
+    ADD_TO_WORK_DIR "m3qxxx" "system" "system/etc/mediacontextanalyzer/$f" 0 0 644 "u:object_r:system_file:s0"
+done
+if [[ "$TARGET_CODENAME" == "dm3q" ]]; then
+    # EXPERIMENTAL Human/Pet Detection: rebuilt from saved YOLOv7-tiny ONNX
+    # with SNPE 2.10 and a fresh SM8550/V73 cache; not Samsung donor weights.
+    # Ten direct stock-SNPE samples and Samsung native decoder checks passed.
+    # WARNING: stock Detection SNAP/MCA integration and Camera use are UNTESTED.
+    # Only dog/cat/human classes exist; faces/gestures are unsupported and one
+    # white-dog sample is misclassified as cat. Installed by experimental opt-in.
+    LOG "- Adding EXPERIMENTAL SM8550 Human/Pet Detection SNPE 2.10 DLC"
+    LOG "- WARNING: Human/Pet Detection is partial; stock SNAP/Camera integration is unverified"
+    # EXPERIMENTAL My FanCam DLCs: learned UN1CA replacements, not S26U weights.
+    # Custom payloads use the _rezoss_custom suffix; loader aliases stay stable.
+    # Locator v4 SNPE 2.10: trained head improves sampled person recall;
+    # stock SNAP numerical/native ABI checks cover 102 inputs. Strict ONNX
+    # box parity still fails 55 inputs; background false-positives remain.
+    # ReID v22 SNPE 2.10: crowded appearance conv5/FC adaptation with training-
+    # only distillation; combined repaired pose and integer RGB resize policy.
+    # Stock SNAP numerical checks cover 549 inputs; 533 host pose outputs
+    # remain bit-identical to the preceding combined experimental candidate.
+    # WARNING: 95% identity/recall and spectator-separation gates still FAIL.
+    # Gallery identity continuity, crop/zoom, preview/export are NOT validated
+    # for v4/v22. Prior v21 single-clip Gallery evidence does not validate v22.
+    # ReID measured ~40% slower than v21 on one repeated input; facial
+    # mapping remains provisional and this is not end-to-end Gallery timing.
+    # Explicit experimental user opt-in on 2026-10-07 despite these failures.
+    # Rollback: archived UN1CA-FanCam-Crowded-Rollout-20261007-210113/
+    # rom-source-backup/ retains v3/v21 DLCs, aliases and this script.
+    LOG "- Adding EXPERIMENTAL SM8550 My FanCam Locator/ReID DLCs"
+    LOG "- WARNING: EXPERIMENTAL Locator v4/ReID v22: accuracy gates FAIL; known false-positives/box drift; Gallery cropping is unverified"
+    for f in \
+        "07-03_Video_HumanPetDetection_v2.0.1_SM8850_SNPE238.dlc" \
+        "07-03_Video_HumanPetDetection_UN1CA_Experimental_v1_SM8550-SNPE210.dlc" \
+        "Detection.dlc" \
+        "07-21_Video_ReframingTargetLocator_v0.1.0_SM8850-SNPE239.dlc" \
+        "07-22_Video_ReframingReID_v0.2.3_SM8850-SNPE244.dlc" \
+        "07-21_Video_ReframingTargetLocator_UN1CA_Experimental_v1_SM8550-SNPE244.dlc" \
+        "07-21_Video_ReframingTargetLocator_UN1CA_Experimental_v2_SM8550-SNPE210.dlc" \
+        "07-21_Video_ReframingTargetLocator_UN1CA_Experimental_v3_SM8550-SNPE210_rezoss_custom.dlc" \
+        "07-22_Video_ReframingReID_UN1CA_Experimental_v1_SM8550-SNPE244.dlc" \
+        "07-22_Video_ReframingReID_UN1CA_Experimental_v2_SM8550-SNPE210.dlc" \
+        "07-22_Video_ReframingReID_UN1CA_Experimental_v21_SM8550-SNPE210_rezoss_custom.dlc" \
+        "07-21_Video_ReframingTargetLocator_UN1CA_Experimental_v3_SM8550-SNPE210.dlc" \
+        "07-21_Video_ReframingTargetLocator_UN1CA_Experimental_v4_SM8550-SNPE210.dlc" \
+        "07-22_Video_ReframingReID_UN1CA_Experimental_v21_SM8550-SNPE210.dlc" \
+        "07-22_Video_ReframingReID_UN1CA_Experimental_v22_SM8550-SNPE210.dlc" \
+        "Locator.dlc" \
+        "Reid.dlc"; do
+        DELETE_FROM_WORK_DIR "system" "system/etc/mediacontextanalyzer/$f"
+    done
+    # Stable loader aliases point to explicitly named SM8550 experimental files.
+    for f in \
+        "07-03_Video_HumanPetDetection_UN1CA_Experimental_v1_SM8550-SNPE210_rezoss_custom.dlc" \
+        "Detection.dlc" \
+        "07-21_Video_ReframingTargetLocator_UN1CA_Experimental_v4_SM8550-SNPE210_rezoss_custom.dlc" \
+        "07-22_Video_ReframingReID_UN1CA_Experimental_v22_SM8550-SNPE210_rezoss_custom.dlc" \
+        "Locator.dlc" \
+        "Reid.dlc"; do
+        ADD_TO_WORK_DIR "$MODPATH/fancam/experimental" "system" "system/etc/mediacontextanalyzer/$f" 0 0 644 "u:object_r:system_file:s0"
+    done
+else
+    for f in \
+        "07-21_Video_ReframingTargetLocator_v0.1.0_SM8850-SNPE239.dlc" \
+        "07-22_Video_ReframingReID_v0.2.3_SM8850-SNPE244.dlc" \
+        "Locator.dlc" \
+        "Reid.dlc"; do
+        ADD_TO_WORK_DIR "m3qxxx" "system" "system/etc/mediacontextanalyzer/$f" 0 0 644 "u:object_r:system_file:s0"
+    done
+fi
 ADD_TO_WORK_DIR "m3qxxx" "vendor" "etc/saiv/image_understanding/db/fm" 0 2000 755 "u:object_r:vendor_configs_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "vendor" "etc/saiv/image_understanding/db/dvs" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+# Keep the target firmware's GPU/TFLite document rectifier. The S26U DLC
+# contains a V81/SM8850 cache that cannot run on the S23U's V73 DSP.
+ADD_TO_WORK_DIR "$TARGET_FIRMWARE" "vendor" "etc/saiv/image_understanding/db/doc_rectifier" 0 2000 755 "u:object_r:vendor_configs_file:s0"
 # S26U enhanced document-scan configs/models.
 # WARNING: Might cause crash.
-ADD_TO_WORK_DIR "m3qxxx" "vendor" "etc/saiv/image_understanding/db/doc_rectifier" 0 2000 755 "u:object_r:vendor_configs_file:s0"
+# SNPE 2.10 audit: no validated Document Scan conversion is available.
+# DocSegment retains weights but needs newer-container/graph translation;
+# dewarp/deblur/inpaint/shadow/line models lack portable donor weights.
+# Keep these existing donor assets distinct from the experimental MCA DLCs.
+# No camera .so, SNAP/SNPE runtime or unvalidated 2.44 DocSegment is added here.
 ADD_TO_WORK_DIR "m3qxxx" "vendor" "etc/saiv/image_understanding/db/ss_magnet" 0 2000 755 "u:object_r:vendor_configs_file:s0"
 ADD_TO_WORK_DIR "m3qxxx" "vendor" "etc/midas_enhancedocumentscan" 0 2000 755 "u:object_r:vendor_configs_file:s0"
 for f in \
@@ -625,6 +758,13 @@ for f in \
     "libtensorflowlite_gpu_delegate.so"; do
     _REZOSS_SET_SYSTEM_LIB64_METADATA "$f"
 done
+
+# =============================================================================
+# Experimental S23U Horizontal Lock - Native EIS Adapter
+# =============================================================================
+# Experimental dm3q-only horizon correction, linked into the stock S23U EIS node.
+# Exact-firmware checks and stock backup are handled by the installer.
+. "$MODPATH/horizontal-lock/install.sh"
 
 # =============================================================================
 # Disabled Experiments - Camera Vendor Stack
@@ -737,33 +877,111 @@ fi
 rm -- "$REZOSS_DRESSROOM_PATCH"
 unset REZOSS_DRESSROOM_PATCH
 
+# The full native port owns editor controls and AOD normalization on dm3q/SDK37.
+REZOSS_DRESSROOM_NATIVE_FULL=false
+if [[ "$TARGET_CODENAME" == "dm3q" && "$TARGET_PLATFORM_SDK_VERSION" == "37" &&
+        ! -f "$SRC_DIR/unica/mods/Dressroom-Advanced/disable" ]]; then
+    REZOSS_DRESSROOM_NATIVE_FULL=true
+fi
+if ! "$REZOSS_DRESSROOM_NATIVE_FULL"; then
+LOG "- Add lockscreen clock height and widget size controls"
+APPLY_PATCH "system" "system/priv-app/DressRoom/DressRoom.apk" \
+    "$MODPATH/dressroom/DressRoom.apk/0003-Add-clock-height-and-widget-size-controls.patch"
+fi
+LOG "- Remove canceled lockscreen Depth Effect integration"
+DELETE_FROM_WORK_DIR "system" "system/lib64/libunica_depth_effect.so"
+DELETE_FROM_WORK_DIR "system" "system/etc/unica-depth-effect/pidnet_s.tflite"
+REZOSS_DEPTH_DRESSROOM_DIR="$APKTOOL_DIR/system/priv-app/DressRoom/DressRoom.apk"
+REZOSS_DEPTH_DRESSROOM_HOOK="smali_classes2/vo/x.smali"
+REZOSS_DEPTH_DRESSROOM_LAYOUT="res/layout/clock_panel_layout.xml"
+DECODE_APK "system" "system/priv-app/DressRoom/DressRoom.apk" || return 1
+if grep -q -F 'DepthEffectToggle;->bind' "$REZOSS_DEPTH_DRESSROOM_DIR/$REZOSS_DEPTH_DRESSROOM_HOOK" || \
+        grep -q -F 'unica_depth_effect' "$REZOSS_DEPTH_DRESSROOM_DIR/$REZOSS_DEPTH_DRESSROOM_LAYOUT"; then
+    APPLY_PATCH "system" "system/priv-app/DressRoom/DressRoom.apk" \
+        "$MODPATH/dressroom/DressRoom.apk/0004-Remove-Depth-Effect-toggle.patch"
+fi
+unset REZOSS_DEPTH_DRESSROOM_DIR REZOSS_DEPTH_DRESSROOM_HOOK REZOSS_DEPTH_DRESSROOM_LAYOUT
+
+# Full menu replaces old editor controls; font-bank and Ambient Weather remain.
+source "$SRC_DIR/unica/mods/Dressroom-Advanced/integrate.sh" dressroom || return 1
+
+REZOSS_DEPTH_SYSTEMUI_DIR="$APKTOOL_DIR/system_ext/priv-app/SystemUI/SystemUI.apk"
+REZOSS_DEPTH_SYSTEMUI_HOOK="smali_classes2/com/android/systemui/keyguard/ui/binder/KeyguardClockViewBinder.smali"
+DECODE_APK "system_ext" "priv-app/SystemUI/SystemUI.apk" || return 1
+if grep -q -F 'DepthEffectController;->attach' "$REZOSS_DEPTH_SYSTEMUI_DIR/$REZOSS_DEPTH_SYSTEMUI_HOOK"; then
+    APPLY_PATCH "system_ext" "priv-app/SystemUI/SystemUI.apk" \
+        "$MODPATH/systemui/SystemUI.apk/0008-Remove-lockscreen-Depth-Effect-compositor-hook.patch"
+fi
+unset REZOSS_DEPTH_SYSTEMUI_DIR REZOSS_DEPTH_SYSTEMUI_HOOK
+
 LOG "- Downloading latest Samsung Always On Display app"
 DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.samsung.android.app.aodservice")" \
-    "$WORK_DIR/system/system/priv-app/AODService_v80/AODService_v80.apk"
+    "$WORK_DIR/system/system/priv-app/AODService_v80/AODService_v80.apk" || return 1
+
+# The Galaxy Store APK may change obfuscated class names. Preserve any cached
+# decode (including partial failed applies) and decode the downloaded APK fresh.
+REZOSS_AOD_TEMP="$(mktemp -d /tmp/unica-aod.XXXXXX)" || return 1
+REZOSS_AOD_DECODE="$APKTOOL_DIR/system/priv-app/AODService_v80/AODService_v80.apk"
+REZOSS_AOD_PATCH_DIR="$REZOSS_AOD_TEMP/patches"
+if [[ -d "$REZOSS_AOD_DECODE" ]]; then
+    LOG "- Preserving previous AOD decode at $REZOSS_AOD_TEMP/previous-decode"
+    mv "$REZOSS_AOD_DECODE" "$REZOSS_AOD_TEMP/previous-decode" || return 1
+fi
+DECODE_APK "system" "system/priv-app/AODService_v80/AODService_v80.apk" || return 1
+LOG "- Resolve AOD font integration and preflight the selected patch stack"
+REZOSS_AOD_PROFILE_ARGS=()
+if "$REZOSS_DRESSROOM_NATIVE_FULL"; then
+    REZOSS_AOD_PROFILE_ARGS+=(--native-full)
+fi
+python3 "$MODPATH/aodservice/prepare_patches.py" "$REZOSS_AOD_DECODE" \
+    "$MODPATH/aodservice/AODService_v80.apk" "$REZOSS_AOD_PATCH_DIR" "${REZOSS_AOD_PROFILE_ARGS[@]}" || return 1
 
 LOG "- Patch AODService UN1CA clock font list integration"
 APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
-    "$MODPATH/aodservice/AODService_v80.apk/0001-Expose-UN1CA-Font-Selector-fonts-to-clock-picker.patch"
+    "$REZOSS_AOD_PATCH_DIR/0001-Expose-UN1CA-Font-Selector-fonts-to-clock-picker.patch" || return 1
 
 LOG "- Patch AODService stretch clock font type sync"
 APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
-    "$MODPATH/aodservice/AODService_v80.apk/0002-Mirror-stretch-clock-font-type-to-AOD.patch"
+    "$REZOSS_AOD_PATCH_DIR/0002-Mirror-stretch-clock-font-type-to-AOD.patch" || return 1
 
 LOG "- Patch AODService stretch clock font type startup backfill"
 APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
-    "$MODPATH/aodservice/AODService_v80.apk/0003-Backfill-AOD-stretch-font-type-on-startup.patch"
+    "$REZOSS_AOD_PATCH_DIR/0003-Backfill-AOD-stretch-font-type-on-startup.patch" || return 1
 
+if ! "$REZOSS_DRESSROOM_NATIVE_FULL"; then
 LOG "- Patch AODService stretch clock font render normalization"
 APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
-    "$MODPATH/aodservice/AODService_v80.apk/0004-Normalize-stretch-font-data-before-AOD-render.patch"
+    "$REZOSS_AOD_PATCH_DIR/0004-Normalize-stretch-font-data-before-AOD-render.patch" || return 1
 
 LOG "- Patch AODService AOD stretch font heights"
 APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
-    "$MODPATH/aodservice/AODService_v80.apk/0005-Preserve-AOD-stretch-font-heights.patch"
+    "$REZOSS_AOD_PATCH_DIR/0005-Preserve-AOD-stretch-font-heights.patch" || return 1
 
 LOG "- Patch AODService AOD stretch renderer gate"
 APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
-    "$MODPATH/aodservice/AODService_v80.apk/0006-Allow-AOD-stretch-render-when-font-heights-exist.patch"
+    "$REZOSS_AOD_PATCH_DIR/0006-Allow-AOD-stretch-render-when-font-heights-exist.patch" || return 1
+
+fi
+LOG "- Patch AODService to use lockscreen clock style for AOD rendering"
+APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
+    "$REZOSS_AOD_PATCH_DIR/0007-Use-lockscreen-clock-style-for-AOD-render.patch" || return 1
+
+if ! "$REZOSS_DRESSROOM_NATIVE_FULL"; then
+LOG "- Expand lockscreen widget grid and preserve widget proportions when resizing"
+APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
+    "$REZOSS_AOD_PATCH_DIR/0008-Expand-and-resize-lockscreen-widget-container.patch" || return 1
+
+LOG "- Patch AODService SDK clock item stretch font data"
+APPLY_PATCH "system" "system/priv-app/AODService_v80/AODService_v80.apk" \
+    "$REZOSS_AOD_PATCH_DIR/0009-Normalize-AOD-SDK-clock-item-stretch-font-data.patch" || return 1
+
+fi
+# The port replaces old normalization and widget overrides with one native owner.
+source "$SRC_DIR/unica/mods/Dressroom-Advanced/integrate.sh" aod || return 1
+source "$SRC_DIR/unica/mods/Dressroom-Advanced/integrate.sh" systemui || return 1
+source "$SRC_DIR/unica/mods/Dressroom-Advanced/integrate.sh" wallpaper || return 1
+
+unset REZOSS_AOD_TEMP REZOSS_AOD_DECODE REZOSS_AOD_PATCH_DIR REZOSS_AOD_PROFILE_ARGS REZOSS_DRESSROOM_NATIVE_FULL
 
 LOG "- Patch VisualCloudCore Galaxy Store model check"
 APPLY_PATCH "system" "system/app/VisualCloudCore/VisualCloudCore.apk" \
@@ -773,6 +991,10 @@ LOG "- Patch product framework overlay doze auto-brightness"
 APPLY_PATCH "product" "overlay/framework-res__dm3qxxx__auto_generated_rro_product.apk" \
     "$MODPATH/rro/framework-res__dm3qxxx__auto_generated_rro_product.apk/0001-Add-doze-auto-brightness-arrays.patch"
 
+LOG "- Patch product framework overlay Now Nudge notification allowlist"
+APPLY_PATCH "product" "overlay/framework-res__dm3qxxx__auto_generated_rro_product.apk" \
+    "$MODPATH/rro/framework-res__dm3qxxx__auto_generated_rro_product.apk/0002-Add-Now-Nudge-notification-allow-packages.patch"
+
 # =============================================================================
 # Notification Highlights / Galaxy AI Stack
 # =============================================================================
@@ -781,19 +1003,83 @@ SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_COMMON_CONFIG_AI_VERSION" "202
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_FRAMEWORK_CONFIG_NOW_NUDGE_VERSION" "2"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_GENAI_CONFIG_LLM_VERSION" "0.81"
 SET_FLOATING_FEATURE_CONFIG "SEC_FLOATING_FEATURE_GENAI_SUPPORT_OFFLINE_LANGUAGEMODEL" "TRUE"
+LOG "- Adding S26U SmartSuggestions and SCS policy XMLs"
+for REZOSS_SCS_POLICY_XML in \
+    "default-permissions/default-permissions-com.samsung.android.scs.xml" \
+    "permissions/privapp-permissions-com.samsung.android.scs.xml" \
+    "permissions/signature-permissions-com.samsung.android.scs.xml" \
+    "sysconfig/preinstalled-packages-com.samsung.android.scs.xml" \
+    "sysconfig/samsungintellivoiceservice.xml" \
+    "sysconfig/samsungsmartsuggestions.xml"; do
+    ADD_TO_WORK_DIR "$MODPATH" "system" "system/etc/$REZOSS_SCS_POLICY_XML" 0 0 644 "u:object_r:system_file:s0"
+done
+unset REZOSS_SCS_POLICY_XML
+LOG "- Build opt-in UN1CA local notification-summary provider"
+LOCAL_SUMMARY_SERVICE_DIR="$MODPATH/local-summary-service"
+LOCAL_SUMMARY_SERVICE_APK="$LOCAL_SUMMARY_SERVICE_DIR/system/priv-app/RezossAI/RezossAI.apk"
+EVAL "bash \"$LOCAL_SUMMARY_SERVICE_DIR/build.sh\" \"$LOCAL_SUMMARY_SERVICE_APK\""
+ADD_TO_WORK_DIR "$LOCAL_SUMMARY_SERVICE_DIR" "system" "system/priv-app/RezossAI/RezossAI.apk" 0 0 644 "u:object_r:system_file:s0"
+SET_METADATA "system" "system/priv-app/RezossAI" 0 0 755 "u:object_r:system_file:s0"
+SET_METADATA "system" "system/priv-app/RezossAI/RezossAI.apk" 0 0 644 "u:object_r:system_file:s0"
+ADD_TO_WORK_DIR "$LOCAL_SUMMARY_SERVICE_DIR" "system" "system/etc/default-permissions/default-permissions-unica-local-summary.xml" 0 0 644 "u:object_r:system_file:s0"
+# Ship the lightweight API/settings app; users install model assets as an update.
+# Build in a temporary directory so a previous combined APK cannot be reused.
+LOG "- Build small Qwen settings stub (offline model APK installed separately)"
+QWEN_STUB_BUILD=$(mktemp -d "$TMP_DIR/qwen-stub.XXXXXX") || return 1
+EVAL "bash \"$MODPATH/qwen-llm/system-stub/build.sh\" \"$QWEN_STUB_BUILD/system/priv-app/QWEN_LLM_rezoss_stub/QWEN_LLM_rezoss_stub.apk\"" || return 1
+ADD_TO_WORK_DIR "$QWEN_STUB_BUILD" "system" "system/priv-app/QWEN_LLM_rezoss_stub/QWEN_LLM_rezoss_stub.apk" 0 0 644 "u:object_r:system_file:s0" || return 1
+SET_METADATA "system" "system/priv-app/QWEN_LLM_rezoss_stub" 0 0 755 "u:object_r:system_file:s0"
+SET_METADATA "system" "system/priv-app/QWEN_LLM_rezoss_stub/QWEN_LLM_rezoss_stub.apk" 0 0 644 "u:object_r:system_file:s0"
+unset QWEN_STUB_BUILD
+# The separately installed app holds local model assets and private API settings.
+# Remove legacy payloads from incremental builds; keep only the bridge.
+DELETE_FROM_WORK_DIR "system" "system/bin/unica-summary-llama"
+DELETE_FROM_WORK_DIR "system" "system/bin/unica-summary-llama-server"
+DELETE_FROM_WORK_DIR "system" "system/etc/unica/local-summary/qwen2.5-0.5b-instruct-q4_k_m.gguf"
+ADD_TO_WORK_DIR "$MODPATH" "system" "system/etc/sysconfig/rezoss-ai-associations.xml" 0 0 644 "u:object_r:system_file:s0"
+LOG "- Native dm3q local backend: $UNICA_LOCAL_LLM_BACKEND; separate model and optional APIs in UN1CA Extra Settings > AI backend settings"
+LOCAL_SUMMARY_ALLOWLIST="$WORK_DIR/system/system/etc/sysconfig/allowed-system-preload-apps.xml"
+if ! grep -q -F 'package="io.mesalabs.unica.localsummary"' "$LOCAL_SUMMARY_ALLOWLIST"; then
+    EVAL "LC_ALL=C patch --batch --fuzz=0 -p1 -d \"$WORK_DIR/system/system/etc/sysconfig\" < \"$LOCAL_SUMMARY_SERVICE_DIR/allowed-system-preload-apps.xml/0001-Allow-UN1CA-local-summary-provider.patch\"" \
+        || ABORT "Failed to allow the UN1CA local summary provider"
+fi
+if ! grep -q -F 'package="io.mesalabs.rezoss.qwen"' "$LOCAL_SUMMARY_ALLOWLIST"; then
+    EVAL "LC_ALL=C patch --batch --fuzz=0 -p1 -d \"$WORK_DIR/system/system/etc/sysconfig\" < \"$LOCAL_SUMMARY_SERVICE_DIR/allowed-system-preload-apps.xml/0002-Allow-Rezoss-Qwen-engine.patch\"" \
+        || ABORT "Failed to allow the Rezoss Qwen engine"
+fi
+EVAL "rm -f \"$LOCAL_SUMMARY_ALLOWLIST.orig\" \"$LOCAL_SUMMARY_ALLOWLIST.rej\"" \
+    || ABORT "Failed to remove stale local summary allowlist patch artifacts"
+unset LOCAL_SUMMARY_ALLOWLIST
+unset LOCAL_SUMMARY_SERVICE_APK LOCAL_SUMMARY_SERVICE_DIR
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/app/SketchBook/SketchBook.apk" 0 0 644 "u:object_r:system_file:s0"
 LOG "- Overlay S26U Notification highlights AI APKs"
 LOG "- Adding S26U One UI 9 Samsung Intelligence Voice Service"
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/priv-app/SamsungIntelliVoiceServices/SamsungIntelliVoiceServices.apk" 0 0 644 "u:object_r:system_file:s0"
 SET_METADATA "system" "system/priv-app/SamsungIntelliVoiceServices" 0 0 755 "u:object_r:system_file:s0"
 SET_METADATA "system" "system/priv-app/SamsungIntelliVoiceServices/SamsungIntelliVoiceServices.apk" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "m3qxxx" "system" "system/priv-app/SamsungAiCore/SamsungAiCore.apk" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "m3qxxx" "system" "system/etc/permissions/privapp-permissions-com.samsung.android.aicore.xml" 0 0 644 "u:object_r:system_file:s0"
+DELETE_FROM_WORK_DIR "system" "system/priv-app/SamsungAiCore"
+if [[ "${UNICA_ENABLE_SAMSUNG_AICORE:-true}" == "true" ]]; then
+    ADD_TO_WORK_DIR "m3qxxx" "system" "system/priv-app/SamsungAiCore/SamsungAiCore.apk" 0 0 644 "u:object_r:system_file:s0"
+    ADD_TO_WORK_DIR "m3qxxx" "system" "system/etc/permissions/privapp-permissions-com.samsung.android.aicore.xml" 0 0 644 "u:object_r:system_file:s0"
+    LOG "- Disabling SamsungAiCore neural-wallpaper pipeline"
+    APPLY_PATCH "system" "system/priv-app/SamsungAiCore/SamsungAiCore.apk" \
+        "$MODPATH/aicore/SamsungAiCore.apk/0003-Disable-crashing-wallpaper-pipeline.patch"
+else
+    LOG "- Removing SamsungAiCore; UN1CA Qwen provider handles notification AI paths"
+fi
 DELETE_FROM_WORK_DIR "system" "system/app/AIOSKernelService"
-ADD_TO_WORK_DIR "m3qxxx" "system" "system/priv-app/AIOSKernelService/AIOSKernelService.apk" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "m3qxxx" "system" "system/etc/permissions/privapp-permissions-com.samsung.android.aioskernelservice.xml" 0 0 644 "u:object_r:system_file:s0"
-ADD_TO_WORK_DIR "pa2qxxx" "system" "system/etc/sysconfig/aioskernelservice.xml" 0 0 644 "u:object_r:system_file:s0"
+DELETE_FROM_WORK_DIR "system" "system/priv-app/AIOSKernelService"
+if [[ "$UNICA_ENABLE_NATIVE_NOW_NUDGE" == "true" ]]; then
+    source "$MODPATH/aioskernel/native-now-nudge/integrate_rom.sh" || return 1
+elif [[ "${UNICA_ENABLE_AIOSKERNELSERVICE:-false}" == "true" ]]; then
+    ADD_TO_WORK_DIR "m3qxxx" "system" "system/priv-app/AIOSKernelService/AIOSKernelService.apk" 0 0 644 "u:object_r:system_file:s0"
+    ADD_TO_WORK_DIR "m3qxxx" "system" "system/etc/permissions/privapp-permissions-com.samsung.android.aioskernelservice.xml" 0 0 644 "u:object_r:system_file:s0"
+    ADD_TO_WORK_DIR "pa2qxxx" "system" "system/etc/sysconfig/aioskernelservice.xml" 0 0 644 "u:object_r:system_file:s0"
+else
+    LOG "- Disabling AIOSKernelService; UN1CA Qwen provider handles notification AI replies"
+fi
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/etc/permissions/signature-permissions-com.samsung.android.offline.languagemodel.xml" 0 0 644 "u:object_r:system_file:s0"
+# Keep the stub; the full OfflineLanguageModel is installed later as an update.
 ADD_TO_WORK_DIR "m3qxxx" "system" "system/priv-app/OfflineLanguageModel_stub/OfflineLanguageModel_stub.apk" 0 0 644 "u:object_r:system_file:s0"
 
 LOG "- Adding S26U NMT languagepack preload metadata"
@@ -846,6 +1132,8 @@ unset NMT_LANG S26U_NMT_TARGET_PRELOAD
 # DOWNLOAD_FILE "$(GET_GALAXY_STORE_DOWNLOAD_URL "com.samsung.android.aicore")" \
     # "$WORK_DIR/system/system/priv-app/SamsungAiCore/SamsungAiCore.apk"
 
+UNICA_ENABLE_UNSAFE_S26U_QNN_EXPERIMENT="${UNICA_ENABLE_UNSAFE_S26U_QNN_EXPERIMENT:-false}"
+if [[ "$UNICA_ENABLE_UNSAFE_S26U_QNN_EXPERIMENT" == "true" && "${UNICA_ENABLE_SAMSUNG_AICORE:-true}" == "true" && "${UNICA_ENABLE_AIOSKERNELSERVICE:-false}" == "true" ]]; then
 REZOSS_SIVS_MODEL_PATCHED_FILE="$APKTOOL_DIR/system/priv-app/SamsungIntelliVoiceServices/SamsungIntelliVoiceServices.apk/smali/com/samsung/android/intellivoiceservice/common/connection/server/LlmClientInterceptor.smali"
 REZOSS_SIVS_MODEL_PATCH_MARKER="$APKTOOL_DIR/system/priv-app/SamsungIntelliVoiceServices/SamsungIntelliVoiceServices.apk/.rezoss_s26u_device_model_patch_applied"
 if [ -f "$REZOSS_SIVS_MODEL_PATCHED_FILE" ] && grep -qF 'const-string v4, "SM-S948B"' "$REZOSS_SIVS_MODEL_PATCHED_FILE"; then
@@ -993,20 +1281,25 @@ EVAL "mv -f \"$AIOS_KERNEL_TMP/AIOSKernelService.signed.apk\" \"$AIOS_KERNEL_APK
 SET_METADATA "system" "system/priv-app/AIOSKernelService/AIOSKernelService.apk" 0 0 644 "u:object_r:system_file:s0"
 EVAL "rm -rf \"$AIOS_KERNEL_TMP\""
 unset AIOS_KERNEL_APK AIOS_KERNEL_TMP AIOS_KERNEL_CERT_PREFIX
+else
+    LOG "- Skip unsupported S26U QNN V81-to-V73 experiment on SM8550"
+fi
+unset UNICA_ENABLE_UNSAFE_S26U_QNN_EXPERIMENT
 
 for REZOSS_NOTI_AI_REQ in \
     "system/priv-app/SecSettings/SecSettings.apk" \
     "system/priv-app/SecSettingsIntelligence/SecSettingsIntelligence.apk" \
     "system/priv-app/SettingsProvider/SettingsProvider.apk" \
     "system/priv-app/SamsungIntelliVoiceServices/SamsungIntelliVoiceServices.apk" \
-    "system/priv-app/SamsungAiCore/SamsungAiCore.apk" \
-    "system/priv-app/AIOSKernelService/AIOSKernelService.apk" \
     "system/etc/permissions/privapp-permissions-com.samsung.android.intellivoiceservice.xml" \
-    "system/etc/permissions/privapp-permissions-com.samsung.android.aicore.xml" \
-    "system/etc/permissions/privapp-permissions-com.samsung.android.aioskernelservice.xml" \
     "system/etc/permissions/signature-permissions-com.samsung.android.offline.languagemodel.xml" \
+    "system/etc/default-permissions/default-permissions-com.samsung.android.scs.xml" \
+    "system/etc/permissions/privapp-permissions-com.samsung.android.scs.xml" \
+    "system/etc/permissions/signature-permissions-com.samsung.android.scs.xml" \
     "system/etc/permissions/signature-permissions-downloadable.xml" \
+    "system/etc/sysconfig/preinstalled-packages-com.samsung.android.scs.xml" \
     "system/etc/sysconfig/samsungintellivoiceservice.xml" \
+    "system/etc/sysconfig/samsungsmartsuggestions.xml" \
     "system/etc/sysconfig/allowed-system-preload-apps.xml"; do
     if [ ! -f "$WORK_DIR/system/$REZOSS_NOTI_AI_REQ" ]; then
         LOGW "Notification highlights requirement missing: /system/$REZOSS_NOTI_AI_REQ"
@@ -1021,6 +1314,18 @@ APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
 LOG "- Patch services.jar AI notification priority/summary model gate"
 APPLY_PATCH "system" "system/framework/services.jar" \
     "$MODPATH/notification-priority/services.jar/0001-Allow-dm1q-dm2q-dm3q-AI-notification-priority.patch"
+LOG "- Add property-gated local notification-summary test bridge"
+APPLY_PATCH "system" "system/framework/services.jar" \
+    "$MODPATH/notification-priority/services.jar/0002-Add-property-gated-local-summary-test-bridge.patch"
+LOG "- Route opt-in local notification summaries through the provider"
+APPLY_PATCH "system" "system/framework/services.jar" \
+    "$MODPATH/notification-priority/services.jar/0003-Call-opt-in-local-summary-provider.patch"
+LOG "- Log Now Nudge notification request gates"
+APPLY_PATCH "system" "system/framework/services.jar" \
+    "$MODPATH/notification-priority/services.jar/0004-Log-Now-Nudge-notification-request-gates.patch"
+LOG "- Keeping bound Qwen inference on foreground CPUs"
+APPLY_PATCH "system" "system/framework/services.jar" \
+    "$MODPATH/notification-priority/services.jar/0005-Keep-bound-Qwen-on-foreground-CPUs.patch"
 
 LOG "- Patch SettingsProvider notification priority/summary defaults"
 APPLY_PATCH "system" "system/priv-app/SettingsProvider/SettingsProvider.apk" \
@@ -1039,8 +1344,153 @@ python3 "$MODPATH/firewall/patch_region_strings.py" \
 LOG_STEP_OUT
 
 # =============================================================================
-# Kernel - Edgars + KernelSU-Next LKM + spoofed manager APK (shared helpers)
+# Kernel fallback helpers
+# =============================================================================
+REZOSS_ARCHIVED_KERNEL_DIR="$SRC_DIR/out/archived/kernel"
+
+_REZOSS_ARCHIVE_KERNEL_IMAGE()
+{
+  local IMAGE_NAME="$1"
+  local SOURCE_IMAGE="$WORK_DIR/kernel/$IMAGE_NAME"
+  local ARCHIVED_IMAGE="$REZOSS_ARCHIVED_KERNEL_DIR/$IMAGE_NAME"
+
+  if [ ! -f "$SOURCE_IMAGE" ]; then
+    LOGE "Kernel image not found: ${SOURCE_IMAGE//$SRC_DIR\//}"
+    return 1
+  fi
+
+  mkdir -p "$REZOSS_ARCHIVED_KERNEL_DIR" || return 1
+  LOG "- Archiving $IMAGE_NAME to ${ARCHIVED_IMAGE//$SRC_DIR\//}"
+  cp -f "$SOURCE_IMAGE" "$ARCHIVED_IMAGE" || return 1
+}
+
+_REZOSS_ARCHIVE_KERNEL()
+{
+  _REZOSS_ARCHIVE_KERNEL_IMAGE "boot.img" || return 1
+  _REZOSS_ARCHIVE_KERNEL_IMAGE "init_boot.img" || return 1
+}
+
+_REZOSS_RESTORE_ARCHIVED_KERNEL_IMAGE()
+{
+  local IMAGE_NAME="$1"
+  local ARCHIVED_IMAGE="$REZOSS_ARCHIVED_KERNEL_DIR/$IMAGE_NAME"
+  local TARGET_IMAGE="$WORK_DIR/kernel/$IMAGE_NAME"
+
+  if [ ! -f "$ARCHIVED_IMAGE" ]; then
+    ABORT "Archived kernel image not found: ${ARCHIVED_IMAGE//$SRC_DIR\//}"
+    return 1
+  fi
+
+  LOG "- Restoring $IMAGE_NAME from ${ARCHIVED_IMAGE//$SRC_DIR\//}"
+  cp -f "$ARCHIVED_IMAGE" "$TARGET_IMAGE" \
+    || {
+      ABORT "Failed to restore $IMAGE_NAME from archived kernel"
+      return 1
+    }
+}
+
+_REZOSS_RESTORE_ARCHIVED_KERNEL()
+{
+  local RESTORE_BOOT="$1"
+  local RESTORE_INIT_BOOT="$2"
+
+  if [ "$RESTORE_BOOT" = "true" ]; then
+    _REZOSS_RESTORE_ARCHIVED_KERNEL_IMAGE "boot.img" || return 1
+  fi
+  if [ "$RESTORE_INIT_BOOT" = "true" ]; then
+    _REZOSS_RESTORE_ARCHIVED_KERNEL_IMAGE "init_boot.img" || return 1
+  fi
+}
+
+# Local bundles are durable inputs; all image work stays in a unique /tmp directory.
+_REZOSS_KERNEL_FROM_CACHE()
+(
+  local CACHE_DIR="$MODPATH/ksu-next"
+  local TMP_DIR KERNEL_VERSION KERNEL_ZIP
+  local -a KERNEL_ZIPS
+  local KSU_KSUD KSU_MODULE
+  python3 "$CACHE_DIR/update.py" "$CACHE_DIR" || {
+    LOGE "Invalid KernelSU-Next cache/version configuration"
+    return 1
+  }
+  KERNEL_VERSION="$(sed -n 's/^kernel=//p' "$CACHE_DIR/version" | tr -d '\r')"
+  KERNEL_VERSION="${KERNEL_VERSION#5.15.}"
+  if [[ ! "$KERNEL_VERSION" =~ ^[0-9]+$ ]]; then
+    LOGE "Invalid cached kernel version: $KERNEL_VERSION"
+    return 1
+  fi
+  mapfile -t KERNEL_ZIPS < <(find "$CACHE_DIR" -maxdepth 1 -type f -name "common-5.15.${KERNEL_VERSION}-*.zip" | sort)
+  if [ "${#KERNEL_ZIPS[@]}" -ne 1 ]; then
+    LOGE "Expected exactly one cached kernel ZIP for 5.15.$KERNEL_VERSION"
+    return 1
+  fi
+  KERNEL_ZIP="${KERNEL_ZIPS[0]}"
+  if [ "$(uname -m)" != "x86_64" ]; then
+    LOGE "The cached ksud and magiskboot require an x86_64 build host"
+    return 1
+  fi
+
+  TMP_DIR="$(mktemp -d /tmp/rezoss-kernel.XXXXXX)" || return 1
+  trap 'rm -rf -- "$TMP_DIR"' EXIT
+  # Validate cached ZIPs too, including when every update check failed offline.
+  python3 - "$CACHE_DIR" "$KERNEL_ZIP" <<'PY_CACHE'
+import importlib.util
+from pathlib import Path
+import sys
+sys.dont_write_bytecode = True
+cache = Path(sys.argv[1])
+spec = importlib.util.spec_from_file_location('ksu_update', cache / 'update.py')
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+module.validate(Path(sys.argv[2]), 'Image.gz')
+for name, member in module.ARTIFACTS.items():
+    module.validate(cache / (name + '.zip'), member)
+PY_CACHE
+  [ "$?" -eq 0 ] || return 1
+  cp -p "$CACHE_DIR/magiskboot" "$TMP_DIR/magiskboot" || return 1
+  chmod +x "$TMP_DIR/magiskboot" || return 1
+  unzip -p "$KERNEL_ZIP" Image.gz > "$TMP_DIR/replacement-kernel" || return 1
+  KSU_KSUD="$TMP_DIR/ksud"
+  KSU_MODULE="$TMP_DIR/android13-5.15_kernelsu.ko"
+  unzip -p "$CACHE_DIR/ksud-x86_64-unknown-linux-musl.zip" x86_64-unknown-linux-musl/release/ksud > "$KSU_KSUD" || return 1
+  unzip -p "$CACHE_DIR/aarch64-android13-5.15-ksu-lkm.zip" android13-5.15_kernelsu.ko > "$KSU_MODULE" || return 1
+  chmod +x "$KSU_KSUD" || return 1
+  "$KSU_KSUD" --help >/dev/null || return 1
+
+  LOG "- Replacing boot kernel with cached $(basename "$KERNEL_ZIP")"
+  cp -p "$WORK_DIR/kernel/boot.img" "$TMP_DIR/boot.img" || return 1
+  cd "$TMP_DIR" || return 1
+  ./magiskboot unpack boot.img || return 1
+  cp replacement-kernel kernel || return 1
+  ./magiskboot repack boot.img || return 1
+  [ -s new-boot.img ] || return 1
+  cp new-boot.img "$WORK_DIR/kernel/boot.img" || return 1
+
+  # Separate KSU outputs from magiskboot's new-boot.img to prevent stale selection.
+  mkdir "$TMP_DIR/ksu" || return 1
+  cp "$WORK_DIR/kernel/init_boot.img" "$TMP_DIR/ksu/init_boot.img" || return 1
+  cd "$TMP_DIR/ksu" || return 1
+  LOG "- Patching init_boot.img with cached $(sed -n 's/^ksu-next-CI=//p' "$CACHE_DIR/version" | tr -d '\r')"
+  "$KSU_KSUD" boot-patch -b init_boot.img --module "$KSU_MODULE" --kmi android13-5.15 || return 1
+  local -a PATCHED_IMAGES
+  mapfile -t PATCHED_IMAGES < <(find . -maxdepth 1 -type f -name '*.img' ! -name init_boot.img)
+  if [ "${#PATCHED_IMAGES[@]}" -ne 1 ] || [ ! -s "${PATCHED_IMAGES[0]}" ]; then
+    LOGE "Expected exactly one newly patched init_boot image"
+    return 1
+  fi
+  cp "${PATCHED_IMAGES[0]}" "$WORK_DIR/kernel/init_boot.img" || return 1
+  cmp -s "${PATCHED_IMAGES[0]}" "$WORK_DIR/kernel/init_boot.img" || return 1
+  LOG "- Verified cached KernelSU-Next patched init_boot.img"
+  LOG "  SHA-256: $(sha256sum "$WORK_DIR/kernel/init_boot.img" | cut -d ' ' -f 1)"
+)
+
+# =============================================================================
+# Kernel - NPL keeps S23 Edgar + KSU via kernel.sh (not tip ksu-next cache primary)
+# Tip helpers (_REZOSS_KERNEL_FROM_CACHE / ksu-next) remain available for fallback tooling.
 # =============================================================================
 # shellcheck source=unica/mods/rezoss/kernel.sh
 source "$MODPATH/kernel.sh"
 REZOSS_APPLY_KERNEL_PATCHES "edgars+ksu"
+
+# Experimental Wi-Fi modules must match the final selected kernel.
+source "$MODPATH/wondertap/integrate.sh" || return 1

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Also support an existing platform-signed /data installation after a dirty
+     ROM update. This allowlist does not replace the platform-signature check. -->
+<permissions>
+    <signature-permissions package="com.samsung.android.app.memory">
+        <permission name="android.permission.WRITE_SECURE_SETTINGS"/>
+    </signature-permissions>
+</permissions>

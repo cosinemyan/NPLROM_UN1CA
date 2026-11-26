@@ -1,0 +1,113 @@
+AUTHOR Rezoss
+Subject: [PATCH] Normalize AOD SDK clock item stretch font data
+
+diff --git a/smali_classes2/aod/ys2.smali b/smali_classes2/aod/ys2.smali
+--- a/smali_classes2/aod/ys2.smali	2026-10-05 13:56:56.035055445 +0200
++++ b/smali_classes2/aod/ys2.smali	2026-10-05 13:56:56.067149049 +0200
+@@ -124 +124 @@
+-    .locals 33
++    .locals 39
+@@ -791,6 +791,56 @@
+
+     invoke-virtual {v9}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
+
++    iget-object v10, v0, Laod/ys2;->o:Laod/ue3;
++
++    iget-object v10, v10, Laod/ue3;->a:Ljava/lang/Object;
++
++    check-cast v10, Landroid/content/Context;
++
++    new-instance v33, Lcom/samsung/android/clockpack/plugins/clock/ClockFontData;
++
++    move/from16 v34, v2
++
++    move-object/from16 v35, v3
++
++    move-object/from16 v36, v4
++
++    move-object/from16 v37, v6
++
++    move-object/from16 v38, v8
++
++    invoke-direct/range {v33 .. v38}, Lcom/samsung/android/clockpack/plugins/clock/ClockFontData;-><init>(ILjava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/util/List;)V
++
++    move-object/from16 v11, v33
++
++    invoke-static/range {v10 .. v11}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->normalizeStretchFontData(Landroid/content/Context;Lcom/samsung/android/clockpack/plugins/clock/ClockFontData;)Lcom/samsung/android/clockpack/plugins/clock/ClockFontData;
++
++    move-result-object v11
++
++    invoke-virtual {v11}, Lcom/samsung/android/clockpack/plugins/clock/ClockFontData;->getFontType()I
++
++    move-result v2
++
++    invoke-virtual {v11}, Lcom/samsung/android/clockpack/plugins/clock/ClockFontData;->getFontPath()Ljava/lang/String;
++
++    move-result-object v3
++
++    invoke-virtual {v11}, Lcom/samsung/android/clockpack/plugins/clock/ClockFontData;->getFontWeight()Ljava/lang/Integer;
++
++    move-result-object v4
++
++    invoke-virtual {v11}, Lcom/samsung/android/clockpack/plugins/clock/ClockFontData;->getFontRoundedCorners()Ljava/lang/Integer;
++
++    move-result-object v6
++
++    invoke-virtual {v11}, Lcom/samsung/android/clockpack/plugins/clock/ClockFontData;->getFontHeights()Ljava/util/List;
++
++    move-result-object v8
++
++    invoke-static {v10, v9}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->normalizeStretchEnabled(Landroid/content/Context;Ljava/lang/Boolean;)Ljava/lang/Boolean;
++
++    move-result-object v9
++
+     const/16 v10, 0x2bc
+
+     if-ne v2, v10, :cond_f
+diff --git a/smali_classes2/io/mesalabs/unica/aod/ClockFontSettingsSync.smali b/smali_classes2/io/mesalabs/unica/aod/ClockFontSettingsSync.smali
+--- a/smali_classes2/io/mesalabs/unica/aod/ClockFontSettingsSync.smali	2026-10-05 13:56:56.033429801 +0200
++++ b/smali_classes2/io/mesalabs/unica/aod/ClockFontSettingsSync.smali	2026-10-05 13:56:56.066755316 +0200
+@@ -307,6 +307,44 @@
+     return-object p1
+ .end method
+
++
++.method public static normalizeStretchEnabled(Landroid/content/Context;Ljava/lang/Boolean;)Ljava/lang/Boolean;
++    .registers 4
++
++    if-eqz p0, :cond_return_original
++
++    :try_start_0
++    new-instance v0, Lcom/samsung/android/app/aodservice/common/provider/settingdata/LockClockSettingData;
++
++    invoke-direct {v0, p0}, Lcom/samsung/android/app/aodservice/common/provider/settingdata/LockClockSettingData;-><init>(Landroid/content/Context;)V
++
++    iget-object v0, v0, Lcom/samsung/android/app/aodservice/common/provider/settingdata/LockClockSettingData;->v:Laod/fc;
++
++    invoke-virtual {v0}, Laod/fc;->c()Ljava/lang/Object;
++
++    move-result-object v0
++
++    const/4 v1, 0x0
++
++    invoke-static {v0, v1}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->getInt(Ljava/lang/Object;I)I
++
++    move-result v0
++
++    if-eqz v0, :cond_return_original
++
++    sget-object p1, Ljava/lang/Boolean;->TRUE:Ljava/lang/Boolean;
++    :try_end_0
++    .catch Ljava/lang/Throwable; {:try_start_0 .. :try_end_0} :catch_0
++
++    return-object p1
++
++    :catch_0
++    move-exception p0
++
++    :cond_return_original
++    return-object p1
++.end method
++
+ .method public static syncAodStretchFontType(Landroid/content/Context;)V
+     .locals 6

@@ -1,0 +1,19 @@
+--- a/qcacld-3.0/components/cmn_services/policy_mgr/src/wlan_policy_mgr_pcl.c
++++ b/qcacld-3.0/components/cmn_services/policy_mgr/src/wlan_policy_mgr_pcl.c
+@@ -1385,6 +1385,7 @@
+ 	struct wlan_objmgr_vdev *vdev;
+ 	uint32_t conn_index;
+ 	uint8_t legacy_sap = 0, ml_sap = 0;
++	uint8_t vdev_id;
+ 
+ 	qdf_mutex_acquire(&pm_ctx->qdf_conc_list_lock);
+ 
+@@ -1394,7 +1395,7 @@
+ 		    pm_conc_connection_list[conn_index].mode != PM_SAP_MODE)
+ 			continue;
+ 
+-		uint8_t vdev_id = pm_conc_connection_list[conn_index].vdev_id;
++		vdev_id = pm_conc_connection_list[conn_index].vdev_id;
+ 
+ 		if (vdev_id == new_vdev_id)
+ 			continue;

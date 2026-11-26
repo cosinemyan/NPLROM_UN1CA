@@ -1,0 +1,130 @@
+Subject: [PATCH] Preserve WhatsApp and Business chat nudges when personal-data autofill is UNKNOWN
+
+The exact focused WhatsApp or WhatsApp Business conversation entry stays UNKNOWN for personal-data
+autofill. Skip only its unsupported-field EXIT broadcast after FTU; do not
+route chat text into personal-data understanding or change chat eligibility.
+All other fields retain the original rejection. Existing registers, labels,
+FTU handling and supported-field flow are preserved. Apply after patch 0026.
+
+--- a/smali_classes15/com/samsung/android/smartsuggestions/service/autofill/interpreter/AssistDataInterpreter.smali
++++ b/smali_classes15/com/samsung/android/smartsuggestions/service/autofill/interpreter/AssistDataInterpreter.smali
+@@ -671,6 +671,101 @@
+     return p0
+ .end method
+ 
++.method private final preserveWhatsAppConversationNudge(Lcom/samsung/android/smartsuggestions/service/autofill/data/AssistData;)Z
++    .locals 3
++
++    invoke-virtual {p1}, Lcom/samsung/android/smartsuggestions/service/autofill/data/AssistData;->getFieldType()Lcom/samsung/android/smartsuggestions/service/autofill/data/FieldInputType;
++    move-result-object v0
++    sget-object v1, Lcom/samsung/android/smartsuggestions/service/autofill/data/FieldInputType;->UNKNOWN:Lcom/samsung/android/smartsuggestions/service/autofill/data/FieldInputType;
++    if-ne v0, v1, :whatsapp_reject
++
++    invoke-virtual {p1}, Lcom/samsung/android/smartsuggestions/service/autofill/data/AssistData;->getComponentName()Landroid/content/ComponentName;
++    move-result-object v0
++    invoke-virtual {v0}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
++    move-result-object v2
++    const-string v1, "com.whatsapp"
++    invoke-virtual {v1, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++    move-result v2
++    if-nez v2, :whatsapp_package_supported
++    const-string v1, "com.whatsapp.w4b"
++    invoke-virtual {v0}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
++    move-result-object v2
++    invoke-virtual {v1, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++    move-result v2
++    if-eqz v2, :whatsapp_reject
++
++    :whatsapp_package_supported
++    invoke-virtual {v0}, Landroid/content/ComponentName;->getClassName()Ljava/lang/String;
++    move-result-object v2
++    const-string v1, "com.whatsapp.Conversation"
++    invoke-virtual {v1, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++    move-result v2
++    if-eqz v2, :whatsapp_reject
++
++    invoke-virtual {p1}, Lcom/samsung/android/smartsuggestions/service/autofill/data/AssistData;->getNodeInfo()Landroid/app/assist/AssistStructure$ViewNode;
++    move-result-object v0
++    if-eqz v0, :whatsapp_reject
++
++    invoke-virtual {v0}, Landroid/app/assist/AssistStructure$ViewNode;->isFocused()Z
++    move-result v2
++    if-eqz v2, :whatsapp_reject
++
++    invoke-virtual {v0}, Landroid/app/assist/AssistStructure$ViewNode;->isEnabled()Z
++    move-result v2
++    if-eqz v2, :whatsapp_reject
++
++    invoke-virtual {v0}, Landroid/app/assist/AssistStructure$ViewNode;->getAutofillType()I
++    move-result v2
++    const/4 v1, 0x1
++    if-ne v2, v1, :whatsapp_reject
++
++    invoke-virtual {v0}, Landroid/app/assist/AssistStructure$ViewNode;->getIdPackage()Ljava/lang/String;
++    move-result-object v2
++    invoke-virtual {p1}, Lcom/samsung/android/smartsuggestions/service/autofill/data/AssistData;->getComponentName()Landroid/content/ComponentName;
++    move-result-object v1
++    invoke-virtual {v1}, Landroid/content/ComponentName;->getPackageName()Ljava/lang/String;
++    move-result-object v1
++    invoke-virtual {v1, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++    move-result v2
++    if-eqz v2, :whatsapp_reject
++
++    invoke-virtual {v0}, Landroid/app/assist/AssistStructure$ViewNode;->getIdEntry()Ljava/lang/String;
++    move-result-object v2
++    const-string v1, "entry"
++    invoke-virtual {v1, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++    move-result v2
++    if-eqz v2, :whatsapp_reject
++
++    invoke-virtual {v0}, Landroid/app/assist/AssistStructure$ViewNode;->getInputType()I
++    move-result v0
++    and-int/lit8 v2, v0, 0xf
++    const/4 v1, 0x1
++    if-ne v2, v1, :whatsapp_reject
++    and-int/lit16 v0, v0, 0xff0
++    const/16 v1, 0x80
++    if-eq v0, v1, :whatsapp_reject
++    const/16 v1, 0x90
++    if-eq v0, v1, :whatsapp_reject
++    const/16 v1, 0xe0
++    if-eq v0, v1, :whatsapp_reject
++
++    sget-object v0, Lcom/samsung/android/smartsuggestions/service/screenintelligence/setting/NowNudgesSettingHelper;->INSTANCE:Lcom/samsung/android/smartsuggestions/service/screenintelligence/setting/NowNudgesSettingHelper;
++    iget-object v1, p0, Lcom/samsung/android/smartsuggestions/service/autofill/interpreter/AssistDataInterpreter;->context:Landroid/content/Context;
++    invoke-virtual {v0, v1}, Lcom/samsung/android/smartsuggestions/service/screenintelligence/setting/NowNudgesSettingHelper;->isNowNudgesFTU(Landroid/content/Context;)Z
++    move-result v0
++    if-nez v0, :whatsapp_reject
++
++    const-string v0, "AssistDataInterpreter"
++    const-string v1, "Preserve chat nudge for verified WhatsApp or Business entry; skip personal-data autofill"
++    invoke-static {v0, v1}, Lcom/samsung/android/smartsuggestions/service/autofill/util/AutofillFlowLogger;->i(Ljava/lang/String;Ljava/lang/String;)V
++    const/4 v0, 0x1
++    return v0
++
++    :whatsapp_reject
++    const/4 v0, 0x0
++    return v0
++.end method
++
+ .method private final loadAllInputTypeConfigs()V
+     .locals 6
+ 
+@@ -1294,6 +1389,17 @@
+ 
+     if-nez v0, :cond_0
+ 
++    # Chat entry is not a personal-data autofill field. Do not clear its chat nudge.
++    invoke-direct {p0, p1}, Lcom/samsung/android/smartsuggestions/service/autofill/interpreter/AssistDataInterpreter;->preserveWhatsAppConversationNudge(Lcom/samsung/android/smartsuggestions/service/autofill/data/AssistData;)Z
++
++    move-result v0
++
++    if-eqz v0, :whatsapp_original_unsupported_field
++
++    return-void
++
++    :whatsapp_original_unsupported_field
++
+     const-string p1, "Focused field is not supported"
+ 
+     invoke-static {v1, p1}, Lcom/samsung/android/smartsuggestions/service/autofill/util/AutofillFlowLogger;->i(Ljava/lang/String;Ljava/lang/String;)V

@@ -197,43 +197,6 @@
     throw v0
 .end method
 
-.method public static getNplMaintainers()Ljava/lang/String;
-    .locals 3
-
-    const-string v0, "ro.npl.maintainers"
-
-    const-string v1, ""
-
-    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v0
-
-    invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
-
-    move-result v2
-
-    if-eqz v2, :cond_0
-
-    const-string v0, "ro.npl.maintainer"
-
-    const-string v1, "Unknown"
-
-    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
-
-    move-result-object v0
-
-    :cond_0
-    const-string v1, ", "
-
-    const-string v2, "\n"
-
-    invoke-virtual {v0, v1, v2}, Ljava/lang/String;->replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
-
-    move-result-object v0
-
-    return-object v0
-.end method
-
 .method public static getRandomNepalFact(Landroid/content/Context;)Ljava/lang/String;
     .locals 8
 
@@ -367,3 +330,41 @@
 
     return-object p0
 .end method
+
+.method public static getNplMaintainers()Ljava/lang/String;
+    .locals 3
+
+    const-string v0, "ro.npl.maintainers"
+
+    const-string v1, ""
+
+    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
+
+    move-result v2
+
+    if-eqz v2, :cond_0
+
+    const-string v0, "ro.npl.maintainer"
+
+    const-string v1, "Unknown"
+
+    invoke-static {v0, v1}, Landroid/os/SemSystemProperties;->get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+    move-result-object v0
+
+    :cond_0
+    const-string v1, ", "
+
+    const-string v2, "\n"
+
+    invoke-virtual {v0, v1, v2}, Ljava/lang/String;->replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+

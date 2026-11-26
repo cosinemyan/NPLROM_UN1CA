@@ -1,0 +1,4 @@
+id=unica-volumeup-action
+name=Early boot Volume Up to recovery
+author=rezoss_reza
+description=Hold Volume Up for 600 ms during the early seven-second boot window to reboot to recovery (dm3q).

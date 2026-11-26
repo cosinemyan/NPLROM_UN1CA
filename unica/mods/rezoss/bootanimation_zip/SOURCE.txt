@@ -18,6 +18,10 @@ SHA-256:
   bootanimation_zip: d95392d15cb17b105386f6f1c0e61139d5e952d7ad8b9277ebb3ae826fc43743
   libbootanimation.so: 70df449650eb3e3b84532082df66daf00c482b79131fe0a5a53a90cedd8795e0
 
+ROM source payload: libbootanimation_rezoss_custom.so (same bytes/hash).
+libbootanimation.so is a relative compatibility symlink. DT_NEEDED/SONAME
+remain libbootanimation.so; no executable or ELF instruction is changed.
+
 Validation: all direct strong dynamic imports, including symbol versions, resolve
 against dm3q work_dir system libraries and its com.android.runtime APEX.
 Actual boot animation playback must still be tested on device.

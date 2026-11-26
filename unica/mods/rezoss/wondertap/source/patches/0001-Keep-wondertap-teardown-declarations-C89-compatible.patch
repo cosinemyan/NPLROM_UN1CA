@@ -1,0 +1,19 @@
+--- a/qcacld-3.0/core/hdd/src/wlan_hdd_wondertap.c
++++ b/qcacld-3.0/core/hdd/src/wlan_hdd_wondertap.c
+@@ -2182,6 +2182,7 @@
+ 	struct hdd_context *hdd_ctx;
+ 	struct hdd_adapter *adapter;
+ 	struct osif_vdev_sync *vdev_sync;
++	qdf_event_t *vdev_event;
+ 	QDF_STATUS status;
+ 
+ 	hdd_enter();
+@@ -2196,7 +2197,7 @@
+ 		hdd_ctx = g_wt_ctx->hdd_ctx;
+ 		adapter = g_wt_ctx->wt_adapter;
+ 		/* Keep reference to event for later use */
+-		qdf_event_t *vdev_event = &g_wt_ctx->wondertap_vdev_event;
++		vdev_event = &g_wt_ctx->wondertap_vdev_event;
+ 		mutex_unlock(&g_wt_ctx_mutex);
+ 
+ 		wlan_hdd_netif_queue_control(adapter,

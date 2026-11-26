@@ -1,0 +1,35 @@
+<!doctype html>
+<html><head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; frame-src https://keybox.kowx712.cc; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'">
+<style>html,body,iframe{margin:0;width:100%;height:100%;border:0}</style>
+</head><body>
+<iframe id="repo" title="Tricky Addon Keybox Repository" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-forms" src="https://keybox.kowx712.cc/"></iframe>
+<script>
+// Duck-ToolBox / Tricky Addon protocol. The native port stays in this local page.
+const origin = 'https://keybox.kowx712.cc';
+const frame = document.getElementById('repo');
+let nativePort = null;
+let timer;
+window.addEventListener('message', event => {
+    // Android's postWebMessage has a null source; browser implementations may use window.
+    if ((event.source === null || event.source === window) && event.data === 'connect' &&
+        event.ports.length === 1 && nativePort === null) {
+        nativePort = event.ports[0];
+        return;
+    }
+    if (event.origin !== origin || event.source !== frame.contentWindow || !event.data) return;
+    if (event.data.type === 'handshake_ack') clearInterval(timer);
+    if (event.data.type === 'download' && typeof event.data.url === 'string' && nativePort) {
+        nativePort.postMessage(JSON.stringify({type: 'download', url: event.data.url}));
+    }
+    if (event.data.type === 'error' && nativePort) {
+        nativePort.postMessage(JSON.stringify({type: 'error'}));
+    }
+});
+frame.onload = () => {
+    clearInterval(timer);
+    timer = setInterval(() => frame.contentWindow.postMessage({type: 'handshake'}, origin), 500);
+};
+</script>
+</body></html>

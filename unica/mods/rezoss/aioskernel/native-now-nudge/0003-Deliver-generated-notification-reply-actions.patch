@@ -1,0 +1,51 @@
+--- a/smali_classes15/com/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver.smali
++++ b/smali_classes15/com/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver.smali
+@@ -2362,6 +2362,13 @@
+ 
+     move-result v0
+ 
++    if-nez v0, :rezoss_reply_generation_ready
++
++    invoke-static {v1, v5}, Lio/mesalabs/rezoss/ai/NativeReplyBridge;->shouldGenerateNow(Landroid/content/Context;Ljava/lang/Object;)Z
++
++    move-result v0
++
++    :rezoss_reply_generation_ready
+     if-eqz v0, :cond_1f
+ 
+     move-object v0, v8
+@@ -5047,6 +5054,8 @@
+     invoke-direct {v0, v8, v3, v2}, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->pushReplyInlineSuggestion(Landroid/content/Context;Ljava/lang/String;Ljava/util/List;)V
+ 
+     :cond_7
++    invoke-static {v8, v1, v2}, Lio/mesalabs/rezoss/ai/NativeReplyBridge;->record(Landroid/content/Context;Ljava/lang/Object;Ljava/util/List;)V
++
+     return-void
+ 
+     :cond_8
+@@ -7195,6 +7204,12 @@
+     invoke-direct/range {v18 .. v23}, Lcom/samsung/android/smartsuggestions/service/smartreply/base/SmartReplyResult;-><init>(Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/lang/String;Ljava/util/Map;)V
+ 
+     move-object/from16 v0, v18
++
++    invoke-static {v2, v0}, Lio/mesalabs/rezoss/ai/NativeReplyBridge;->merge(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object v0
++
++    check-cast v0, Lcom/samsung/android/smartsuggestions/service/smartreply/base/SmartReplyResult;
+ 
+     invoke-virtual {v2, v0}, Lcom/samsung/android/smartsuggestions/service/smartreply/base/SmartReplyRequestParam;->callback(Lcom/samsung/android/smartsuggestions/service/smartreply/base/SmartReplyResult;)V
+ 
+--- a/smali_classes15/com/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler.smali
++++ b/smali_classes15/com/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler.smali
+@@ -389,6 +389,10 @@
+ 
+     invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+ 
++    iget-object v1, p0, Lcom/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler;->context:Landroid/content/Context;
++
++    invoke-static {v1, v0, p2}, Lio/mesalabs/rezoss/ai/NativeReplyBridge;->addReplyActions(Landroid/content/Context;Ljava/util/List;Ljava/lang/Object;)V
++
+     sget-object v1, Lcom/samsung/android/smartsuggestions/service/smartreply/analytics/SaLogResolver;->INSTANCE:Lcom/samsung/android/smartsuggestions/service/smartreply/analytics/SaLogResolver;
+ 
+     invoke-virtual {p2}, Lcom/samsung/android/smartsuggestions/service/smartreply/base/SmartReplyResult;->getSuggestedActions()Ljava/util/List;

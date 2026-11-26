@@ -1,0 +1,31 @@
+AUTHOR Rezoss
+
+diff --git a/smali_classes2/com/android/server/notification/sec/summarize/NotiSummaryManager$$ExternalSyntheticLambda0.smali b/smali_classes2/com/android/server/notification/sec/summarize/NotiSummaryManager$$ExternalSyntheticLambda0.smali
+--- a/smali_classes2/com/android/server/notification/sec/summarize/NotiSummaryManager$$ExternalSyntheticLambda0.smali
++++ b/smali_classes2/com/android/server/notification/sec/summarize/NotiSummaryManager$$ExternalSyntheticLambda0.smali
+@@ -302,6 +302,25 @@
+     goto/16 :goto_5
+
+     :cond_7
++    const-string v2, "persist.sys.unica.noti_summary_test"
++
++    const/4 v3, 0x1
++
++    invoke-static {v2, v3}, Landroid/os/SystemProperties;->getBoolean(Ljava/lang/String;Z)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_rezoss_real_summary
++
++    const-string p1, "UN1CA local summary test"
++
++    sget-object p2, Lcom/android/server/notification/sec/summarize/NotiSummaryStatus;->SUCCESS:Lcom/android/server/notification/sec/summarize/NotiSummaryStatus;
++
++    invoke-virtual {p0, p2, p1}, Lcom/android/server/notification/NotificationManagerService$$ExternalSyntheticLambda15;->accept(Ljava/lang/Object;Ljava/lang/Object;)V
++
++    return-void
++
++    :cond_rezoss_real_summary
+     iget v2, p2, Lcom/android/server/notification/sec/summarize/NotiSumamryLimiter;->mCount:I
+
+     add-int/2addr v2, v4

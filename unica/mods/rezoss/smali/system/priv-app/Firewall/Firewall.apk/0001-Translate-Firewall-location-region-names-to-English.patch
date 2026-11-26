@@ -3470,9 +3470,9 @@ diff -ruN a/smali_classes2/tmsdk/bg/tcc/RezossRegionTranslator.smali b/smali_cla
 +    return-void
 +.end method
 diff -ruN a/smali_classes2/tmsdk/bg/tcc/TelNumberLocator.smali b/smali_classes2/tmsdk/bg/tcc/TelNumberLocator.smali
---- a/smali_classes2/tmsdk/bg/tcc/TelNumberLocator.smali	2026-06-02 21:36:08.476279610 +0200
-+++ b/smali_classes2/tmsdk/bg/tcc/TelNumberLocator.smali	2026-06-02 21:38:17.153165306 +0200
-@@ -282,6 +282,10 @@
+--- a/smali_classes2/tmsdk/bg/tcc/TelNumberLocator.smali
++++ b/smali_classes2/tmsdk/bg/tcc/TelNumberLocator.smali
+@@ -280,6 +280,10 @@
 
      move-result-object p0
 
@@ -3483,7 +3483,7 @@ diff -ruN a/smali_classes2/tmsdk/bg/tcc/TelNumberLocator.smali b/smali_classes2/
      return-object p0
  .end method
 
-@@ -305,6 +309,10 @@
+@@ -302,6 +306,10 @@
 
      iget-wide v1, p0, Ltmsdk/bg/tcc/TelNumberLocator;->object:J
 
@@ -3494,7 +3494,7 @@ diff -ruN a/smali_classes2/tmsdk/bg/tcc/TelNumberLocator.smali b/smali_classes2/
      invoke-static {v1, v2, p1, v0}, Ltmsdk/bg/tcc/TelNumberLocator;->getCityNameList(JLjava/lang/String;Ljava/util/ArrayList;)I
 
      move-result p1
-@@ -359,6 +367,10 @@
+@@ -354,6 +362,10 @@
 
      move-result-object p0
 
@@ -3505,20 +3505,20 @@ diff -ruN a/smali_classes2/tmsdk/bg/tcc/TelNumberLocator.smali b/smali_classes2/
      return-object p0
  .end method
 
-@@ -478,6 +490,12 @@
+@@ -470,6 +482,12 @@
+     invoke-direct {p0, p1}, Ltmsdk/bg/tcc/TelNumberLocator;->throwIfError(I)V
 
      :cond_1
-     :goto_0
-+    invoke-static {p1}, Ltmsdk/bg/tcc/RezossRegionTranslator;->translateBuffer(Ljava/lang/StringBuffer;)V
++    invoke-static {v4}, Ltmsdk/bg/tcc/RezossRegionTranslator;->translateBuffer(Ljava/lang/StringBuffer;)V
 +
-+    invoke-static {p2}, Ltmsdk/bg/tcc/RezossRegionTranslator;->translateBuffer(Ljava/lang/StringBuffer;)V
++    invoke-static {v5}, Ltmsdk/bg/tcc/RezossRegionTranslator;->translateBuffer(Ljava/lang/StringBuffer;)V
 +
-+    invoke-static {p3}, Ltmsdk/bg/tcc/RezossRegionTranslator;->translateBuffer(Ljava/lang/StringBuffer;)V
++    invoke-static {v6}, Ltmsdk/bg/tcc/RezossRegionTranslator;->translateBuffer(Ljava/lang/StringBuffer;)V
 +
      return-void
  .end method
 
-@@ -513,6 +531,10 @@
+@@ -504,6 +522,10 @@
 
      move-result-object p0
 
@@ -3529,52 +3529,52 @@ diff -ruN a/smali_classes2/tmsdk/bg/tcc/TelNumberLocator.smali b/smali_classes2/
      return-object p0
  .end method
 
-@@ -540,6 +562,8 @@
+@@ -529,6 +551,8 @@
+     move-result v1
 
      invoke-direct {p0, v1}, Ltmsdk/bg/tcc/TelNumberLocator;->throwIfError(I)V
-
-+    invoke-static {v0}, Ltmsdk/bg/tcc/RezossRegionTranslator;->translateList(Ljava/util/ArrayList;)V
 +
++    invoke-static {v0}, Ltmsdk/bg/tcc/RezossRegionTranslator;->translateList(Ljava/util/ArrayList;)V
+
      return-object v0
  .end method
+diff -ruN a/smali/t3/b.smali b/smali/t3/b.smali
+--- a/smali/t3/b.smali
++++ b/smali/t3/b.smali
+@@ -631,7 +631,7 @@
 
-diff -ruN a/smali/o1/b.smali b/smali/o1/b.smali
---- a/smali/o1/b.smali	2026-06-06 00:00:00.000000000 +0200
-+++ b/smali/o1/b.smali	2026-06-06 00:00:00.000000000 +0200
-@@ -569,7 +569,7 @@
+     move-result-object v14
 
-     move-result-object v9
+-    sget-object v15, Ljava/util/Locale;->CHINESE:Ljava/util/Locale;
++    sget-object v15, Ljava/util/Locale;->ENGLISH:Ljava/util/Locale;
 
--    sget-object v10, Ljava/util/Locale;->CHINESE:Ljava/util/Locale;
-+    sget-object v10, Ljava/util/Locale;->ENGLISH:Ljava/util/Locale;
+     invoke-virtual {v14, v9, v15}, Lcom/google/i18n/phonenumbers/geocoding/PhoneNumberOfflineGeocoder;->getDescriptionForNumber(Lcom/google/i18n/phonenumbers/Phonenumber$PhoneNumber;Ljava/util/Locale;)Ljava/lang/String;
 
-     invoke-virtual {v9, v4, v10}, Lcom/google/i18n/phonenumbers/geocoding/PhoneNumberOfflineGeocoder;->getDescriptionForNumber(Lcom/google/i18n/phonenumbers/Phonenumber$PhoneNumber;Ljava/util/Locale;)Ljava/lang/String;
+diff -ruN a/smali/com/sec/android/app/firewall/ui/blocklog/BlockedLogAdapter.smali b/smali/com/sec/android/app/firewall/ui/blocklog/BlockedLogAdapter.smali
+--- a/smali/com/sec/android/app/firewall/ui/blocklog/BlockedLogAdapter.smali
++++ b/smali/com/sec/android/app/firewall/ui/blocklog/BlockedLogAdapter.smali
+@@ -686,6 +686,10 @@
+     iput-boolean v3, v4, Lw1/f;->b:Z
 
-diff -ruN a/smali_classes3/com/sec/android/app/firewall/ui/blocklog/BlockedLogAdapter.smali b/smali_classes3/com/sec/android/app/firewall/ui/blocklog/BlockedLogAdapter.smali
---- a/smali_classes3/com/sec/android/app/firewall/ui/blocklog/BlockedLogAdapter.smali	2026-06-04 00:00:00.000000000 +0200
-+++ b/smali_classes3/com/sec/android/app/firewall/ui/blocklog/BlockedLogAdapter.smali	2026-06-04 00:00:00.000000000 +0200
-@@ -703,6 +703,10 @@
-
-     iget-object v5, p2, Lo0/b;->p:Ljava/lang/String;
-
+     iget-object v5, p2, Lt1/b;->p:Ljava/lang/String;
++
 +    invoke-static {v5}, Ltmsdk/bg/tcc/RezossRegionTranslator;->translate(Ljava/lang/String;)Ljava/lang/String;
 +
 +    move-result-object v5
-+
-     invoke-virtual {v4, v5}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
 
-     goto/16 :goto_3
+     invoke-virtual {v0, v5}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
+
 diff -ruN a/smali_classes3/com/sec/android/app/firewall/databinding/BlockedCallLogItemBindingImpl.smali b/smali_classes3/com/sec/android/app/firewall/databinding/BlockedCallLogItemBindingImpl.smali
---- a/smali_classes3/com/sec/android/app/firewall/databinding/BlockedCallLogItemBindingImpl.smali	2026-06-04 00:00:00.000000000 +0200
-+++ b/smali_classes3/com/sec/android/app/firewall/databinding/BlockedCallLogItemBindingImpl.smali	2026-06-04 00:00:00.000000000 +0200
-@@ -712,6 +712,10 @@
+--- a/smali_classes3/com/sec/android/app/firewall/databinding/BlockedCallLogItemBindingImpl.smali
++++ b/smali_classes3/com/sec/android/app/firewall/databinding/BlockedCallLogItemBindingImpl.smali
+@@ -710,6 +710,10 @@
 
      iget-object v0, v1, Lcom/sec/android/app/firewall/databinding/BlockedCallLogItemBinding;->g:Landroid/widget/TextView;
 
-+    invoke-static {v4}, Ltmsdk/bg/tcc/RezossRegionTranslator;->translate(Ljava/lang/String;)Ljava/lang/String;
++    invoke-static {v14}, Ltmsdk/bg/tcc/RezossRegionTranslator;->translate(Ljava/lang/String;)Ljava/lang/String;
 +
-+    move-result-object v4
++    move-result-object v14
 +
-     invoke-static {v0, v4}, Landroidx/databinding/adapters/TextViewBindingAdapter;->setText(Landroid/widget/TextView;Ljava/lang/CharSequence;)V
+     invoke-static {v0, v14}, Landroidx/databinding/adapters/TextViewBindingAdapter;->setText(Landroid/widget/TextView;Ljava/lang/CharSequence;)V
 
      iget-object v0, v1, Lcom/sec/android/app/firewall/databinding/BlockedCallLogItemBinding;->g:Landroid/widget/TextView;

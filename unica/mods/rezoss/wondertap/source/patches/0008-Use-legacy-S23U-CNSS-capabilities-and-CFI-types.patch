@@ -1,0 +1,86 @@
+--- a/qcacld-3.0/Kbuild
++++ b/qcacld-3.0/Kbuild
+@@ -3818,6 +3818,7 @@
+ ccflags-y += -DMSM_PLATFORM
+ endif
+ 
++ccflags-$(CONFIG_S23U_LEGACY_CNSS) += -DCONFIG_S23U_LEGACY_CNSS
+ ccflags-$(CONFIG_CNSS_OUT_OF_TREE) += -DCONFIG_CNSS_OUT_OF_TREE
+ ccflags-$(CONFIG_CNSS_OUT_OF_TREE) += -I$(WLAN_PLATFORM_INC)
+ ccflags-$(CONFIG_IPA_OUT_OF_TREE) += -I$(DATA_IPA_INC)
+--- a/platform/inc/cnss2.h
++++ b/platform/inc/cnss2.h
+@@ -141,8 +141,13 @@
+ 	int  (*suspend_noirq)(struct pci_dev *pdev);
+ 	int  (*resume_noirq)(struct pci_dev *pdev);
+ 	void (*modem_status)(struct pci_dev *pdev, int state);
++#ifdef CONFIG_S23U_LEGACY_CNSS
++	/* Keep the older CNSS callback type, including its CFI signature. */
++	void (*update_status)(struct pci_dev *pdev, uint32_t status);
++#else
+ 	void (*update_status)(struct pci_dev *pdev,
+ 			      enum cnss_driver_status status);
++#endif
+ 	int  (*update_event)(struct pci_dev *pdev,
+ 			     struct cnss_uevent_data *uevent);
+ 	struct cnss_wlan_runtime_ops *runtime_ops;
+--- a/qcacld-3.0/core/pld/src/pld_pcie.c
++++ b/qcacld-3.0/core/pld/src/pld_pcie.c
+@@ -288,8 +288,12 @@
+  *
+  * Return: void
+  */
++#ifdef CONFIG_S23U_LEGACY_CNSS
++static void pld_pcie_uevent(struct pci_dev *pdev, uint32_t status)
++#else
+ static void pld_pcie_uevent(struct pci_dev *pdev,
+ 			    enum cnss_driver_status status)
++#endif
+ {
+ 	struct pld_context *pld_context;
+ 	struct pld_uevent_data data = {0};
+--- a/qcacld-3.0/core/pld/src/pld_pcie.h
++++ b/qcacld-3.0/core/pld/src/pld_pcie.h
+@@ -880,7 +880,8 @@
+ 	cnss_remove_pm_qos(dev);
+ }
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0)) && \
++    !defined(CONFIG_S23U_LEGACY_CNSS)
+ static inline void pld_pcie_set_tsf_sync_period(struct device *dev, u32 val)
+ {
+ 	cnss_update_time_sync_period(dev, val);
+@@ -1070,17 +1071,32 @@
+ 
+ static inline bool pld_pcie_audio_is_direct_link_supported(struct device *dev)
+ {
++#ifdef CONFIG_S23U_LEGACY_CNSS
++	/* The stock S23U platform does not expose this optional capability. */
++	return false;
++#else
+ 	return cnss_audio_is_direct_link_supported(dev);
++#endif
+ }
+ 
+ static inline bool pld_pcie_is_audio_shared_iommu_group(struct device *dev)
+ {
++#ifdef CONFIG_S23U_LEGACY_CNSS
++	/* The stock S23U platform does not expose this optional capability. */
++	return false;
++#else
+ 	return cnss_get_audio_shared_iommu_group_cap(dev);
++#endif
+ }
+ 
+ static inline bool pld_pcie_is_ipa_shared_smmu_enable(struct device *dev)
+ {
++#ifdef CONFIG_S23U_LEGACY_CNSS
++	/* The stock S23U platform does not expose this optional capability. */
++	return false;
++#else
+ 	return cnss_ipa_wlan_shared_smmu_supported(dev);
++#endif
+ }
+ 
+ static inline

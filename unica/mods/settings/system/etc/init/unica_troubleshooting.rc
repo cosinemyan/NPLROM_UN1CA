@@ -1,0 +1,18 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# User-triggered only. Never scans or disables modules automatically during boot.
+service unica_troubleshooting /system/bin/unica-troubleshooting
+    user root
+    group system
+    capabilities
+    seclabel u:r:unica_troubleshooting:s0
+    disabled
+    oneshot
+
+on post-fs-data
+    mkdir /data/misc/unica_troubleshooting 0750 root system
+    mkdir /data/misc/unica_troubleshooting/requests 0770 system system
+    mkdir /data/misc/unica_troubleshooting/responses 0750 root system
+    restorecon_recursive /data/misc/unica_troubleshooting
+
+on property:sys.unica.troubleshooting.request=*
+    start unica_troubleshooting

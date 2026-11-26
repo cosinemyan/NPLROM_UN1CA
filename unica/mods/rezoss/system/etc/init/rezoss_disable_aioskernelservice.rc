@@ -1,0 +1,10 @@
+on property:sys.boot_completed=1
+    exec_background -- /system/bin/sh /system/etc/unica/rezoss_disable_aioskernelservice.sh
+
+on property:persist.sys.unica.aioskernelservice.disable=1
+    exec_background -- /system/bin/sh /system/etc/unica/rezoss_disable_aioskernelservice.sh
+    setprop persist.sys.unica.aioskernelservice.disable 0
+
+on property:persist.sys.unica.samsung_aicore.disable=1
+    exec_background -- /system/bin/sh /system/etc/unica/rezoss_disable_aioskernelservice.sh
+    setprop persist.sys.unica.samsung_aicore.disable 0

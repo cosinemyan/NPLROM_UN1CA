@@ -20,6 +20,17 @@ SMALI_PATCH "system" "system/framework/framework.jar" \
 
 DECODE_APK "system" "system/priv-app/SecSettings/SecSettings.apk"
 
+# Relax SDHMS uses the inspected dm3q persistent process, with no root shell,
+# kernel changes or cross-app data writes. Reject an unreviewed SDHMS ABI.
+if [[ "$TARGET_CODENAME" == "dm3q" ]]; then
+    python3 "$MODPATH/thermal/verify-input.py" \
+        "$WORK_DIR/system/system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk" \
+        || ABORT "Relax SDHMS firmware compatibility check failed"
+    APPLY_PATCH "system" "system/priv-app/SamsungDeviceHealthManagerService/SamsungDeviceHealthManagerService.apk" \
+        "$MODPATH/thermal/patches/0001-Add-protected-SDHMS-policy-switch.patch" \
+        || ABORT "Failed to install Relax SDHMS policy control"
+fi
+
 # SoftwareUpdateUtils no longer exposes isOTAUpgradeAllowed(Context) on One UI 9.
 
 # Always show One UI minor version
@@ -68,6 +79,16 @@ done < <(find "$MODPATH/SecSettings.apk" -type f \
     ! -name "*.bak*" \
     ! -name "*.orig" \
     ! -name "*.rej")
+
+# The toggle controller binds the backend row after the UN1CA overlay is copied.
+APPLY_PATCH "system" "system/priv-app/SecSettings/SecSettings.apk" \
+    "$MODPATH/now-nudge/0001-Show-AI-backend-only-when-Now-Nudge-is-enabled.patch" \
+    || ABORT "Failed to configure Now Nudge backend menu visibility"
+
+# Keep the device-specific Power schedule menu aligned with its Rezoss backend.
+python3 "$SRC_DIR/unica/mods/rezoss/scheduled-power-on/install-settings-menu.py" \
+    "$APKTOOL_DIR/system/priv-app/SecSettings/SecSettings.apk/res/xml" \
+    "$TARGET_CODENAME" || ABORT "Failed to configure Power schedule menu"
 
 # Expose UN1CA-selected SamsungSans source-bank fonts through Samsung's normal
 # Display > Font list and apply path.
@@ -241,3 +262,39 @@ unset -f ADD_UNICA_SETTINGS_SEARCH_INDEX_DATA_PROVIDER
 unset PATCH_INST CONTENT SEARCH_INDEX_RESOURCES SEARCH_INDEX_RESOURCES_SMALI TOP_LEVEL_KEYS_COLLECTOR TOP_LEVEL_KEYS_COLLECTOR_SMALI
 
 LOG_STEP_OUT
+
+# ROM-native Battery Saving: the native worker only accepts fixed kernel controls.
+LOG "- Installing Battery Saving service policy"
+python3 "$MODPATH/battery/install-policy.py" "$WORK_DIR" || ABORT "Failed to install Battery Saving service policy"
+python3 "$MODPATH/ota/install-policy.py" "$WORK_DIR" || ABORT "Failed to install OTA staging service policy"
+if [[ "$TARGET_CODENAME" == "dm3q" ]]; then
+    python3 "$MODPATH/movecertificate/install-policy.py" "$WORK_DIR" || ABORT "Failed to install Move Certificate service policy"
+else
+    DELETE_FROM_WORK_DIR "system" "system/bin/unica-movecert"
+    DELETE_FROM_WORK_DIR "system" "system/etc/init/unica_movecert.rc"
+fi
+
+# dm3q-only GPU image editor and recovery backup policy. Other targets keep no
+# partition access or service; the shared Settings page reports unsupported.
+if [[ "$TARGET_CODENAME" == "dm3q" ]]; then
+    "$MODPATH/gpu/verify-firmware.sh" "$WORK_DIR/kernel/vendor_boot.img" \
+        "$WORK_DIR/vendor_dlkm/lib/modules/msm_kgsl.ko" || ABORT "GPU capability check failed; review the changed table/driver contract before shipping"
+    python3 "$MODPATH/gpu/install-policy.py" "$WORK_DIR" || ABORT "Failed to install GPU tuning service policy"
+else
+    DELETE_FROM_WORK_DIR "system" "system/bin/unica-gpu"
+    DELETE_FROM_WORK_DIR "system" "system/etc/init/unica_gpu.rc"
+    DELETE_FROM_WORK_DIR "system" "system/etc/unica/gpu"
+fi
+
+# User-triggered Troubleshooting worker; no automatic boot-time module changes.
+# Compile verified compatibility rules for this source tree; no network access.
+python3 "$MODPATH/troubleshooting/compile-catalog.py" \
+    --output-dir "$WORK_DIR/system/system/etc/unica" --no-backup || ABORT "Failed to compile compatibility catalog"
+for _UNICA_COMPAT_TABLE in troubleshooting-root-purposes.tsv troubleshooting-lsposed-purposes.json troubleshooting-lsposed-conflicts.json troubleshooting-registry-info.json; do
+    SET_METADATA "system" "system/etc/unica/$_UNICA_COMPAT_TABLE" 0 0 644 "u:object_r:system_file:s0"
+done
+unset _UNICA_COMPAT_TABLE
+python3 "$MODPATH/troubleshooting/install-policy.py" "$WORK_DIR" || ABORT "Failed to install Troubleshooting policy"
+python3 "$MODPATH/troubleshooting/registry.py" "$WORK_DIR/system/system/etc/unica/troubleshooting-targets.tsv" || ABORT "Failed to index ROM conflict targets"
+SET_METADATA "system" "system/etc/unica/troubleshooting-targets.tsv" 0 0 644 "u:object_r:system_file:s0"
+SET_METADATA "system" "system/bin/unica-troubleshooting" 0 0 755 "u:object_r:unica_troubleshooting_exec:s0"

@@ -1,0 +1,58 @@
+Dressroom Advanced Source-Available License 1.0
+
+Copyright (c) 2026 BlueOutside and contributors.
+
+1. Scope and permission
+
+"Software" means the original code, documentation and assets in this repository
+that the copyright holders may license, together with modifications to them.
+Third-party material remains subject to its own license.
+
+You may use, study, copy, modify and distribute the Software, in source or
+compiled form, provided you comply with the following conditions.
+
+2. Credit and notices
+
+Keep this license and existing copyright and attribution notices in all copies
+or substantial portions of the Software. Distributed applications and their
+release or download pages must visibly credit "BlueOutside / Dressroom Advanced"
+and link to https://github.com/BlueOutside/Dressroom-Advanced.
+
+Clearly identify modifications and their authors. Do not claim authorship of
+work you did not create, or imply that a modified release is an official release
+or is endorsed by the original authors.
+
+3. Free distribution and available source
+
+You must not sell, sublicense for a fee, or require payment, a paid subscription,
+a donation or a purchase to access, download or use the Software or a derivative
+containing it. This includes charging for an application, module or bundle that
+contains the Software or a substantial portion of it. Optional donations are
+allowed only when access and functionality do not depend on payment.
+
+When distributing the Software or a derivative, make the corresponding source
+code for the covered portions and modifications, including the files needed to
+build those portions, available without charge or a paywall. Provide the source
+with the distribution or a clear link to it. License those portions and
+modifications under these same terms. Do not impose additional restrictions that
+prevent recipients from exercising these permissions.
+
+These requirements do not relicense independent software merely distributed
+alongside the Software. You may keep private modifications private until you
+distribute them.
+
+4. Separate permission and termination
+
+A copyright holder may grant separate written permission for material they own.
+Without that permission, the conditions above apply. Rights under this license
+terminate if you violate its conditions. They are reinstated if you correct the
+violation within 30 days of receiving notice of it, unless you previously
+received notice of the same violation from the same copyright holder.
+
+5. Disclaimer
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. TO THE EXTENT PERMITTED BY LAW, THE AUTHORS AND
+COPYRIGHT HOLDERS ARE NOT LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY
+ARISING FROM THE SOFTWARE OR ITS USE.

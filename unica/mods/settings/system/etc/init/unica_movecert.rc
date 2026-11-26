@@ -1,0 +1,20 @@
+# Copyright (c) 2026 Rezoss
+# SPDX-License-Identifier: GPL-3.0-or-later
+service unica_movecert /system/bin/unica-movecert
+    user root
+    group system everybody
+    capabilities SYS_ADMIN CHOWN
+    seclabel u:r:unica_movecert:s0
+    disabled
+    oneshot
+
+# Synchronous application before Zygote/app mount namespaces are created.
+# A failed worker exits without preventing the remaining boot actions.
+on post-fs-data
+    mkdir /data/misc/unica_movecert 0750 root system
+    mkdir /data/misc/unica_movecert/request 0770 system system
+    mkdir /data/misc/unica_movecert/request/certs 0770 system system
+    restorecon_recursive /data/misc/unica_movecert
+    mkdir /mnt/unica-movecert 0755 root root
+    restorecon /mnt/unica-movecert
+    exec_start unica_movecert

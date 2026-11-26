@@ -1,0 +1,14 @@
+--- a/wlan/wonder/mac80211.c
++++ b/wlan/wonder/mac80211.c
+@@ -1037,7 +1037,11 @@
+ 			enum wondertap_station_action action)
+ {
+ 	struct wonder_sta_update_work *swork;
++#ifdef WONDER_MAC80211_STA_LEGACY
++	struct ieee80211_sta *link_sta = sta;
++#else
+ 	struct ieee80211_link_sta *link_sta = &sta->deflink;
++#endif
+ 	struct wonder_data *wonder = hw->priv;
+ 	struct wondertap_station_info *sta_info;
+ 

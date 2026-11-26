@@ -1,0 +1,4 @@
+/system/bin/unica-summary-llama
+/system/etc/unica/local-summary/*.gguf
+/out/
+/system/priv-app/RezossAI/RezossAI.apk

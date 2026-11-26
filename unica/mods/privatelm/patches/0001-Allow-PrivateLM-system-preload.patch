@@ -1,0 +1,7 @@
+AUTHOR Rezoss
+
+--- a/allowed-system-preload-apps.xml
++++ b/allowed-system-preload-apps.xml
+@@ -1072 +1072,2 @@
++    <allowed-system-preload package="com.orailnoor.privatelm"/>
+ </config>

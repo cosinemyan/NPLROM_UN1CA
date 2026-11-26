@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: @rezoss_reza <rezoss@local>
+Date: Fri, 25 Sep 2026 15:30:00 +0200
+Subject: [PATCH] Add Now Nudge notification allow packages
+
+---
+ res/values/arrays.xml | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/res/values/arrays.xml b/res/values/arrays.xml
+--- a/res/values/arrays.xml
++++ b/res/values/arrays.xml
+@@ -1417,4 +1417,19 @@
+         <item>2000</item>
+         <item>3000</item>
+     </integer-array>
++    <string-array name="config_DefaultNotificationNudgeAllowPackages">
++        <item>com.google.android.apps.dynamite</item>
++        <item>com.kakao.talk</item>
++        <item>jp.naver.line.android</item>
++        <item>com.sgiggle.production</item>
++        <item>com.nttdocomo.android.msg</item>
++        <item>com.kddi.android.cmail</item>
++        <item>org.thoughtcrime.securesms</item>
++        <item>com.google.android.apps.messaging</item>
++        <item>com.samsung.android.messaging</item>
++        <item>com.whatsapp</item>
++        <item>com.whatsapp.w4b</item>
++        <item>org.telegram.messenger</item>
++        <item>org.telegram.messenger.web</item>
++    </string-array>
+ </resources>
+--
+2.43.0

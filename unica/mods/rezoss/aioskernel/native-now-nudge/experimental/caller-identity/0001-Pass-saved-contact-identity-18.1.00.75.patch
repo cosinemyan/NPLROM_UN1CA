@@ -1,0 +1,17 @@
+--- a/smali_classes2/ko/d3.smali
++++ b/smali_classes2/ko/d3.smali
+@@ -798,8 +798,13 @@
+     .line 386
+     move-result-object v4
+ 
++    # Pass a fresh per-request contact record; preserve the original history list.
++    invoke-static {p0, v0}, Lio/mesalabs/rezoss/callscreen/CallerIdentity;->decorate(Ljava/util/List;Ljava/lang/Object;)Ljava/util/List;
++
++    move-result-object v5
++
+     .line 387
+-    invoke-direct {v2, p0, v3, v1, v4}, Lz8/k;-><init>(Ljava/util/List;Ljava/util/Locale;ILy4/b;)V
++    invoke-direct {v2, v5, v3, v1, v4}, Lz8/k;-><init>(Ljava/util/List;Ljava/util/Locale;ILy4/b;)V
+ 
+     .line 388
+     .line 389

@@ -1,0 +1,102 @@
+--- a/wlan-driver/qcacld-3.0/components/pmo/dispatcher/src/wlan_pmo_tgt_static_config.c
++++ b/wlan-driver/qcacld-3.0/components/pmo/dispatcher/src/wlan_pmo_tgt_static_config.c
+@@ -102,11 +102,27 @@
+ {
+ 	QDF_STATUS status;
+ 	struct wlan_objmgr_psoc *psoc;
++	struct wlan_objmgr_pdev *pdev;
++	struct pmo_psoc_priv_obj *psoc_ctx;
+ 	struct wlan_pmo_tx_ops pmo_tx_ops;
+ 
+-	psoc = pmo_vdev_get_psoc(vdev);
++	if (!vdev || !cmd)
++		return QDF_STATUS_E_INVAL;
+ 
+-	pmo_tx_ops = GET_PMO_TX_OPS_FROM_PSOC(psoc);
++	/* Recovery can leave a referenced vdev without its parent/PMO context. */
++	pdev = wlan_vdev_get_pdev(vdev);
++	if (!pdev)
++		return QDF_STATUS_E_NULL_VALUE;
++	psoc = wlan_pdev_get_psoc(pdev);
++	if (!psoc)
++		return QDF_STATUS_E_NULL_VALUE;
++	psoc_ctx = pmo_psoc_get_priv_nolock(psoc);
++	if (!psoc_ctx) {
++		pmo_err("PMO context unavailable for action frame request");
++		return QDF_STATUS_E_NULL_VALUE;
++	}
++
++	pmo_tx_ops = psoc_ctx->pmo_tx_ops;
+ 	if (!pmo_tx_ops.send_action_frame_pattern_req) {
+ 		pmo_err("send_add_action_frame_pattern_cmd is null");
+ 		status = QDF_STATUS_E_NULL_VALUE;
+--- a/wlan-driver/qcacld-3.0/components/pmo/core/src/wlan_pmo_suspend_resume.c
++++ b/wlan-driver/qcacld-3.0/components/pmo/core/src/wlan_pmo_suspend_resume.c
+@@ -454,10 +454,11 @@
+ 
+ }
+ 
+-static void pmo_core_enable_runtime_pm_offloads(struct wlan_objmgr_psoc *psoc)
++static QDF_STATUS pmo_core_enable_runtime_pm_offloads(struct wlan_objmgr_psoc *psoc)
+ {
+ 	uint8_t vdev_id;
+ 	struct wlan_objmgr_vdev *vdev;
++	QDF_STATUS status;
+ 
+ 	/* Iterate through VDEV list */
+ 	for (vdev_id = 0; vdev_id < WLAN_UMAC_PSOC_MAX_VDEVS; vdev_id++) {
+@@ -466,9 +467,13 @@
+ 		if (!vdev)
+ 			continue;
+ 
+-		pmo_register_action_frame_patterns(vdev, QDF_RUNTIME_SUSPEND);
++		status = pmo_register_action_frame_patterns(vdev, QDF_RUNTIME_SUSPEND);
+ 		wlan_objmgr_vdev_release_ref(vdev, WLAN_PMO_ID);
++		if (QDF_IS_STATUS_ERROR(status))
++			return status;
+ 	}
++
++	return QDF_STATUS_SUCCESS;
+ }
+ 
+ static void pmo_core_disable_runtime_pm_offloads(struct wlan_objmgr_psoc *psoc)
+@@ -503,11 +508,19 @@
+ 	struct pmo_psoc_priv_obj *psoc_ctx;
+ 	struct hif_target_info *tgt_info;
+ 	struct hif_opaque_softc *hif_ctx;
++	QDF_STATUS status;
+ 
+-	psoc_ctx = pmo_psoc_get_priv(psoc);
+-
+-	if (is_runtime_pm)
+-		pmo_core_enable_runtime_pm_offloads(psoc);
++	if (!psoc)
++		return QDF_STATUS_E_NULL_VALUE;
++	psoc_ctx = pmo_psoc_get_priv_nolock(psoc);
++	if (!psoc_ctx)
++		return QDF_STATUS_E_NULL_VALUE;
++
++	if (is_runtime_pm) {
++		status = pmo_core_enable_runtime_pm_offloads(psoc);
++		if (QDF_IS_STATUS_ERROR(status))
++			return status;
++	}
+ 
+ 	hif_ctx = pmo_core_psoc_get_hif_handle(psoc);
+ 	if (!hif_ctx) {
+--- a/wonder-samsung-api/wlan/wonder/wondertap.c
++++ b/wonder-samsung-api/wlan/wonder/wondertap.c
+@@ -138,6 +138,13 @@
+ 		if (ret == 0)
+ 			break;
+ 
++		/* A fatal init/firmware failure must not trigger a recovery storm. */
++		if (ret != -EAGAIN && ret != -EBUSY) {
++			wonder_warn("Vendor init failed: %d; not retrying fatal error\n",
++				    ret);
++			break;
++		}
++
+ 		if (retry < WONDER_INIT_RETRY_CNT) {
+ 			wonder_warn(
+ 				"Vendor init failed: %d. Retrying in %d ms...(retry %d)\n",

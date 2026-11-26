@@ -1,0 +1,93 @@
+From: UN1CA <unica@local>
+Subject: [PATCH] Use legacy multiview modes for integrated dual recording
+
+Keep DualRecordingVideoMaker callbacks and refresh all cached request maps
+with S23U shooting modes 32/37 instead of 45. Preserve register counts.
+Pair with dm3q dual_recording XML allowlists. This shared maker also
+covers dedicated mode 42 if that mode is exposed later. Runtime experimental.
+
+--- a/smali_classes2/com/samsung/android/camera/core2/maker/DualRecordingVideoMaker.smali
++++ b/smali_classes2/com/samsung/android/camera/core2/maker/DualRecordingVideoMaker.smali
+@@ -122,6 +122,62 @@
+     iget-object v1, p0, Lcom/samsung/android/camera/core2/maker/MakerBase;->mRecordRequestBuilderMap:Ljava/util/Map;
+ 
+     invoke-virtual {p0, v0, v1, v2, v3}, Lcom/samsung/android/camera/core2/maker/MakerBase;->createRequestBuilder(Lcom/samsung/android/camera/core2/CamDevice;Ljava/util/Map;ILjava/util/Set;)Landroid/hardware/camera2/CaptureRequest$Builder;
++
++    iget-object v0, p0, Lcom/samsung/android/camera/core2/maker/MakerBase;->mPreviewRequestBuilderMap:Ljava/util/Map;
++
++    iget-object v1, p0, Lcom/samsung/android/camera/core2/maker/MakerBase;->mCamDevice:Lcom/samsung/android/camera/core2/CamDevice;
++
++    invoke-virtual {v1}, Lcom/samsung/android/camera/core2/CamDevice;->m()Ljava/lang/String;
++
++    move-result-object v1
++
++    sget-object v2, Lcom/samsung/android/camera/core2/local/vendorkey/SemCaptureRequest;->j0:Landroid/hardware/camera2/CaptureRequest$Key;
++
++    invoke-virtual {p0}, Lcom/samsung/android/camera/core2/maker/DualRecordingVideoMaker;->getMakerShootingMode()I
++
++    move-result v3
++
++    invoke-static {v3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object v3
++
++    invoke-static {v0, v1, v2, v3}, Lcom/samsung/android/camera/core2/local/vendorkey/SemCaptureRequest;->e(Ljava/util/Map;Ljava/lang/String;Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
++
++    iget-object v0, p0, Lcom/samsung/android/camera/core2/maker/MakerBase;->mPictureRequestBuilderMap:Ljava/util/Map;
++
++    iget-object v1, p0, Lcom/samsung/android/camera/core2/maker/MakerBase;->mCamDevice:Lcom/samsung/android/camera/core2/CamDevice;
++
++    invoke-virtual {v1}, Lcom/samsung/android/camera/core2/CamDevice;->m()Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {p0}, Lcom/samsung/android/camera/core2/maker/DualRecordingVideoMaker;->getMakerShootingMode()I
++
++    move-result v3
++
++    invoke-static {v3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object v3
++
++    invoke-static {v0, v1, v2, v3}, Lcom/samsung/android/camera/core2/local/vendorkey/SemCaptureRequest;->e(Ljava/util/Map;Ljava/lang/String;Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
++
++    iget-object v0, p0, Lcom/samsung/android/camera/core2/maker/MakerBase;->mRecordRequestBuilderMap:Ljava/util/Map;
++
++    iget-object v1, p0, Lcom/samsung/android/camera/core2/maker/MakerBase;->mCamDevice:Lcom/samsung/android/camera/core2/CamDevice;
++
++    invoke-virtual {v1}, Lcom/samsung/android/camera/core2/CamDevice;->m()Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {p0}, Lcom/samsung/android/camera/core2/maker/DualRecordingVideoMaker;->getMakerShootingMode()I
++
++    move-result v3
++
++    invoke-static {v3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object v3
++
++    invoke-static {v0, v1, v2, v3}, Lcom/samsung/android/camera/core2/local/vendorkey/SemCaptureRequest;->e(Ljava/util/Map;Ljava/lang/String;Landroid/hardware/camera2/CaptureRequest$Key;Ljava/lang/Object;)V
+     :try_end_1
+     .catchall {:try_start_1 .. :try_end_1} :catchall_0
+ 
+@@ -149,7 +205,18 @@
+ .method public getMakerShootingMode()I
+     .locals 0
+ 
+-    const/16 p0, 0x2d
++    iget p0, p0, Lcom/samsung/android/camera/core2/maker/MakerBase;->mDeviceUsageType:I
++
++    add-int/lit8 p0, p0, -0x1
++
++    if-nez p0, :legacy_mode_normal
++
++    const/16 p0, 0x25
++
++    return p0
++
++    :legacy_mode_normal
++    const/16 p0, 0x20
+ 
+     return p0
+ .end method

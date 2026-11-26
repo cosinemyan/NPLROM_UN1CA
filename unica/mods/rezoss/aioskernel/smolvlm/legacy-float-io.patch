@@ -1,0 +1,97 @@
+--- a/backends/qualcomm/runtime/QnnExecuTorchBackend.cpp
++++ b/backends/qualcomm/runtime/QnnExecuTorchBackend.cpp
+@@ -14,6 +14,8 @@
+ #include <executorch/backends/qualcomm/runtime/backends/QnnCustomProtocol.h>
+ #include <executorch/runtime/backend/interface.h>
+ #include <executorch/runtime/backend/options.h>
++#include <cmath>
++#include <cstdlib>
+ namespace executorch {
+ namespace backends {
+ namespace qnn {
+@@ -187,13 +189,47 @@
+       bindable_outputs,
+       args.size());
+ 
++  // The pinned community export declares FP32 I/O while its decoder context
++  // exposes UFixed16. Marshal using the native scale/offset, with explicit opt-in.
++  const bool legacy_float_io = std::getenv("REZOSS_LEGACY_FLOAT_IO") != nullptr;
++  std::vector<std::vector<uint16_t>> quantized_buffers;
++  quantized_buffers.reserve(args.size());
++  struct FloatOutput {
++    float* target;
++    size_t buffer;
++    Qnn_ScaleOffset_t quant;
++  };
++  std::vector<FloatOutput> float_outputs;
++  auto needs_conversion = [](const std::shared_ptr<TensorWrapper>& native,
++                             const executorch::aten::Tensor& tensor) {
++    return native->GetDataType() == QNN_DATATYPE_UFIXED_POINT_16 &&
++        tensor.scalar_type() == executorch::aten::ScalarType::Float;
++  };
+   size_t args_index = 0;
+   input_tensor_structs.reserve(input_tensors.size());
+   for (const auto& input_tensor : input_tensors) {
+     if (input_tensor->GetName().find("mutbuf_") == std::string::npos) {
+-      if (qnn_manager->RegisterMem(
+-              args[args_index]->toTensor().mutable_data_ptr(), input_tensor) !=
+-          Error::Ok) {
++      auto tensor = args[args_index]->toTensor();
++      if (needs_conversion(input_tensor, tensor)) {
++        auto params = input_tensor->GetQuantizeParams();
++        ET_CHECK_OR_RETURN_ERROR(
++            legacy_float_io && params.quantizationEncoding == QNN_QUANTIZATION_ENCODING_SCALE_OFFSET &&
++                std::isfinite(params.scaleOffsetEncoding.scale) && params.scaleOffsetEncoding.scale > 0 &&
++                input_tensor->GetBytes() == tensor.numel() * sizeof(uint16_t),
++            InvalidProgram, "Unapproved or invalid legacy FP32/UInt16 input conversion");
++        auto quant = params.scaleOffsetEncoding;
++        quantized_buffers.emplace_back(tensor.numel());
++        auto& buffer = quantized_buffers.back();
++        const float* values = tensor.const_data_ptr<float>();
++        for (size_t i = 0; i < buffer.size(); ++i) {
++          ET_CHECK_OR_RETURN_ERROR(std::isfinite(values[i]), InvalidArgument,
++                                   "Nonfinite legacy input");
++          double value = std::nearbyint(static_cast<double>(values[i]) / quant.scale) - quant.offset;
++          buffer[i] = static_cast<uint16_t>(std::fmax(0.0, std::fmin(65535.0, value)));
++        }
++        input_tensor->FillDataBuffer(buffer.data());
++      } else if (qnn_manager->RegisterMem(
++              tensor.mutable_data_ptr(), input_tensor) != Error::Ok) {
+         // update data ptr only should be fine
+         input_tensor->FillDataBuffer(
+             args[args_index]->toTensor().const_data_ptr());
+@@ -212,8 +248,19 @@
+     if (output_tensor->GetName().rfind("output_", 0) == 0 &&
+         output_tensor->GetName().find("mutbuf_") == std::string::npos) {
+       void* mutable_data_ptr = args[args_index]->toTensor().mutable_data_ptr();
+-      if (qnn_manager->RegisterMem(mutable_data_ptr, output_tensor) !=
+-          Error::Ok) {
++      auto tensor = args[args_index]->toTensor();
++      if (needs_conversion(output_tensor, tensor)) {
++        auto params = output_tensor->GetQuantizeParams();
++        ET_CHECK_OR_RETURN_ERROR(
++            legacy_float_io && params.quantizationEncoding == QNN_QUANTIZATION_ENCODING_SCALE_OFFSET &&
++                std::isfinite(params.scaleOffsetEncoding.scale) && params.scaleOffsetEncoding.scale > 0 &&
++                output_tensor->GetBytes() == tensor.numel() * sizeof(uint16_t),
++            InvalidProgram, "Unapproved or invalid legacy FP32/UInt16 output conversion");
++        quantized_buffers.emplace_back(tensor.numel());
++        float_outputs.push_back({tensor.mutable_data_ptr<float>(), quantized_buffers.size() - 1,
++                                 params.scaleOffsetEncoding});
++        output_tensor->FillDataBuffer(quantized_buffers.back().data());
++      } else if (qnn_manager->RegisterMem(mutable_data_ptr, output_tensor) != Error::Ok) {
+         output_tensor->FillDataBuffer(mutable_data_ptr);
+       }
+       args_index++;
+@@ -229,6 +276,12 @@
+           context.event_tracer()) == Error::Ok,
+       Internal,
+       "Fail to execute graph");
++  for (const auto& output : float_outputs) {
++    const auto& buffer = quantized_buffers[output.buffer];
++    for (size_t i = 0; i < buffer.size(); ++i) {
++      output.target[i] = (static_cast<int32_t>(buffer[i]) + output.quant.offset) * output.quant.scale;
++    }
++  }
+   ET_CHECK_OR_RETURN_ERROR(
+       qnn_manager->ProfileExecuteData(method_name, context.event_tracer()) ==
+           Error::Ok,

@@ -6,7 +6,7 @@ diff --git a/smali_classes3/com/samsung/android/uniform/widget/clock/DigitalHori
 @@ -2262,5 +2262,5 @@
 
      :cond_1
--    invoke-static {v4}, Laod/ql2;->w(I)Z
+-    invoke-static {v4}, Laod/rl2;->w(I)Z
 +    invoke-virtual {v1}, Lcom/samsung/android/clockpack/plugins/clock/ClockFontData;->hasFontHeights()Z
 
      move-result v2
@@ -16,7 +16,7 @@ diff --git a/smali_classes3/com/samsung/android/uniform/widget/clock/DigitalVert
 @@ -1494,5 +1494,5 @@
 
      :cond_1
--    invoke-static {v2}, Laod/ql2;->w(I)Z
+-    invoke-static {v2}, Laod/rl2;->w(I)Z
 +    invoke-virtual {p1}, Lcom/samsung/android/clockpack/plugins/clock/ClockFontData;->hasFontHeights()Z
 
      move-result v0

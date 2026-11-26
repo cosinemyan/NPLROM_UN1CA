@@ -7,35 +7,29 @@ Subject: [PATCH] Add Galaxy Store and Google Photos device spoof hooks
 diff --git a/smali_classes3/android/os/SystemProperties.smali b/smali_classes3/android/os/SystemProperties.smali
 --- a/smali_classes3/android/os/SystemProperties.smali
 +++ b/smali_classes3/android/os/SystemProperties.smali
-@@ -382,6 +382,15 @@
-     return-object v0
-
-     :cond_0
+@@ -392,3 +392,12 @@
 +    invoke-static {p0}, Lio/mesalabs/unica/SamsungPropsHooks;->onSystemPropertiesGet(Ljava/lang/String;)Ljava/lang/String;
 +
 +    move-result-object v0
 +
-+    if-eqz v0, :cond_1
++    if-eqz v0, :unica_samsung_real_property
 +
 +    return-object v0
 +
-+    :cond_1
++    :unica_samsung_real_property
      invoke-static {p0}, Landroid/os/SystemProperties;->native_get(Ljava/lang/String;)Ljava/lang/String;
 
      move-result-object p0
-@@ -403,6 +412,15 @@
-     return-object v0
-
-     :cond_0
+@@ -422,3 +422,12 @@
 +    invoke-static {p0}, Lio/mesalabs/unica/SamsungPropsHooks;->onSystemPropertiesGet(Ljava/lang/String;)Ljava/lang/String;
 +
 +    move-result-object v0
 +
-+    if-eqz v0, :cond_1
++    if-eqz v0, :unica_samsung_real_property
 +
 +    return-object v0
 +
-+    :cond_1
++    :unica_samsung_real_property
      invoke-static {p0, p1}, Landroid/os/SystemProperties;->native_get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 
      move-result-object p0

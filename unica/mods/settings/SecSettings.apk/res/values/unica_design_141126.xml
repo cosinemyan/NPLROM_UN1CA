@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unica_audio_tweaks_settings_title">Audio Tweaks</string>
+    <string name="unica_battery_performance_settings_title">Battery &amp; Performance Tweak</string>
+    <string name="unica_design_141126_unica_top_settings_group_0">ROM Status</string>
+    <string name="unica_design_141126_unica_top_settings_group_1">OTA</string>
+    <string name="unica_design_141126_unica_top_settings_group_2">Misc Tweaks</string>
+    <string name="unica_design_141126_unica_top_settings_group_3">Spoof &amp; Misc</string>
+    <string name="unica_design_141126_unica_top_settings_group_4">Support</string>
+    <string name="unica_design_141126_unica_spoof_settings_group_0">Keybox</string>
+    <string name="unica_design_141126_unica_spoof_settings_group_1">PIF</string>
+    <string name="unica_design_141126_unica_spoof_settings_group_2">Hide My Apps</string>
+    <string name="unica_design_141126_unica_spoof_settings_group_3">AdGuard System Cert Converter</string>
+</resources>

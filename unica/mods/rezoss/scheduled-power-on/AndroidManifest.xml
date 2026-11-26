@@ -1,0 +1,21 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.mesalabs.rezoss.poweron" android:sharedUserId="android.uid.system"
+    android:versionCode="2" android:versionName="0.2">
+    <uses-sdk android:minSdkVersion="35" android:targetSdkVersion="35" />
+    <uses-permission android:name="android.permission.REBOOT" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <application android:label="Power schedule" android:allowBackup="false"
+        android:extractNativeLibs="true" android:theme="@style/PowerScheduleTheme">
+        <activity android:name=".PowerOnActivity" android:exported="true"
+            android:permission="android.permission.REBOOT" />
+        <receiver android:name=".PowerScheduleReceiver" android:exported="false" android:directBootAware="true">
+            <intent-filter>
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>

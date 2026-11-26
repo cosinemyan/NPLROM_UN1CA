@@ -1,0 +1,13 @@
+Subject: [PATCH] Bind notification reply generation to its notification identity
+
+--- a/smali_classes15/com/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler.smali
++++ b/smali_classes15/com/samsung/android/smartsuggestions/service/smartreply/NowNudgeConversationActionsHandler.smali
+@@ -1297,6 +1297,8 @@
+ 
+     move-object v10, v5
+ 
++    invoke-static {v11, v15, v6}, Lio/mesalabs/rezoss/ai/NativeReplyBridge;->begin(Landroid/content/Context;Ljava/lang/Object;Landroid/view/textclassifier/ConversationActions$Request;)V
++
+     invoke-virtual/range {v10 .. v15}, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->executeForTextClassifier(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Lcom/samsung/android/smartsuggestions/service/smartreply/base/Conversation;Lcom/samsung/android/smartsuggestions/service/smartreply/base/SmartReplyRequestParam;)V
+ 
+     move-object v10, v15

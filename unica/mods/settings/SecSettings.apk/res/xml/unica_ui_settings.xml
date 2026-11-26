@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen android:title="@string/unica_ui_settings_title" settings:hierarchicalParentFragment="io.mesalabs.unica.settings.UnicaSettingsFragment" settings:topLevelPreferenceKey="unica_ui_settings"
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto">
-    <SecSwitchPreference android:title="@string/unica_native_blur_title" android:key="unica_native_blur" settings:controller="io.mesalabs.unica.settings.ui.LiveBlurPreferenceController" />
-    <SecDropDownPreference android:title="@string/unica_launcher_anim_type_title" android:key="unica_launcher_anim_type" android:summary="%s" settings:controller="io.mesalabs.unica.settings.ui.LauncherAnimationTypePreferenceController" />
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto" android:title="@string/unica_ui_settings_title" settings:hierarchicalParentFragment="io.mesalabs.unica.settings.UnicaSettingsFragment" settings:topLevelPreferenceKey="unica_ui_settings">
+    <Preference android:icon="@drawable/ic_settings_enable" android:title="@string/unica_dynamic_island_title" android:key="unica_dynamic_island" android:summary="@string/unica_dynamic_island_summary" settings:controller="io.mesalabs.unica.island.DynamicIslandPreferenceController">
+        <intent android:targetPackage="com.android.settings" android:targetClass="dev.android.dynamicisland.settings.SettingsActivity" />
+    </Preference>
+    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/unica_qt_app" android:title="@string/unica_quick_tiles_title" android:key="unica_quick_tiles" android:summary="@string/unica_quick_tiles_summary">
+        <intent android:targetPackage="com.android.settings" android:targetClass="io.mesalabs.unica.quicktiles.ConfigActivity" />
+    </io.mesalabs.unica.settings.preference.IconPreference>
+    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_unica_settings_font" android:title="@string/unica_font_selector_title" android:key="unica_font_selector" android:summary="@string/unica_font_selector_summary" android:fragment="io.mesalabs.unica.settings.font.FontSelectorFragment" />
     <com.samsung.android.settings.widget.SecInsetCategoryPreference />
+    <SecSwitchPreference android:title="@string/unica_native_blur_title" android:key="unica_native_blur" android:summary="@string/unica_native_blur_summary" settings:controller="io.mesalabs.unica.settings.ui.LiveBlurPreferenceController" />
     <SecSwitchPreference android:title="@string/unica_vulkan_title" android:key="unica_vulkan" android:summary="@string/unica_vulkan_summary" settings:controller="io.mesalabs.unica.settings.ui.VulkanPreferenceController" />
+    <SecDropDownPreference android:title="@string/unica_launcher_anim_type_title" android:key="unica_launcher_anim_type" android:summary="%s" settings:controller="io.mesalabs.unica.settings.ui.LauncherAnimationTypePreferenceController" android:icon="@drawable/ic_settings_enable" />
     <com.samsung.android.settings.widget.SecInsetCategoryPreference />
     <SecSwitchPreference android:title="@string/unica_max_refresh_rate_title" android:key="unica_max_refresh_rate" settings:controller="io.mesalabs.unica.settings.ui.ForceMaxRefreshRatePreferenceController" />
-    <com.samsung.android.settings.widget.SecInsetCategoryPreference />
-    <SecSwitchPreference android:title="@string/unica_boot_sound_title" android:key="unica_boot_sound" settings:controller="io.mesalabs.unica.settings.ui.BootSoundPreferenceController" />
+    <SecSwitchPreference android:title="@string/unica_games_spoof_title" android:key="unica_games_spoof" settings:controller="io.mesalabs.unica.settings.extra.GamesPropsPreferenceController" />
+    <SecSwitchPreference android:icon="@drawable/ic_settings_security" android:title="@string/unica_relax_sdhms_title" android:key="unica_relax_sdhms" android:persistent="false" android:summary="@string/unica_relax_sdhms_checking" settings:controller="io.mesalabs.unica.thermal.RelaxSdhmsPreferenceController" />
 </PreferenceScreen>

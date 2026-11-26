@@ -1,0 +1,4 @@
+/system u:object_r:system_file:s0
+/system/app u:object_r:system_file:s0
+/system/app/PrivateLM u:object_r:system_file:s0
+/system/app/PrivateLM/PrivateLM\.apk u:object_r:system_file:s0

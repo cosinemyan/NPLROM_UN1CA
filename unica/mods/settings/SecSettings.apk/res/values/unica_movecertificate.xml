@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unica_adcert_title">Adcert by AdGuard</string>
+    <string name="unica_adcert_missing">Install the AdGuard Personal CA in Android user certificates to enable.</string>
+    <string name="unica_adcert_off">Trust the AdGuard Personal CA as a system certificate. Reboot to apply.</string>
+    <string name="unica_adcert_on">AdGuard Personal CA is selected for system trust. Reboot to apply changes.</string>
+    <string name="unica_adcert_unavailable">Adcert service is unavailable on this device.</string>
+    <string name="unica_adcert_reboot">Reboot to apply Adcert changes.</string>
+    <string name="unica_adcert_write_failed">Could not save Adcert setting.</string>
+    <string name="unica_movecert_owner_only">Manage system certificates from the device owner profile</string>
+    <string name="unica_movecert_title">Move Certificate by ys1231</string>
+    <string name="unica_movecert_manage">Manage certificates</string>
+    <string name="unica_movecert_summary">Import and manage additional system-trusted CA certificates</string>
+    <string name="unica_movecert_enabled">Trust imported certificates</string>
+    <string name="unica_movecert_on">Enabled for the next boot. Tap to disable.</string>
+    <string name="unica_movecert_off">Off for the next boot. Tap to enable.</string>
+    <string name="unica_movecert_enable_question">Enable system CA trust?</string>
+    <string name="unica_movecert_enable">Enable</string>
+    <string name="unica_movecert_trust_warning">Apps using Android system trust may accept connections signed by these CAs. Only import certificates you trust. This does not bypass SSL pinning or hide certificates from apps.</string>
+    <string name="unica_movecert_status">Current boot status</string>
+    <string name="unica_movecert_refresh">Refresh status</string>
+    <string name="unica_movecert_refresh_summary">Read the boot worker result</string>
+    <string name="unica_movecert_unavailable">Boot status unavailable. The ROM service may not be installed or accessible.</string>
+    <string name="unica_movecert_unsupported">Certificate management is available on the dm3q build.</string>
+    <string name="unica_movecert_import">Import CA certificate</string>
+    <string name="unica_movecert_import_summary">Select one PEM or DER certificate (.crt, .cer, .pem). For AdGuard, select the Personal CA.</string>
+    <string name="unica_movecert_import_question">Import this CA certificate?</string>
+    <string name="unica_movecert_empty">No imported certificates</string>
+    <string name="unica_movecert_empty_summary">Only certificates you explicitly import here are added. Existing user certificates stay unchanged.</string>
+    <string name="unica_movecert_invalid">Invalid certificate. Tap to remove.</string>
+    <string name="unica_movecert_details">Certificate details</string>
+    <string name="unica_movecert_issuer">Issuer</string>
+    <string name="unica_movecert_remove">Remove</string>
+    <string name="unica_movecert_remove_question">Remove imported certificate?</string>
+    <string name="unica_movecert_remove_failed">Could not remove certificate</string>
+    <string name="unica_movecert_reboot_summary">Reboot manually to apply changes. Until then, the current boot trust store remains active. Stock certificates and Android user certificates are preserved.</string>
+    <string name="unica_movecert_saved">Saved — reboot required</string>
+    <string name="unica_movecert_failed">Certificate operation failed</string>
+    <string name="unica_movecert_picker_missing">No document picker is available</string>
+    <string name="unica_movecert_about">About Move Certificate</string>
+    <string name="unica_movecert_about_summary">ROM adaptation inspired by MoveCertificate by ys1231 (Apache 2.0). Uses temporary boot-time stores. No Magisk, KernelSU or LSPosed required for certificate management.</string>
+</resources>

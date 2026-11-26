@@ -1,0 +1,41 @@
+AUTHOR Rezoss
+Subject: [PATCH] Remove lockscreen Depth Effect compositor hook
+
+--- a/smali_classes2/com/android/systemui/keyguard/ui/binder/KeyguardClockViewBinder.smali
++++ b/smali_classes2/com/android/systemui/keyguard/ui/binder/KeyguardClockViewBinder.smali
+@@ -212,35 +212,9 @@
+
+ # virtual methods
+ .method public final addClockViews(Lcom/android/systemui/plugins/keyguard/ui/clocks/ClockController;Landroidx/constraintlayout/widget/ConstraintLayout;)V
+-    .locals 4
++    .locals 3
+
+     if-eqz p1, :cond_3
+-
+-    invoke-virtual {p2}, Landroid/view/ViewGroup;->getContext()Landroid/content/Context;
+-
+-    move-result-object v3
+-
+-    invoke-virtual {v3}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+-
+-    move-result-object v3
+-
+-    const-string v0, "unica_lockscreen_depth_effect"
+-
+-    const/4 v1, 0x0
+-
+-    invoke-static {v3, v0, v1}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
+-
+-    move-result v3
+-
+-    if-eqz v3, :cond_unica_depth_effect_disabled
+-
+-    invoke-virtual {p2}, Landroid/view/ViewGroup;->getContext()Landroid/content/Context;
+-
+-    move-result-object v3
+-
+-    invoke-static {v3, p2}, Lio/mesalabs/unica/depth/DepthEffectController;->attach(Landroid/content/Context;Landroid/view/ViewGroup;)V
+-
+-    :cond_unica_depth_effect_disabled
+
+     invoke-interface {p1}, Lcom/android/systemui/plugins/keyguard/ui/clocks/ClockController;->getSmallClock()Lcom/android/systemui/plugins/keyguard/ui/clocks/ClockFaceController;

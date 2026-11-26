@@ -1,0 +1,19 @@
+From: UN1CA <unica@local>
+Subject: [PATCH] Preserve UHD30 selection in vertical Dual Recording
+
+Skip only the vertical-specific default-resolution dimmer. Keep stock
+FHD30/UHD30 menu mappings and vertical output geometry. Preserve registers,
+labels and all other dimmers, including the single-resolution device case.
+
+--- a/smali_classes2/vc/u.smali
++++ b/smali_classes2/vc/u.smali
+@@ -2610,8 +2610,8 @@
+     goto :goto_27
+
+     :cond_62
+-    if-ne p2, v2, :cond_63
++    goto :cond_63
+
+     iget-object v0, p0, Ld0/i;->c:Ljava/lang/Object;
+
+     move-object v4, v0

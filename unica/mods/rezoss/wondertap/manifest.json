@@ -1,0 +1,51 @@
+{
+  "kernel_image_sha256": "8fb32c0b063da9722363d2848c82a7310a32820ec98be2e8e58003b46e850fd4",
+  "kernel_release": "5.15.220-g2b8b46da",
+  "kernel_reference_only": true,
+  "kernel_abi": {
+    "release_family": "5.15",
+    "required_config": {
+      "CONFIG_ARM64": "y",
+      "CONFIG_MODULES": "y",
+      "CONFIG_SMP": "y",
+      "CONFIG_PREEMPT": "y",
+      "CONFIG_MODULE_UNLOAD": "y",
+      "CONFIG_MODVERSIONS": "y",
+      "CONFIG_MODULE_REL_CRCS": "n",
+      "CONFIG_CFI_CLANG": "y"
+    }
+  },
+  "modules": {
+    "wonder.ko": "d4008aa31b2fbf2efe12fec4826db35c3698cef535c8f9700888660d073ad26f",
+    "s23u_wonder_provider.ko": "18e45044ecfd01a1f0c613d34ad2f9a6dd25574b4d9a0960d03e9a77f82bed6d",
+    "qca_cld3_kiwi_v2.ko": "0ae55dfe8f810b18e948fbe746febb5042305ef64f1c8a66d9f1d8f0ed292765"
+  },
+  "stock_modules": {
+    "cfg80211.ko": "b6be8e2e3ceabd8536ee34a09e2ddeb3eddc03d1873463d7f927356ea206727d",
+    "mac80211.ko": "ec7946474497b7683e9debcbbd3a6dfaecb1540a24c02c18149f167060f4d683",
+    "cnss2.ko": "ef2f667fe9ea971b11efa20d4b1811276145e3adbe2e3c6c28264bb696ffda32",
+    "cnss_utils.ko": "2d392b9a8b2df7f5c9ab7094a5bb8b16b5bc9d16c9c2a94fb0415771deda8803",
+    "cnss_prealloc.ko": "37299d78d2afead378c8614406610ec3080f3bc6516f3420a11fcf6533d8b6df",
+    "cnss_nl.ko": "558ecc37ee08100da6f027c43585259c97c483336fc96098d2add1023ff1ee0d",
+    "qca_cld3_kiwi_v2.ko": "f8448bfedf01b016fc47547f50e09dbc671095abfdec1109ba45773f50e4fcc5"
+  },
+  "runtime_status": "Previous modules reached native Wondertap but triggered firmware assertions and a PMO NULL-context kernel panic. Current candidates repair the observed PMO dereference/error handling and fatal-init retry storm; not deployed. Firmware assertion remains unresolved.",
+  "superseded_modules": {
+    "qca_cld3_kiwi_v2.ko": [
+      "6ed43c8de1582fe3e53e3ff092e85126bab4907bcf20ba9c09a2f26de39657c9",
+      "959047c7408ef3279473782c7d7251636ae9b71c270c6ff7a1da611760baae50",
+      "c37e5f61174433689af9ec857b6ac1a5cdf731e0287b288473ff3922327195e4"
+    ],
+    "wonder.ko": [
+      "c6e0954db8328e35bd336c97dd6a214115500d9ef522628a2db6c4d8c74d33f5",
+      "daba889f24c0d6da4d318e35ced9b94027df8052e8cd3df53c6f40cb9744070c"
+    ]
+  },
+  "revision": "2026-10-24-pmo-recovery-guard-and-fatal-init-retry-repair",
+  "rate_control": {
+    "implementation": "Linux Minstrel HT bundled in wonder.ko",
+    "algorithm": "wonder_minstrel_ht",
+    "explicit_selection": true,
+    "global_default_required": false
+  }
+}

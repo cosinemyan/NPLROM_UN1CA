@@ -1,0 +1,2752 @@
+{
+  "schema": 1,
+  "updated": "2026-11-07",
+  "policy": "Exact identities only. Duplicate purpose is not proof of a failure. Unverified candidates and standalone apps do not generate warnings. Never auto-disable.",
+  "features": {
+    "pif": {
+      "name": "PIF",
+      "sources": [
+        "unica/mods/pif/framework.jar/0001-Introduce-PlayIntegrityHooks.patch"
+      ],
+      "feature_class": "io.mesalabs.unica.PlayIntegrityHooks",
+      "required_files": [
+        "lib64/libunica_pif.so",
+        "framework/framework.jar"
+      ]
+    },
+    "tee": {
+      "name": "TEE Simulator",
+      "sources": [
+        "unica/mods/tee-simulator/customize.sh"
+      ],
+      "required_files": [
+        "bin/unica-teesim-inject",
+        "framework/unica-teesim.jar",
+        "lib64/libunica_teesim.so",
+        "etc/init/unica-teesim.rc"
+      ]
+    },
+    "hma": {
+      "name": "HMA",
+      "sources": [
+        "unica/mods/hma/src/io/mesalabs/unica/HmaPolicy.java"
+      ],
+      "feature_class": "io.mesalabs.unica.HmaPolicy",
+      "required_files": [
+        "framework/framework.jar",
+        "framework/services.jar"
+      ]
+    },
+    "photos": {
+      "name": "UN1CA Settings (Google Photos spoofing)",
+      "sources": [
+        "unica/mods/settings/smali/system/framework/framework.jar/0001-Allow-unlimited-storage-for-Google-Photos.patch"
+      ],
+      "feature_class": "io.mesalabs.unica.SamsungPropsHooks",
+      "required_files": [
+        "framework/framework.jar"
+      ]
+    },
+    "secure_windows": {
+      "name": "UN1CA Settings (secure screenshots)",
+      "sources": [
+        "unica/mods/settings/smali/system/framework/services.jar/0001-Allow-disabling-secure-windows.patch"
+      ],
+      "feature_class": "io.mesalabs.unica.settings.wm.SecureScreenshotPreferenceController"
+    },
+    "downgrade": {
+      "name": "UN1CA Settings (app downgrade)",
+      "sources": [
+        "unica/mods/settings/smali/system/framework/services.jar/0002-Allow-app-downgrade.patch"
+      ],
+      "feature_class": "io.mesalabs.unica.settings.pm.AppDowngradePreferenceController"
+    },
+    "signature": {
+      "name": "Signature patches",
+      "sources": [
+        "unica/patches/signature/framework.jar/0001-Allow-CorePatch-style-SigningDetails-bypass.patch"
+      ],
+      "feature_class": "io.mesalabs.unica.settings.pm.SignatureVerificationPreferenceController"
+    },
+    "knox": {
+      "name": "KnoxPatch",
+      "sources": [
+        "unica/mods/knoxpatch/framework.jar/0001-Introduce-KnoxPatchHooks.patch"
+      ],
+      "feature_class": "io.mesalabs.unica.KnoxPatchHooks",
+      "required_files": [
+        "framework/framework.jar"
+      ]
+    },
+    "boot_props": {
+      "name": "Prophide",
+      "sources": [
+        "unica/mods/prophide/system/bin/prophide.sh"
+      ],
+      "required_files": [
+        "bin/prophide.sh"
+      ]
+    },
+    "font": {
+      "name": "Monotype / UN1CA fonts",
+      "sources": [
+        "unica/mods/monotype/customize.sh"
+      ],
+      "required_files": [
+        "etc/fonts.xml"
+      ]
+    }
+  },
+  "entries": [
+    {
+      "key": "candidate-01",
+      "name": "PlayIntegrityFix (KOWX712)",
+      "type": "Magisk / KSU",
+      "source": "https://github.com/KOWX712/PlayIntegrityFix",
+      "claimed_identifier": "playintegrityfix",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "playintegrityfix",
+          "sources": [
+            "https://raw.githubusercontent.com/KOWX712/PlayIntegrityFix/cc06c31e1de8c6d4d25e48c62c2dbc3995979fc3/module/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "pif"
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-02",
+      "name": "PlayIntegrityFork (osm0sis)",
+      "type": "Magisk / KSU",
+      "source": "https://github.com/osm0sis/PlayIntegrityFork",
+      "claimed_identifier": "playintegrityfix",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "playintegrityfix",
+          "sources": [
+            "https://raw.githubusercontent.com/osm0sis/PlayIntegrityFork/a364a3079bdfbe4361de7df048fe94c1e2e8fa50/module/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "pif"
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-03",
+      "name": "PlayIntegrityFix (JingMatrix)",
+      "type": "Magisk",
+      "source": "https://github.com/JingMatrix/PlayIntegrityFix",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "playintegrityfix",
+          "sources": [
+            "https://raw.githubusercontent.com/JingMatrix/PlayIntegrityFix/8ad25d0994cd32cf908bce08d911ead30c5994c8/module/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "pif"
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-04",
+      "name": "PIF-NEXT",
+      "type": "Magisk",
+      "source": "https://github.com/EricInacio01/PlayIntegrityFix-NEXT",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "playintegrityfix",
+          "sources": [
+            "https://raw.githubusercontent.com/EricInacio01/PlayIntegrityFix-NEXT/69bfd45282ce38a99a1e308924ca284ceb8cd40e/module/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "pif"
+        }
+      ],
+      "notes": "PIF-Next (EricInacio01) uses playintegrityfix. This is distinct from the older daboynb PlayIntegrityNEXT/playcurl project; no guessed pifnext ID is used.",
+      "policy_conflict": {
+        "group": "pif",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s PIF",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-05",
+      "name": "PlaycurlNEXT",
+      "type": "Magisk / KSU",
+      "source": "https://github.com/daboynb/playcurlNEXT",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "playcurlNEXT",
+          "sources": [
+            "https://raw.githubusercontent.com/daboynb/playcurlNEXT/54bd6e11f9b2d926d3e43e91181527ca031fc086/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "pif"
+        }
+      ],
+      "notes": "Exact upstream install identity verified. Maintainer conflict classification retained; identity alone does not establish a reproduced failure.",
+      "policy_conflict": {
+        "group": "pif",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s PIF",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-06",
+      "name": "Integrity Box",
+      "type": "Magisk / KSU",
+      "source": "https://github.com/MeowDump/Integrity-Box",
+      "claimed_identifier": "playintegrityfix",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "playintegrityfix",
+          "sources": [
+            "https://raw.githubusercontent.com/MeowDump/Integrity-Box/5e885cf5c73c2108567a871738b4867b4e91db2f/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "pif"
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-07",
+      "name": "AlwaysStrong",
+      "type": "Magisk / KSU",
+      "source": "https://gitlab.com/Evokerr/AlwaysStrong",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "tricky_store",
+          "sources": [
+            "https://gitlab.com/Evokerr/AlwaysStrong/-/raw/main/module/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "tee"
+        }
+      ],
+      "notes": "Original GitHub location is unavailable; moved upstream GitLab module.prop explicitly declares tricky_store. Forks share this ID, so the scanner cannot infer a particular engine variant from ID alone.",
+      "policy_conflict": {
+        "group": "tee",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s TEE",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-08",
+      "name": "Specter",
+      "type": "Magisk / KSU",
+      "source": "https://github.com/dpejoh/specter",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "specter",
+          "sources": [
+            "https://raw.githubusercontent.com/dpejoh/specter/c3faf2e1f1ac75605cc3a7ab99b37e8d713262ae/src/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "tee"
+        }
+      ],
+      "notes": "Exact upstream install identity verified. Maintainer conflict classification retained; identity alone does not establish a reproduced failure.",
+      "policy_conflict": {
+        "group": "tee",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s TEE",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-09",
+      "name": "YuriKey",
+      "type": "Magisk / KSU",
+      "source": "https://github.com/dpejoh/yurikey",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "Yurikey",
+          "sources": [
+            "https://raw.githubusercontent.com/dpejoh/yurikey/aee5b812c35033629755568025f92e333339f61b/Module/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "tee"
+        }
+      ],
+      "notes": "Exact upstream install identity verified. Maintainer conflict classification retained; identity alone does not establish a reproduced failure.",
+      "policy_conflict": {
+        "group": "tee",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s TEE",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-10",
+      "name": "Strong Integrity Fix",
+      "type": "Magisk",
+      "source": "https://github.com/sarhan00/Strong-Integrity-Fix",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "playintegrityfix",
+          "sources": [
+            "https://raw.githubusercontent.com/sarhan00/Strong-Integrity-Fix/6b5d9eab92ca9144b7a33fe32e1e8c124d619aa8/update.json",
+            "https://github.com/sarhan00/Strong-Integrity-Fix/releases/download/v1.2/PlayIntegrityFix-Strong.Integrity.-v1.2.zip"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "pif"
+        }
+      ],
+      "notes": "Sarhan Root v1.2 ZIP inspected without executing it: id=playintegrityfix. Maintainer TEE policy retained, but the shared exact ID matches the existing PIF rule; it must not classify every PIF fork as a TEE backend.",
+      "policy_conflict": {
+        "group": "tee",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s TEE",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-11",
+      "name": "Sensitive Props",
+      "type": "Magisk",
+      "source": "https://github.com/Pixel-Props/sensitive-props",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "sensitive_props",
+          "sources": [
+            "https://raw.githubusercontent.com/Pixel-Props/sensitive-props/ccbc0882819abaee4917f75f4c280c06cf710807/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "boot_props"
+        }
+      ],
+      "notes": "Exact root ID verified. Maintainer TEE classification retained; concrete duplicate-purpose check maps boot-property modification to built-in Prophide.",
+      "policy_conflict": {
+        "group": "tee",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s TEE",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-12",
+      "name": "Universal SafetyNet Fix",
+      "type": "Magisk; LEGACY",
+      "source": "",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "safetynet-fix",
+          "sources": [
+            "https://raw.githubusercontent.com/kdrag0n/safetynet-fix/89a4cf49360a1fc4c10a09e9ff56deda08e922e4/magisk/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "pif"
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-13",
+      "name": "TrickyStore (5ec1cff)",
+      "type": "Magisk / KSU",
+      "source": "https://github.com/5ec1cff/TrickyStore",
+      "claimed_identifier": "tricky_store",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "tricky_store",
+          "sources": [
+            "https://github.com/5ec1cff/TrickyStore/releases/tag/1.4.1"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "tee"
+        }
+      ],
+      "notes": "ID verified from official v1.4.1 module.prop in previous audit; shared with OSS fork."
+    },
+    {
+      "key": "candidate-14",
+      "name": "TrickyStoreOSS",
+      "type": "Magisk / KSU",
+      "source": "https://github.com/beakthoven/TrickyStoreOSS",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "tricky_store",
+          "sources": [
+            "https://raw.githubusercontent.com/beakthoven/TrickyStoreOSS/dda5277d10b948ba6bec362252ec41f8bbbd9f97/module/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "tee"
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-15",
+      "name": "TEE Simulator (JingMatrix)",
+      "type": "Magisk / KSU",
+      "source": "https://github.com/JingMatrix/TEESimulator",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "teesim",
+          "sources": [
+            "https://raw.githubusercontent.com/JingMatrix/TEESimulator/06f9f2ee11b86c5144a1f345f70f8fb23cae4493/module/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "tee"
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-16",
+      "name": "TEESimulator-RS",
+      "type": "Magisk / KSU",
+      "source": "https://github.com/Enginex0/TEESimulator-RS",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "tricky_store",
+          "sources": [
+            "https://raw.githubusercontent.com/Enginex0/TEESimulator-RS/6d241e56d6e8146cd67ed4ac3dadc9c632969549/module/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "tee"
+        }
+      ],
+      "notes": "Despite its project name, this upstream fork uses tricky_store; not teesim or teesimulator_rs. Shared-ID deduplication intentionally keeps one TEE recommendation.",
+      "policy_conflict": {
+        "group": "tee",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s TEE",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-17",
+      "name": "OhMyKeymint",
+      "type": "Magisk / KSU",
+      "source": "https://github.com/qwq233/OhMyKeymint",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "oh_my_keymint",
+          "sources": [
+            "https://raw.githubusercontent.com/qwq233/OhMyKeymint/9069c6c3030840c600fb9037d91b5c9efcc61586/module.yaml",
+            "https://raw.githubusercontent.com/qwq233/OhMyKeymint/9069c6c3030840c600fb9037d91b5c9efcc61586/template/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "tee"
+        }
+      ],
+      "notes": "Exact upstream install identity verified. Maintainer conflict classification retained; identity alone does not establish a reproduced failure.",
+      "policy_conflict": {
+        "group": "tee",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s TEE",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-18",
+      "name": "ForgeStore",
+      "type": "Root module",
+      "source": "",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "unverified",
+      "identities": [],
+      "rules": [],
+      "notes": "Exhaustive project-name searches did not identify an authoritative Android/KeyMint upstream repository or release artifact. Unrelated Minecraft/web-store projects were excluded. Exact upstream URL or original ZIP is needed; no module ID is guessed.",
+      "policy_conflict": {
+        "group": "tee",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s TEE",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      }
+    },
+    {
+      "key": "candidate-20",
+      "name": "TS-Enhancer-Extreme",
+      "type": "Root utility",
+      "source": "https://github.com/XtrLumen/TS-Enhancer-Extreme",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "fs_enhancer_extreme",
+          "sources": [
+            "https://raw.githubusercontent.com/XtrLumen/TS-Enhancer-Extreme/3c21dbdba5c0c5d0a7ef6653d1d6ffe6bc7d0027/build.gradle.kts",
+            "https://raw.githubusercontent.com/XtrLumen/TS-Enhancer-Extreme/3c21dbdba5c0c5d0a7ef6653d1d6ffe6bc7d0027/module/build.gradle.kts",
+            "https://raw.githubusercontent.com/XtrLumen/TS-Enhancer-Extreme/3c21dbdba5c0c5d0a7ef6653d1d6ffe6bc7d0027/module/src/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "tee"
+        }
+      ],
+      "notes": "Current upstream renamed the module to FS-Enhancer-Extreme. Template id=${moduleId} resolves to fs_enhancer_extreme. The old ts_enhancer_extreme alias is not assumed without a separately inspected historical artifact.",
+      "policy_conflict": {
+        "group": "tee",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s TEE",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-21",
+      "name": "Tricky Addon — Update Target List",
+      "type": "KSU / WebUI",
+      "source": "https://github.com/KOWX712/Tricky-Addon-Update-Target-List",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "TA_utl",
+          "sources": [
+            "https://raw.githubusercontent.com/KOWX712/Tricky-Addon-Update-Target-List/e7d95a064efccfff3c6c17fa8e652155a547643a/module/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "tee"
+        }
+      ],
+      "notes": "Exact upstream install identity verified. Maintainer conflict classification retained; identity alone does not establish a reproduced failure.",
+      "policy_conflict": {
+        "group": "tee",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s TEE",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-22",
+      "name": "One UI X (OneUIX)",
+      "type": "LSPosed",
+      "source": "https://github.com/SoClear/OneUIX",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "io.github.soclear.oneuix",
+          "sources": [
+            "https://raw.githubusercontent.com/SoClear/OneUIX/a08935a044434af7d7d6d0f7c9e539089e78bfcf/app/build.gradle.kts",
+            "https://raw.githubusercontent.com/SoClear/OneUIX/a08935a044434af7d7d6d0f7c9e539089e78bfcf/gradle.properties",
+            "https://raw.githubusercontent.com/SoClear/OneUIX/a08935a044434af7d7d6d0f7c9e539089e78bfcf/hook/src/main/resources/META-INF/xposed/scope.list",
+            "https://raw.githubusercontent.com/SoClear/OneUIX/a08935a044434af7d7d6d0f7c9e539089e78bfcf/hook/src/main/java/io/github/soclear/oneuix/hook/DisableFlagSecure.kt"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "secure_windows",
+          "scopes": [
+            "android",
+            "system"
+          ]
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-23",
+      "name": "Firefds Kit",
+      "type": "LSPosed",
+      "source": "https://github.com/Firefds/FirefdsKit",
+      "claimed_identifier": "sb.firefds.u.firefdskit",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "sb.firefds.u.firefdskit",
+          "sources": [
+            "https://raw.githubusercontent.com/Firefds/FirefdsKit/8a4310fa45c319011bfc1de1bd82346cbcbe06e3/firefdskit/build.gradle",
+            "https://raw.githubusercontent.com/Firefds/FirefdsKit/8a4310fa45c319011bfc1de1bd82346cbcbe06e3/firefdskit/src/main/res/values/arrays.xml"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Identity verified. No specific overlapping built-in implementation has been established; catalog only, no runtime warning."
+    },
+    {
+      "key": "candidate-24",
+      "name": "KnoxPatch",
+      "type": "LSPosed",
+      "source": "https://github.com/salvogiangri/KnoxPatch",
+      "claimed_identifier": "io.mesalabs.knoxpatch",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "io.mesalabs.knoxpatch",
+          "sources": [
+            "https://raw.githubusercontent.com/salvogiangri/KnoxPatch/738420fa731d542b796abc6261dd45a2cf318145/app/build.gradle.kts",
+            "https://raw.githubusercontent.com/salvogiangri/KnoxPatch/738420fa731d542b796abc6261dd45a2cf318145/app/src/main/res/values-v33/arrays.xml"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "knox",
+          "scopes": [
+            "android"
+          ]
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-25",
+      "name": "KnoxPatch Enhancer",
+      "type": "Magisk / KSU",
+      "source": "https://github.com/salvogiangri/KnoxPatch",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "kp_enhancer",
+          "sources": [
+            "https://raw.githubusercontent.com/salvogiangri/KnoxPatch/738420fa731d542b796abc6261dd45a2cf318145/enhancer/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "knox"
+        }
+      ],
+      "notes": "Exact upstream install identity verified. Maintainer conflict classification retained; identity alone does not establish a reproduced failure.",
+      "policy_conflict": {
+        "group": "knox",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s Knox patch",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-26",
+      "name": "PrismLock",
+      "type": "LSPosed",
+      "source": "https://modules.lsposed.org/module/io.github.aureliomo.prismlock/",
+      "claimed_identifier": "io.github.aureliomo.prismlock",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "io.github.aureliomo.prismlock",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://modules.lsposed.org/module/io.github.aureliomo.prismlock/"
+          ]
+        }
+      ],
+      "rules": [],
+      "notes": "Identity verified. No specific overlapping built-in implementation has been established; catalog only, no runtime warning."
+    },
+    {
+      "key": "candidate-27",
+      "name": "Samsung IMS Patcher",
+      "type": "LSPosed",
+      "source": "https://github.com/rezaf28/Samsung-IMS-Patcher",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "com.ims.patcher",
+          "sources": [
+            "https://raw.githubusercontent.com/rezaf28/Samsung-IMS-Patcher/61842f3482d224cb7237e45ef7a67e1903f5e0cb/app/build.gradle.kts",
+            "https://raw.githubusercontent.com/rezaf28/Samsung-IMS-Patcher/61842f3482d224cb7237e45ef7a67e1903f5e0cb/app/src/main/res/values/arrays.xml"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Identity verified. No specific overlapping built-in implementation has been established; catalog only, no runtime warning."
+    },
+    {
+      "key": "candidate-28",
+      "name": "GravityBox",
+      "type": "Xposed / LSPosed; LEGACY",
+      "source": "https://github.com/GravityBox/GravityBox",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "com.ceco.r.gravitybox",
+          "sources": [
+            "https://raw.githubusercontent.com/GravityBox/GravityBox/23033506c8406a2a3b768a2bafc9562dcdcd52d5/GravityBox/src/main/AndroidManifest.xml",
+            "https://raw.githubusercontent.com/GravityBox/GravityBox/23033506c8406a2a3b768a2bafc9562dcdcd52d5/GravityBox/src/main/res/values/module_scope.xml"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Verified GravityBox Android R branch package/scope. Other Android-letter branches have different package names and must be verified separately. Maintainer Settings classification retained; no specific built-in duplicate rule was fabricated.",
+      "policy_conflict": {
+        "group": "settings",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s Settings",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "declared_scopes": [
+        "android",
+        "com.android.systemui",
+        "com.android.server.telecom",
+        "com.android.providers.downloads",
+        "com.android.dialer",
+        "com.google.android.dialer",
+        "com.android.phone",
+        "com.android.incallui",
+        "com.google.android.inputmethod.latin",
+        "com.oneplus.dialer"
+      ],
+      "scope_verification": "verified",
+      "detection_status": "catalog_only"
+    },
+    {
+      "key": "candidate-29",
+      "name": "Wanam Xposed / XTouchWiz",
+      "type": "Xposed; LEGACY",
+      "source": "https://github.com/wanam/XTouchWiz",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "ma.wanam.xtouchwiz",
+          "sources": [
+            "https://raw.githubusercontent.com/wanam/XTouchWiz/7645d38a91a3f297afd19bb68bcd169f1285270e/AndroidManifest.xml",
+            "https://raw.githubusercontent.com/wanam/XTouchWiz/7645d38a91a3f297afd19bb68bcd169f1285270e/src/ma/wanam/xtouchwiz/Xposed.java",
+            "https://raw.githubusercontent.com/wanam/XTouchWiz/7645d38a91a3f297afd19bb68bcd169f1285270e/src/ma/wanam/xtouchwiz/utils/Packages.java"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Verified XTouchWiz identity and Android hook dispatch only. This does not assert that the older Wanam Xposed APK has the same package. Maintainer Settings classification retained; broad legacy customization remains catalog-only.",
+      "policy_conflict": {
+        "group": "settings",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s Settings",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "declared_scopes": [
+        "android"
+      ],
+      "scope_verification": "verified",
+      "detection_status": "catalog_only"
+    },
+    {
+      "key": "candidate-30",
+      "name": "OneDesign",
+      "type": "Samsung customization project",
+      "source": "",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "qyz.onedesign",
+          "sources": [
+            "https://modules.lsposed.org/module/qyz.onedesign/"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Developer-published module listing verifies qyz.onedesign. Source repository only publishes README metadata; no scope declaration was available in the audited source. Exact enabled target-scope matching cannot be enabled from the display name alone.",
+      "policy_conflict": {
+        "group": "settings",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s Settings",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "declared_scopes": [],
+      "scope_verification": "unverified",
+      "detection_status": "catalog_only"
+    },
+    {
+      "key": "candidate-31",
+      "name": "Core Patch N",
+      "type": "LSPosed",
+      "source": "https://github.com/LSPosed/CorePatch",
+      "claimed_identifier": "org.lsposed.corepatch",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "org.lsposed.corepatch",
+          "sources": [
+            "https://raw.githubusercontent.com/LSPosed/CorePatch/ddf87bb5fb2bb2eb962992103abf0b225952d738/app/build.gradle.kts",
+            "https://raw.githubusercontent.com/LSPosed/CorePatch/ddf87bb5fb2bb2eb962992103abf0b225952d738/app/src/main/resources/META-INF/xposed/scope.list"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "signature",
+          "scopes": [
+            "android",
+            "system"
+          ]
+        },
+        {
+          "classification": "duplicate",
+          "feature": "downgrade",
+          "scopes": [
+            "android",
+            "system"
+          ]
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-32",
+      "name": "Core Patch (legacy)",
+      "type": "LSPosed; LEGACY",
+      "source": "",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "com.coderstory.toolkit",
+          "sources": [
+            "https://raw.githubusercontent.com/LSPosed/CorePatch/4.9/app/build.gradle.kts",
+            "https://github.com/Xposed-Modules-Repo/com.coderstory.toolkit"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "signature",
+          "scopes": [
+            "android"
+          ]
+        },
+        {
+          "classification": "duplicate",
+          "feature": "downgrade",
+          "scopes": [
+            "android"
+          ]
+        }
+      ],
+      "notes": "Official CorePatch tag 4.9 build explicitly declares com.coderstory.toolkit. Later org.lsposed.corepatch is a separate existing exact rule.",
+      "policy_conflict": {
+        "group": "settings",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s Settings",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "declared_scopes": [
+        "android"
+      ],
+      "scope_verification": "verified",
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-33",
+      "name": "Let Me Downgrade",
+      "type": "LSPosed",
+      "source": "https://modules.lsposed.org/module/com.berdik.letmedowngrade/",
+      "claimed_identifier": "com.berdik.letmedowngrade",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "com.berdik.letmedowngrade",
+          "sources": [
+            "https://raw.githubusercontent.com/DavidBerdik/Let-Me-Downgrade/800ca9182dca03f712b1b5e178a2a676df8f69c3/app/build.gradle.kts"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "downgrade",
+          "scopes": [
+            "android",
+            "system"
+          ]
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-34",
+      "name": "Firefds Kit",
+      "type": "LSPosed",
+      "source": "https://github.com/Firefds/FirefdsKit",
+      "claimed_identifier": "sb.firefds.u.firefdskit",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "sb.firefds.u.firefdskit",
+          "sources": [
+            "https://raw.githubusercontent.com/Firefds/FirefdsKit/8a4310fa45c319011bfc1de1bd82346cbcbe06e3/firefdskit/build.gradle",
+            "https://raw.githubusercontent.com/Firefds/FirefdsKit/8a4310fa45c319011bfc1de1bd82346cbcbe06e3/firefdskit/src/main/res/values/arrays.xml"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Identity verified. No specific overlapping built-in implementation has been established; catalog only, no runtime warning."
+    },
+    {
+      "key": "candidate-35",
+      "name": "pairipfix",
+      "type": "LSPosed",
+      "source": "https://modules.lsposed.org/module/io.github.ahmedmani.pairipfix/",
+      "claimed_identifier": "io.github.ahmedmani.pairipfix",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "io.github.ahmedmani.pairipfix",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://modules.lsposed.org/module/io.github.ahmedmani.pairipfix/"
+          ]
+        }
+      ],
+      "rules": [],
+      "notes": "Identity verified. No specific overlapping built-in implementation has been established; catalog only, no runtime warning."
+    },
+    {
+      "key": "candidate-36",
+      "name": "DisableFlagSecure (Enable Screenshot)",
+      "type": "LSPosed",
+      "source": "https://github.com/LSPosed/DisableFlagSecure",
+      "claimed_identifier": "io.github.lsposed.disableflagsecure",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "io.github.lsposed.disableflagsecure",
+          "sources": [
+            "https://raw.githubusercontent.com/LSPosed/DisableFlagSecure/74f63aa04aa3d5d2f6039f0442d97e8691a998ee/app/build.gradle",
+            "https://raw.githubusercontent.com/LSPosed/DisableFlagSecure/74f63aa04aa3d5d2f6039f0442d97e8691a998ee/app/src/main/resources/META-INF/xposed/scope.list"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "secure_windows",
+          "scopes": [
+            "android",
+            "system"
+          ]
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-37",
+      "name": "dynamicSpot — Dynamic Island (Jawomo)",
+      "type": "App",
+      "source": "",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "app",
+          "value": "com.jamworks.dynamicspot",
+          "sources": [
+            "https://play.google.com/store/apps/details?id=com.jamworks.dynamicspot"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Developer Play listing verifies standalone app identity. It is not a Magisk/LSPosed module, so no module.prop or LSPosed scope exists. Maintainer Settings policy retained; excluded from module-only detection.",
+      "policy_conflict": {
+        "group": "settings",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s Settings",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "catalog_only"
+    },
+    {
+      "key": "candidate-38",
+      "name": "Material You Dynamic Island",
+      "type": "App, open source",
+      "source": "https://github.com/Anto426/Dynamic-Island",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "app",
+          "value": "com.anto426.dynamicisland",
+          "sources": [
+            "https://raw.githubusercontent.com/Anto426/Dynamic-Island/b2a8f6463f9f07aa0194f68b6f3ecd8a0135f5a2/app/build.gradle.kts"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Identity verified. No specific overlapping built-in implementation has been established; catalog only, no runtime warning."
+    },
+    {
+      "key": "candidate-39",
+      "name": "Smart Island / disland",
+      "type": "App, open source",
+      "source": "https://github.com/POX-project/disland",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "app",
+          "value": "com.agupta07505.smartisland",
+          "sources": [
+            "https://raw.githubusercontent.com/POX-project/disland/076128588e60c656c00ea27b54ef817a10230af5/app/build.gradle.kts"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Identity verified. No specific overlapping built-in implementation has been established; catalog only, no runtime warning."
+    },
+    {
+      "key": "candidate-40",
+      "name": "Dynamic Island for Android (ajitpal)",
+      "type": "App / project",
+      "source": "https://github.com/ajitpal/dynamic-island-android",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "app",
+          "value": "com.ajit.dynamicisland",
+          "sources": [
+            "https://raw.githubusercontent.com/ajitpal/dynamic-island-android/56cb0d296e6b60335118c98488b50814974e07d9/app/build.gradle.kts"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Identity verified. No specific overlapping built-in implementation has been established; catalog only, no runtime warning."
+    },
+    {
+      "key": "candidate-41",
+      "name": "Islandify",
+      "type": "App / project",
+      "source": "https://github.com/bughunter11/Islandify",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "app",
+          "value": "com.islandify.app",
+          "sources": [
+            "https://raw.githubusercontent.com/bughunter11/Islandify/86c1a1db5272ee06bb616761b4bab52ca057a68b/app/build.gradle.kts"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Identity verified. No specific overlapping built-in implementation has been established; catalog only, no runtime warning."
+    },
+    {
+      "key": "candidate-42",
+      "name": "Expressive Cutout",
+      "type": "App / project (confirm source)",
+      "source": "https://github.com/EvanKoe/expressive-cutout",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "app",
+          "value": "com.ekoehler.expressivecutout",
+          "sources": [
+            "https://raw.githubusercontent.com/EvanKoe/expressive-cutout/91c93f70c4dfb4366bbe3af120864a1c3c33eee5/app/build.gradle.kts",
+            "https://raw.githubusercontent.com/EvanKoe/expressive-cutout/91c93f70c4dfb4366bbe3af120864a1c3c33eee5/app/src/main/AndroidManifest.xml"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Upstream applicationId verified. Standalone accessibility overlay, not an LSPosed/root module. Maintainer Settings policy retained; excluded from module-only detection.",
+      "policy_conflict": {
+        "group": "settings",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s Settings",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "catalog_only"
+    },
+    {
+      "key": "candidate-43",
+      "name": "Font Manager (FontManager-Module)",
+      "type": "Magisk",
+      "source": "https://github.com/Magic-Mask-Repo/FontManager-Module",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "fontrevival",
+          "sources": [
+            "https://raw.githubusercontent.com/Magic-Mask-Repo/FontManager-Module/1072bc04e4cb5e530045b1ae4fbceebb8bb662ab/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Identity verified. No specific overlapping built-in implementation has been established; catalog only, no runtime warning."
+    },
+    {
+      "key": "candidate-44",
+      "name": "FontChanger (John Fawkes)",
+      "type": "Magisk",
+      "source": "https://github.com/FreglBoy/fontchanger",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "Fontchanger",
+          "sources": [
+            "https://raw.githubusercontent.com/FreglBoy/fontchanger/58d838b258802ccd605af604df49ade37b1f8e11/module.prop",
+            "https://raw.githubusercontent.com/FreglBoy/fontchanger/58d838b258802ccd605af604df49ade37b1f8e11/README.md"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "font"
+        }
+      ],
+      "notes": "Preserved upstream fork snapshot declares id=Fontchanger and author=John Fawkes, and links the original deleted repository. Exact historical identity is verified; this is not a claim that the original repo is currently available.",
+      "policy_conflict": {
+        "group": "font",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s Font",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-45",
+      "name": "Magisk Font Collection",
+      "type": "Magisk",
+      "source": "https://codeberg.org/fruitsnack/magisk-font-collection",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "font_collection_adventpro",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_anonymouspro",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_anta",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_anton",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_antonio",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_archivo",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_archivonarrow",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_arimo",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_asimovian",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_audiowide",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_bangers",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_barlow",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_barlowcondensed",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_barlowsemicondensed",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_bebasneue",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_caacupeone",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_cairo",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_cantarell",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_chelseamarket",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_comfortaa",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_commissioner",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_cormorantgaramond",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_crimsontext",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_dmsans",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_dmserifdisplay",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_dosis",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_dotgothic16",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_ebgaramond",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_encodesans",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_encodesanscondensed",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_encodesanssemicondensed",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_figtree",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_firamono",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_firasans",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_firasanscondensed",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_fjallaone",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_fraunces",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_geist",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_geo",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_ibmplexmono",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_ibmplexsans",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_ibmplexsanscondensed",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_ibmplexserif",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_iceberg",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_iceland",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_inconsolata",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_instrumentsans",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_instrumentserif",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_inter",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_intertight",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_jacquard12",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_jersey10",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_jersey15",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_jersey20",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_jersey25",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_jetbrainsmono",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_josefinsans",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_kanit",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_lexend",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_librebaskerville",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_lilitaone",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_merriweather",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_michroma",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_montserrat",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_mukta",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_nanumgothic",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_notosans",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_notosansmono",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_notoserif",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_novamono",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_nunito",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_nunitosans",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_opensans",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_oswald",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_outfit",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_playfairdisplay",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_poiretone",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_poppins",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_pragatinarrow",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_pressstart2p",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_prompt",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_ptmono",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_ptsansnarrow",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_ptserif",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_quantico",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_quicksand",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_raleway",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_redhatdisplay",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_redhatmono",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_roboto",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_robotocondensed",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_robotoflex",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_sharetech",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_smoochsans",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_sofiasans",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_sofiasanscondensed",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_sourcecodepro",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_sourcesans3",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_sourceserif4",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_teko",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_titilliumweb",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_unicaone",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_viga",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_vt323",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        },
+        {
+          "kind": "root",
+          "value": "font_collection_zendots",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://codeberg.org/fruitsnack/magisk-font-repo/raw/branch/main/json/modules.json"
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "font"
+        }
+      ],
+      "notes": "Published maintainer repository index enumerates 105 concrete per-font module IDs. A sample published ZIP module.prop agrees with the index. Custom user builds can choose a different prefix; only these published exact IDs are matched.",
+      "policy_conflict": {
+        "group": "font",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s Font",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-46",
+      "name": "Open Fonts",
+      "type": "Magisk",
+      "source": "https://github.com/Magisk-Modules-Alt-Repo/open_fonts",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "open_fonts",
+          "sources": [
+            "https://raw.githubusercontent.com/Magisk-Modules-Alt-Repo/open_fonts/e270e54b71c2fec0ca8fbd81d9e157c5cd956105/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Identity verified. No specific overlapping built-in implementation has been established; catalog only, no runtime warning."
+    },
+    {
+      "key": "candidate-47",
+      "name": "MFGA",
+      "type": "Magisk",
+      "source": "https://github.com/Numbersf/MakeFontsGreatAgain",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "MFGA",
+          "sources": [
+            "https://raw.githubusercontent.com/Numbersf/MakeFontsGreatAgain/32c0ed68b8725ba9ee1ef3e22d304ff176d4a8c6/update.json",
+            "https://github.com/Numbersf/MakeFontsGreatAgain/releases/download/1717180003/MFGA-17.0.1.08-31-alpha2.1717180003.zip"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "font"
+        }
+      ],
+      "notes": "Official 137 MB release ZIP module.prop was read using bounded ZIP central-directory/local-header ranges, without downloading/executing the module payload. ID is case-sensitive MFGA.",
+      "policy_conflict": {
+        "group": "font",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s Font",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-48",
+      "name": "MFGA-XPosed",
+      "type": "LSPosed",
+      "source": "https://github.com/Xposed-Modules-Repo/com.mfga.xposed",
+      "claimed_identifier": "com.mfga.xposed",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "com.mfga.xposed",
+          "sources": [
+            "https://raw.githubusercontent.com/Numbersf/MakeFontsGreatAgain/32c0ed68b8725ba9ee1ef3e22d304ff176d4a8c6/mfga-xposed/app/build.gradle.kts"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Identity verified. No specific overlapping built-in implementation has been established; catalog only, no runtime warning."
+    },
+    {
+      "key": "candidate-49",
+      "name": "PixelMask",
+      "type": "LSPosed",
+      "source": "https://github.com/kinginu/PixelMask",
+      "claimed_identifier": "com.kinginu.pixelmask",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "com.kinginu.pixelmask",
+          "sources": [
+            "https://raw.githubusercontent.com/kinginu/PixelMask/8ebeedfad974d60fb8cfe5746b5d4e05cc1d9704/app/build.gradle"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "photos",
+          "scopes": [
+            "com.google.android.apps.photos"
+          ]
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-50",
+      "name": "Pixel Photos Evolved",
+      "type": "LSPosed",
+      "source": "https://modules.lsposed.org/module/io.github.mrxsin.pixelphotosevolved/",
+      "claimed_identifier": "io.github.mrxsin.pixelphotosevolved",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "io.github.mrxsin.pixelphotosevolved",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://modules.lsposed.org/module/io.github.mrxsin.pixelphotosevolved/"
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "photos",
+          "scopes": [
+            "com.google.android.apps.photos"
+          ]
+        }
+      ],
+      "notes": "Package, Photos scope and identity-spoofing purpose verified in developer-published module listing."
+    },
+    {
+      "key": "candidate-51",
+      "name": "Pixelify Google Photos (balti)",
+      "type": "LSPosed; LEGACY",
+      "source": "https://modules.lsposed.org/module/balti.xposed.pixelifygooglephotos/",
+      "claimed_identifier": "balti.xposed.pixelifygooglephotos",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "balti.xposed.pixelifygooglephotos",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://modules.lsposed.org/module/balti.xposed.pixelifygooglephotos/"
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "photos",
+          "scopes": [
+            "com.google.android.apps.photos"
+          ]
+        }
+      ],
+      "notes": "Package, scope and hasSystemFeature/Build spoofing documented in developer module listing."
+    },
+    {
+      "key": "candidate-52",
+      "name": "Pixelify Google Photos API 101 (seiry)",
+      "type": "LSPosed",
+      "source": "https://github.com/seiry/Pixelify-Google-Photos-LSPosed",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "seiry.xposed.pixelifygooglephotos.lsposed",
+          "sources": [
+            "https://raw.githubusercontent.com/seiry/Pixelify-Google-Photos-LSPosed/01538b61ec813a55807f731c850e2c0cf13aea73/app/build.gradle",
+            "https://raw.githubusercontent.com/seiry/Pixelify-Google-Photos-LSPosed/01538b61ec813a55807f731c850e2c0cf13aea73/app/src/main/resources/META-INF/xposed/scope.list"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "photos",
+          "scopes": [
+            "com.google.android.apps.photos"
+          ]
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-53",
+      "name": "GPhotos Unlimited Zygisk",
+      "type": "Magisk / Zygisk",
+      "source": "https://github.com/Grass2000/gphotos-unlimited-zygisk-module",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "PixelifyPhotos",
+          "sources": [
+            "https://raw.githubusercontent.com/Grass2000/gphotos-unlimited-zygisk-module/bc8f1afa504e10afba1ffac5df3cbacc5c6e8c6a/module.prop"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "photos"
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-54",
+      "name": "Pixelify (Kingsman44)",
+      "type": "Magisk",
+      "source": "https://github.com/Kingsman44/Pixelify",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "Pixelify",
+          "sources": [
+            "https://raw.githubusercontent.com/Kingsman44/Pixelify/17dfbb3ae1730ac14125570e746317e2124fbd49/module.gradle"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "photos"
+        }
+      ],
+      "notes": "Root module.gradle resolves magiskModuleId=Pixelify, expanded into module/module.prop by zygisk/build.gradle. Existing PixelifyPhotos is a different project ID.",
+      "policy_conflict": {
+        "group": "photos",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s GPhoto Unlimited",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-55",
+      "name": "GooglePhotosMod",
+      "type": "LSPosed",
+      "source": "",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "io.github.pbzin.googlephotosmod",
+          "sources": [
+            "https://modules.lsposed.org/module/io.github.pbzin.googlephotosmod/",
+            "https://github.com/pbzin/GooglePhotosMod"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [],
+      "notes": "Developer module listing verifies package/scope. Documented functions are filename display and backup-job lifetime handling, not unlimited storage identity spoofing. Maintainer GPhoto Unlimited conflict policy is retained; no false duplicate-purpose claim is generated.",
+      "policy_conflict": {
+        "group": "photos",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s GPhoto Unlimited",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "declared_scopes": [
+        "com.google.android.apps.photos"
+      ],
+      "scope_verification": "verified",
+      "detection_status": "catalog_only"
+    },
+    {
+      "key": "candidate-56",
+      "name": "Hide My Applist (original / Dr-TSNG)",
+      "type": "LSPosed",
+      "source": "https://github.com/Dr-TSNG/Hide-My-Applist",
+      "claimed_identifier": "com.tsng.hidemyapplist",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "com.tsng.hidemyapplist",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "https://github.com/Dr-TSNG/Hide-My-Applist/blob/master/app/build.gradle.kts",
+            "https://github.com/Dr-TSNG/Hide-My-Applist/blob/master/app/src/main/res/values/arrays.xml"
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "hma",
+          "scopes": [
+            "android"
+          ]
+        }
+      ],
+      "notes": "Exact package and Android scope; validated against built-in HMA policy class."
+    },
+    {
+      "key": "candidate-57",
+      "name": "HMA-OSS (frknkrc44)",
+      "type": "Zygisk",
+      "source": "https://github.com/frknkrc44/HMA-OSS",
+      "claimed_identifier": "hma_oss_zygisk",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "hma_oss_zygisk",
+          "sources": [
+            "https://raw.githubusercontent.com/frknkrc44/HMA-OSS/fe7a36799f040a79c666fb05b8479e69854656df/zygote/build.gradle.kts"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "hma"
+        }
+      ],
+      "notes": "Verified identity; shared IDs/packages can represent multiple forks. Presence is not a confirmed failure."
+    },
+    {
+      "key": "candidate-58",
+      "name": "HMAL (pumPCin)",
+      "type": "LSPosed",
+      "source": "https://github.com/pumPCin/HMAL",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "com.google.android.hmal",
+          "sources": [
+            "https://raw.githubusercontent.com/pumPCin/HMAL/cdabf62fb0731af3b6ebfebe3645e49cd348585a/app/build.gradle.kts",
+            "https://raw.githubusercontent.com/pumPCin/HMAL/cdabf62fb0731af3b6ebfebe3645e49cd348585a/build.gradle.kts",
+            "https://raw.githubusercontent.com/pumPCin/HMAL/cdabf62fb0731af3b6ebfebe3645e49cd348585a/xposed/build.gradle.kts",
+            "https://raw.githubusercontent.com/pumPCin/HMAL/cdabf62fb0731af3b6ebfebe3645e49cd348585a/app/src/main/AndroidManifest.xml",
+            "https://raw.githubusercontent.com/pumPCin/HMAL/cdabf62fb0731af3b6ebfebe3645e49cd348585a/app/src/main/res/values/arrays.xml",
+            "https://developer.android.com/build/configure-app-module?hl=en"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "hma",
+          "scopes": [
+            "android"
+          ]
+        }
+      ],
+      "notes": "Resolved app namespace/default applicationId against all audited Gradle configuration. xposed is an Android library bundled into the app; its namespace is not a separately installed hook APK. Built-in HMA gate and exact enabled LSPosed scope remain required.",
+      "policy_conflict": {
+        "group": "hma",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s HMA",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "declared_scopes": [
+        "android"
+      ],
+      "scope_verification": "verified",
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-59",
+      "name": "HMA-OSS LSPosed (fgjaee)",
+      "type": "LSPosed",
+      "source": "https://github.com/fgjaee/HMA-OSS-Lsposed",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "org.frknkrc44.hma_oss",
+          "sources": [
+            "https://raw.githubusercontent.com/fgjaee/HMA-OSS-Lsposed/1c00d4e8d5c028370ccac9c80745a6c0e805248b/app/build.gradle.kts",
+            "https://raw.githubusercontent.com/fgjaee/HMA-OSS-Lsposed/1c00d4e8d5c028370ccac9c80745a6c0e805248b/build.gradle.kts",
+            "https://raw.githubusercontent.com/fgjaee/HMA-OSS-Lsposed/1c00d4e8d5c028370ccac9c80745a6c0e805248b/xposed/build.gradle.kts",
+            "https://raw.githubusercontent.com/fgjaee/HMA-OSS-Lsposed/1c00d4e8d5c028370ccac9c80745a6c0e805248b/app/src/main/AndroidManifest.xml",
+            "https://raw.githubusercontent.com/fgjaee/HMA-OSS-Lsposed/1c00d4e8d5c028370ccac9c80745a6c0e805248b/app/src/main/res/values/arrays.xml",
+            "https://raw.githubusercontent.com/fgjaee/HMA-OSS-Lsposed/1c00d4e8d5c028370ccac9c80745a6c0e805248b/xposed/src/main/resources/META-INF/xposed/scope.list",
+            "https://developer.android.com/build/configure-app-module?hl=en"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "hma",
+          "scopes": [
+            "android",
+            "system"
+          ]
+        }
+      ],
+      "notes": "Resolved app namespace/default applicationId against all audited Gradle configuration. xposed is an Android library bundled into the app; its namespace is not a separately installed hook APK. Built-in HMA gate and exact enabled LSPosed scope remain required.",
+      "policy_conflict": {
+        "group": "hma",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s HMA",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "declared_scopes": [
+        "android",
+        "system"
+      ],
+      "scope_verification": "verified",
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-60",
+      "name": "HMA-OSSa (testrvx)",
+      "type": "LSPosed / Zygisk variant; check particular release",
+      "source": "https://github.com/testrvx/HMA-OSSa",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "org.frknkrc44.hma_oss",
+          "sources": [
+            "https://raw.githubusercontent.com/testrvx/HMA-OSSa/a1f8a27d47961746a55da741f2b8593570a47dc7/app/build.gradle.kts",
+            "https://raw.githubusercontent.com/testrvx/HMA-OSSa/a1f8a27d47961746a55da741f2b8593570a47dc7/build.gradle.kts",
+            "https://raw.githubusercontent.com/testrvx/HMA-OSSa/a1f8a27d47961746a55da741f2b8593570a47dc7/xposed/build.gradle.kts",
+            "https://raw.githubusercontent.com/testrvx/HMA-OSSa/a1f8a27d47961746a55da741f2b8593570a47dc7/app/src/main/AndroidManifest.xml",
+            "https://raw.githubusercontent.com/testrvx/HMA-OSSa/a1f8a27d47961746a55da741f2b8593570a47dc7/app/src/main/res/values/arrays.xml",
+            "https://developer.android.com/build/configure-app-module?hl=en"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "hma",
+          "scopes": [
+            "android"
+          ]
+        }
+      ],
+      "notes": "Resolved app namespace/default applicationId against all audited Gradle configuration. xposed is an Android library bundled into the app; its namespace is not a separately installed hook APK. Built-in HMA gate and exact enabled LSPosed scope remain required.",
+      "policy_conflict": {
+        "group": "hma",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s HMA",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "declared_scopes": [
+        "android"
+      ],
+      "scope_verification": "verified",
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "candidate-61",
+      "name": "HMA-OSS MASK (lanlinga)",
+      "type": "HMA-OSS derivative; verify actual hooking mechanism",
+      "source": "https://github.com/lanlinga/HMA-OSS_MASK",
+      "claimed_identifier": "UNVERIFIED",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "lsposed",
+          "value": "org.frknkrc44.hma_oss",
+          "sources": [
+            "https://raw.githubusercontent.com/lanlinga/HMA-OSS_MASK/e77c92157e68904fee7b374cddd801501f76b3ba/app/build.gradle.kts",
+            "https://raw.githubusercontent.com/lanlinga/HMA-OSS_MASK/e77c92157e68904fee7b374cddd801501f76b3ba/build.gradle.kts",
+            "https://raw.githubusercontent.com/lanlinga/HMA-OSS_MASK/e77c92157e68904fee7b374cddd801501f76b3ba/xposed/build.gradle.kts",
+            "https://raw.githubusercontent.com/lanlinga/HMA-OSS_MASK/e77c92157e68904fee7b374cddd801501f76b3ba/app/src/main/AndroidManifest.xml",
+            "https://raw.githubusercontent.com/lanlinga/HMA-OSS_MASK/e77c92157e68904fee7b374cddd801501f76b3ba/app/src/main/res/values/arrays.xml",
+            "https://developer.android.com/build/configure-app-module?hl=en"
+          ],
+          "verified_on": "2026-11-07"
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "hma",
+          "scopes": [
+            "android"
+          ]
+        }
+      ],
+      "notes": "Resolved app namespace/default applicationId against all audited Gradle configuration. xposed is an Android library bundled into the app; its namespace is not a separately installed hook APK. Built-in HMA gate and exact enabled LSPosed scope remain required.",
+      "policy_conflict": {
+        "group": "hma",
+        "authority": "user",
+        "status": "classified",
+        "label": "Conflict with UN1CA’s HMA",
+        "evidence_status": "user classification; not a reproduced technical conflict"
+      },
+      "declared_scopes": [
+        "android"
+      ],
+      "scope_verification": "verified",
+      "detection_status": "rule_enabled"
+    },
+    {
+      "key": "unica-tee-hotfix",
+      "name": "UN1CA TEE runtime hotfix",
+      "type": "root",
+      "verification": "verified",
+      "identities": [
+        {
+          "kind": "root",
+          "value": "unica_teesim_runtime_fix",
+          "verified_on": "2026-11-07",
+          "sources": [
+            "unica/mods/tee-simulator/runtime-hotfix/module.prop"
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "classification": "duplicate",
+          "feature": "tee"
+        }
+      ],
+      "notes": "Local ROM development hotfix."
+    }
+  ],
+  "classification_groups": {
+    "pif": {
+      "name": "PIF"
+    },
+    "tee": {
+      "name": "TEE"
+    },
+    "knox": {
+      "name": "Knox patch"
+    },
+    "settings": {
+      "name": "Settings"
+    },
+    "font": {
+      "name": "Font"
+    },
+    "photos": {
+      "name": "GPhoto Unlimited"
+    },
+    "hma": {
+      "name": "HMA"
+    }
+  }
+}

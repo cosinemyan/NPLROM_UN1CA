@@ -1,0 +1,773 @@
+From: UN1CA Rezoss
+Subject: [PATCH] Add accessibility-aware Memory Volume Up Side shortcut
+
+diff --git a/smali/com/android/server/input/KeyGestureController$LocalKeyGestureEventHandler.smali b/smali/com/android/server/input/KeyGestureController$LocalKeyGestureEventHandler.smali
+--- a/smali/com/android/server/input/KeyGestureController$LocalKeyGestureEventHandler.smali
++++ b/smali/com/android/server/input/KeyGestureController$LocalKeyGestureEventHandler.smali
+@@ -113,10 +113,19 @@
+     return-void
+ 
+     :cond_2
+     iget-object v0, v0, Lcom/android/server/input/KeyGestureController$LocalKeyGestureEventHandler;->this$0:Lcom/android/server/input/KeyGestureController;
+ 
++    invoke-static {v0, v1}, Lio/mesalabs/rezoss/memory/MemorySideKey;->handle(Lcom/android/server/input/KeyGestureController;Landroid/hardware/input/KeyGestureEvent;)Z
++
++    move-result v2
++
++    if-eqz v2, :rezoss_memory_stock_side_key
++
++    return-void
++
++    :rezoss_memory_stock_side_key
+     const/16 v1, 0x66
+ 
+     if-eqz v6, :cond_3
+ 
+     iget-object v2, v0, Lcom/android/server/input/KeyGestureController;->mHandler:Landroid/os/Handler;
+diff --git a/smali_classes2/io/mesalabs/rezoss/memory/MemorySideKey$1.smali b/smali_classes2/io/mesalabs/rezoss/memory/MemorySideKey$1.smali
+--- /dev/null
++++ b/smali_classes2/io/mesalabs/rezoss/memory/MemorySideKey$1.smali
+@@ -0,0 +1,139 @@
++.class Lio/mesalabs/rezoss/memory/MemorySideKey$1;
++.super Ljava/lang/Object;
++.source "MemorySideKey.java"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# annotations
++.annotation system Ldalvik/annotation/EnclosingMethod;
++    value = Lio/mesalabs/rezoss/memory/MemorySideKey;->handle(Lcom/android/server/input/KeyGestureController;Landroid/hardware/input/KeyGestureEvent;)Z
++.end annotation
++
++.annotation system Ldalvik/annotation/InnerClass;
++    accessFlags = 0x0
++    name = null
++.end annotation
++
++
++# instance fields
++.field final synthetic val$controller:Lcom/android/server/input/KeyGestureController;
++
++.field final synthetic val$user:I
++
++
++# direct methods
++.method constructor <init>(ILcom/android/server/input/KeyGestureController;)V
++    .registers 3
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "()V"
++        }
++    .end annotation
++
++    .line 76
++    iput p1, p0, Lio/mesalabs/rezoss/memory/MemorySideKey$1;->val$user:I
++
++    iput-object p2, p0, Lio/mesalabs/rezoss/memory/MemorySideKey$1;->val$controller:Lcom/android/server/input/KeyGestureController;
++
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public run()V
++    .registers 5
++
++    .line 80
++    const-string v0, "RezossMemorySideKey"
++
++    :try_start_2
++    invoke-static {}, Landroid/app/ActivityManager;->getCurrentUser()I
++
++    move-result v1
++
++    iget v2, p0, Lio/mesalabs/rezoss/memory/MemorySideKey$1;->val$user:I
++
++    if-ne v1, v2, :cond_3f
++
++    iget-object v1, p0, Lio/mesalabs/rezoss/memory/MemorySideKey$1;->val$controller:Lcom/android/server/input/KeyGestureController;
++
++    iget v2, p0, Lio/mesalabs/rezoss/memory/MemorySideKey$1;->val$user:I
++
++    # invokes: Lio/mesalabs/rezoss/memory/MemorySideKey;->eligible(Lcom/android/server/input/KeyGestureController;I)Z
++    invoke-static {v1, v2}, Lio/mesalabs/rezoss/memory/MemorySideKey;->access$000(Lcom/android/server/input/KeyGestureController;I)Z
++
++    move-result v1
++
++    if-nez v1, :cond_15
++
++    goto :goto_3f
++
++    .line 81
++    :cond_15
++    iget-object v1, p0, Lio/mesalabs/rezoss/memory/MemorySideKey$1;->val$controller:Lcom/android/server/input/KeyGestureController;
++
++    iget-object v1, v1, Lcom/android/server/input/KeyGestureController;->mContext:Landroid/content/Context;
++
++    # invokes: Lio/mesalabs/rezoss/memory/MemorySideKey;->voiceIntent()Landroid/content/Intent;
++    invoke-static {}, Lio/mesalabs/rezoss/memory/MemorySideKey;->access$100()Landroid/content/Intent;
++
++    move-result-object v2
++
++    iget v3, p0, Lio/mesalabs/rezoss/memory/MemorySideKey$1;->val$user:I
++
++    invoke-static {v3}, Landroid/os/UserHandle;->of(I)Landroid/os/UserHandle;
++
++    move-result-object v3
++
++    invoke-virtual {v1, v2, v3}, Landroid/content/Context;->startActivityAsUser(Landroid/content/Intent;Landroid/os/UserHandle;)V
++
++    .line 82
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v2, "Started Memory voice capture for user "
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    iget v2, p0, Lio/mesalabs/rezoss/memory/MemorySideKey$1;->val$user:I
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    :try_end_3e
++    .catch Ljava/lang/RuntimeException; {:try_start_2 .. :try_end_3e} :catch_40
++
++    .line 85
++    goto :goto_46
++
++    .line 80
++    :cond_3f
++    :goto_3f
++    return-void
++
++    .line 83
++    :catch_40
++    move-exception v1
++
++    .line 84
++    const-string v2, "Cannot start Memory voice capture"
++
++    invoke-static {v0, v2, v1}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    .line 86
++    :goto_46
++    return-void
++.end method
+diff --git a/smali_classes2/io/mesalabs/rezoss/memory/MemorySideKey.smali b/smali_classes2/io/mesalabs/rezoss/memory/MemorySideKey.smali
+--- /dev/null
++++ b/smali_classes2/io/mesalabs/rezoss/memory/MemorySideKey.smali
+@@ -0,0 +1,492 @@
++.class public final Lio/mesalabs/rezoss/memory/MemorySideKey;
++.super Ljava/lang/Object;
++.source "MemorySideKey.java"
++
++
++# static fields
++.field private static final POLICY:Lio/mesalabs/rezoss/memory/SideKeyPolicy;
++
++.field private static final TAG:Ljava/lang/String; = "RezossMemorySideKey"
++
++
++# direct methods
++.method static constructor <clinit>()V
++    .registers 1
++
++    .line 22
++    new-instance v0, Lio/mesalabs/rezoss/memory/SideKeyPolicy;
++
++    invoke-direct {v0}, Lio/mesalabs/rezoss/memory/SideKeyPolicy;-><init>()V
++
++    sput-object v0, Lio/mesalabs/rezoss/memory/MemorySideKey;->POLICY:Lio/mesalabs/rezoss/memory/SideKeyPolicy;
++
++    return-void
++.end method
++
++.method public constructor <init>()V
++    .registers 1
++
++    .line 20
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method static synthetic access$000(Lcom/android/server/input/KeyGestureController;I)Z
++    .registers 2
++
++    .line 20
++    invoke-static {p0, p1}, Lio/mesalabs/rezoss/memory/MemorySideKey;->eligible(Lcom/android/server/input/KeyGestureController;I)Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method static synthetic access$100()Landroid/content/Intent;
++    .registers 1
++
++    .line 20
++    invoke-static {}, Lio/mesalabs/rezoss/memory/MemorySideKey;->voiceIntent()Landroid/content/Intent;
++
++    move-result-object v0
++
++    return-object v0
++.end method
++
++.method private static eligible(Lcom/android/server/input/KeyGestureController;I)Z
++    .registers 7
++
++    .line 32
++    sget-boolean v0, Lcom/samsung/android/rune/InputRune;->PWM_DEVICE_SHUTDOWN_VOLUP_POWER_CHN:Z
++
++    const/4 v1, 0x0
++
++    if-eqz v0, :cond_6
++
++    return v1
++
++    .line 33
++    :cond_6
++    iget-object v0, p0, Lcom/android/server/input/KeyGestureController;->mSecureLockDeviceService:Lcom/android/server/security/authenticationpolicy/SecureLockDeviceService;
++
++    if-eqz v0, :cond_13
++
++    iget-object v0, p0, Lcom/android/server/input/KeyGestureController;->mSecureLockDeviceService:Lcom/android/server/security/authenticationpolicy/SecureLockDeviceService;
++
++    .line 34
++    invoke-virtual {v0}, Lcom/android/server/security/authenticationpolicy/SecureLockDeviceService;->isSecureLockDeviceEnabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_13
++
++    return v1
++
++    .line 35
++    :cond_13
++    iget-object p0, p0, Lcom/android/server/input/KeyGestureController;->mContext:Landroid/content/Context;
++
++    .line 36
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    const-string v2, "memory_volume_up_side_key"
++
++    const/4 v3, 0x1
++
++    invoke-static {v0, v2, v3, p1}, Landroid/provider/Settings$Secure;->getIntForUser(Landroid/content/ContentResolver;Ljava/lang/String;II)I
++
++    move-result v0
++
++    if-eq v0, v3, :cond_23
++
++    .line 37
++    return v1
++
++    .line 40
++    :cond_23
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    const-string v2, "accessibility_direct_access_target_service"
++
++    invoke-static {v0, v2, p1}, Landroid/provider/Settings$Secure;->getStringForUser(Landroid/content/ContentResolver;Ljava/lang/String;I)Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-static {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_34
++
++    .line 41
++    return v1
++
++    .line 42
++    :cond_34
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    const-string v2, "device_provisioned"
++
++    invoke-static {v0, v2, v1}, Landroid/provider/Settings$Global;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result v0
++
++    if-ne v0, v3, :cond_b9
++
++    .line 43
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    const-string v2, "user_setup_complete"
++
++    invoke-static {v0, v2, v1, p1}, Landroid/provider/Settings$Secure;->getIntForUser(Landroid/content/ContentResolver;Ljava/lang/String;II)I
++
++    move-result v0
++
++    if-eq v0, v3, :cond_4d
++
++    goto :goto_b9
++
++    .line 45
++    :cond_4d
++    const-class v0, Landroid/os/PowerManager;
++
++    invoke-virtual {p0, v0}, Landroid/content/Context;->getSystemService(Ljava/lang/Class;)Ljava/lang/Object;
++
++    move-result-object v0
++
++    check-cast v0, Landroid/os/PowerManager;
++
++    .line 46
++    const-class v2, Landroid/app/KeyguardManager;
++
++    invoke-virtual {p0, v2}, Landroid/content/Context;->getSystemService(Ljava/lang/Class;)Ljava/lang/Object;
++
++    move-result-object v2
++
++    check-cast v2, Landroid/app/KeyguardManager;
++
++    .line 47
++    const-class v4, Landroid/os/UserManager;
++
++    invoke-virtual {p0, v4}, Landroid/content/Context;->getSystemService(Ljava/lang/Class;)Ljava/lang/Object;
++
++    move-result-object v4
++
++    check-cast v4, Landroid/os/UserManager;
++
++    .line 48
++    if-eqz v0, :cond_b8
++
++    invoke-virtual {v0}, Landroid/os/PowerManager;->isInteractive()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_b8
++
++    if-eqz v2, :cond_b8
++
++    .line 49
++    invoke-virtual {v2}, Landroid/app/KeyguardManager;->isKeyguardLocked()Z
++
++    move-result v0
++
++    if-nez v0, :cond_b8
++
++    invoke-virtual {v2}, Landroid/app/KeyguardManager;->isDeviceLocked()Z
++
++    move-result v0
++
++    if-nez v0, :cond_b8
++
++    if-eqz v4, :cond_b8
++
++    .line 50
++    invoke-static {p1}, Landroid/os/UserHandle;->of(I)Landroid/os/UserHandle;
++
++    move-result-object v0
++
++    invoke-virtual {v4, v0}, Landroid/os/UserManager;->isUserUnlocked(Landroid/os/UserHandle;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_88
++
++    goto :goto_b8
++
++    .line 51
++    :cond_88
++    invoke-static {p1}, Landroid/os/UserHandle;->of(I)Landroid/os/UserHandle;
++
++    move-result-object p1
++
++    invoke-virtual {p0, p1, v1}, Landroid/content/Context;->createContextAsUser(Landroid/os/UserHandle;I)Landroid/content/Context;
++
++    move-result-object p0
++
++    .line 52
++    invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
++
++    move-result-object p0
++
++    invoke-static {}, Lio/mesalabs/rezoss/memory/MemorySideKey;->voiceIntent()Landroid/content/Intent;
++
++    move-result-object p1
++
++    invoke-virtual {p0, p1, v1}, Landroid/content/pm/PackageManager;->resolveActivity(Landroid/content/Intent;I)Landroid/content/pm/ResolveInfo;
++
++    move-result-object p0
++
++    .line 53
++    if-eqz p0, :cond_b7
++
++    iget-object p1, p0, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
++
++    if-eqz p1, :cond_b7
++
++    iget-object p1, p0, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
++
++    iget-boolean p1, p1, Landroid/content/pm/ActivityInfo;->enabled:Z
++
++    if-eqz p1, :cond_b7
++
++    iget-object p1, p0, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
++
++    iget-boolean p1, p1, Landroid/content/pm/ActivityInfo;->exported:Z
++
++    if-eqz p1, :cond_b7
++
++    iget-object p0, p0, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
++
++    iget-object p0, p0, Landroid/content/pm/ActivityInfo;->applicationInfo:Landroid/content/pm/ApplicationInfo;
++
++    iget-boolean p0, p0, Landroid/content/pm/ApplicationInfo;->enabled:Z
++
++    if-eqz p0, :cond_b7
++
++    move v1, v3
++
++    :cond_b7
++    return v1
++
++    .line 50
++    :cond_b8
++    :goto_b8
++    return v1
++
++    .line 44
++    :cond_b9
++    :goto_b9
++    return v1
++.end method
++
++.method public static declared-synchronized handle(Lcom/android/server/input/KeyGestureController;Landroid/hardware/input/KeyGestureEvent;)Z
++    .registers 8
++
++    const-class v0, Lio/mesalabs/rezoss/memory/MemorySideKey;
++
++    monitor-enter v0
++
++    .line 63
++    nop
++
++    .line 65
++    const/4 v1, 0x1
++
++    const/4 v2, 0x0
++
++    :try_start_6
++    invoke-static {}, Landroid/app/ActivityManager;->getCurrentUser()I
++
++    move-result v3
++
++    .line 66
++    invoke-virtual {p1}, Landroid/hardware/input/KeyGestureEvent;->getAction()I
++
++    move-result v4
++
++    if-ne v4, v1, :cond_21
++
++    invoke-virtual {p1}, Landroid/hardware/input/KeyGestureEvent;->isCancelled()Z
++
++    move-result v4
++
++    if-nez v4, :cond_21
++
++    invoke-virtual {p1}, Landroid/hardware/input/KeyGestureEvent;->isInteractive()Z
++
++    move-result v4
++
++    if-eqz v4, :cond_21
++
++    .line 67
++    invoke-static {p0, v3}, Lio/mesalabs/rezoss/memory/MemorySideKey;->eligible(Lcom/android/server/input/KeyGestureController;I)Z
++
++    move-result v4
++    :try_end_20
++    .catch Ljava/lang/RuntimeException; {:try_start_6 .. :try_end_20} :catch_4b
++    .catchall {:try_start_6 .. :try_end_20} :catchall_49
++
++    goto :goto_22
++
++    .line 72
++    :cond_21
++    move v4, v2
++
++    :goto_22
++    nop
++
++    .line 73
++    :try_start_23
++    sget-object v5, Lio/mesalabs/rezoss/memory/MemorySideKey;->POLICY:Lio/mesalabs/rezoss/memory/SideKeyPolicy;
++
++    invoke-virtual {p1}, Landroid/hardware/input/KeyGestureEvent;->getAction()I
++
++    move-result p1
++
++    invoke-virtual {v5, p1, v4}, Lio/mesalabs/rezoss/memory/SideKeyPolicy;->event(IZ)I
++
++    move-result p1
++    :try_end_2d
++    .catchall {:try_start_23 .. :try_end_2d} :catchall_49
++
++    .line 74
++    const/4 v4, 0x2
++
++    if-ne p1, v4, :cond_43
++
++    .line 76
++    :try_start_30
++    iget-object v4, p0, Lcom/android/server/input/KeyGestureController;->mHandler:Landroid/os/Handler;
++
++    new-instance v5, Lio/mesalabs/rezoss/memory/MemorySideKey$1;
++
++    invoke-direct {v5, v3, p0}, Lio/mesalabs/rezoss/memory/MemorySideKey$1;-><init>(ILcom/android/server/input/KeyGestureController;)V
++
++    invoke-virtual {v4, v5}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
++    :try_end_3a
++    .catch Ljava/lang/RuntimeException; {:try_start_30 .. :try_end_3a} :catch_3b
++    .catchall {:try_start_30 .. :try_end_3a} :catchall_49
++
++    .line 90
++    goto :goto_43
++
++    .line 88
++    :catch_3b
++    move-exception p0
++
++    .line 89
++    :try_start_3c
++    const-string v3, "RezossMemorySideKey"
++
++    const-string v4, "Cannot enqueue Memory voice capture"
++
++    invoke-static {v3, v4, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++    :try_end_43
++    .catchall {:try_start_3c .. :try_end_43} :catchall_49
++
++    .line 92
++    :cond_43
++    :goto_43
++    if-eqz p1, :cond_46
++
++    goto :goto_47
++
++    :cond_46
++    move v1, v2
++
++    :goto_47
++    monitor-exit v0
++
++    return v1
++
++    .line 62
++    :catchall_49
++    move-exception p0
++
++    goto :goto_63
++
++    .line 69
++    :catch_4b
++    move-exception p0
++
++    .line 70
++    :try_start_4c
++    const-string v3, "RezossMemorySideKey"
++
++    const-string v4, "Cannot evaluate Memory side-key eligibility"
++
++    invoke-static {v3, v4, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    .line 71
++    sget-object p0, Lio/mesalabs/rezoss/memory/MemorySideKey;->POLICY:Lio/mesalabs/rezoss/memory/SideKeyPolicy;
++
++    invoke-virtual {p1}, Landroid/hardware/input/KeyGestureEvent;->getAction()I
++
++    move-result p1
++
++    invoke-virtual {p0, p1, v2}, Lio/mesalabs/rezoss/memory/SideKeyPolicy;->event(IZ)I
++
++    move-result p0
++    :try_end_5d
++    .catchall {:try_start_4c .. :try_end_5d} :catchall_49
++
++    if-eqz p0, :cond_60
++
++    goto :goto_61
++
++    :cond_60
++    move v1, v2
++
++    :goto_61
++    monitor-exit v0
++
++    return v1
++
++    .line 62
++    :goto_63
++    :try_start_63
++    monitor-exit v0
++    :try_end_64
++    .catchall {:try_start_63 .. :try_end_64} :catchall_49
++
++    throw p0
++.end method
++
++.method private static voiceIntent()Landroid/content/Intent;
++    .registers 3
++
++    .line 25
++    new-instance v0, Landroid/content/Intent;
++
++    const-string v1, "com.samsung.android.app.memory.action.ADD_MEMORY_VOICE"
++
++    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
++
++    .line 26
++    const-string v1, "com.samsung.android.app.memory"
++
++    const-string v2, "com.samsung.android.app.memory.feature.main.MainActivity"
++
++    invoke-virtual {v0, v1, v2}, Landroid/content/Intent;->setClassName(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
++
++    move-result-object v0
++
++    .line 28
++    const/high16 v1, 0x10000000
++
++    invoke-virtual {v0, v1}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
++
++    move-result-object v0
++
++    .line 25
++    return-object v0
++.end method
+diff --git a/smali_classes2/io/mesalabs/rezoss/memory/SideKeyPolicy.smali b/smali_classes2/io/mesalabs/rezoss/memory/SideKeyPolicy.smali
+--- /dev/null
++++ b/smali_classes2/io/mesalabs/rezoss/memory/SideKeyPolicy.smali
+@@ -0,0 +1,104 @@
++.class public final Lio/mesalabs/rezoss/memory/SideKeyPolicy;
++.super Ljava/lang/Object;
++.source "SideKeyPolicy.java"
++
++
++# static fields
++.field public static final CONSUME:I = 0x1
++
++.field public static final LAUNCH:I = 0x2
++
++.field public static final STOCK:I
++
++
++# instance fields
++.field private active:Z
++
++.field private owned:Z
++
++
++# direct methods
++.method public constructor <init>()V
++    .registers 1
++
++    .line 5
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public event(IZ)I
++    .registers 6
++
++    .line 11
++    const/4 v0, 0x2
++
++    const/4 v1, 0x0
++
++    const/4 v2, 0x1
++
++    if-ne p1, v2, :cond_17
++
++    .line 12
++    iget-boolean p1, p0, Lio/mesalabs/rezoss/memory/SideKeyPolicy;->active:Z
++
++    if-eqz p1, :cond_c
++
++    iget-boolean p1, p0, Lio/mesalabs/rezoss/memory/SideKeyPolicy;->owned:Z
++
++    return p1
++
++    .line 13
++    :cond_c
++    iput-boolean v2, p0, Lio/mesalabs/rezoss/memory/SideKeyPolicy;->active:Z
++
++    .line 14
++    iput-boolean p2, p0, Lio/mesalabs/rezoss/memory/SideKeyPolicy;->owned:Z
++
++    .line 15
++    iget-boolean p1, p0, Lio/mesalabs/rezoss/memory/SideKeyPolicy;->owned:Z
++
++    if-eqz p1, :cond_15
++
++    goto :goto_16
++
++    :cond_15
++    move v0, v1
++
++    :goto_16
++    return v0
++
++    .line 17
++    :cond_17
++    if-ne p1, v0, :cond_28
++
++    .line 18
++    iget-boolean p1, p0, Lio/mesalabs/rezoss/memory/SideKeyPolicy;->active:Z
++
++    if-eqz p1, :cond_22
++
++    iget-boolean p1, p0, Lio/mesalabs/rezoss/memory/SideKeyPolicy;->owned:Z
++
++    if-eqz p1, :cond_22
++
++    goto :goto_23
++
++    :cond_22
++    move v2, v1
++
++    .line 19
++    :goto_23
++    iput-boolean v1, p0, Lio/mesalabs/rezoss/memory/SideKeyPolicy;->active:Z
++
++    .line 20
++    iput-boolean v1, p0, Lio/mesalabs/rezoss/memory/SideKeyPolicy;->owned:Z
++
++    .line 21
++    return v2
++
++    .line 23
++    :cond_28
++    return v1
++.end method

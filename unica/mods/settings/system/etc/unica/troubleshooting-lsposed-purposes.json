@@ -1,0 +1,173 @@
+{
+  "schema": 1,
+  "rules": [
+    {
+      "package": "io.github.soclear.oneuix",
+      "scope": "android",
+      "unica_mod": "UN1CA Settings (secure screenshots)",
+      "feature_class": "io.mesalabs.unica.settings.wm.SecureScreenshotPreferenceController",
+      "source": "https://raw.githubusercontent.com/SoClear/OneUIX/a08935a044434af7d7d6d0f7c9e539089e78bfcf/app/build.gradle.kts",
+      "catalog_key": "candidate-22"
+    },
+    {
+      "package": "io.github.soclear.oneuix",
+      "scope": "system",
+      "unica_mod": "UN1CA Settings (secure screenshots)",
+      "feature_class": "io.mesalabs.unica.settings.wm.SecureScreenshotPreferenceController",
+      "source": "https://raw.githubusercontent.com/SoClear/OneUIX/a08935a044434af7d7d6d0f7c9e539089e78bfcf/app/build.gradle.kts",
+      "catalog_key": "candidate-22"
+    },
+    {
+      "package": "io.mesalabs.knoxpatch",
+      "scope": "android",
+      "unica_mod": "KnoxPatch",
+      "feature_class": "io.mesalabs.unica.KnoxPatchHooks",
+      "source": "https://raw.githubusercontent.com/salvogiangri/KnoxPatch/738420fa731d542b796abc6261dd45a2cf318145/app/build.gradle.kts",
+      "catalog_key": "candidate-24"
+    },
+    {
+      "package": "org.lsposed.corepatch",
+      "scope": "android",
+      "unica_mod": "Signature patches",
+      "feature_class": "io.mesalabs.unica.settings.pm.SignatureVerificationPreferenceController",
+      "source": "https://raw.githubusercontent.com/LSPosed/CorePatch/ddf87bb5fb2bb2eb962992103abf0b225952d738/app/build.gradle.kts",
+      "catalog_key": "candidate-31"
+    },
+    {
+      "package": "org.lsposed.corepatch",
+      "scope": "system",
+      "unica_mod": "Signature patches",
+      "feature_class": "io.mesalabs.unica.settings.pm.SignatureVerificationPreferenceController",
+      "source": "https://raw.githubusercontent.com/LSPosed/CorePatch/ddf87bb5fb2bb2eb962992103abf0b225952d738/app/build.gradle.kts",
+      "catalog_key": "candidate-31"
+    },
+    {
+      "package": "org.lsposed.corepatch",
+      "scope": "android",
+      "unica_mod": "UN1CA Settings (app downgrade)",
+      "feature_class": "io.mesalabs.unica.settings.pm.AppDowngradePreferenceController",
+      "source": "https://raw.githubusercontent.com/LSPosed/CorePatch/ddf87bb5fb2bb2eb962992103abf0b225952d738/app/build.gradle.kts",
+      "catalog_key": "candidate-31"
+    },
+    {
+      "package": "org.lsposed.corepatch",
+      "scope": "system",
+      "unica_mod": "UN1CA Settings (app downgrade)",
+      "feature_class": "io.mesalabs.unica.settings.pm.AppDowngradePreferenceController",
+      "source": "https://raw.githubusercontent.com/LSPosed/CorePatch/ddf87bb5fb2bb2eb962992103abf0b225952d738/app/build.gradle.kts",
+      "catalog_key": "candidate-31"
+    },
+    {
+      "package": "com.coderstory.toolkit",
+      "scope": "android",
+      "unica_mod": "Signature patches",
+      "feature_class": "io.mesalabs.unica.settings.pm.SignatureVerificationPreferenceController",
+      "source": "https://raw.githubusercontent.com/LSPosed/CorePatch/4.9/app/build.gradle.kts",
+      "catalog_key": "candidate-32"
+    },
+    {
+      "package": "com.coderstory.toolkit",
+      "scope": "android",
+      "unica_mod": "UN1CA Settings (app downgrade)",
+      "feature_class": "io.mesalabs.unica.settings.pm.AppDowngradePreferenceController",
+      "source": "https://raw.githubusercontent.com/LSPosed/CorePatch/4.9/app/build.gradle.kts",
+      "catalog_key": "candidate-32"
+    },
+    {
+      "package": "com.berdik.letmedowngrade",
+      "scope": "android",
+      "unica_mod": "UN1CA Settings (app downgrade)",
+      "feature_class": "io.mesalabs.unica.settings.pm.AppDowngradePreferenceController",
+      "source": "https://raw.githubusercontent.com/DavidBerdik/Let-Me-Downgrade/800ca9182dca03f712b1b5e178a2a676df8f69c3/app/build.gradle.kts",
+      "catalog_key": "candidate-33"
+    },
+    {
+      "package": "com.berdik.letmedowngrade",
+      "scope": "system",
+      "unica_mod": "UN1CA Settings (app downgrade)",
+      "feature_class": "io.mesalabs.unica.settings.pm.AppDowngradePreferenceController",
+      "source": "https://raw.githubusercontent.com/DavidBerdik/Let-Me-Downgrade/800ca9182dca03f712b1b5e178a2a676df8f69c3/app/build.gradle.kts",
+      "catalog_key": "candidate-33"
+    },
+    {
+      "package": "io.github.lsposed.disableflagsecure",
+      "scope": "android",
+      "unica_mod": "UN1CA Settings (secure screenshots)",
+      "feature_class": "io.mesalabs.unica.settings.wm.SecureScreenshotPreferenceController",
+      "source": "https://raw.githubusercontent.com/LSPosed/DisableFlagSecure/74f63aa04aa3d5d2f6039f0442d97e8691a998ee/app/build.gradle",
+      "catalog_key": "candidate-36"
+    },
+    {
+      "package": "io.github.lsposed.disableflagsecure",
+      "scope": "system",
+      "unica_mod": "UN1CA Settings (secure screenshots)",
+      "feature_class": "io.mesalabs.unica.settings.wm.SecureScreenshotPreferenceController",
+      "source": "https://raw.githubusercontent.com/LSPosed/DisableFlagSecure/74f63aa04aa3d5d2f6039f0442d97e8691a998ee/app/build.gradle",
+      "catalog_key": "candidate-36"
+    },
+    {
+      "package": "com.kinginu.pixelmask",
+      "scope": "com.google.android.apps.photos",
+      "unica_mod": "UN1CA Settings (Google Photos spoofing)",
+      "feature_class": "io.mesalabs.unica.SamsungPropsHooks",
+      "source": "https://raw.githubusercontent.com/kinginu/PixelMask/8ebeedfad974d60fb8cfe5746b5d4e05cc1d9704/app/build.gradle",
+      "catalog_key": "candidate-49"
+    },
+    {
+      "package": "io.github.mrxsin.pixelphotosevolved",
+      "scope": "com.google.android.apps.photos",
+      "unica_mod": "UN1CA Settings (Google Photos spoofing)",
+      "feature_class": "io.mesalabs.unica.SamsungPropsHooks",
+      "source": "https://modules.lsposed.org/module/io.github.mrxsin.pixelphotosevolved/",
+      "catalog_key": "candidate-50"
+    },
+    {
+      "package": "balti.xposed.pixelifygooglephotos",
+      "scope": "com.google.android.apps.photos",
+      "unica_mod": "UN1CA Settings (Google Photos spoofing)",
+      "feature_class": "io.mesalabs.unica.SamsungPropsHooks",
+      "source": "https://modules.lsposed.org/module/balti.xposed.pixelifygooglephotos/",
+      "catalog_key": "candidate-51"
+    },
+    {
+      "package": "seiry.xposed.pixelifygooglephotos.lsposed",
+      "scope": "com.google.android.apps.photos",
+      "unica_mod": "UN1CA Settings (Google Photos spoofing)",
+      "feature_class": "io.mesalabs.unica.SamsungPropsHooks",
+      "source": "https://raw.githubusercontent.com/seiry/Pixelify-Google-Photos-LSPosed/01538b61ec813a55807f731c850e2c0cf13aea73/app/build.gradle",
+      "catalog_key": "candidate-52"
+    },
+    {
+      "package": "com.tsng.hidemyapplist",
+      "scope": "android",
+      "unica_mod": "HMA",
+      "feature_class": "io.mesalabs.unica.HmaPolicy",
+      "source": "https://github.com/Dr-TSNG/Hide-My-Applist/blob/master/app/build.gradle.kts",
+      "catalog_key": "candidate-56"
+    },
+    {
+      "package": "com.google.android.hmal",
+      "scope": "android",
+      "unica_mod": "HMA",
+      "feature_class": "io.mesalabs.unica.HmaPolicy",
+      "source": "https://raw.githubusercontent.com/pumPCin/HMAL/cdabf62fb0731af3b6ebfebe3645e49cd348585a/app/build.gradle.kts",
+      "catalog_key": "candidate-58"
+    },
+    {
+      "package": "org.frknkrc44.hma_oss",
+      "scope": "android",
+      "unica_mod": "HMA",
+      "feature_class": "io.mesalabs.unica.HmaPolicy",
+      "source": "https://raw.githubusercontent.com/lanlinga/HMA-OSS_MASK/e77c92157e68904fee7b374cddd801501f76b3ba/app/build.gradle.kts",
+      "catalog_key": "candidate-61"
+    },
+    {
+      "package": "org.frknkrc44.hma_oss",
+      "scope": "system",
+      "unica_mod": "HMA",
+      "feature_class": "io.mesalabs.unica.HmaPolicy",
+      "source": "https://raw.githubusercontent.com/fgjaee/HMA-OSS-Lsposed/1c00d4e8d5c028370ccac9c80745a6c0e805248b/app/build.gradle.kts",
+      "catalog_key": "candidate-59"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+(allow unica_battery proc_swappiness (file (read write open getattr)))
+(allow unica_battery vendor_sysfs_kgsl (dir (read open getattr search)))
+(allow unica_battery vendor_sysfs_kgsl (file (read write open getattr)))
+(allow unica_battery vendor_sysfs_kgsl (lnk_file (read getattr)))
+
+(typeattributeset sysfs_33_0 (unica_battery_sysfs))

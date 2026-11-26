@@ -1,0 +1,4610 @@
+Subject: [PATCH] Keep Qwen replies until manual input or editor exit
+
+--- a/smali_classes3/com/samsung/android/honeyboard/service/HoneyBoardService.smali
++++ b/smali_classes3/com/samsung/android/honeyboard/service/HoneyBoardService.smali
+@@ -5110,6 +5110,8 @@
+
+     invoke-super {p0, p1, p2}, Landroid/inputmethodservice/InputMethodService;->onAppPrivateCommand(Ljava/lang/String;Landroid/os/Bundle;)V
+
++    invoke-static {p1, p2}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->command(Ljava/lang/String;Landroid/os/Bundle;)V
++
+     iget-object v0, p0, Lcom/samsung/android/honeyboard/service/HoneyBoardService;->honeyBoardComponentManager:Llp/a;
+
+     if-eqz v0, :cond_0
+@@ -6184,6 +6186,8 @@
+ .method public onFinishInput()V
+     .locals 5
+
++    invoke-static {}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->finish()V
++
+     iget-object v0, p0, Lcom/samsung/android/honeyboard/service/HoneyBoardService;->log:Llo/b;
+
+     const/4 v1, 0x0
+@@ -6255,6 +6259,8 @@
+
+ .method public onFinishInputView(Z)V
+     .locals 6
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->finish()V
+
+     iget-object v0, p0, Lcom/samsung/android/honeyboard/service/HoneyBoardService;->log:Llo/b;
+
+@@ -6840,6 +6846,8 @@
+ .method public onStartInput(Landroid/view/inputmethod/EditorInfo;Z)V
+     .locals 4
+
++    invoke-static {p0, p1, p2}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->start(Landroid/inputmethodservice/InputMethodService;Landroid/view/inputmethod/EditorInfo;Z)V
++
+     const-string v0, "attribute"
+
+     invoke-static {p1, v0}, Lkotlin/jvm/internal/Intrinsics;->checkNotNullParameter(Ljava/lang/Object;Ljava/lang/String;)V
+@@ -6932,6 +6940,8 @@
+     invoke-direct {v1, v2}, Lep/a;-><init>(Llo/b;)V
+
+     invoke-super {p0, p1, p2}, Landroid/inputmethodservice/InputMethodService;->onStartInputView(Landroid/view/inputmethod/EditorInfo;Z)V
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->viewStarted()V
+
+     invoke-direct {p0}, Lcom/samsung/android/honeyboard/service/HoneyBoardService;->getBooster()Lrm/b;
+
+@@ -7532,6 +7542,8 @@
+ .method public onUpdateSelection(IIIIII)V
+     .locals 9
+
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->selection(Landroid/inputmethodservice/InputMethodService;)V
++
+     const-string v0, "onUpdateSelection"
+
+     invoke-static {v0}, Lfp/a;->a(Ljava/lang/String;)V
+--- a/smali_classes2/com/samsung/android/honeyboard/base/suggestedreplies/receiver/SuggestedRepliesReceiver.smali
++++ b/smali_classes2/com/samsung/android/honeyboard/base/suggestedreplies/receiver/SuggestedRepliesReceiver.smali
+@@ -1228,6 +1228,15 @@
+ .method public onReceive(Landroid/content/Context;Landroid/content/Intent;)V
+     .locals 5
+
++    invoke-static {p0, p2, p1}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->consume(Ljava/lang/Object;Landroid/content/Intent;Landroid/content/Context;)Z
++
++    move-result v0
++
++    if-eqz v0, :rezoss_original_receive
++
++    return-void
++
++    :rezoss_original_receive
+     const-string p1, "intent"
+
+     invoke-static {p2, p1}, Lkotlin/jvm/internal/Intrinsics;->checkNotNullParameter(Ljava/lang/Object;Ljava/lang/String;)V
+@@ -1869,6 +1878,8 @@
+
+     invoke-direct {v4, v5, v3}, Lcom/samsung/android/honeyboard/base/suggestedreplies/data/SuggestedData$e;-><init>(Lcom/samsung/android/honeyboard/base/suggestedreplies/data/SuggestedData$State;Ljava/lang/String;)V
+
++    invoke-static {v4}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->tagItem(Ljava/lang/Object;)V
++
+     invoke-virtual {v0, v4}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+
+     goto :goto_0
+--- a/smali_classes2/jk/t.smali
++++ b/smali_classes2/jk/t.smali
+@@ -705,6 +705,15 @@
+ .method public final k()V
+     .locals 1
+
++    invoke-static {}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->keep()Z
++
++    move-result v0
++
++    if-eqz v0, :rezoss_original_hide
++
++    return-void
++
++    :rezoss_original_hide
+     invoke-direct {p0}, Ljk/t;->i()Ljk/o;
+
+     move-result-object v0
+--- a/smali_classes2/com/samsung/android/honeyboard/icecone/rts/manager/RtsManager.smali
++++ b/smali_classes2/com/samsung/android/honeyboard/icecone/rts/manager/RtsManager.smali
+@@ -573,6 +573,8 @@
+
+     iput-object v1, p0, Lcom/samsung/android/honeyboard/icecone/rts/manager/RtsManager;->rtsAppsPolicyManager:Lmo/e;
+
++    invoke-static {v1}, Lio/mesalabs/rezoss/ai/KeyboardRtsPolicy;->enable(Ljava/lang/Object;)V
++
+     new-instance p1, Ls0/i;
+
+     invoke-direct {p1, v2}, Ls0/i;-><init>(Landroid/content/Context;)V
+--- a/res/raw/sticker_rts_allow_list.json
++++ b/res/raw/sticker_rts_allow_list.json
+@@ -63,7 +63,11 @@
+     },
+     {
+       "item": "org.telegram.messenger",
+-      "default_on": false
++      "default_on": true
++    },
++    {
++      "item": "org.telegram.messenger.web",
++      "default_on": true
+     },
+     {
+       "item": "com.skype.raider",
+--- a/smali_classes3/ok0/r.smali
++++ b/smali_classes3/ok0/r.smali
+@@ -936,6 +936,16 @@
+ .method public final N(Landroid/content/Context;Lcom/samsung/android/honeyboard/base/suggestedreplies/data/SuggestedData;IZ)V
+     .locals 3
+
++    invoke-static {p2}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->allowClick(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-nez v0, :rezoss_shade_reply_click_allowed
++
++    return-void
++
++    :rezoss_shade_reply_click_allowed
++
+     sget-object v0, Lnk/a;->a:Lnk/a;
+
+     invoke-virtual {v0, p1}, Lnk/a;->d(Landroid/content/Context;)Z
+--- a/smali_classes2/com/samsung/android/honeyboard/icecone/suggestedreplies/view/SuggestedRepliesViewController.smali
++++ b/smali_classes2/com/samsung/android/honeyboard/icecone/suggestedreplies/view/SuggestedRepliesViewController.smali
+@@ -643,6 +643,12 @@
+
+     if-eqz v2, :cond_0
+
++    invoke-static {v1}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->isBridgeItem(Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-nez v2, :cond_0
++
+     check-cast v1, Lcom/samsung/android/honeyboard/base/suggestedreplies/data/SuggestedData$e;
+
+     invoke-virtual {v1}, Lcom/samsung/android/honeyboard/base/suggestedreplies/data/SuggestedData$e;->getText()Ljava/lang/String;
+--- /dev/null
++++ b/smali_classes5/com/android/tools/r8/annotations/LambdaMethod.smali
+@@ -0,0 +1,27 @@
++.class public interface abstract synthetic annotation Lcom/android/tools/r8/annotations/LambdaMethod;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/annotation/Annotation;
++
++
++# annotations
++.annotation runtime Ljava/lang/annotation/Retention;
++    value = .enum Ljava/lang/annotation/RetentionPolicy;->RUNTIME:Ljava/lang/annotation/RetentionPolicy;
++.end annotation
++
++.annotation runtime Ljava/lang/annotation/Target;
++    value = .enum Ljava/lang/annotation/ElementType;->TYPE:Ljava/lang/annotation/ElementType;
++.end annotation
++
++
++# virtual methods
++.method public abstract holder()Ljava/lang/String;
++.end method
++
++.method public abstract method()Ljava/lang/String;
++.end method
++
++.method public abstract proto()Ljava/lang/String;
++.end method
+--- /dev/null
++++ b/smali_classes5/io/mesalabs/rezoss/ai/KeyboardReplyRetention.smali
+@@ -0,0 +1,811 @@
++.class public final Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;
++.super Ljava/lang/Object;
++.source "KeyboardReplyRetention.java"
++
++
++# static fields
++.field private static fieldId:I
++
++.field private static packageName:Ljava/lang/String;
++
++.field private static pinned:Z
++
++.field private static receiver:Ljava/lang/ref/WeakReference;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/lang/ref/WeakReference<",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static service:Ljava/lang/ref/WeakReference;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/lang/ref/WeakReference<",
++            "Landroid/inputmethodservice/InputMethodService;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static typed:Z
++
++.field private static waiting:Z
++
++
++# direct methods
++.method static constructor <clinit>()V
++    .registers 2
++
++    .line 13
++    new-instance v0, Ljava/lang/ref/WeakReference;
++
++    const/4 v1, 0x0
++
++    invoke-direct {v0, v1}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
++
++    sput-object v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->service:Ljava/lang/ref/WeakReference;
++
++    .line 14
++    new-instance v0, Ljava/lang/ref/WeakReference;
++
++    invoke-direct {v0, v1}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
++
++    sput-object v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->receiver:Ljava/lang/ref/WeakReference;
++
++    return-void
++.end method
++
++.method public constructor <init>()V
++    .registers 1
++
++    .line 12
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method private static clear()V
++    .registers 6
++
++    .line 78
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->pinned:Z
++
++    .line 79
++    const/4 v1, 0x0
++
++    sput-boolean v1, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->pinned:Z
++
++    .line 80
++    sput-boolean v1, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->waiting:Z
++
++    .line 81
++    sget-object v2, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->receiver:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {v2}, Ljava/lang/ref/WeakReference;->get()Ljava/lang/Object;
++
++    move-result-object v2
++
++    .line 82
++    sget-object v3, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->receiver:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {v3}, Ljava/lang/ref/WeakReference;->clear()V
++
++    .line 83
++    if-eqz v0, :cond_55
++
++    if-eqz v2, :cond_55
++
++    .line 85
++    :try_start_16
++    invoke-virtual {v2}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
++
++    move-result-object v0
++
++    const-string v3, "q"
++
++    const/4 v4, 0x1
++
++    new-array v4, v4, [Ljava/lang/Class;
++
++    const-class v5, Landroid/content/Intent;
++
++    aput-object v5, v4, v1
++
++    invoke-virtual {v0, v3, v4}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
++
++    move-result-object v0
++
++    new-instance v1, Landroid/content/Intent;
++
++    invoke-direct {v1}, Landroid/content/Intent;-><init>()V
++
++    filled-new-array {v1}, [Ljava/lang/Object;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v2, v1}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
++    :try_end_33
++    .catch Ljava/lang/Exception; {:try_start_16 .. :try_end_33} :catch_34
++
++    .line 88
++    goto :goto_55
++
++    .line 86
++    :catch_34
++    move-exception v0
++
++    .line 87
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v2, "clear status="
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/Class;->getSimpleName()Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v0
++
++    const-string v1, "RezossKeyboard"
++
++    invoke-static {v1, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
++
++    .line 90
++    :cond_55
++    :goto_55
++    return-void
++.end method
++
++.method public static consume(Ljava/lang/Object;Landroid/content/Intent;Landroid/content/Context;)Z
++    .registers 12
++
++    .line 94
++    invoke-static {p0, p1, p2}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->consume(Ljava/lang/Object;Landroid/content/Intent;Landroid/content/Context;)Z
++
++    move-result p2
++
++    const/4 v0, 0x1
++
++    if-eqz p2, :cond_8
++
++    return v0
++
++    .line 95
++    :cond_8
++    sget-object p2, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->service:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {p2}, Ljava/lang/ref/WeakReference;->get()Ljava/lang/Object;
++
++    move-result-object p2
++
++    check-cast p2, Landroid/inputmethodservice/InputMethodService;
++
++    .line 96
++    const/4 v1, 0x0
++
++    if-eqz p2, :cond_ec
++
++    sget-object v2, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->packageName:Ljava/lang/String;
++
++    if-nez v2, :cond_19
++
++    goto/16 :goto_ec
++
++    .line 97
++    :cond_19
++    invoke-virtual {p1}, Landroid/content/Intent;->getAction()Ljava/lang/String;
++
++    move-result-object v2
++
++    .line 98
++    if-nez v2, :cond_20
++
++    return v1
++
++    .line 99
++    :cond_20
++    const-string v3, "REZOSS_QWEN"
++
++    invoke-virtual {p1, v3, v1}, Landroid/content/Intent;->getBooleanExtra(Ljava/lang/String;Z)Z
++
++    move-result v3
++
++    const-string v4, ".FAILED_SUGGESTED_REPLIES"
++
++    const-string v5, ".NOW_NUDGE"
++
++    const-string v6, ".EXIT"
++
++    const-string v7, "RezossKeyboard"
++
++    if-eqz v3, :cond_af
++
++    .line 100
++    sget-object v3, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->packageName:Ljava/lang/String;
++
++    const-string v8, "PACKAGE_NAME"
++
++    invoke-virtual {p1, v8}, Landroid/content/Intent;->getStringExtra(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v8
++
++    invoke-virtual {v3, v8}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v3
++
++    if-nez v3, :cond_3f
++
++    return v0
++
++    .line 101
++    :cond_3f
++    invoke-static {p2}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->selection(Landroid/inputmethodservice/InputMethodService;)V
++
++    .line 102
++    sget-boolean p2, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->typed:Z
++
++    if-eqz p2, :cond_47
++
++    return v0
++
++    .line 103
++    :cond_47
++    const-string p2, "SUGGESTIONS"
++
++    invoke-virtual {p1, p2}, Landroid/content/Intent;->getStringArrayListExtra(Ljava/lang/String;)Ljava/util/ArrayList;
++
++    move-result-object p2
++
++    .line 104
++    invoke-virtual {v2, v5}, Ljava/lang/String;->endsWith(Ljava/lang/String;)Z
++
++    move-result v3
++
++    if-eqz v3, :cond_93
++
++    if-eqz p2, :cond_93
++
++    invoke-virtual {p2}, Ljava/util/ArrayList;->isEmpty()Z
++
++    move-result v3
++
++    if-nez v3, :cond_93
++
++    .line 105
++    sput-boolean v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->pinned:Z
++
++    .line 106
++    const-string v0, "REZOSS_WAITING"
++
++    invoke-virtual {p1, v0, v1}, Landroid/content/Intent;->getBooleanExtra(Ljava/lang/String;Z)Z
++
++    move-result p1
++
++    sput-boolean p1, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->waiting:Z
++
++    .line 107
++    new-instance p1, Ljava/lang/ref/WeakReference;
++
++    invoke-direct {p1, p0}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
++
++    sput-object p1, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->receiver:Ljava/lang/ref/WeakReference;
++
++    .line 108
++    new-instance p0, Ljava/lang/StringBuilder;
++
++    invoke-direct {p0}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string p1, "retention status=pinned count="
++
++    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p0
++
++    invoke-virtual {p2}, Ljava/util/ArrayList;->size()I
++
++    move-result p1
++
++    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    move-result-object p0
++
++    const-string p1, " waiting="
++
++    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p0
++
++    sget-boolean p1, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->waiting:Z
++
++    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Z)Ljava/lang/StringBuilder;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-static {v7, p0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    .line 109
++    return v1
++
++    .line 111
++    :cond_93
++    sget-boolean p0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->waiting:Z
++
++    if-eqz p0, :cond_ac
++
++    invoke-virtual {v2, v6}, Ljava/lang/String;->endsWith(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-nez p0, :cond_a3
++
++    invoke-virtual {v2, v4}, Ljava/lang/String;->endsWith(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_ac
++
++    .line 112
++    :cond_a3
++    invoke-static {}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->clear()V
++
++    .line 113
++    const-string p0, "retention status=waiting_cleared"
++
++    invoke-static {v7, p0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    .line 114
++    return v1
++
++    .line 116
++    :cond_ac
++    sget-boolean p0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->pinned:Z
++
++    return p0
++
++    .line 118
++    :cond_af
++    sget-boolean p0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->pinned:Z
++
++    if-nez p0, :cond_b4
++
++    return v1
++
++    .line 119
++    :cond_b4
++    const-string p0, ".USER_SENT"
++
++    invoke-virtual {v2, p0}, Ljava/lang/String;->endsWith(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_c2
++
++    sput-boolean v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->typed:Z
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->clear()V
++
++    return v1
++
++    .line 120
++    :cond_c2
++    invoke-virtual {v2, v6}, Ljava/lang/String;->endsWith(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-nez p0, :cond_e6
++
++    invoke-virtual {v2, v5}, Ljava/lang/String;->endsWith(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-nez p0, :cond_e6
++
++    .line 121
++    const-string p0, ".SUGGESTED_REPLIES"
++
++    invoke-virtual {v2, p0}, Ljava/lang/String;->endsWith(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-nez p0, :cond_e6
++
++    const-string p0, ".PREPARE_SUGGESTED_REPLIES"
++
++    invoke-virtual {v2, p0}, Ljava/lang/String;->endsWith(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-nez p0, :cond_e6
++
++    .line 122
++    invoke-virtual {v2, v4}, Ljava/lang/String;->endsWith(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_e5
++
++    goto :goto_e6
++
++    .line 126
++    :cond_e5
++    return v1
++
++    .line 123
++    :cond_e6
++    :goto_e6
++    const-string p0, "retention status=preserved"
++
++    invoke-static {v7, p0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    .line 124
++    return v0
++
++    .line 96
++    :cond_ec
++    :goto_ec
++    return v1
++.end method
++
++.method public static finish()V
++    .registers 2
++
++    .line 38
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->finish()V
++
++    .line 39
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->pinned:Z
++
++    if-eqz v0, :cond_18
++
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->typed:Z
++
++    if-nez v0, :cond_18
++
++    .line 40
++    sget-object v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->service:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {v0}, Ljava/lang/ref/WeakReference;->clear()V
++
++    .line 41
++    const-string v0, "RezossKeyboard"
++
++    const-string v1, "retention status=finish_retained"
++
++    invoke-static {v0, v1}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    .line 42
++    return-void
++
++    .line 44
++    :cond_18
++    invoke-static {}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->clear()V
++
++    .line 45
++    const/4 v0, 0x0
++
++    sput-object v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->packageName:Ljava/lang/String;
++
++    .line 46
++    const/4 v0, 0x0
++
++    sput-boolean v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->typed:Z
++
++    .line 47
++    sget-object v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->service:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {v0}, Ljava/lang/ref/WeakReference;->clear()V
++
++    .line 48
++    return-void
++.end method
++
++.method private static hasText(Landroid/inputmethodservice/InputMethodService;)Z
++    .registers 5
++
++    .line 51
++    invoke-virtual {p0}, Landroid/inputmethodservice/InputMethodService;->getCurrentInputConnection()Landroid/view/inputmethod/InputConnection;
++
++    move-result-object p0
++
++    .line 52
++    const/4 v0, 0x1
++
++    if-nez p0, :cond_8
++
++    return v0
++
++    .line 53
++    :cond_8
++    const/4 v1, 0x0
++
++    invoke-interface {p0, v0, v1}, Landroid/view/inputmethod/InputConnection;->getTextBeforeCursor(II)Ljava/lang/CharSequence;
++
++    move-result-object v2
++
++    .line 54
++    invoke-interface {p0, v0, v1}, Landroid/view/inputmethod/InputConnection;->getTextAfterCursor(II)Ljava/lang/CharSequence;
++
++    move-result-object v3
++
++    .line 55
++    invoke-interface {p0, v1}, Landroid/view/inputmethod/InputConnection;->getSelectedText(I)Ljava/lang/CharSequence;
++
++    move-result-object p0
++
++    .line 56
++    if-eqz v2, :cond_30
++
++    if-eqz v3, :cond_30
++
++    invoke-interface {v2}, Ljava/lang/CharSequence;->length()I
++
++    move-result v2
++
++    if-gtz v2, :cond_30
++
++    invoke-interface {v3}, Ljava/lang/CharSequence;->length()I
++
++    move-result v2
++
++    if-gtz v2, :cond_30
++
++    if-eqz p0, :cond_2e
++
++    .line 57
++    invoke-interface {p0}, Ljava/lang/CharSequence;->length()I
++
++    move-result p0
++
++    if-lez p0, :cond_2e
++
++    goto :goto_30
++
++    :cond_2e
++    move v0, v1
++
++    goto :goto_31
++
++    :cond_30
++    :goto_30
++    nop
++
++    .line 56
++    :goto_31
++    return v0
++.end method
++
++.method public static keep()Z
++    .registers 1
++
++    .line 71
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->active()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_b
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->keep()Z
++
++    move-result v0
++
++    return v0
++
++    .line 72
++    :cond_b
++    sget-object v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->service:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {v0}, Ljava/lang/ref/WeakReference;->get()Ljava/lang/Object;
++
++    move-result-object v0
++
++    check-cast v0, Landroid/inputmethodservice/InputMethodService;
++
++    .line 73
++    if-eqz v0, :cond_18
++
++    invoke-static {v0}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->selection(Landroid/inputmethodservice/InputMethodService;)V
++
++    .line 74
++    :cond_18
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->pinned:Z
++
++    if-eqz v0, :cond_22
++
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->typed:Z
++
++    if-nez v0, :cond_22
++
++    const/4 v0, 0x1
++
++    goto :goto_23
++
++    :cond_22
++    const/4 v0, 0x0
++
++    :goto_23
++    return v0
++.end method
++
++.method public static selection(Landroid/inputmethodservice/InputMethodService;)V
++    .registers 2
++
++    .line 61
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->selection()V
++
++    .line 62
++    sget-object v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->packageName:Ljava/lang/String;
++
++    if-eqz v0, :cond_20
++
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->typed:Z
++
++    if-eqz v0, :cond_c
++
++    goto :goto_20
++
++    .line 63
++    :cond_c
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->hasText(Landroid/inputmethodservice/InputMethodService;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_1f
++
++    .line 64
++    const/4 p0, 0x1
++
++    sput-boolean p0, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->typed:Z
++
++    .line 65
++    invoke-static {}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->clear()V
++
++    .line 66
++    const-string p0, "RezossKeyboard"
++
++    const-string v0, "retention status=manual_input"
++
++    invoke-static {p0, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    .line 68
++    :cond_1f
++    return-void
++
++    .line 62
++    :cond_20
++    :goto_20
++    return-void
++.end method
++
++.method public static start(Landroid/inputmethodservice/InputMethodService;Landroid/view/inputmethod/EditorInfo;Z)V
++    .registers 7
++
++    .line 22
++    if-nez p1, :cond_6
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->finish()V
++
++    return-void
++
++    .line 23
++    :cond_6
++    iget-object p2, p1, Landroid/view/inputmethod/EditorInfo;->packageName:Ljava/lang/String;
++
++    const/4 v0, 0x1
++
++    const/4 v1, 0x0
++
++    if-eqz p2, :cond_18
++
++    iget-object p2, p1, Landroid/view/inputmethod/EditorInfo;->packageName:Ljava/lang/String;
++
++    sget-object v2, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->packageName:Ljava/lang/String;
++
++    invoke-virtual {p2, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p2
++
++    if-eqz p2, :cond_18
++
++    move p2, v0
++
++    goto :goto_19
++
++    :cond_18
++    move p2, v1
++
++    .line 24
++    :goto_19
++    if-eqz p2, :cond_22
++
++    iget v2, p1, Landroid/view/inputmethod/EditorInfo;->fieldId:I
++
++    sget v3, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->fieldId:I
++
++    if-ne v2, v3, :cond_22
++
++    goto :goto_23
++
++    :cond_22
++    move v0, v1
++
++    .line 25
++    :goto_23
++    if-nez v0, :cond_35
++
++    sget-boolean v2, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->pinned:Z
++
++    if-eqz v2, :cond_2f
++
++    sget-boolean v2, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->typed:Z
++
++    if-nez v2, :cond_2f
++
++    if-nez p2, :cond_35
++
++    .line 26
++    :cond_2f
++    invoke-static {}, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->clear()V
++
++    .line 27
++    sput-boolean v1, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->typed:Z
++
++    goto :goto_3e
++
++    .line 28
++    :cond_35
++    if-nez v0, :cond_3e
++
++    .line 29
++    const-string p2, "RezossKeyboard"
++
++    const-string v0, "retention status=editor_refresh_preserved"
++
++    invoke-static {p2, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    .line 31
++    :cond_3e
++    :goto_3e
++    new-instance p2, Ljava/lang/ref/WeakReference;
++
++    invoke-direct {p2, p0}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
++
++    sput-object p2, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->service:Ljava/lang/ref/WeakReference;
++
++    .line 32
++    iget-object p2, p1, Landroid/view/inputmethod/EditorInfo;->packageName:Ljava/lang/String;
++
++    sput-object p2, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->packageName:Ljava/lang/String;
++
++    .line 33
++    iget p2, p1, Landroid/view/inputmethod/EditorInfo;->fieldId:I
++
++    sput p2, Lio/mesalabs/rezoss/ai/KeyboardReplyRetention;->fieldId:I
++
++    .line 34
++    invoke-static {p0, p1}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->start(Landroid/inputmethodservice/InputMethodService;Landroid/view/inputmethod/EditorInfo;)V
++
++    .line 35
++    return-void
++.end method
+--- /dev/null
++++ b/smali_classes5/io/mesalabs/rezoss/ai/KeyboardRtsPolicy.smali
+@@ -0,0 +1,237 @@
++.class public final Lio/mesalabs/rezoss/ai/KeyboardRtsPolicy;
++.super Ljava/lang/Object;
++.source "KeyboardRtsPolicy.java"
++
++
++# static fields
++.field private static final PACKAGES:[Ljava/lang/String;
++
++
++# direct methods
++.method static constructor <clinit>()V
++    .registers 2
++
++    .line 12
++    const-string v0, "org.telegram.messenger"
++
++    const-string v1, "org.telegram.messenger.web"
++
++    filled-new-array {v0, v1}, [Ljava/lang/String;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/rezoss/ai/KeyboardRtsPolicy;->PACKAGES:[Ljava/lang/String;
++
++    return-void
++.end method
++
++.method private constructor <init>()V
++    .registers 1
++
++    .line 40
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method public static enable(Ljava/lang/Object;)V
++    .registers 11
++
++    .line 18
++    const-string v0, "RezossKeyboard"
++
++    if-nez p0, :cond_5
++
++    return-void
++
++    .line 20
++    :cond_5
++    :try_start_5
++    const-string v1, "a"
++
++    invoke-static {p0, v1}, Lio/mesalabs/rezoss/ai/KeyboardRtsPolicy;->field(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;
++
++    move-result-object v1
++
++    check-cast v1, Landroid/content/Context;
++
++    .line 21
++    const-string v2, "c"
++
++    invoke-static {p0, v2}, Lio/mesalabs/rezoss/ai/KeyboardRtsPolicy;->field(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;
++
++    move-result-object v2
++
++    invoke-static {v2}, Ljava/lang/String;->valueOf(Ljava/lang/Object;)Ljava/lang/String;
++
++    move-result-object v2
++
++    .line 22
++    nop
++
++    .line 23
++    invoke-static {v1}, Landroid/preference/PreferenceManager;->getDefaultSharedPreferences(Landroid/content/Context;)Landroid/content/SharedPreferences;
++
++    move-result-object v1
++
++    invoke-interface {v1}, Landroid/content/SharedPreferences;->edit()Landroid/content/SharedPreferences$Editor;
++
++    move-result-object v1
++
++    .line 24
++    sget-object v3, Lio/mesalabs/rezoss/ai/KeyboardRtsPolicy;->PACKAGES:[Ljava/lang/String;
++
++    array-length v4, v3
++
++    const/4 v5, 0x0
++
++    move v6, v5
++
++    :goto_25
++    const/4 v7, 0x1
++
++    if-ge v6, v4, :cond_41
++
++    aget-object v8, v3, v6
++
++    new-instance v9, Ljava/lang/StringBuilder;
++
++    invoke-direct {v9}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {v9, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v9
++
++    invoke-virtual {v9, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v8
++
++    invoke-virtual {v8}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v8
++
++    invoke-interface {v1, v8, v7}, Landroid/content/SharedPreferences$Editor;->putBoolean(Ljava/lang/String;Z)Landroid/content/SharedPreferences$Editor;
++
++    add-int/lit8 v6, v6, 0x1
++
++    goto :goto_25
++
++    .line 25
++    :cond_41
++    invoke-interface {v1}, Landroid/content/SharedPreferences$Editor;->apply()V
++
++    .line 26
++    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
++
++    move-result-object v1
++
++    const-string v2, "d"
++
++    new-array v3, v7, [Ljava/lang/Class;
++
++    const-class v4, Ljava/lang/String;
++
++    aput-object v4, v3, v5
++
++    invoke-virtual {v1, v2, v3}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
++
++    move-result-object v1
++
++    .line 27
++    sget-object v2, Lio/mesalabs/rezoss/ai/KeyboardRtsPolicy;->PACKAGES:[Ljava/lang/String;
++
++    array-length v3, v2
++
++    :goto_57
++    if-ge v5, v3, :cond_65
++
++    aget-object v4, v2, v5
++
++    filled-new-array {v4}, [Ljava/lang/Object;
++
++    move-result-object v4
++
++    invoke-virtual {v1, p0, v4}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
++
++    add-int/lit8 v5, v5, 0x1
++
++    goto :goto_57
++
++    .line 28
++    :cond_65
++    const-string p0, "rts_policy status=enabled telegram=true ayugram=true"
++
++    invoke-static {v0, p0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++    :try_end_6a
++    .catch Ljava/lang/Exception; {:try_start_5 .. :try_end_6a} :catch_6b
++
++    .line 31
++    goto :goto_8a
++
++    .line 29
++    :catch_6b
++    move-exception p0
++
++    .line 30
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v2, "rts_policy status="
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljava/lang/Class;->getSimpleName()Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {v1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-static {v0, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
++
++    .line 32
++    :goto_8a
++    return-void
++.end method
++
++.method private static field(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/Object;
++    .registers 3
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 35
++    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
++
++    move-result-object v0
++
++    invoke-virtual {v0, p1}, Ljava/lang/Class;->getDeclaredField(Ljava/lang/String;)Ljava/lang/reflect/Field;
++
++    move-result-object p1
++
++    .line 36
++    const/4 v0, 0x1
++
++    invoke-virtual {p1, v0}, Ljava/lang/reflect/Field;->setAccessible(Z)V
++
++    .line 37
++    invoke-virtual {p1, p0}, Ljava/lang/reflect/Field;->get(Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object p0
++
++    return-object p0
++.end method
+--- /dev/null
++++ b/smali_classes5/io/mesalabs/rezoss/ai/ShadeReplyContract$State$0.smali
+@@ -0,0 +1,48 @@
++.class public final synthetic Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$0;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/util/function/Predicate;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;"
++    method = "lambda$receive$0"
++    proto = "(JLjava/util/Map$Entry;)Z"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:J
++
++
++# direct methods
++.method public synthetic constructor <init>(J)V
++    .registers 3
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-wide p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$0;->f$0:J
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final test(Ljava/lang/Object;)Z
++    .registers 4
++
++    .line 0
++    iget-wide v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$0;->f$0:J
++
++    check-cast p1, Ljava/util/Map$Entry;
++
++    invoke-static {v0, v1, p1}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->lambda$receive$0(JLjava/util/Map$Entry;)Z
++
++    move-result p1
++
++    return p1
++.end method
+--- /dev/null
++++ b/smali_classes5/io/mesalabs/rezoss/ai/ShadeReplyContract$State$1.smali
+@@ -0,0 +1,48 @@
++.class public final synthetic Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$1;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/util/function/Predicate;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;"
++    method = "lambda$receive$1"
++    proto = "(Ljava/lang/String;Ljava/lang/String;)Z"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Ljava/lang/String;
++
++
++# direct methods
++.method public synthetic constructor <init>(Ljava/lang/String;)V
++    .registers 2
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$1;->f$0:Ljava/lang/String;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final test(Ljava/lang/Object;)Z
++    .registers 3
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$1;->f$0:Ljava/lang/String;
++
++    check-cast p1, Ljava/lang/String;
++
++    invoke-static {v0, p1}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->lambda$receive$1(Ljava/lang/String;Ljava/lang/String;)Z
++
++    move-result p1
++
++    return p1
++.end method
+--- /dev/null
++++ b/smali_classes5/io/mesalabs/rezoss/ai/ShadeReplyContract$State$2.smali
+@@ -0,0 +1,48 @@
++.class public final synthetic Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$2;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/util/function/Predicate;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;"
++    method = "lambda$receive$2"
++    proto = "(Ljava/lang/String;Ljava/lang/String;)Z"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Ljava/lang/String;
++
++
++# direct methods
++.method public synthetic constructor <init>(Ljava/lang/String;)V
++    .registers 2
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$2;->f$0:Ljava/lang/String;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final test(Ljava/lang/Object;)Z
++    .registers 3
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$2;->f$0:Ljava/lang/String;
++
++    check-cast p1, Ljava/lang/String;
++
++    invoke-static {v0, p1}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->lambda$receive$2(Ljava/lang/String;Ljava/lang/String;)Z
++
++    move-result p1
++
++    return p1
++.end method
+--- /dev/null
++++ b/smali_classes5/io/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry.smali
+@@ -0,0 +1,51 @@
++.class final Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;
++.super Ljava/lang/Object;
++.source "ShadeReplyContract.java"
++
++
++# annotations
++.annotation system Ldalvik/annotation/EnclosingClass;
++    value = Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;
++.end annotation
++
++.annotation system Ldalvik/annotation/InnerClass;
++    accessFlags = 0x1a
++    name = "Entry"
++.end annotation
++
++
++# instance fields
++.field replies:Ljava/util/List;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/List<",
++            "Ljava/lang/String;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field started:J
++
++
++# direct methods
++.method constructor <init>(JLjava/util/List;)V
++    .registers 4
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "(J",
++            "Ljava/util/List<",
++            "Ljava/lang/String;",
++            ">;)V"
++        }
++    .end annotation
++
++    .line 70
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-wide p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;->started:J
++
++    iput-object p3, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;->replies:Ljava/util/List;
++
++    return-void
++.end method
+--- /dev/null
++++ b/smali_classes5/io/mesalabs/rezoss/ai/ShadeReplyContract$State.smali
+@@ -0,0 +1,1014 @@
++.class public final Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;
++.super Ljava/lang/Object;
++.source "ShadeReplyContract.java"
++
++
++# annotations
++.annotation system Ldalvik/annotation/EnclosingClass;
++    value = Lio/mesalabs/rezoss/ai/ShadeReplyContract;
++.end annotation
++
++.annotation system Ldalvik/annotation/InnerClass;
++    accessFlags = 0x19
++    name = "State"
++.end annotation
++
++.annotation system Ldalvik/annotation/MemberClasses;
++    value = {
++        Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;
++    }
++.end annotation
++
++
++# instance fields
++.field private active:Ljava/lang/String;
++
++.field private final blocked:Ljava/util/Set;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/Set<",
++            "Ljava/lang/String;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private final cache:Ljava/util/Map;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private cutoff:J
++
++.field private disabled:Z
++
++.field private final generationFingerprints:Ljava/util/Map;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Ljava/lang/String;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private final generations:Ljava/util/Map;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/Map<",
++            "Ljava/lang/String;",
++            "Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private token:Ljava/lang/String;
++
++
++# direct methods
++.method public constructor <init>()V
++    .registers 3
++
++    .line 66
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    .line 72
++    new-instance v0, Ljava/util/LinkedHashMap;
++
++    invoke-direct {v0}, Ljava/util/LinkedHashMap;-><init>()V
++
++    iput-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cache:Ljava/util/Map;
++
++    .line 73
++    new-instance v0, Ljava/util/LinkedHashMap;
++
++    invoke-direct {v0}, Ljava/util/LinkedHashMap;-><init>()V
++
++    iput-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->generations:Ljava/util/Map;
++
++    .line 74
++    new-instance v0, Ljava/util/LinkedHashMap;
++
++    invoke-direct {v0}, Ljava/util/LinkedHashMap;-><init>()V
++
++    iput-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->generationFingerprints:Ljava/util/Map;
++
++    .line 75
++    new-instance v0, Ljava/util/LinkedHashSet;
++
++    invoke-direct {v0}, Ljava/util/LinkedHashSet;-><init>()V
++
++    iput-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->blocked:Ljava/util/Set;
++
++    .line 78
++    const-wide/high16 v0, -0x8000000000000000L
++
++    iput-wide v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cutoff:J
++
++    return-void
++.end method
++
++.method private static fresh(JJ)Z
++    .registers 6
++
++    .line 82
++    const-wide/16 v0, 0x0
++
++    cmp-long v0, p0, v0
++
++    if-lez v0, :cond_16
++
++    cmp-long v0, p2, p0
++
++    if-ltz v0, :cond_16
++
++    sub-long/2addr p2, p0
++
++    const-wide p0, 0xdf8475800L
++
++    cmp-long p0, p2, p0
++
++    if-gtz p0, :cond_16
++
++    const/4 p0, 0x1
++
++    goto :goto_17
++
++    :cond_16
++    const/4 p0, 0x0
++
++    :goto_17
++    return p0
++.end method
++
++.method private static identity(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++    .registers 3
++
++    .line 81
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->prefix(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p0
++
++    invoke-virtual {p0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method static synthetic lambda$receive$0(JLjava/util/Map$Entry;)Z
++    .registers 5
++
++    .line 134
++    invoke-interface {p2}, Ljava/util/Map$Entry;->getValue()Ljava/lang/Object;
++
++    move-result-object p2
++
++    check-cast p2, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;
++
++    iget-wide v0, p2, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;->started:J
++
++    invoke-static {v0, v1, p0, p1}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->fresh(JJ)Z
++
++    move-result p0
++
++    xor-int/lit8 p0, p0, 0x1
++
++    return p0
++.end method
++
++.method static synthetic lambda$receive$1(Ljava/lang/String;Ljava/lang/String;)Z
++    .registers 2
++
++    .line 145
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->prefix(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {p1, p0}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method static synthetic lambda$receive$2(Ljava/lang/String;Ljava/lang/String;)Z
++    .registers 2
++
++    .line 151
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->prefix(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {p1, p0}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method private static prefix(Ljava/lang/String;)Ljava/lang/String;
++    .registers 3
++
++    .line 80
++    if-nez p0, :cond_5
++
++    const-string p0, "null:"
++
++    goto :goto_26
++
++    :cond_5
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {p0}, Ljava/lang/String;->length()I
++
++    move-result v1
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    const-string v1, ":"
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p0
++
++    const-string v0, "\n"
++
++    invoke-virtual {p0, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p0
++
++    :goto_26
++    return-object p0
++.end method
++
++
++# virtual methods
++.method public close(J)V
++    .registers 5
++
++    .line 98
++    const/4 v0, 0x0
++
++    iput-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->active:Ljava/lang/String;
++
++    .line 99
++    iput-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->token:Ljava/lang/String;
++
++    .line 100
++    iget-wide v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cutoff:J
++
++    invoke-static {v0, v1, p1, p2}, Ljava/lang/Math;->max(JJ)J
++
++    move-result-wide p1
++
++    iput-wide p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cutoff:J
++
++    .line 101
++    iget-object p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cache:Ljava/util/Map;
++
++    invoke-interface {p1}, Ljava/util/Map;->clear()V
++
++    .line 102
++    iget-object p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->generations:Ljava/util/Map;
++
++    invoke-interface {p1}, Ljava/util/Map;->clear()V
++
++    .line 103
++    iget-object p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->generationFingerprints:Ljava/util/Map;
++
++    invoke-interface {p1}, Ljava/util/Map;->clear()V
++
++    .line 104
++    return-void
++.end method
++
++.method public current(J)Ljava/util/List;
++    .registers 6
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "(J)",
++            "Ljava/util/List<",
++            "Ljava/lang/String;",
++            ">;"
++        }
++    .end annotation
++
++    .line 160
++    iget-boolean v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->disabled:Z
++
++    if-nez v0, :cond_37
++
++    iget-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->active:Ljava/lang/String;
++
++    if-eqz v0, :cond_37
++
++    iget-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->token:Ljava/lang/String;
++
++    if-eqz v0, :cond_37
++
++    iget-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->blocked:Ljava/util/Set;
++
++    iget-object v1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->active:Ljava/lang/String;
++
++    invoke-interface {v0, v1}, Ljava/util/Set;->contains(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_17
++
++    goto :goto_37
++
++    .line 161
++    :cond_17
++    iget-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cache:Ljava/util/Map;
++
++    iget-object v1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->active:Ljava/lang/String;
++
++    invoke-interface {v0, v1}, Ljava/util/Map;->get(Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object v0
++
++    check-cast v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;
++
++    .line 162
++    if-eqz v0, :cond_32
++
++    iget-object v1, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;->replies:Ljava/util/List;
++
++    if-eqz v1, :cond_32
++
++    iget-wide v1, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;->started:J
++
++    invoke-static {v1, v2, p1, p2}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->fresh(JJ)Z
++
++    move-result p1
++
++    if-eqz p1, :cond_32
++
++    .line 163
++    iget-object p1, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;->replies:Ljava/util/List;
++
++    goto :goto_36
++
++    :cond_32
++    invoke-static {}, Ljava/util/Collections;->emptyList()Ljava/util/List;
++
++    move-result-object p1
++
++    .line 162
++    :goto_36
++    return-object p1
++
++    .line 160
++    :cond_37
++    :goto_37
++    invoke-static {}, Ljava/util/Collections;->emptyList()Ljava/util/List;
++
++    move-result-object p1
++
++    return-object p1
++.end method
++
++.method public open(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;J)V
++    .registers 9
++
++    .line 85
++    iget-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->active:Ljava/lang/String;
++
++    if-eqz v0, :cond_1b
++
++    iget-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->active:Ljava/lang/String;
++
++    invoke-static {p1, p3}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->identity(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_18
++
++    iget-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->token:Ljava/lang/String;
++
++    invoke-static {v0, p4}, Ljava/util/Objects;->equals(Ljava/lang/Object;Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_1b
++
++    .line 86
++    :cond_18
++    invoke-virtual {p0, p5, p6}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->close(J)V
++
++    .line 88
++    :cond_1b
++    const/4 v0, 0x0
++
++    iput-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->active:Ljava/lang/String;
++
++    .line 89
++    iput-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->token:Ljava/lang/String;
++
++    .line 90
++    iget-boolean v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->disabled:Z
++
++    if-nez v0, :cond_42
++
++    invoke-static {p1, p2, p3}, Lio/mesalabs/rezoss/ai/ShadeReplyContract;->valid(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z
++
++    move-result p2
++
++    if-eqz p2, :cond_42
++
++    const/16 p2, 0x100
++
++    # invokes: Lio/mesalabs/rezoss/ai/ShadeReplyContract;->clean(Ljava/lang/String;I)Z
++    invoke-static {p4, p2}, Lio/mesalabs/rezoss/ai/ShadeReplyContract;->access$000(Ljava/lang/String;I)Z
++
++    move-result p2
++
++    if-eqz p2, :cond_42
++
++    const-wide/16 v0, 0x0
++
++    cmp-long p2, p5, v0
++
++    if-gtz p2, :cond_39
++
++    goto :goto_42
++
++    .line 94
++    :cond_39
++    invoke-static {p1, p3}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->identity(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p1
++
++    iput-object p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->active:Ljava/lang/String;
++
++    .line 95
++    iput-object p4, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->token:Ljava/lang/String;
++
++    .line 96
++    return-void
++
++    .line 91
++    :cond_42
++    :goto_42
++    invoke-virtual {p0, p5, p6}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->close(J)V
++
++    .line 92
++    return-void
++.end method
++
++.method public receive(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLjava/util/List;J)Z
++    .registers 26
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "(",
++            "Ljava/lang/String;",
++            "Ljava/lang/String;",
++            "Ljava/lang/String;",
++            "J",
++            "Ljava/util/List<",
++            "Ljava/lang/String;",
++            ">;J)Z"
++        }
++    .end annotation
++
++    .line 112
++    move-object/from16 v0, p0
++
++    move-object/from16 v1, p1
++
++    move-object/from16 v2, p3
++
++    move-wide/from16 v3, p4
++
++    move-wide/from16 v5, p7
++
++    iget-boolean v7, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->disabled:Z
++
++    const/4 v8, 0x0
++
++    if-nez v7, :cond_174
++
++    invoke-static/range {p1 .. p3}, Lio/mesalabs/rezoss/ai/ShadeReplyContract;->valid(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z
++
++    move-result v7
++
++    if-eqz v7, :cond_174
++
++    if-eqz p6, :cond_174
++
++    invoke-static {v3, v4, v5, v6}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->fresh(JJ)Z
++
++    move-result v7
++
++    if-eqz v7, :cond_174
++
++    iget-wide v9, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cutoff:J
++
++    cmp-long v7, v3, v9
++
++    if-gtz v7, :cond_27
++
++    move/from16 v16, v8
++
++    goto/16 :goto_176
++
++    .line 114
++    :cond_27
++    invoke-static {v1, v2}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->identity(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v7
++
++    .line 115
++    iget-object v9, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->generations:Ljava/util/Map;
++
++    invoke-interface {v9, v1}, Ljava/util/Map;->get(Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object v9
++
++    check-cast v9, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;
++
++    .line 116
++    if-eqz v9, :cond_4e
++
++    iget-wide v10, v9, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;->started:J
++
++    cmp-long v10, v10, v3
++
++    if-gtz v10, :cond_4d
++
++    iget-wide v10, v9, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;->started:J
++
++    cmp-long v10, v10, v3
++
++    if-nez v10, :cond_4e
++
++    iget-object v10, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->generationFingerprints:Ljava/util/Map;
++
++    .line 117
++    invoke-interface {v10, v1}, Ljava/util/Map;->get(Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object v10
++
++    invoke-virtual {v2, v10}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v10
++
++    if-nez v10, :cond_4e
++
++    :cond_4d
++    return v8
++
++    .line 118
++    :cond_4e
++    iget-object v10, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cache:Ljava/util/Map;
++
++    invoke-interface {v10, v7}, Ljava/util/Map;->get(Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object v10
++
++    check-cast v10, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;
++
++    .line 119
++    if-eqz v10, :cond_5f
++
++    iget-wide v11, v10, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;->started:J
++
++    cmp-long v11, v11, v3
++
++    if-lez v11, :cond_5f
++
++    return v8
++
++    .line 121
++    :cond_5f
++    if-eqz v10, :cond_6c
++
++    iget-wide v11, v10, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;->started:J
++
++    cmp-long v11, v11, v3
++
++    if-nez v11, :cond_6c
++
++    iget-object v11, v10, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;->replies:Ljava/util/List;
++
++    if-eqz v11, :cond_6c
++
++    return v8
++
++    .line 122
++    :cond_6c
++    nop
++
++    .line 123
++    invoke-interface/range {p6 .. p6}, Ljava/util/List;->isEmpty()Z
++
++    move-result v11
++
++    const/4 v12, 0x0
++
++    if-nez v11, :cond_ae
++
++    .line 124
++    invoke-interface/range {p6 .. p6}, Ljava/util/List;->size()I
++
++    move-result v11
++
++    const/4 v13, 0x3
++
++    if-le v11, v13, :cond_7c
++
++    return v8
++
++    .line 125
++    :cond_7c
++    new-instance v11, Ljava/util/ArrayList;
++
++    invoke-direct {v11}, Ljava/util/ArrayList;-><init>()V
++
++    .line 126
++    invoke-interface/range {p6 .. p6}, Ljava/util/List;->iterator()Ljava/util/Iterator;
++
++    move-result-object v13
++
++    :goto_85
++    invoke-interface {v13}, Ljava/util/Iterator;->hasNext()Z
++
++    move-result v14
++
++    if-eqz v14, :cond_a9
++
++    invoke-interface {v13}, Ljava/util/Iterator;->next()Ljava/lang/Object;
++
++    move-result-object v14
++
++    check-cast v14, Ljava/lang/String;
++
++    .line 127
++    const/16 v15, 0x400
++
++    # invokes: Lio/mesalabs/rezoss/ai/ShadeReplyContract;->clean(Ljava/lang/String;I)Z
++    invoke-static {v14, v15}, Lio/mesalabs/rezoss/ai/ShadeReplyContract;->access$000(Ljava/lang/String;I)Z
++
++    move-result v15
++
++    if-eqz v15, :cond_a8
++
++    invoke-virtual {v14}, Ljava/lang/String;->trim()Ljava/lang/String;
++
++    move-result-object v15
++
++    invoke-virtual {v15}, Ljava/lang/String;->isEmpty()Z
++
++    move-result v15
++
++    if-eqz v15, :cond_a4
++
++    goto :goto_a8
++
++    .line 128
++    :cond_a4
++    invoke-virtual {v11, v14}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
++
++    .line 129
++    goto :goto_85
++
++    .line 127
++    :cond_a8
++    :goto_a8
++    return v8
++
++    .line 130
++    :cond_a9
++    invoke-static {v11}, Ljava/util/Collections;->unmodifiableList(Ljava/util/List;)Ljava/util/List;
++
++    move-result-object v11
++
++    goto :goto_af
++
++    .line 123
++    :cond_ae
++    move-object v11, v12
++
++    .line 133
++    :goto_af
++    const/16 v13, 0x10
++
++    if-nez v10, :cond_d4
++
++    if-nez v9, :cond_d4
++
++    iget-object v10, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cache:Ljava/util/Map;
++
++    invoke-interface {v10}, Ljava/util/Map;->size()I
++
++    move-result v10
++
++    if-lt v10, v13, :cond_d4
++
++    .line 134
++    iget-object v10, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cache:Ljava/util/Map;
++
++    invoke-interface {v10}, Ljava/util/Map;->entrySet()Ljava/util/Set;
++
++    move-result-object v10
++
++    new-instance v14, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$0;
++
++    invoke-direct {v14, v5, v6}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$0;-><init>(J)V
++
++    invoke-interface {v10, v14}, Ljava/util/Set;->removeIf(Ljava/util/function/Predicate;)Z
++
++    .line 135
++    iget-object v10, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cache:Ljava/util/Map;
++
++    invoke-interface {v10}, Ljava/util/Map;->size()I
++
++    move-result v10
++
++    if-lt v10, v13, :cond_d4
++
++    return v8
++
++    .line 137
++    :cond_d4
++    if-nez v9, :cond_134
++
++    iget-object v10, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->generations:Ljava/util/Map;
++
++    invoke-interface {v10}, Ljava/util/Map;->size()I
++
++    move-result v10
++
++    if-lt v10, v13, :cond_134
++
++    .line 138
++    iget-object v10, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->generations:Ljava/util/Map;
++
++    invoke-interface {v10}, Ljava/util/Map;->entrySet()Ljava/util/Set;
++
++    move-result-object v10
++
++    invoke-interface {v10}, Ljava/util/Set;->iterator()Ljava/util/Iterator;
++
++    move-result-object v10
++
++    .line 139
++    :goto_e8
++    invoke-interface {v10}, Ljava/util/Iterator;->hasNext()Z
++
++    move-result v14
++
++    if-eqz v14, :cond_127
++
++    .line 140
++    invoke-interface {v10}, Ljava/util/Iterator;->next()Ljava/lang/Object;
++
++    move-result-object v14
++
++    check-cast v14, Ljava/util/Map$Entry;
++
++    .line 141
++    invoke-interface {v14}, Ljava/util/Map$Entry;->getValue()Ljava/lang/Object;
++
++    move-result-object v15
++
++    check-cast v15, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;
++
++    move/from16 v16, v8
++
++    move-object/from16 p2, v9
++
++    iget-wide v8, v15, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;->started:J
++
++    invoke-static {v8, v9, v5, v6}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->fresh(JJ)Z
++
++    move-result v8
++
++    if-nez v8, :cond_122
++
++    .line 142
++    invoke-interface {v14}, Ljava/util/Map$Entry;->getKey()Ljava/lang/Object;
++
++    move-result-object v8
++
++    check-cast v8, Ljava/lang/String;
++
++    .line 143
++    invoke-interface {v10}, Ljava/util/Iterator;->remove()V
++
++    .line 144
++    iget-object v9, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->generationFingerprints:Ljava/util/Map;
++
++    invoke-interface {v9, v8}, Ljava/util/Map;->remove(Ljava/lang/Object;)Ljava/lang/Object;
++
++    .line 145
++    iget-object v9, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cache:Ljava/util/Map;
++
++    invoke-interface {v9}, Ljava/util/Map;->keySet()Ljava/util/Set;
++
++    move-result-object v9
++
++    new-instance v14, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$1;
++
++    invoke-direct {v14, v8}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$1;-><init>(Ljava/lang/String;)V
++
++    invoke-interface {v9, v14}, Ljava/util/Set;->removeIf(Ljava/util/function/Predicate;)Z
++
++    .line 147
++    :cond_122
++    move-object/from16 v9, p2
++
++    move/from16 v8, v16
++
++    goto :goto_e8
++
++    .line 148
++    :cond_127
++    move/from16 v16, v8
++
++    move-object/from16 p2, v9
++
++    iget-object v5, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->generations:Ljava/util/Map;
++
++    invoke-interface {v5}, Ljava/util/Map;->size()I
++
++    move-result v5
++
++    if-lt v5, v13, :cond_138
++
++    return v16
++
++    .line 137
++    :cond_134
++    move/from16 v16, v8
++
++    move-object/from16 p2, v9
++
++    .line 150
++    :cond_138
++    if-eqz p2, :cond_142
++
++    move-object/from16 v9, p2
++
++    iget-wide v5, v9, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;->started:J
++
++    cmp-long v5, v5, v3
++
++    if-gez v5, :cond_150
++
++    .line 151
++    :cond_142
++    iget-object v5, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cache:Ljava/util/Map;
++
++    invoke-interface {v5}, Ljava/util/Map;->keySet()Ljava/util/Set;
++
++    move-result-object v5
++
++    new-instance v6, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$2;
++
++    invoke-direct {v6, v1}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$2;-><init>(Ljava/lang/String;)V
++
++    invoke-interface {v5, v6}, Ljava/util/Set;->removeIf(Ljava/util/function/Predicate;)Z
++
++    .line 153
++    :cond_150
++    iget-object v5, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->generations:Ljava/util/Map;
++
++    new-instance v6, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;
++
++    invoke-direct {v6, v3, v4, v12}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;-><init>(JLjava/util/List;)V
++
++    invoke-interface {v5, v1, v6}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    .line 154
++    iget-object v5, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->generationFingerprints:Ljava/util/Map;
++
++    invoke-interface {v5, v1, v2}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    .line 155
++    iget-object v1, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->blocked:Ljava/util/Set;
++
++    invoke-interface {v1, v7}, Ljava/util/Set;->contains(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_168
++
++    return v16
++
++    .line 156
++    :cond_168
++    iget-object v0, v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cache:Ljava/util/Map;
++
++    new-instance v1, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;
++
++    invoke-direct {v1, v3, v4, v11}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State$Entry;-><init>(JLjava/util/List;)V
++
++    invoke-interface {v0, v7, v1}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++
++    .line 157
++    const/4 v0, 0x1
++
++    return v0
++
++    .line 112
++    :cond_174
++    move/from16 v16, v8
++
++    .line 113
++    :goto_176
++    return v16
++.end method
++
++.method public typed(J)V
++    .registers 3
++
++    .line 106
++    iget-object p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->active:Ljava/lang/String;
++
++    if-nez p1, :cond_5
++
++    return-void
++
++    .line 107
++    :cond_5
++    iget-object p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->blocked:Ljava/util/Set;
++
++    iget-object p2, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->active:Ljava/lang/String;
++
++    invoke-interface {p1, p2}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
++
++    .line 108
++    iget-object p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cache:Ljava/util/Map;
++
++    iget-object p2, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->active:Ljava/lang/String;
++
++    invoke-interface {p1, p2}, Ljava/util/Map;->remove(Ljava/lang/Object;)Ljava/lang/Object;
++
++    .line 109
++    iget-object p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->blocked:Ljava/util/Set;
++
++    invoke-interface {p1}, Ljava/util/Set;->size()I
++
++    move-result p1
++
++    const/16 p2, 0x80
++
++    if-le p1, p2, :cond_2a
++
++    const/4 p1, 0x1
++
++    iput-boolean p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->disabled:Z
++
++    iget-object p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->cache:Ljava/util/Map;
++
++    invoke-interface {p1}, Ljava/util/Map;->clear()V
++
++    const/4 p1, 0x0
++
++    iput-object p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->active:Ljava/lang/String;
++
++    iput-object p1, p0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->token:Ljava/lang/String;
++
++    .line 110
++    :cond_2a
++    return-void
++.end method
+--- /dev/null
++++ b/smali_classes5/io/mesalabs/rezoss/ai/ShadeReplyContract.smali
+@@ -0,0 +1,435 @@
++.class public final Lio/mesalabs/rezoss/ai/ShadeReplyContract;
++.super Ljava/lang/Object;
++.source "ShadeReplyContract.java"
++
++
++# annotations
++.annotation system Ldalvik/annotation/MemberClasses;
++    value = {
++        Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;
++    }
++.end annotation
++
++
++# static fields
++.field public static final BLOCKED:Ljava/lang/String; = "rezoss.shade.blocked"
++
++.field public static final BRIDGE:Ljava/lang/String; = "rezoss.shade.bridge"
++
++.field public static final FINGERPRINT:Ljava/lang/String; = "rezoss.shade.fingerprint"
++
++.field public static final KEY:Ljava/lang/String; = "rezoss.shade.key"
++
++.field public static final PACKAGE:Ljava/lang/String; = "rezoss.shade.package"
++
++.field public static final PERMISSION:Ljava/lang/String; = "com.samsung.android.permission.SUGGESTED_REPLIES"
++
++.field public static final PREFIX:Ljava/lang/String; = "rezoss.shade."
++
++.field public static final STARTED:Ljava/lang/String; = "rezoss.shade.started"
++
++.field public static final TOKEN:Ljava/lang/String; = "rezoss.shade.token"
++
++.field private static final TTL:J = 0xdf8475800L
++
++
++# direct methods
++.method private constructor <init>()V
++    .registers 1
++
++    .line 25
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method static synthetic access$000(Ljava/lang/String;I)Z
++    .registers 2
++
++    .line 14
++    invoke-static {p0, p1}, Lio/mesalabs/rezoss/ai/ShadeReplyContract;->clean(Ljava/lang/String;I)Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method private static clean(Ljava/lang/String;I)Z
++    .registers 4
++
++    .line 41
++    const/4 v0, 0x0
++
++    if-eqz p0, :cond_27
++
++    invoke-virtual {p0}, Ljava/lang/String;->isEmpty()Z
++
++    move-result v1
++
++    if-nez v1, :cond_27
++
++    invoke-virtual {p0}, Ljava/lang/String;->length()I
++
++    move-result v1
++
++    if-le v1, p1, :cond_10
++
++    goto :goto_27
++
++    .line 42
++    :cond_10
++    move p1, v0
++
++    :goto_11
++    invoke-virtual {p0}, Ljava/lang/String;->length()I
++
++    move-result v1
++
++    if-ge p1, v1, :cond_25
++
++    invoke-virtual {p0, p1}, Ljava/lang/String;->charAt(I)C
++
++    move-result v1
++
++    invoke-static {v1}, Ljava/lang/Character;->isISOControl(C)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_22
++
++    return v0
++
++    :cond_22
++    add-int/lit8 p1, p1, 0x1
++
++    goto :goto_11
++
++    .line 43
++    :cond_25
++    const/4 p0, 0x1
++
++    return p0
++
++    .line 41
++    :cond_27
++    :goto_27
++    return v0
++.end method
++
++.method public static fingerprint(Ljava/lang/String;J)Ljava/lang/String;
++    .registers 8
++
++    .line 28
++    const/4 v0, 0x0
++
++    if-eqz p0, :cond_68
++
++    invoke-virtual {p0}, Ljava/lang/String;->isEmpty()Z
++
++    move-result v1
++
++    if-nez v1, :cond_68
++
++    invoke-virtual {p0}, Ljava/lang/String;->length()I
++
++    move-result v1
++
++    const v2, 0x8000
++
++    if-gt v1, v2, :cond_68
++
++    const-wide/16 v1, 0x0
++
++    cmp-long v1, p1, v1
++
++    if-gtz v1, :cond_19
++
++    goto :goto_68
++
++    .line 30
++    :cond_19
++    :try_start_19
++    const-string v1, "SHA-256"
++
++    invoke-static {v1}, Ljava/security/MessageDigest;->getInstance(Ljava/lang/String;)Ljava/security/MessageDigest;
++
++    move-result-object v1
++
++    .line 31
++    sget-object v2, Ljava/nio/charset/StandardCharsets;->UTF_8:Ljava/nio/charset/Charset;
++
++    invoke-virtual {p0, v2}, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
++
++    move-result-object p0
++
++    invoke-virtual {v1, p0}, Ljava/security/MessageDigest;->update([B)V
++
++    .line 32
++    const/4 p0, 0x0
++
++    invoke-virtual {v1, p0}, Ljava/security/MessageDigest;->update(B)V
++
++    .line 33
++    invoke-static {p1, p2}, Ljava/lang/Long;->toString(J)Ljava/lang/String;
++
++    move-result-object p1
++
++    sget-object p2, Ljava/nio/charset/StandardCharsets;->US_ASCII:Ljava/nio/charset/Charset;
++
++    invoke-virtual {p1, p2}, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
++
++    move-result-object p1
++
++    invoke-virtual {v1, p1}, Ljava/security/MessageDigest;->update([B)V
++
++    .line 34
++    new-instance p1, Ljava/lang/StringBuilder;
++
++    const/16 p2, 0x40
++
++    invoke-direct {p1, p2}, Ljava/lang/StringBuilder;-><init>(I)V
++
++    .line 35
++    invoke-virtual {v1}, Ljava/security/MessageDigest;->digest()[B
++
++    move-result-object p2
++
++    array-length v1, p2
++
++    :goto_45
++    if-ge p0, v1, :cond_61
++
++    aget-byte v2, p2, p0
++
++    sget-object v3, Ljava/util/Locale;->ROOT:Ljava/util/Locale;
++
++    const-string v4, "%02x"
++
++    and-int/lit16 v2, v2, 0xff
++
++    invoke-static {v2}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object v2
++
++    filled-new-array {v2}, [Ljava/lang/Object;
++
++    move-result-object v2
++
++    invoke-static {v3, v4, v2}, Ljava/lang/String;->format(Ljava/util/Locale;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-virtual {p1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    add-int/lit8 p0, p0, 0x1
++
++    goto :goto_45
++
++    .line 36
++    :cond_61
++    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p0
++    :try_end_65
++    .catch Ljava/security/NoSuchAlgorithmException; {:try_start_19 .. :try_end_65} :catch_66
++
++    return-object p0
++
++    .line 37
++    :catch_66
++    move-exception p0
++
++    return-object v0
++
++    .line 28
++    :cond_68
++    :goto_68
++    return-object v0
++.end method
++
++.method public static packageFromKey(Ljava/lang/String;)Ljava/lang/String;
++    .registers 8
++
++    .line 48
++    const/4 v0, 0x0
++
++    if-eqz p0, :cond_70
++
++    invoke-virtual {p0}, Ljava/lang/String;->isEmpty()Z
++
++    move-result v1
++
++    if-nez v1, :cond_70
++
++    invoke-virtual {p0}, Ljava/lang/String;->length()I
++
++    move-result v1
++
++    const/16 v2, 0x800
++
++    if-le v1, v2, :cond_12
++
++    goto :goto_70
++
++    .line 49
++    :cond_12
++    const/16 v1, 0x7c
++
++    invoke-virtual {p0, v1}, Ljava/lang/String;->indexOf(I)I
++
++    move-result v2
++
++    add-int/lit8 v3, v2, 0x1
++
++    invoke-virtual {p0, v1, v3}, Ljava/lang/String;->indexOf(II)I
++
++    move-result v4
++
++    .line 50
++    add-int/lit8 v5, v4, 0x1
++
++    invoke-virtual {p0, v1, v5}, Ljava/lang/String;->indexOf(II)I
++
++    move-result v6
++
++    invoke-virtual {p0, v1}, Ljava/lang/String;->lastIndexOf(I)I
++
++    move-result v1
++
++    .line 51
++    if-lez v2, :cond_6f
++
++    if-le v4, v3, :cond_6f
++
++    if-le v6, v5, :cond_6f
++
++    if-gt v1, v6, :cond_31
++
++    goto :goto_6f
++
++    .line 52
++    :cond_31
++    invoke-virtual {p0, v3, v4}, Ljava/lang/String;->substring(II)Ljava/lang/String;
++
++    move-result-object v3
++
++    .line 53
++    const/4 v4, 0x0
++
++    invoke-virtual {p0, v4, v2}, Ljava/lang/String;->substring(II)Ljava/lang/String;
++
++    move-result-object v2
++
++    const-string v4, "-?[0-9]{1,10}"
++
++    invoke-virtual {v2, v4}, Ljava/lang/String;->matches(Ljava/lang/String;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_6e
++
++    .line 54
++    const/16 v2, 0xff
++
++    invoke-static {v3, v2}, Lio/mesalabs/rezoss/ai/ShadeReplyContract;->clean(Ljava/lang/String;I)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_6e
++
++    const-string v2, "[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z0-9_]+)+"
++
++    invoke-virtual {v3, v2}, Ljava/lang/String;->matches(Ljava/lang/String;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_6e
++
++    .line 55
++    invoke-virtual {p0, v5, v6}, Ljava/lang/String;->substring(II)Ljava/lang/String;
++
++    move-result-object v2
++
++    const-string v4, "-?[0-9]{1,11}"
++
++    invoke-virtual {v2, v4}, Ljava/lang/String;->matches(Ljava/lang/String;)Z
++
++    move-result v2
++
++    if-eqz v2, :cond_6e
++
++    add-int/lit8 v1, v1, 0x1
++
++    .line 56
++    invoke-virtual {p0, v1}, Ljava/lang/String;->substring(I)Ljava/lang/String;
++
++    move-result-object p0
++
++    const-string v1, "[0-9]{1,10}"
++
++    invoke-virtual {p0, v1}, Ljava/lang/String;->matches(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-nez p0, :cond_6d
++
++    goto :goto_6e
++
++    .line 57
++    :cond_6d
++    return-object v3
++
++    .line 56
++    :cond_6e
++    :goto_6e
++    return-object v0
++
++    .line 51
++    :cond_6f
++    :goto_6f
++    return-object v0
++
++    .line 48
++    :cond_70
++    :goto_70
++    return-object v0
++.end method
++
++.method public static valid(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z
++    .registers 3
++
++    .line 61
++    if-eqz p1, :cond_18
++
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/ShadeReplyContract;->packageFromKey(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {p1, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_18
++
++    if-eqz p2, :cond_18
++
++    .line 62
++    const-string p0, "[0-9a-f]{64}"
++
++    invoke-virtual {p2, p0}, Ljava/lang/String;->matches(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_18
++
++    const/4 p0, 0x1
++
++    goto :goto_19
++
++    :cond_18
++    const/4 p0, 0x0
++
++    .line 61
++    :goto_19
++    return p0
++.end method
+--- /dev/null
++++ b/smali_classes5/io/mesalabs/rezoss/ai/ShadeReplyKeyboard$0.smali
+@@ -0,0 +1,40 @@
++.class public final synthetic Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$0;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/util/function/Predicate;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;"
++    method = "lambda$tagItem$0"
++    proto = "(Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;)Z"
++.end annotation
++
++
++# direct methods
++.method public synthetic constructor <init>()V
++    .registers 1
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final test(Ljava/lang/Object;)Z
++    .registers 2
++
++    .line 0
++    check-cast p1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;
++
++    invoke-static {p1}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->lambda$tagItem$0(Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;)Z
++
++    move-result p1
++
++    return p1
++.end method
+--- /dev/null
++++ b/smali_classes5/io/mesalabs/rezoss/ai/ShadeReplyKeyboard$1.smali
+@@ -0,0 +1,36 @@
++.class public final synthetic Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$1;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;"
++    method = "refresh"
++    proto = "()V"
++.end annotation
++
++
++# direct methods
++.method public synthetic constructor <init>()V
++    .registers 1
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final run()V
++    .registers 1
++
++    .line 0
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->refresh()V
++
++    return-void
++.end method
+--- /dev/null
++++ b/smali_classes5/io/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket.smali
+@@ -0,0 +1,52 @@
++.class final Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;
++.super Ljava/lang/Object;
++.source "ShadeReplyKeyboard.java"
++
++
++# annotations
++.annotation system Ldalvik/annotation/EnclosingClass;
++    value = Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;
++.end annotation
++
++.annotation system Ldalvik/annotation/InnerClass;
++    accessFlags = 0x1a
++    name = "Ticket"
++.end annotation
++
++
++# instance fields
++.field final epoch:J
++
++.field final item:Ljava/lang/ref/WeakReference;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/lang/ref/WeakReference<",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++
++# direct methods
++.method constructor <init>(Ljava/lang/Object;)V
++    .registers 4
++
++    .line 26
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    new-instance v0, Ljava/lang/ref/WeakReference;
++
++    invoke-direct {v0, p1}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
++
++    iput-object v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;->item:Ljava/lang/ref/WeakReference;
++
++    # getter for: Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->epoch:J
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->access$000()J
++
++    move-result-wide v0
++
++    iput-wide v0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;->epoch:J
++
++    return-void
++.end method
+--- /dev/null
++++ b/smali_classes5/io/mesalabs/rezoss/ai/ShadeReplyKeyboard.smali
+@@ -0,0 +1,1561 @@
++.class public final Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;
++.super Ljava/lang/Object;
++.source "ShadeReplyKeyboard.java"
++
++
++# annotations
++.annotation system Ldalvik/annotation/MemberClasses;
++    value = {
++        Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;
++    }
++.end annotation
++
++
++# static fields
++.field private static clearing:Z
++
++.field private static epoch:J
++
++.field private static final expiry:Ljava/lang/Runnable;
++
++.field private static fp:Ljava/lang/String;
++
++.field private static final handler:Landroid/os/Handler;
++
++.field private static key:Ljava/lang/String;
++
++.field private static pinned:Z
++
++.field private static pkg:Ljava/lang/String;
++
++.field private static receiver:Ljava/lang/ref/WeakReference;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/lang/ref/WeakReference<",
++            "Ljava/lang/Object;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static rendering:Z
++
++.field private static service:Ljava/lang/ref/WeakReference;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/lang/ref/WeakReference<",
++            "Landroid/inputmethodservice/InputMethodService;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static shown:Ljava/util/List;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/List<",
++            "Ljava/lang/String;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static final state:Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;
++
++.field private static final tickets:Ljava/util/List;
++    .annotation system Ldalvik/annotation/Signature;
++        value = {
++            "Ljava/util/List<",
++            "Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;",
++            ">;"
++        }
++    .end annotation
++.end field
++
++.field private static token:Ljava/lang/String;
++
++
++# direct methods
++.method static constructor <clinit>()V
++    .registers 2
++
++    .line 13
++    new-instance v0, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;
++
++    invoke-direct {v0}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;-><init>()V
++
++    sput-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->state:Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;
++
++    .line 14
++    new-instance v0, Landroid/os/Handler;
++
++    invoke-static {}, Landroid/os/Looper;->getMainLooper()Landroid/os/Looper;
++
++    move-result-object v1
++
++    invoke-direct {v0, v1}, Landroid/os/Handler;-><init>(Landroid/os/Looper;)V
++
++    sput-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->handler:Landroid/os/Handler;
++
++    .line 15
++    new-instance v0, Ljava/lang/ref/WeakReference;
++
++    const/4 v1, 0x0
++
++    invoke-direct {v0, v1}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
++
++    sput-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->service:Ljava/lang/ref/WeakReference;
++
++    .line 16
++    new-instance v0, Ljava/lang/ref/WeakReference;
++
++    invoke-direct {v0, v1}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
++
++    sput-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->receiver:Ljava/lang/ref/WeakReference;
++
++    .line 17
++    new-instance v0, Ljava/util/ArrayList;
++
++    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
++
++    sput-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->tickets:Ljava/util/List;
++
++    .line 20
++    new-instance v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$1;
++
++    invoke-direct {v0}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$1;-><init>()V
++
++    sput-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->expiry:Ljava/lang/Runnable;
++
++    .line 22
++    invoke-static {}, Ljava/util/Collections;->emptyList()Ljava/util/List;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->shown:Ljava/util/List;
++
++    return-void
++.end method
++
++.method public constructor <init>()V
++    .registers 1
++
++    .line 12
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method static synthetic access$000()J
++    .registers 2
++
++    .line 12
++    sget-wide v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->epoch:J
++
++    return-wide v0
++.end method
++
++.method public static active()Z
++    .registers 1
++
++    .line 50
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->token:Ljava/lang/String;
++
++    if-eqz v0, :cond_6
++
++    const/4 v0, 0x1
++
++    goto :goto_7
++
++    :cond_6
++    const/4 v0, 0x0
++
++    :goto_7
++    return v0
++.end method
++
++.method public static allowClick(Ljava/lang/Object;)Z
++    .registers 6
++
++    .line 148
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->tickets:Ljava/util/List;
++
++    invoke-interface {v0}, Ljava/util/List;->iterator()Ljava/util/Iterator;
++
++    move-result-object v0
++
++    :cond_6
++    invoke-interface {v0}, Ljava/util/Iterator;->hasNext()Z
++
++    move-result v1
++
++    const/4 v2, 0x1
++
++    if-eqz v1, :cond_54
++
++    invoke-interface {v0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
++
++    move-result-object v1
++
++    check-cast v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;
++
++    iget-object v3, v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;->item:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {v3}, Ljava/lang/ref/WeakReference;->get()Ljava/lang/Object;
++
++    move-result-object v3
++
++    if-ne v3, p0, :cond_6
++
++    .line 149
++    sget-object p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->service:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {p0}, Ljava/lang/ref/WeakReference;->get()Ljava/lang/Object;
++
++    move-result-object p0
++
++    check-cast p0, Landroid/inputmethodservice/InputMethodService;
++
++    .line 150
++    iget-wide v0, v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;->epoch:J
++
++    sget-wide v3, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->epoch:J
++
++    cmp-long v0, v0, v3
++
++    if-nez v0, :cond_52
++
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->token:Ljava/lang/String;
++
++    if-eqz v0, :cond_52
++
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->pinned:Z
++
++    if-eqz v0, :cond_52
++
++    if-eqz p0, :cond_52
++
++    .line 151
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->matches(Landroid/inputmethodservice/InputMethodService;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_52
++
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->text(Landroid/inputmethodservice/InputMethodService;)I
++
++    move-result p0
++
++    if-nez p0, :cond_52
++
++    sget-object p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->state:Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->now()J
++
++    move-result-wide v0
++
++    invoke-virtual {p0, v0, v1}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->current(J)Ljava/util/List;
++
++    move-result-object p0
++
++    invoke-interface {p0}, Ljava/util/List;->isEmpty()Z
++
++    move-result p0
++
++    if-nez p0, :cond_52
++
++    goto :goto_53
++
++    :cond_52
++    const/4 v2, 0x0
++
++    .line 150
++    :goto_53
++    return v2
++
++    .line 153
++    :cond_54
++    return v2
++.end method
++
++.method private static clear()V
++    .registers 5
++
++    .line 83
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->pinned:Z
++
++    const/4 v1, 0x0
++
++    sput-boolean v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->pinned:Z
++
++    invoke-static {}, Ljava/util/Collections;->emptyList()Ljava/util/List;
++
++    move-result-object v2
++
++    sput-object v2, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->shown:Ljava/util/List;
++
++    .line 84
++    sget-object v2, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->receiver:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {v2}, Ljava/lang/ref/WeakReference;->get()Ljava/lang/Object;
++
++    move-result-object v2
++
++    .line 85
++    sget-object v3, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->handler:Landroid/os/Handler;
++
++    sget-object v4, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->expiry:Ljava/lang/Runnable;
++
++    invoke-virtual {v3, v4}, Landroid/os/Handler;->removeCallbacks(Ljava/lang/Runnable;)V
++
++    .line 86
++    if-eqz v0, :cond_30
++
++    if-eqz v2, :cond_30
++
++    .line 87
++    const/4 v0, 0x1
++
++    sput-boolean v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->clearing:Z
++
++    .line 88
++    :try_start_1f
++    const-string v0, "q"
++
++    new-instance v3, Landroid/content/Intent;
++
++    invoke-direct {v3}, Landroid/content/Intent;-><init>()V
++
++    invoke-static {v2, v0, v3}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->invoke(Ljava/lang/Object;Ljava/lang/String;Landroid/content/Intent;)Z
++    :try_end_29
++    .catchall {:try_start_1f .. :try_end_29} :catchall_2c
++
++    sput-boolean v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->clearing:Z
++
++    goto :goto_30
++
++    :catchall_2c
++    move-exception v0
++
++    sput-boolean v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->clearing:Z
++
++    throw v0
++
++    .line 90
++    :cond_30
++    :goto_30
++    return-void
++.end method
++
++.method public static command(Ljava/lang/String;Landroid/os/Bundle;)V
++    .registers 4
++
++    .line 56
++    const-string v0, "rezoss.shade.invalidate"
++
++    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_3d
++
++    if-eqz p1, :cond_3d
++
++    sget-object p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->token:Ljava/lang/String;
++
++    if-eqz p0, :cond_3d
++
++    sget-object p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->token:Ljava/lang/String;
++
++    .line 57
++    const-string v0, "rezoss.shade.token"
++
++    invoke-virtual {p1, v0}, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-virtual {p0, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p0
++
++    if-nez p0, :cond_1d
++
++    goto :goto_3d
++
++    .line 58
++    :cond_1d
++    const-string p0, "rezoss.shade.blocked"
++
++    invoke-virtual {p1, p0}, Landroid/os/Bundle;->getBoolean(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_39
++
++    sget-object p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->state:Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->now()J
++
++    move-result-wide v0
++
++    invoke-virtual {p0, v0, v1}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->typed(J)V
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->clear()V
++
++    sget-wide p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->epoch:J
++
++    const-wide/16 v0, 0x1
++
++    add-long/2addr p0, v0
++
++    sput-wide p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->epoch:J
++
++    goto :goto_3c
++
++    .line 59
++    :cond_39
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->finish()V
++
++    .line 60
++    :goto_3c
++    return-void
++
++    .line 57
++    :cond_3d
++    :goto_3d
++    return-void
++.end method
++
++.method public static consume(Ljava/lang/Object;Landroid/content/Intent;Landroid/content/Context;)Z
++    .registers 15
++
++    .line 96
++    const-string v0, "rezoss.shade.bridge"
++
++    const/4 v1, 0x0
++
++    invoke-virtual {p1, v0, v1}, Landroid/content/Intent;->getBooleanExtra(Ljava/lang/String;Z)Z
++
++    move-result v0
++
++    const/4 v2, 0x1
++
++    if-nez v0, :cond_1e
++
++    .line 98
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->active()Z
++
++    move-result p0
++
++    if-eqz p0, :cond_1d
++
++    const-string p0, "com.samsung.android.intent.action.INPUT_SUGGESTED_REPLIES"
++
++    invoke-virtual {p1}, Landroid/content/Intent;->getAction()Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-virtual {p0, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p0
++
++    if-nez p0, :cond_1d
++
++    move v1, v2
++
++    :cond_1d
++    return v1
++
++    .line 100
++    :cond_1e
++    new-instance v0, Ljava/lang/ref/WeakReference;
++
++    invoke-direct {v0, p0}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
++
++    sput-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->receiver:Ljava/lang/ref/WeakReference;
++
++    .line 102
++    :try_start_25
++    instance-of v0, p0, Landroid/content/BroadcastReceiver;
++
++    if-nez v0, :cond_2a
++
++    return v2
++
++    .line 103
++    :cond_2a
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->service:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {v0}, Ljava/lang/ref/WeakReference;->get()Ljava/lang/Object;
++
++    move-result-object v0
++
++    check-cast v0, Landroid/inputmethodservice/InputMethodService;
++
++    .line 104
++    if-nez p2, :cond_35
++
++    return v2
++
++    .line 105
++    :cond_35
++    invoke-virtual {p2}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
++
++    move-result-object p2
++
++    .line 106
++    const-string v0, "com.samsung.android.smartsuggestions"
++
++    invoke-virtual {p2, v0, v1}, Landroid/content/pm/PackageManager;->getApplicationInfo(Ljava/lang/String;I)Landroid/content/pm/ApplicationInfo;
++
++    move-result-object v0
++
++    iget v0, v0, Landroid/content/pm/ApplicationInfo;->uid:I
++
++    .line 107
++    check-cast p0, Landroid/content/BroadcastReceiver;
++
++    invoke-virtual {p0}, Landroid/content/BroadcastReceiver;->getSentFromUid()I
++
++    move-result p0
++
++    if-ne p0, v0, :cond_84
++
++    .line 108
++    invoke-static {}, Landroid/os/Process;->myUid()I
++
++    move-result p0
++
++    invoke-virtual {p2, v0, p0}, Landroid/content/pm/PackageManager;->checkSignatures(II)I
++
++    move-result p0
++
++    if-eqz p0, :cond_54
++
++    goto :goto_84
++
++    .line 109
++    :cond_54
++    const-string p0, "SUGGESTIONS"
++
++    invoke-virtual {p1, p0}, Landroid/content/Intent;->getStringArrayListExtra(Ljava/lang/String;)Ljava/util/ArrayList;
++
++    move-result-object v9
++
++    .line 110
++    sget-object v3, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->state:Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;
++
++    const-string p0, "rezoss.shade.key"
++
++    invoke-virtual {p1, p0}, Landroid/content/Intent;->getStringExtra(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v4
++
++    const-string p0, "rezoss.shade.package"
++
++    invoke-virtual {p1, p0}, Landroid/content/Intent;->getStringExtra(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v5
++
++    const-string p0, "rezoss.shade.fingerprint"
++
++    .line 111
++    invoke-virtual {p1, p0}, Landroid/content/Intent;->getStringExtra(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v6
++
++    const-string p0, "rezoss.shade.started"
++
++    const-wide/16 v0, 0x0
++
++    invoke-virtual {p1, p0, v0, v1}, Landroid/content/Intent;->getLongExtra(Ljava/lang/String;J)J
++
++    move-result-wide v7
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->now()J
++
++    move-result-wide v10
++
++    .line 110
++    invoke-virtual/range {v3 .. v11}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->receive(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;JLjava/util/List;J)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_86
++
++    .line 111
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->refresh()V
++    :try_end_83
++    .catch Ljava/lang/Exception; {:try_start_25 .. :try_end_83} :catch_85
++
++    goto :goto_86
++
++    .line 108
++    :cond_84
++    :goto_84
++    return v2
++
++    .line 112
++    :catch_85
++    move-exception v0
++
++    :cond_86
++    :goto_86
++    nop
++
++    .line 113
++    return v2
++.end method
++
++.method public static finish()V
++    .registers 4
++
++    .line 52
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->token:Ljava/lang/String;
++
++    if-nez v0, :cond_5
++
++    return-void
++
++    .line 53
++    :cond_5
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->state:Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->now()J
++
++    move-result-wide v1
++
++    invoke-virtual {v0, v1, v2}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->close(J)V
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->clear()V
++
++    sget-wide v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->epoch:J
++
++    const-wide/16 v2, 0x1
++
++    add-long/2addr v0, v2
++
++    sput-wide v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->epoch:J
++
++    const/4 v0, 0x0
++
++    sput-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->token:Ljava/lang/String;
++
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->service:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {v0}, Ljava/lang/ref/WeakReference;->clear()V
++
++    .line 54
++    return-void
++.end method
++
++.method private static invoke(Ljava/lang/Object;Ljava/lang/String;Landroid/content/Intent;)Z
++    .registers 8
++
++    .line 92
++    const/4 v0, 0x0
++
++    :try_start_1
++    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
++
++    move-result-object v1
++
++    const/4 v2, 0x1
++
++    new-array v3, v2, [Ljava/lang/Class;
++
++    const-class v4, Landroid/content/Intent;
++
++    aput-object v4, v3, v0
++
++    invoke-virtual {v1, p1, v3}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
++
++    move-result-object p1
++
++    filled-new-array {p2}, [Ljava/lang/Object;
++
++    move-result-object p2
++
++    invoke-virtual {p1, p0, p2}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
++    :try_end_17
++    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_17} :catch_18
++
++    return v2
++
++    .line 93
++    :catch_18
++    move-exception p0
++
++    new-instance p1, Ljava/lang/StringBuilder;
++
++    invoke-direct {p1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string p2, "render status="
++
++    invoke-virtual {p1, p2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p1
++
++    invoke-virtual {p0}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljava/lang/Class;->getSimpleName()Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {p1, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p0
++
++    const-string p1, "RezossShadeReply"
++
++    invoke-static {p1, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;)I
++
++    return v0
++.end method
++
++.method public static isBridgeItem(Ljava/lang/Object;)Z
++    .registers 3
++
++    .line 144
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->tickets:Ljava/util/List;
++
++    invoke-interface {v0}, Ljava/util/List;->iterator()Ljava/util/Iterator;
++
++    move-result-object v0
++
++    :cond_6
++    invoke-interface {v0}, Ljava/util/Iterator;->hasNext()Z
++
++    move-result v1
++
++    if-eqz v1, :cond_1c
++
++    invoke-interface {v0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
++
++    move-result-object v1
++
++    check-cast v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;
++
++    iget-object v1, v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;->item:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {v1}, Ljava/lang/ref/WeakReference;->get()Ljava/lang/Object;
++
++    move-result-object v1
++
++    if-ne v1, p0, :cond_6
++
++    const/4 p0, 0x1
++
++    return p0
++
++    .line 145
++    :cond_1c
++    const/4 p0, 0x0
++
++    return p0
++.end method
++
++.method public static keep()Z
++    .registers 1
++
++    .line 81
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->rendering:Z
++
++    if-eqz v0, :cond_6
++
++    const/4 v0, 0x1
++
++    return v0
++
++    :cond_6
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->clearing:Z
++
++    if-eqz v0, :cond_c
++
++    const/4 v0, 0x0
++
++    return v0
++
++    :cond_c
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->refresh()V
++
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->pinned:Z
++
++    return v0
++.end method
++
++.method static synthetic lambda$tagItem$0(Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;)Z
++    .registers 1
++
++    .line 140
++    iget-object p0, p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;->item:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {p0}, Ljava/lang/ref/WeakReference;->get()Ljava/lang/Object;
++
++    move-result-object p0
++
++    if-nez p0, :cond_a
++
++    const/4 p0, 0x1
++
++    goto :goto_b
++
++    :cond_a
++    const/4 p0, 0x0
++
++    :goto_b
++    return p0
++.end method
++
++.method private static matches(Landroid/inputmethodservice/InputMethodService;)Z
++    .registers 3
++
++    .line 62
++    invoke-virtual {p0}, Landroid/inputmethodservice/InputMethodService;->getCurrentInputEditorInfo()Landroid/view/inputmethod/EditorInfo;
++
++    move-result-object p0
++
++    .line 63
++    if-eqz p0, :cond_54
++
++    const-string v0, "com.android.systemui"
++
++    iget-object v1, p0, Landroid/view/inputmethod/EditorInfo;->packageName:Ljava/lang/String;
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_54
++
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->token:Ljava/lang/String;
++
++    .line 64
++    const-string v1, "rezoss.shade.token"
++
++    invoke-static {p0, v1}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->value(Landroid/view/inputmethod/EditorInfo;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Ljava/util/Objects;->equals(Ljava/lang/Object;Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_54
++
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->key:Ljava/lang/String;
++
++    .line 65
++    const-string v1, "rezoss.shade.key"
++
++    invoke-static {p0, v1}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->value(Landroid/view/inputmethod/EditorInfo;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Ljava/util/Objects;->equals(Ljava/lang/Object;Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_54
++
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->pkg:Ljava/lang/String;
++
++    .line 66
++    const-string v1, "rezoss.shade.package"
++
++    invoke-static {p0, v1}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->value(Landroid/view/inputmethod/EditorInfo;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Ljava/util/Objects;->equals(Ljava/lang/Object;Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_54
++
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->fp:Ljava/lang/String;
++
++    .line 67
++    const-string v1, "rezoss.shade.fingerprint"
++
++    invoke-static {p0, v1}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->value(Landroid/view/inputmethod/EditorInfo;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Ljava/util/Objects;->equals(Ljava/lang/Object;Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_54
++
++    iget-object p0, p0, Landroid/view/inputmethod/EditorInfo;->extras:Landroid/os/Bundle;
++
++    .line 68
++    const-string v0, "rezoss.shade.blocked"
++
++    invoke-virtual {p0, v0}, Landroid/os/Bundle;->getBoolean(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-nez p0, :cond_54
++
++    const/4 p0, 0x1
++
++    goto :goto_55
++
++    :cond_54
++    const/4 p0, 0x0
++
++    .line 63
++    :goto_55
++    return p0
++.end method
++
++.method private static now()J
++    .registers 2
++
++    .line 28
++    invoke-static {}, Landroid/os/SystemClock;->elapsedRealtimeNanos()J
++
++    move-result-wide v0
++
++    return-wide v0
++.end method
++
++.method public static refresh()V
++    .registers 8
++
++    .line 116
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->rendering:Z
++
++    if-nez v0, :cond_cb
++
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->clearing:Z
++
++    if-eqz v0, :cond_a
++
++    goto/16 :goto_cb
++
++    .line 117
++    :cond_a
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->handler:Landroid/os/Handler;
++
++    sget-object v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->expiry:Ljava/lang/Runnable;
++
++    invoke-virtual {v0, v1}, Landroid/os/Handler;->removeCallbacks(Ljava/lang/Runnable;)V
++
++    .line 118
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->service:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {v0}, Ljava/lang/ref/WeakReference;->get()Ljava/lang/Object;
++
++    move-result-object v0
++
++    check-cast v0, Landroid/inputmethodservice/InputMethodService;
++
++    .line 119
++    sget-object v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->token:Ljava/lang/String;
++
++    if-eqz v1, :cond_ca
++
++    if-nez v0, :cond_21
++
++    goto/16 :goto_ca
++
++    .line 120
++    :cond_21
++    invoke-static {v0}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->matches(Landroid/inputmethodservice/InputMethodService;)Z
++
++    move-result v1
++
++    if-nez v1, :cond_2b
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->clear()V
++
++    return-void
++
++    .line 121
++    :cond_2b
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->selection()V
++
++    .line 122
++    sget-object v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->state:Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->now()J
++
++    move-result-wide v2
++
++    invoke-virtual {v1, v2, v3}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->current(J)Ljava/util/List;
++
++    move-result-object v1
++
++    .line 123
++    invoke-static {v0}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->text(Landroid/inputmethodservice/InputMethodService;)I
++
++    move-result v2
++
++    if-nez v2, :cond_c6
++
++    invoke-virtual {v0}, Landroid/inputmethodservice/InputMethodService;->isInputViewShown()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_c6
++
++    invoke-interface {v1}, Ljava/util/List;->isEmpty()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_4c
++
++    goto/16 :goto_c6
++
++    .line 124
++    :cond_4c
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->pinned:Z
++
++    const-wide/16 v2, 0x3e8
++
++    if-eqz v0, :cond_62
++
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->shown:Ljava/util/List;
++
++    invoke-interface {v1, v0}, Ljava/util/List;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_62
++
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->handler:Landroid/os/Handler;
++
++    sget-object v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->expiry:Ljava/lang/Runnable;
++
++    invoke-virtual {v0, v1, v2, v3}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
++
++    return-void
++
++    .line 125
++    :cond_62
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->receiver:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {v0}, Ljava/lang/ref/WeakReference;->get()Ljava/lang/Object;
++
++    move-result-object v0
++
++    .line 126
++    if-nez v0, :cond_6b
++
++    return-void
++
++    .line 127
++    :cond_6b
++    sget-wide v4, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->epoch:J
++
++    const-wide/16 v6, 0x1
++
++    add-long/2addr v4, v6
++
++    sput-wide v4, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->epoch:J
++
++    const/4 v4, 0x1
++
++    sput-boolean v4, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->rendering:Z
++
++    .line 128
++    new-instance v4, Landroid/content/Intent;
++
++    const-string v5, "com.samsung.android.intent.action.SUGGESTED_REPLIES"
++
++    invoke-direct {v4, v5}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
++
++    .line 129
++    const-string v5, "PACKAGE_NAME"
++
++    const-string v6, "com.android.systemui"
++
++    invoke-virtual {v4, v5, v6}, Landroid/content/Intent;->putExtra(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;
++
++    .line 130
++    new-instance v5, Ljava/util/ArrayList;
++
++    invoke-direct {v5, v1}, Ljava/util/ArrayList;-><init>(Ljava/util/Collection;)V
++
++    const-string v6, "SUGGESTIONS"
++
++    invoke-virtual {v4, v6, v5}, Landroid/content/Intent;->putStringArrayListExtra(Ljava/lang/String;Ljava/util/ArrayList;)Landroid/content/Intent;
++
++    .line 131
++    const/4 v5, 0x0
++
++    :try_start_8e
++    const-string v6, "t"
++
++    invoke-static {v0, v6, v4}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->invoke(Ljava/lang/Object;Ljava/lang/String;Landroid/content/Intent;)Z
++
++    move-result v0
++
++    sput-boolean v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->pinned:Z
++
++    sput-object v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->shown:Ljava/util/List;
++    :try_end_98
++    .catchall {:try_start_8e .. :try_end_98} :catchall_c2
++
++    .line 132
++    sput-boolean v5, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->rendering:Z
++
++    .line 133
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->pinned:Z
++
++    if-eqz v0, :cond_c1
++
++    .line 134
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v4, "render count="
++
++    invoke-virtual {v0, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-interface {v1}, Ljava/util/List;->size()I
++
++    move-result v1
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v0
++
++    const-string v1, "RezossShadeReply"
++
++    invoke-static {v1, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    .line 135
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->handler:Landroid/os/Handler;
++
++    sget-object v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->expiry:Ljava/lang/Runnable;
++
++    invoke-virtual {v0, v1, v2, v3}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
++
++    .line 137
++    :cond_c1
++    return-void
++
++    .line 132
++    :catchall_c2
++    move-exception v0
++
++    sput-boolean v5, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->rendering:Z
++
++    throw v0
++
++    .line 123
++    :cond_c6
++    :goto_c6
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->clear()V
++
++    return-void
++
++    .line 119
++    :cond_ca
++    :goto_ca
++    return-void
++
++    .line 116
++    :cond_cb
++    :goto_cb
++    return-void
++.end method
++
++.method public static selection()V
++    .registers 4
++
++    .line 78
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->service:Ljava/lang/ref/WeakReference;
++
++    invoke-virtual {v0}, Ljava/lang/ref/WeakReference;->get()Ljava/lang/Object;
++
++    move-result-object v0
++
++    check-cast v0, Landroid/inputmethodservice/InputMethodService;
++
++    .line 79
++    sget-object v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->token:Ljava/lang/String;
++
++    if-eqz v1, :cond_28
++
++    if-eqz v0, :cond_28
++
++    invoke-static {v0}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->text(Landroid/inputmethodservice/InputMethodService;)I
++
++    move-result v0
++
++    const/4 v1, 0x1
++
++    if-ne v0, v1, :cond_28
++
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->state:Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->now()J
++
++    move-result-wide v1
++
++    invoke-virtual {v0, v1, v2}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->typed(J)V
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->clear()V
++
++    sget-wide v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->epoch:J
++
++    const-wide/16 v2, 0x1
++
++    add-long/2addr v0, v2
++
++    sput-wide v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->epoch:J
++
++    .line 80
++    :cond_28
++    return-void
++.end method
++
++.method public static start(Landroid/inputmethodservice/InputMethodService;Landroid/view/inputmethod/EditorInfo;)V
++    .registers 12
++
++    .line 33
++    const-string v0, "rezoss.shade.token"
++
++    invoke-static {p1, v0}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->value(Landroid/view/inputmethod/EditorInfo;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    .line 34
++    if-eqz p1, :cond_95
++
++    const-string v1, "com.android.systemui"
++
++    iget-object v2, p1, Landroid/view/inputmethod/EditorInfo;->packageName:Ljava/lang/String;
++
++    invoke-virtual {v1, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_95
++
++    if-eqz v0, :cond_95
++
++    .line 35
++    const-string v1, "rezoss.shade.key"
++
++    invoke-static {p1, v1}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->value(Landroid/view/inputmethod/EditorInfo;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v2
++
++    .line 36
++    const-string v3, "rezoss.shade.package"
++
++    invoke-static {p1, v3}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->value(Landroid/view/inputmethod/EditorInfo;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v4
++
++    const-string v5, "rezoss.shade.fingerprint"
++
++    invoke-static {p1, v5}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->value(Landroid/view/inputmethod/EditorInfo;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v6
++
++    .line 35
++    invoke-static {v2, v4, v6}, Lio/mesalabs/rezoss/ai/ShadeReplyContract;->valid(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z
++
++    move-result v2
++
++    if-nez v2, :cond_2d
++
++    goto :goto_95
++
++    .line 40
++    :cond_2d
++    sget-object v2, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->token:Ljava/lang/String;
++
++    invoke-static {v2, v0}, Ljava/util/Objects;->equals(Ljava/lang/Object;Ljava/lang/Object;)Z
++
++    move-result v2
++
++    if-nez v2, :cond_3f
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->clear()V
++
++    sget-wide v6, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->epoch:J
++
++    const-wide/16 v8, 0x1
++
++    add-long/2addr v6, v8
++
++    sput-wide v6, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->epoch:J
++
++    .line 41
++    :cond_3f
++    new-instance v2, Ljava/lang/ref/WeakReference;
++
++    invoke-direct {v2, p0}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
++
++    sput-object v2, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->service:Ljava/lang/ref/WeakReference;
++
++    .line 42
++    sput-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->token:Ljava/lang/String;
++
++    invoke-static {p1, v1}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->value(Landroid/view/inputmethod/EditorInfo;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    sput-object p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->key:Ljava/lang/String;
++
++    .line 43
++    invoke-static {p1, v3}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->value(Landroid/view/inputmethod/EditorInfo;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    sput-object p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->pkg:Ljava/lang/String;
++
++    invoke-static {p1, v5}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->value(Landroid/view/inputmethod/EditorInfo;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    sput-object p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->fp:Ljava/lang/String;
++
++    .line 44
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->state:Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;
++
++    sget-object v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->key:Ljava/lang/String;
++
++    sget-object v2, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->pkg:Ljava/lang/String;
++
++    sget-object v3, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->fp:Ljava/lang/String;
++
++    sget-object v4, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->token:Ljava/lang/String;
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->now()J
++
++    move-result-wide v5
++
++    invoke-virtual/range {v0 .. v6}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->open(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;J)V
++
++    .line 45
++    iget-object p0, p1, Landroid/view/inputmethod/EditorInfo;->extras:Landroid/os/Bundle;
++
++    const-string p1, "rezoss.shade.blocked"
++
++    invoke-virtual {p0, p1}, Landroid/os/Bundle;->getBoolean(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_7e
++
++    sget-object p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->state:Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->now()J
++
++    move-result-wide v0
++
++    invoke-virtual {p0, v0, v1}, Lio/mesalabs/rezoss/ai/ShadeReplyContract$State;->typed(J)V
++
++    .line 46
++    :cond_7e
++    sget-object p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->handler:Landroid/os/Handler;
++
++    new-instance p1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$1;
++
++    invoke-direct {p1}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$1;-><init>()V
++
++    invoke-virtual {p0, p1}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
++
++    .line 47
++    sget-object p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->handler:Landroid/os/Handler;
++
++    new-instance p1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$1;
++
++    invoke-direct {p1}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$1;-><init>()V
++
++    const-wide/16 v0, 0x96
++
++    invoke-virtual {p0, p1, v0, v1}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
++
++    .line 48
++    return-void
++
++    .line 37
++    :cond_95
++    :goto_95
++    sget-object p0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->token:Ljava/lang/String;
++
++    if-eqz p0, :cond_9c
++
++    invoke-static {}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->finish()V
++
++    .line 38
++    :cond_9c
++    return-void
++.end method
++
++.method public static tagItem(Ljava/lang/Object;)V
++    .registers 3
++
++    .line 139
++    sget-boolean v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->rendering:Z
++
++    if-nez v0, :cond_5
++
++    return-void
++
++    .line 140
++    :cond_5
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->tickets:Ljava/util/List;
++
++    new-instance v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$0;
++
++    invoke-direct {v1}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$0;-><init>()V
++
++    invoke-interface {v0, v1}, Ljava/util/List;->removeIf(Ljava/util/function/Predicate;)Z
++
++    .line 141
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->tickets:Ljava/util/List;
++
++    new-instance v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;
++
++    invoke-direct {v1, p0}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$Ticket;-><init>(Ljava/lang/Object;)V
++
++    invoke-interface {v0, v1}, Ljava/util/List;->add(Ljava/lang/Object;)Z
++
++    .line 142
++    return-void
++.end method
++
++.method private static text(Landroid/inputmethodservice/InputMethodService;)I
++    .registers 6
++
++    .line 71
++    invoke-virtual {p0}, Landroid/inputmethodservice/InputMethodService;->getCurrentInputConnection()Landroid/view/inputmethod/InputConnection;
++
++    move-result-object p0
++
++    .line 72
++    const/4 v0, -0x1
++
++    if-nez p0, :cond_8
++
++    return v0
++
++    .line 73
++    :cond_8
++    const/4 v1, 0x1
++
++    const/4 v2, 0x0
++
++    invoke-interface {p0, v1, v2}, Landroid/view/inputmethod/InputConnection;->getTextBeforeCursor(II)Ljava/lang/CharSequence;
++
++    move-result-object v3
++
++    invoke-interface {p0, v1, v2}, Landroid/view/inputmethod/InputConnection;->getTextAfterCursor(II)Ljava/lang/CharSequence;
++
++    move-result-object v4
++
++    invoke-interface {p0, v2}, Landroid/view/inputmethod/InputConnection;->getSelectedText(I)Ljava/lang/CharSequence;
++
++    move-result-object p0
++
++    .line 74
++    if-eqz v3, :cond_31
++
++    if-nez v4, :cond_1b
++
++    goto :goto_31
++
++    .line 75
++    :cond_1b
++    invoke-interface {v3}, Ljava/lang/CharSequence;->length()I
++
++    move-result v0
++
++    invoke-interface {v4}, Ljava/lang/CharSequence;->length()I
++
++    move-result v3
++
++    add-int/2addr v0, v3
++
++    if-gtz v0, :cond_30
++
++    if-eqz p0, :cond_2f
++
++    invoke-interface {p0}, Ljava/lang/CharSequence;->length()I
++
++    move-result p0
++
++    if-lez p0, :cond_2f
++
++    goto :goto_30
++
++    :cond_2f
++    move v1, v2
++
++    :cond_30
++    :goto_30
++    return v1
++
++    .line 74
++    :cond_31
++    :goto_31
++    return v0
++.end method
++
++.method private static value(Landroid/view/inputmethod/EditorInfo;Ljava/lang/String;)Ljava/lang/String;
++    .registers 3
++
++    .line 30
++    if-eqz p0, :cond_e
++
++    iget-object v0, p0, Landroid/view/inputmethod/EditorInfo;->extras:Landroid/os/Bundle;
++
++    if-nez v0, :cond_7
++
++    goto :goto_e
++
++    :cond_7
++    iget-object p0, p0, Landroid/view/inputmethod/EditorInfo;->extras:Landroid/os/Bundle;
++
++    invoke-virtual {p0, p1}, Landroid/os/Bundle;->getString(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++
++    goto :goto_f
++
++    :cond_e
++    :goto_e
++    const/4 p0, 0x0
++
++    :goto_f
++    return-object p0
++.end method
++
++.method public static viewStarted()V
++    .registers 2
++
++    .line 49
++    sget-object v0, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard;->handler:Landroid/os/Handler;
++
++    new-instance v1, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$1;
++
++    invoke-direct {v1}, Lio/mesalabs/rezoss/ai/ShadeReplyKeyboard$1;-><init>()V
++
++    invoke-virtual {v0, v1}, Landroid/os/Handler;->post(Ljava/lang/Runnable;)Z
++
++    return-void
++.end method

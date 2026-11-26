@@ -1,0 +1,55 @@
+Subject: [PATCH] Supply recall classifier and MT5 inference through the V73 service
+
+Apply after paradigm's 0001 neural bypass. Keep the generic embedding bypass,
+Samsung preprocessing, Unsafe gate, t/c.d validation and response_json writer.
+The combined model prediction is consumed once on the same SSCO worker thread.
+Add the missing Mail schema before Samsung derives its allowed parameter sets.
+No register-count change. Requires the generated ssco-java helper classes.
+
+--- a/smali/t/c.smali
++++ b/smali/t/c.smali
+@@ -139,6 +139,15 @@
+ .method public static a(Ljava/lang/String;)Ljava/lang/String;
+     .locals 3
+ 
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/SamsungRecallInference;->classify(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    if-eqz v0, :rezoss_stock_recall_classifier
++
++    return-object v0
++
++    :rezoss_stock_recall_classifier
+     const-string v0, "ActionParamExtractor"
+ 
+     const-string v1, "classifyAction"
+--- a/smali/com/samsung/android/ssco/models/mt5/MT5ModelJni.smali
++++ b/smali/com/samsung/android/ssco/models/mt5/MT5ModelJni.smali
+@@ -29,7 +29,9 @@
+ .method public final inference(Ljava/lang/String;)Ljava/lang/String;
+     .registers 3
+ 
+-    const-string v0, ""
++    invoke-static {p1}, Lio/mesalabs/rezoss/ai/SamsungRecallInference;->parameters(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
+ 
+     return-object v0
+ .end method
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -6,3 +6,7 @@
+     <uses-permission android:name="com.samsung.android.ssco.models.permission.UPDATE_MODEL"/>
++    <uses-permission android:name="io.mesalabs.rezoss.permission.QWEN_ENGINE"/>
++    <queries>
++        <package android:name="com.samsung.android.aioskernelservice"/>
++    </queries>
+     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS"/>
+--- a/smali/n/b.smali
++++ b/smali/n/b.smali
+@@ -337,1 +337,3 @@
++    invoke-static {v2}, Lio/mesalabs/rezoss/ai/RecallPrediction;->addMailSchema(Ljava/util/Map;)V
++
+     invoke-interface {v2}, Ljava/util/Map;->keySet()Ljava/util/Set;

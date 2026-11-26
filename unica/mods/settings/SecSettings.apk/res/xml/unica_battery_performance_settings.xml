@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:settings="http://schemas.android.com/apk/res-auto" android:title="@string/unica_battery_performance_settings_title" settings:hierarchicalParentFragment="io.mesalabs.unica.settings.UnicaSettingsFragment" settings:topLevelPreferenceKey="custom_mwgscg03_entry">
+    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_unica_settings_battery" android:title="@string/unica_battery_title" android:key="unica_battery" android:summary="@string/unica_battery_summary">
+        <intent android:targetPackage="com.android.settings" android:targetClass="io.mesalabs.unica.battery.BatteryActivity" />
+    </io.mesalabs.unica.settings.preference.IconPreference>
+    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_settings_date_time" android:title="@string/unica_power_schedule_title" android:key="unica_power_schedule" android:summary="@string/unica_power_schedule_summary">
+        <intent android:targetPackage="io.mesalabs.rezoss.poweron" android:targetClass="io.mesalabs.rezoss.poweron.PowerOnActivity" />
+    </io.mesalabs.unica.settings.preference.IconPreference>
+    <io.mesalabs.unica.settings.preference.IconPreference android:icon="@drawable/ic_settings_cpu" android:title="@string/unica_gpu_title" android:key="unica_gpu" android:summary="@string/unica_gpu_summary">
+        <intent android:targetPackage="com.android.settings" android:targetClass="io.mesalabs.unica.gpu.GpuActivity" />
+    </io.mesalabs.unica.settings.preference.IconPreference>
+</PreferenceScreen>

@@ -12,6 +12,44 @@ OUTPUT=$(realpath -m "$2")
 MODPATH=$(cd -- "$(dirname -- "$0")" && pwd)
 TMP=$(mktemp -d /tmp/offlinelm-repair.XXXXXX)
 echo "Evidence and working files: $TMP"
+INPUT_SHA256=$(sha256sum "$INPUT" | cut -d ' ' -f 1)
+if [[ "$INPUT_SHA256" == "6d61847386d0cf08088acfd7b93976847bffa8ea062b07a307fa3374686c6d29" ]]; then
+    echo "Detected OfflineLanguageModel repaired-v4 baseline; applying native QNN backend fallback only"
+    python3 - "$INPUT" "$TMP" <<'PY'
+import sys, zipfile
+from pathlib import Path
+p=Path(sys.argv[1]); t=Path(sys.argv[2])
+with zipfile.ZipFile(p) as z:
+    f=t/'decoded/lib/arm64-v8a/libsnap_qnn.so'
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_bytes(z.read('lib/arm64-v8a/libsnap_qnn.so'))
+PY
+    python3 "$MODPATH/../aioskernel/patch_qnn_logging_nullguard.py" "$TMP/decoded/lib/arm64-v8a/libsnap_qnn.so" "$TMP/snap-qnn-logging.so"
+    python3 "$MODPATH/../aioskernel/patch_qnn_backend_v73_fallback.py" "$TMP/snap-qnn-logging.so" "$TMP/snap-qnn-fixed.so"
+    python3 - "$INPUT" "$TMP" <<'PY'
+import sys, zipfile, shutil
+from pathlib import Path
+p=Path(sys.argv[1]);t=Path(sys.argv[2])
+replacements={'lib/arm64-v8a/libsnap_qnn.so': (t/'snap-qnn-fixed.so').read_bytes()}
+with zipfile.ZipFile(p) as src, zipfile.ZipFile(t/'unsigned.apk','w',allowZip64=True) as out:
+    for info in src.infolist():
+        if info.filename.startswith('META-INF/') and info.filename.upper().endswith(('.SF','.RSA','.DSA','.EC','MANIFEST.MF')):
+            continue
+        if info.filename in replacements:
+            out.writestr(info,replacements[info.filename])
+            continue
+        with src.open(info) as a,out.open(info,'w',force_zip64=info.file_size>2**31) as b:
+            shutil.copyfileobj(a,b,1024*1024)
+PY
+    signapk "$SRC_DIR/security/aosp_platform.x509.pem" "$SRC_DIR/security/aosp_platform.pk8" "$TMP/unsigned.apk" "$TMP/normalized.apk"
+    zipalign -f -p 4 "$TMP/normalized.apk" "$TMP/aligned.apk"
+    apksigner sign --key "$SRC_DIR/security/aosp_platform.pk8" --cert "$SRC_DIR/security/aosp_platform.x509.pem" --out "$OUTPUT" "$TMP/aligned.apk"
+    apksigner verify "$OUTPUT"
+    zipalign -c -p 4 "$OUTPUT"
+    unzip -tq "$OUTPUT"
+    echo "Repaired APK: $OUTPUT (not installed)"
+    exit 0
+fi
 python3 - "$INPUT" "$TMP" <<'PY'
 import hashlib,sys,zipfile
 from pathlib import Path
@@ -32,7 +70,8 @@ for PATCH in "$MODPATH/OfflineLanguageModel.apk/"*.patch; do
 done
 python3 "$MODPATH/patch_native.py" "$TMP/smali/lib/arm64-v8a/libjniAIOSKernelNative.so" "$TMP/native-fixed.so"
 python3 "$MODPATH/../aioskernel/patch_sm8550_chipset.py" "$TMP/smali/lib/arm64-v8a/libssneural_vndk.so" "$TMP/ssneural-fixed.so"
-python3 "$MODPATH/../aioskernel/patch_qnn_logging_nullguard.py" "$TMP/smali/lib/arm64-v8a/libsnap_qnn.so" "$TMP/snap-qnn-fixed.so"
+python3 "$MODPATH/../aioskernel/patch_qnn_logging_nullguard.py" "$TMP/smali/lib/arm64-v8a/libsnap_qnn.so" "$TMP/snap-qnn-logging.so"
+python3 "$MODPATH/../aioskernel/patch_qnn_backend_v73_fallback.py" "$TMP/snap-qnn-logging.so" "$TMP/snap-qnn-fixed.so"
 apktool b -j 2 "$TMP/smali" -o "$TMP/code-fixed.apk"
 python3 - "$INPUT" "$TMP" <<'PY'
 import sys,zipfile,shutil

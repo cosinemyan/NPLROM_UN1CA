@@ -37,7 +37,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$1$1.smali b/smali_classe
 +        }
 +    .end annotation
 +
-+    .line 58
++    .line 60
 +    iput-object p1, p0, Lio/mesalabs/unica/HmaPolicy$1$1;->this$0:Lio/mesalabs/unica/HmaPolicy$1;
 +
 +    invoke-direct {p0}, Landroid/content/BroadcastReceiver;-><init>()V
@@ -50,7 +50,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$1$1.smali b/smali_classe
 +.method public onReceive(Landroid/content/Context;Landroid/content/Intent;)V
 +    .registers 7
 +
-+    .line 60
++    .line 62
 +    invoke-virtual {p2}, Landroid/content/Intent;->getData()Landroid/net/Uri;
 +
 +    move-result-object p1
@@ -70,13 +70,13 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$1$1.smali b/smali_classe
 +
 +    move-result-object p1
 +
-+    .line 61
++    .line 63
 +    :goto_10
 +    if-nez p1, :cond_13
 +
 +    return-void
 +
-+    .line 62
++    .line 64
 +    :cond_13
 +    # getter for: Lio/mesalabs/unica/HmaPolicy;->facts:Ljava/util/concurrent/ConcurrentHashMap;
 +    invoke-static {}, Lio/mesalabs/unica/HmaPolicy;->access$000()Ljava/util/concurrent/ConcurrentHashMap;
@@ -138,7 +138,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$1$1.smali b/smali_classe
 +
 +    goto :goto_1f
 +
-+    .line 63
++    .line 65
 +    :cond_4c
 +    const-string/jumbo v0, "android.intent.action.PACKAGE_REMOVED"
 +
@@ -167,7 +167,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$1$1.smali b/smali_classe
 +    # invokes: Lio/mesalabs/unica/HmaPolicy;->requestScan(Ljava/lang/String;I)V
 +    invoke-static {p1, p2}, Lio/mesalabs/unica/HmaPolicy;->access$100(Ljava/lang/String;I)V
 +
-+    .line 64
++    .line 66
 +    :cond_66
 +    return-void
 +.end method
@@ -198,7 +198,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$1.smali b/smali_classes6
 +.method constructor <init>()V
 +    .registers 1
 +
-+    .line 51
++    .line 53
 +    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 +
 +    return-void
@@ -209,33 +209,33 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$1.smali b/smali_classes6
 +.method public run()V
 +    .registers 4
 +
-+    .line 53
++    .line 55
 +    :try_start_0
 +    new-instance v0, Landroid/content/IntentFilter;
 +
 +    invoke-direct {v0}, Landroid/content/IntentFilter;-><init>()V
 +
-+    .line 54
++    .line 56
 +    const-string/jumbo v1, "android.intent.action.PACKAGE_ADDED"
 +
 +    invoke-virtual {v0, v1}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
 +
-+    .line 55
++    .line 57
 +    const-string/jumbo v1, "android.intent.action.PACKAGE_REMOVED"
 +
 +    invoke-virtual {v0, v1}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
 +
-+    .line 56
++    .line 58
 +    const-string/jumbo v1, "android.intent.action.PACKAGE_CHANGED"
 +
 +    invoke-virtual {v0, v1}, Landroid/content/IntentFilter;->addAction(Ljava/lang/String;)V
 +
-+    .line 57
++    .line 59
 +    const-string/jumbo v1, "package"
 +
 +    invoke-virtual {v0, v1}, Landroid/content/IntentFilter;->addDataScheme(Ljava/lang/String;)V
 +
-+    .line 58
++    .line 60
 +    # getter for: Lio/mesalabs/unica/HmaPolicy;->context:Landroid/content/Context;
 +    invoke-static {}, Lio/mesalabs/unica/HmaPolicy;->access$200()Landroid/content/Context;
 +
@@ -247,7 +247,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$1.smali b/smali_classes6
 +
 +    invoke-virtual {v1, v2, v0}, Landroid/content/Context;->registerReceiver(Landroid/content/BroadcastReceiver;Landroid/content/IntentFilter;)Landroid/content/Intent;
 +
-+    .line 66
++    .line 68
 +    # getter for: Lio/mesalabs/unica/HmaPolicy;->context:Landroid/content/Context;
 +    invoke-static {}, Lio/mesalabs/unica/HmaPolicy;->access$200()Landroid/content/Context;
 +
@@ -289,7 +289,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$1.smali b/smali_classes6
 +
 +    goto :goto_36
 +
-+    .line 67
++    .line 69
 +    :cond_48
 +    goto :goto_51
 +
@@ -302,14 +302,14 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$1.smali b/smali_classes6
 +
 +    invoke-static {v1, v2, v0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
 +
-+    .line 68
++    .line 70
 +    :goto_51
 +    return-void
 +.end method
 diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$2.smali b/smali_classes6/io/mesalabs/unica/HmaPolicy$2.smali
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/HmaPolicy$2.smali
-@@ -0,0 +1,245 @@
+@@ -0,0 +1,243 @@
 +.class Lio/mesalabs/unica/HmaPolicy$2;
 +.super Ljava/lang/Object;
 +.source "HmaPolicy.java"
@@ -346,7 +346,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$2.smali b/smali_classes6
 +        }
 +    .end annotation
 +
-+    .line 357
++    .line 379
 +    iput p1, p0, Lio/mesalabs/unica/HmaPolicy$2;->val$user:I
 +
 +    iput-object p2, p0, Lio/mesalabs/unica/HmaPolicy$2;->val$name:Ljava/lang/String;
@@ -361,9 +361,9 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$2.smali b/smali_classes6
 +
 +# virtual methods
 +.method public run()V
-+    .registers 10
++    .registers 9
 +
-+    .line 358
++    .line 380
 +    # getter for: Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +    invoke-static {}, Lio/mesalabs/unica/HmaPolicy;->access$300()Ljava/lang/ThreadLocal;
 +
@@ -377,21 +377,21 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$2.smali b/smali_classes6
 +
 +    invoke-virtual {v0, v2}, Ljava/lang/ThreadLocal;->set(Ljava/lang/Object;)V
 +
-+    .line 360
++    .line 382
 +    :try_start_c
 +    # invokes: Lio/mesalabs/unica/HmaPolicy;->getContext()Landroid/content/Context;
 +    invoke-static {}, Lio/mesalabs/unica/HmaPolicy;->access$400()Landroid/content/Context;
 +
 +    move-result-object v0
 +
-+    .line 361
++    .line 383
 +    iget v2, p0, Lio/mesalabs/unica/HmaPolicy$2;->val$user:I
 +
 +    const/4 v3, 0x0
 +
-+    if-eqz v2, :cond_58
++    if-eqz v2, :cond_56
 +
-+    .line 362
++    .line 384
 +    const-string/jumbo v2, "android.os.UserHandle"
 +
 +    invoke-static {v2}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
@@ -408,61 +408,59 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$2.smali b/smali_classes6
 +
 +    move-result-object v2
 +
-+    new-array v4, v1, [Ljava/lang/Object;
++    iget v4, p0, Lio/mesalabs/unica/HmaPolicy$2;->val$user:I
 +
-+    iget v5, p0, Lio/mesalabs/unica/HmaPolicy$2;->val$user:I
++    invoke-static {v4}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
 +
-+    invoke-static {v5}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++    move-result-object v4
 +
-+    move-result-object v5
++    filled-new-array {v4}, [Ljava/lang/Object;
 +
-+    aput-object v5, v4, v3
++    move-result-object v4
 +
 +    invoke-virtual {v2, v4}, Ljava/lang/reflect/Constructor;->newInstance([Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    move-result-object v2
 +
-+    .line 363
++    .line 385
 +    const-class v4, Landroid/content/Context;
 +
 +    const-string/jumbo v5, "createContextAsUser"
 +
 +    const/4 v6, 0x2
 +
-+    new-array v7, v6, [Ljava/lang/Class;
++    new-array v6, v6, [Ljava/lang/Class;
 +
 +    invoke-virtual {v2}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
 +
-+    move-result-object v8
++    move-result-object v7
 +
-+    aput-object v8, v7, v3
++    aput-object v7, v6, v3
 +
-+    sget-object v8, Ljava/lang/Integer;->TYPE:Ljava/lang/Class;
++    sget-object v7, Ljava/lang/Integer;->TYPE:Ljava/lang/Class;
 +
-+    aput-object v8, v7, v1
++    aput-object v7, v6, v1
 +
-+    invoke-virtual {v4, v5, v7}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
++    invoke-virtual {v4, v5, v6}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
 +
-+    move-result-object v4
-+
-+    new-array v5, v6, [Ljava/lang/Object;
-+
-+    aput-object v2, v5, v3
++    move-result-object v1
 +
 +    invoke-static {v3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
 +
++    move-result-object v4
++
++    filled-new-array {v2, v4}, [Ljava/lang/Object;
++
 +    move-result-object v2
 +
-+    aput-object v2, v5, v1
-+
-+    invoke-virtual {v4, v0, v5}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v1, v0, v2}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    move-result-object v0
 +
 +    check-cast v0, Landroid/content/Context;
 +
-+    .line 365
-+    :cond_58
++    .line 387
++    :cond_56
 +    invoke-virtual {v0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
 +
 +    move-result-object v0
@@ -473,7 +471,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$2.smali b/smali_classes6
 +
 +    move-result-object v0
 +
-+    .line 366
++    .line 388
 +    # getter for: Lio/mesalabs/unica/HmaPolicy;->facts:Ljava/util/concurrent/ConcurrentHashMap;
 +    invoke-static {}, Lio/mesalabs/unica/HmaPolicy;->access$000()Ljava/util/concurrent/ConcurrentHashMap;
 +
@@ -486,23 +484,23 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$2.smali b/smali_classes6
 +    move-result-object v0
 +
 +    invoke-virtual {v1, v2, v0}, Ljava/util/concurrent/ConcurrentHashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+    :try_end_6f
-+    .catch Ljava/lang/Exception; {:try_start_c .. :try_end_6f} :catch_72
-+    .catchall {:try_start_c .. :try_end_6f} :catchall_70
++    :try_end_6d
++    .catch Ljava/lang/Exception; {:try_start_c .. :try_end_6d} :catch_70
++    .catchall {:try_start_c .. :try_end_6d} :catchall_6e
 +
-+    goto :goto_7c
++    goto :goto_7a
 +
-+    .line 368
-+    :catchall_70
++    .line 390
++    :catchall_6e
 +    move-exception v0
 +
-+    goto :goto_8d
++    goto :goto_8b
 +
-+    .line 367
-+    :catch_72
++    .line 389
++    :catch_70
 +    move-exception v0
 +
-+    :try_start_73
++    :try_start_71
 +    # getter for: Lio/mesalabs/unica/HmaPolicy;->facts:Ljava/util/concurrent/ConcurrentHashMap;
 +    invoke-static {}, Lio/mesalabs/unica/HmaPolicy;->access$000()Ljava/util/concurrent/ConcurrentHashMap;
 +
@@ -511,11 +509,11 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$2.smali b/smali_classes6
 +    iget-object v1, p0, Lio/mesalabs/unica/HmaPolicy$2;->val$key:Ljava/lang/String;
 +
 +    invoke-virtual {v0, v1}, Ljava/util/concurrent/ConcurrentHashMap;->remove(Ljava/lang/Object;)Ljava/lang/Object;
-+    :try_end_7c
-+    .catchall {:try_start_73 .. :try_end_7c} :catchall_70
++    :try_end_7a
++    .catchall {:try_start_71 .. :try_end_7a} :catchall_6e
 +
-+    .line 368
-+    :goto_7c
++    .line 390
++    :goto_7a
 +    # getter for: Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +    invoke-static {}, Lio/mesalabs/unica/HmaPolicy;->access$300()Ljava/lang/ThreadLocal;
 +
@@ -532,11 +530,11 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$2.smali b/smali_classes6
 +
 +    invoke-interface {v0, v1}, Ljava/util/Set;->remove(Ljava/lang/Object;)Z
 +
-+    .line 369
++    .line 391
 +    return-void
 +
-+    .line 368
-+    :goto_8d
++    .line 390
++    :goto_8b
 +    # getter for: Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +    invoke-static {}, Lio/mesalabs/unica/HmaPolicy;->access$300()Ljava/lang/ThreadLocal;
 +
@@ -590,17 +588,17 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$Config.smali b/smali_cla
 +        }
 +    .end annotation
 +
-+    .line 36
++    .line 38
 +    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 +
-+    .line 35
++    .line 37
 +    invoke-static {}, Landroid/os/SystemClock;->elapsedRealtime()J
 +
 +    move-result-wide v0
 +
 +    iput-wide v0, p0, Lio/mesalabs/unica/HmaPolicy$Config;->time:J
 +
-+    .line 36
++    .line 38
 +    new-instance v0, Lorg/json/JSONObject;
 +
 +    if-nez p1, :cond_f
@@ -652,10 +650,10 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$Facts.smali b/smali_clas
 +.method constructor <init>()V
 +    .registers 2
 +
-+    .line 38
++    .line 40
 +    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 +
-+    .line 39
++    .line 41
 +    new-instance v0, Ljava/util/HashSet;
 +
 +    invoke-direct {v0}, Ljava/util/HashSet;-><init>()V
@@ -667,7 +665,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy$Facts.smali b/smali_clas
 diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/io/mesalabs/unica/HmaPolicy.smali
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/HmaPolicy.smali
-@@ -0,0 +1,3431 @@
+@@ -0,0 +1,3762 @@
 +.class public final Lio/mesalabs/unica/HmaPolicy;
 +.super Ljava/lang/Object;
 +.source "HmaPolicy.java"
@@ -683,6 +681,10 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +
 +# static fields
++.field private static final CHUNK_MARKER:Ljava/lang/String; = "_hma_chunked"
++
++.field private static final CHUNK_PREFIX:Ljava/lang/String; = "unica_hma_policy_chunk_"
++
 +.field private static final GIDS:[I
 +
 +.field public static final KEY:Ljava/lang/String; = "unica_hma_policy"
@@ -742,28 +744,28 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method static constructor <clinit>()V
 +    .registers 1
 +
-+    .line 25
++    .line 27
 +    new-instance v0, Ljava/lang/ThreadLocal;
 +
 +    invoke-direct {v0}, Ljava/lang/ThreadLocal;-><init>()V
 +
 +    sput-object v0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
-+    .line 26
++    .line 28
 +    new-instance v0, Ljava/util/concurrent/ConcurrentHashMap;
 +
 +    invoke-direct {v0}, Ljava/util/concurrent/ConcurrentHashMap;-><init>()V
 +
 +    sput-object v0, Lio/mesalabs/unica/HmaPolicy;->configs:Ljava/util/concurrent/ConcurrentHashMap;
 +
-+    .line 27
++    .line 29
 +    new-instance v0, Ljava/util/concurrent/ConcurrentHashMap;
 +
 +    invoke-direct {v0}, Ljava/util/concurrent/ConcurrentHashMap;-><init>()V
 +
 +    sput-object v0, Lio/mesalabs/unica/HmaPolicy;->facts:Ljava/util/concurrent/ConcurrentHashMap;
 +
-+    .line 28
++    .line 30
 +    new-instance v0, Ljava/util/concurrent/ConcurrentHashMap;
 +
 +    invoke-direct {v0}, Ljava/util/concurrent/ConcurrentHashMap;-><init>()V
@@ -774,14 +776,14 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    sput-object v0, Lio/mesalabs/unica/HmaPolicy;->pending:Ljava/util/Set;
 +
-+    .line 29
++    .line 31
 +    invoke-static {}, Ljava/util/concurrent/Executors;->newSingleThreadExecutor()Ljava/util/concurrent/ExecutorService;
 +
 +    move-result-object v0
 +
 +    sput-object v0, Lio/mesalabs/unica/HmaPolicy;->scanner:Ljava/util/concurrent/ExecutorService;
 +
-+    .line 30
++    .line 32
 +    const/16 v0, 0x8
 +
 +    new-array v0, v0, [I
@@ -808,7 +810,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method private constructor <init>()V
 +    .registers 1
 +
-+    .line 42
++    .line 44
 +    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 +
 +    return-void
@@ -873,7 +875,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method private static appUid(I)Z
 +    .registers 2
 +
-+    .line 80
++    .line 101
 +    if-ltz p0, :cond_10
 +
 +    const v0, 0x186a0
@@ -902,7 +904,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method public static blockActivity(ILandroid/content/Intent;Landroid/content/pm/ActivityInfo;)Z
 +    .registers 11
 +
-+    .line 189
++    .line 211
 +    const-string/jumbo v0, "activity"
 +
 +    invoke-static {p0}, Lio/mesalabs/unica/HmaPolicy;->enter(I)Z
@@ -915,14 +917,14 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return v2
 +
-+    .line 191
++    .line 213
 +    :cond_a
 +    :try_start_a
 +    invoke-static {p0}, Lio/mesalabs/unica/HmaPolicy;->config(I)Lio/mesalabs/unica/HmaPolicy$Config;
 +
 +    move-result-object v1
 +
-+    .line 192
++    .line 214
 +    invoke-static {p0, v1}, Lio/mesalabs/unica/HmaPolicy;->caller(ILio/mesalabs/unica/HmaPolicy$Config;)Ljava/lang/String;
 +
 +    move-result-object v3
@@ -930,18 +932,18 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_a .. :try_end_12} :catch_76
 +    .catchall {:try_start_a .. :try_end_12} :catchall_6f
 +
-+    .line 193
++    .line 215
 +    if-nez v3, :cond_1a
 +
-+    .line 200
++    .line 222
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 193
++    .line 215
 +    return v2
 +
-+    .line 194
++    .line 216
 +    :cond_1a
 +    :try_start_1a
 +    iget-object v4, v1, Lio/mesalabs/unica/HmaPolicy$Config;->json:Lorg/json/JSONObject;
@@ -962,7 +964,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    xor-int/2addr v4, v6
 +
-+    .line 195
++    .line 217
 +    if-nez p2, :cond_40
 +
 +    if-eqz p1, :cond_3e
@@ -995,7 +997,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    :cond_40
 +    iget-object p1, p2, Landroid/content/pm/ActivityInfo;->packageName:Ljava/lang/String;
 +
-+    .line 196
++    .line 218
 +    :goto_42
 +    if-eqz v4, :cond_4b
 +
@@ -1010,7 +1012,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    :cond_4b
 +    move v5, v2
 +
-+    .line 197
++    .line 219
 +    :goto_4c
 +    if-eqz v5, :cond_68
 +
@@ -1041,19 +1043,19 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_1a .. :try_end_68} :catch_76
 +    .catchall {:try_start_1a .. :try_end_68} :catchall_6f
 +
-+    .line 198
++    .line 220
 +    :cond_68
 +    nop
 +
-+    .line 200
++    .line 222
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 198
++    .line 220
 +    return v5
 +
-+    .line 200
++    .line 222
 +    :catchall_6f
 +    move-exception p0
 +
@@ -1063,23 +1065,23 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    throw p0
 +
-+    .line 199
++    .line 221
 +    :catch_76
 +    move-exception p0
 +
-+    .line 200
++    .line 222
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 199
++    .line 221
 +    return v2
 +.end method
 +
 +.method private static booted()Z
-+    .registers 7
++    .registers 6
 +
-+    .line 82
++    .line 103
 +    const/4 v0, 0x0
 +
 +    :try_start_1
@@ -1095,21 +1097,21 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    const/4 v4, 0x1
 +
-+    new-array v5, v4, [Ljava/lang/Class;
++    new-array v4, v4, [Ljava/lang/Class;
 +
-+    const-class v6, Ljava/lang/String;
++    const-class v5, Ljava/lang/String;
 +
-+    aput-object v6, v5, v0
++    aput-object v5, v4, v0
 +
-+    invoke-virtual {v2, v3, v5}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
++    invoke-virtual {v2, v3, v4}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
 +
 +    move-result-object v2
 +
-+    new-array v3, v4, [Ljava/lang/Object;
++    const-string/jumbo v3, "sys.boot_completed"
 +
-+    const-string/jumbo v4, "sys.boot_completed"
++    filled-new-array {v3}, [Ljava/lang/Object;
 +
-+    aput-object v4, v3, v0
++    move-result-object v3
 +
 +    const/4 v4, 0x0
 +
@@ -1125,7 +1127,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return v0
 +
-+    .line 83
++    .line 104
 +    :catch_26
 +    move-exception v1
 +
@@ -1135,7 +1137,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method private static caller(ILio/mesalabs/unica/HmaPolicy$Config;)Ljava/lang/String;
 +    .registers 10
 +
-+    .line 119
++    .line 141
 +    const/4 v0, 0x0
 +
 +    if-eqz p1, :cond_67
@@ -1160,13 +1162,13 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_67
 +
-+    .line 120
++    .line 142
 +    :cond_15
 +    invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
 +
 +    move-result-wide v1
 +
-+    .line 122
++    .line 144
 +    :try_start_19
 +    invoke-static {}, Lio/mesalabs/unica/HmaPolicy;->getContext()Landroid/content/Context;
 +
@@ -1180,7 +1182,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move-result-object p0
 +
-+    .line 123
++    .line 145
 +    if-eqz p0, :cond_45
 +
 +    array-length v4, p0
@@ -1192,7 +1194,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    aget-object v6, p0, v5
 +
-+    .line 124
++    .line 146
 +    const-string/jumbo v7, "com.android.settings"
 +
 +    invoke-virtual {v7, v6}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
@@ -1214,21 +1216,21 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_41
 +
-+    .line 123
++    .line 145
 +    :cond_3e
 +    add-int/lit8 v5, v5, 0x1
 +
 +    goto :goto_29
 +
-+    .line 128
++    .line 150
 +    :cond_41
 +    :goto_41
 +    invoke-static {v1, v2}, Landroid/os/Binder;->restoreCallingIdentity(J)V
 +
-+    .line 124
++    .line 146
 +    return-object v0
 +
-+    .line 126
++    .line 148
 +    :cond_45
 +    if-eqz p0, :cond_63
 +
@@ -1253,10 +1255,10 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    if-eqz v6, :cond_5a
 +
-+    .line 128
++    .line 150
 +    invoke-static {v1, v2}, Landroid/os/Binder;->restoreCallingIdentity(J)V
 +
-+    .line 126
++    .line 148
 +    return-object v5
 +
 +    :cond_5a
@@ -1264,7 +1266,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_48
 +
-+    .line 128
++    .line 150
 +    :catchall_5d
 +    move-exception p0
 +
@@ -1272,32 +1274,32 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    throw p0
 +
-+    .line 127
++    .line 149
 +    :catch_62
 +    move-exception p0
 +
-+    .line 128
++    .line 150
 +    :cond_63
 +    invoke-static {v1, v2}, Landroid/os/Binder;->restoreCallingIdentity(J)V
 +
-+    .line 129
++    .line 151
 +    return-object v0
 +
-+    .line 119
++    .line 141
 +    :cond_67
 +    :goto_67
 +    return-object v0
 +.end method
 +
 +.method private static config(I)Lio/mesalabs/unica/HmaPolicy$Config;
-+    .registers 13
++    .registers 10
 +
-+    .line 86
++    .line 107
 +    const v0, 0x186a0
 +
 +    div-int/2addr p0, v0
 +
-+    .line 87
++    .line 108
 +    sget-object v0, Lio/mesalabs/unica/HmaPolicy;->configs:Ljava/util/concurrent/ConcurrentHashMap;
 +
 +    invoke-static {p0}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
@@ -1310,7 +1312,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    check-cast v0, Lio/mesalabs/unica/HmaPolicy$Config;
 +
-+    .line 88
++    .line 109
 +    if-eqz v0, :cond_20
 +
 +    invoke-static {}, Landroid/os/SystemClock;->elapsedRealtime()J
@@ -1329,26 +1331,26 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return-object v0
 +
-+    .line 89
++    .line 110
 +    :cond_20
 +    invoke-static {}, Lio/mesalabs/unica/HmaPolicy;->getContext()Landroid/content/Context;
 +
 +    move-result-object v0
 +
-+    .line 90
++    .line 111
 +    const/4 v1, 0x0
 +
 +    if-nez v0, :cond_28
 +
 +    return-object v1
 +
-+    .line 91
++    .line 112
 +    :cond_28
 +    invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
 +
 +    move-result-wide v2
 +
-+    .line 93
++    .line 114
 +    :try_start_2c
 +    const-class v4, Landroid/provider/Settings$Secure;
 +
@@ -1356,60 +1358,45 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    const/4 v6, 0x3
 +
-+    new-array v7, v6, [Ljava/lang/Class;
++    new-array v6, v6, [Ljava/lang/Class;
 +
-+    const-class v8, Landroid/content/ContentResolver;
++    const-class v7, Landroid/content/ContentResolver;
 +
-+    const/4 v9, 0x0
++    const/4 v8, 0x0
 +
-+    aput-object v8, v7, v9
++    aput-object v7, v6, v8
 +
-+    const-class v8, Ljava/lang/String;
++    const-class v7, Ljava/lang/String;
 +
-+    const/4 v10, 0x1
++    const/4 v8, 0x1
 +
-+    aput-object v8, v7, v10
++    aput-object v7, v6, v8
 +
-+    sget-object v8, Ljava/lang/Integer;->TYPE:Ljava/lang/Class;
++    sget-object v7, Ljava/lang/Integer;->TYPE:Ljava/lang/Class;
 +
-+    const/4 v11, 0x2
++    const/4 v8, 0x2
 +
-+    aput-object v8, v7, v11
++    aput-object v7, v6, v8
 +
-+    invoke-virtual {v4, v5, v7}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
++    invoke-virtual {v4, v5, v6}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
 +
 +    move-result-object v4
 +
-+    .line 94
-+    new-instance v5, Lio/mesalabs/unica/HmaPolicy$Config;
-+
-+    new-array v6, v6, [Ljava/lang/Object;
-+
++    .line 115
 +    invoke-virtual {v0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
 +
 +    move-result-object v0
 +
-+    aput-object v0, v6, v9
++    .line 116
++    new-instance v5, Lio/mesalabs/unica/HmaPolicy$Config;
 +
-+    const-string/jumbo v0, "unica_hma_policy"
-+
-+    aput-object v0, v6, v10
-+
-+    invoke-static {p0}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++    invoke-static {v0, v4, p0}, Lio/mesalabs/unica/HmaPolicy;->policyString(Landroid/content/ContentResolver;Ljava/lang/reflect/Method;I)Ljava/lang/String;
 +
 +    move-result-object v0
-+
-+    aput-object v0, v6, v11
-+
-+    invoke-virtual {v4, v1, v6}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
-+
-+    move-result-object v0
-+
-+    check-cast v0, Ljava/lang/String;
 +
 +    invoke-direct {v5, v0}, Lio/mesalabs/unica/HmaPolicy$Config;-><init>(Ljava/lang/String;)V
 +
-+    .line 95
++    .line 117
 +    sget-object v0, Lio/mesalabs/unica/HmaPolicy;->configs:Ljava/util/concurrent/ConcurrentHashMap;
 +
 +    invoke-static {p0}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
@@ -1417,47 +1404,47 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    move-result-object p0
 +
 +    invoke-virtual {v0, p0, v5}, Ljava/util/concurrent/ConcurrentHashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
-+    :try_end_6c
-+    .catch Ljava/lang/Exception; {:try_start_2c .. :try_end_6c} :catch_76
-+    .catchall {:try_start_2c .. :try_end_6c} :catchall_71
++    :try_end_5c
++    .catch Ljava/lang/Exception; {:try_start_2c .. :try_end_5c} :catch_66
++    .catchall {:try_start_2c .. :try_end_5c} :catchall_61
 +
-+    .line 96
++    .line 118
 +    nop
 +
-+    .line 98
++    .line 120
 +    invoke-static {v2, v3}, Landroid/os/Binder;->restoreCallingIdentity(J)V
 +
-+    .line 96
++    .line 118
 +    return-object v5
 +
-+    .line 98
-+    :catchall_71
++    .line 120
++    :catchall_61
 +    move-exception p0
 +
 +    invoke-static {v2, v3}, Landroid/os/Binder;->restoreCallingIdentity(J)V
 +
 +    throw p0
 +
-+    .line 97
-+    :catch_76
++    .line 119
++    :catch_66
 +    move-exception p0
 +
-+    .line 98
++    .line 120
 +    invoke-static {v2, v3}, Landroid/os/Binder;->restoreCallingIdentity(J)V
 +
-+    .line 97
++    .line 119
 +    return-object v1
 +.end method
 +
 +.method private static contains(Lorg/json/JSONObject;Ljava/lang/String;Ljava/lang/String;)Z
 +    .registers 5
 +
-+    .line 101
++    .line 123
 +    invoke-virtual {p0, p1}, Lorg/json/JSONObject;->optJSONArray(Ljava/lang/String;)Lorg/json/JSONArray;
 +
 +    move-result-object p0
 +
-+    .line 102
++    .line 124
 +    const/4 p1, 0x0
 +
 +    if-eqz p0, :cond_1d
@@ -1490,7 +1477,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_8
 +
-+    .line 103
++    .line 125
 +    :cond_1d
 +    return p1
 +.end method
@@ -1498,7 +1485,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method private static enter(I)Z
 +    .registers 3
 +
-+    .line 132
++    .line 154
 +    invoke-static {p0}, Lio/mesalabs/unica/HmaPolicy;->appUid(I)Z
 +
 +    move-result p0
@@ -1527,7 +1514,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_26
 +
-+    .line 133
++    .line 155
 +    :cond_1b
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
@@ -1539,10 +1526,10 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    invoke-virtual {p0, v1}, Ljava/lang/ThreadLocal;->set(Ljava/lang/Object;)V
 +
-+    .line 134
++    .line 156
 +    return v0
 +
-+    .line 132
++    .line 154
 +    :cond_26
 +    :goto_26
 +    const/4 p0, 0x0
@@ -1553,14 +1540,14 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method private static event(Lio/mesalabs/unica/HmaPolicy$Config;Ljava/lang/String;ILjava/lang/String;)V
 +    .registers 4
 +
-+    .line 137
++    .line 159
 +    return-void
 +.end method
 +
 +.method private static fakeInputMethod()Landroid/view/inputmethod/InputMethodInfo;
 +    .registers 5
 +
-+    .line 341
++    .line 363
 +    new-instance v0, Landroid/view/inputmethod/InputMethodInfo;
 +
 +    const-string/jumbo v1, "Gboard"
@@ -1588,7 +1575,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +        }
 +    .end annotation
 +
-+    .line 329
++    .line 351
 +    const-string/jumbo v0, "accessibility"
 +
 +    invoke-static {p0, v0}, Lio/mesalabs/unica/HmaPolicy;->hideServiceList(ILjava/lang/String;)Z
@@ -1606,9 +1593,9 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.end method
 +
 +.method public static filterAccessibilitySlice(ILjava/lang/Object;)Ljava/lang/Object;
-+    .registers 6
++    .registers 5
 +
-+    .line 332
++    .line 354
 +    const-string/jumbo v0, "accessibility"
 +
 +    invoke-static {p0, v0}, Lio/mesalabs/unica/HmaPolicy;->hideServiceList(ILjava/lang/String;)Z
@@ -1621,7 +1608,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_2a
 +
-+    .line 333
++    .line 355
 +    :cond_b
 +    :try_start_b
 +    invoke-virtual {p1}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
@@ -1630,25 +1617,25 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    const/4 v0, 0x1
 +
-+    new-array v1, v0, [Ljava/lang/Class;
++    new-array v0, v0, [Ljava/lang/Class;
 +
-+    const-class v2, Ljava/util/List;
++    const-class v1, Ljava/util/List;
 +
-+    const/4 v3, 0x0
++    const/4 v2, 0x0
 +
-+    aput-object v2, v1, v3
++    aput-object v1, v0, v2
 +
-+    invoke-virtual {p0, v1}, Ljava/lang/Class;->getConstructor([Ljava/lang/Class;)Ljava/lang/reflect/Constructor;
++    invoke-virtual {p0, v0}, Ljava/lang/Class;->getConstructor([Ljava/lang/Class;)Ljava/lang/reflect/Constructor;
 +
 +    move-result-object p0
 +
-+    new-array v0, v0, [Ljava/lang/Object;
-+
 +    invoke-static {}, Ljava/util/Collections;->emptyList()Ljava/util/List;
 +
-+    move-result-object v1
++    move-result-object v0
 +
-+    aput-object v1, v0, v3
++    filled-new-array {v0}, [Ljava/lang/Object;
++
++    move-result-object v0
 +
 +    invoke-virtual {p0, v0}, Ljava/lang/reflect/Constructor;->newInstance([Ljava/lang/Object;)Ljava/lang/Object;
 +
@@ -1658,13 +1645,13 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return-object p0
 +
-+    .line 334
++    .line 356
 +    :catch_28
 +    move-exception p0
 +
 +    return-object p1
 +
-+    .line 332
++    .line 354
 +    :cond_2a
 +    :goto_2a
 +    return-object p1
@@ -1673,7 +1660,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method public static filterCall(Landroid/content/ContentProvider;Ljava/lang/String;Ljava/lang/String;Landroid/os/Bundle;)Landroid/os/Bundle;
 +    .registers 8
 +
-+    .line 268
++    .line 290
 +    if-eqz p0, :cond_81
 +
 +    if-eqz p3, :cond_81
@@ -1698,7 +1685,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_81
 +
-+    .line 269
++    .line 291
 +    :cond_17
 +    invoke-virtual {p0}, Landroid/content/ContentProvider;->getContext()Landroid/content/Context;
 +
@@ -1718,7 +1705,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return-object p3
 +
-+    .line 270
++    .line 292
 +    :cond_28
 +    invoke-virtual {p0}, Landroid/content/ContentProvider;->getContext()Landroid/content/Context;
 +
@@ -1726,12 +1713,12 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    sput-object p0, Lio/mesalabs/unica/HmaPolicy;->context:Landroid/content/Context;
 +
-+    .line 271
++    .line 293
 +    invoke-static {}, Landroid/os/Binder;->getCallingUid()I
 +
 +    move-result p0
 +
-+    .line 272
++    .line 294
 +    invoke-static {p0}, Lio/mesalabs/unica/HmaPolicy;->enter(I)Z
 +
 +    move-result v0
@@ -1740,14 +1727,14 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return-object p3
 +
-+    .line 274
++    .line 296
 +    :cond_39
 +    :try_start_39
 +    invoke-static {p0}, Lio/mesalabs/unica/HmaPolicy;->config(I)Lio/mesalabs/unica/HmaPolicy$Config;
 +
 +    move-result-object v0
 +
-+    .line 275
++    .line 297
 +    invoke-static {p0, v0}, Lio/mesalabs/unica/HmaPolicy;->caller(ILio/mesalabs/unica/HmaPolicy$Config;)Ljava/lang/String;
 +
 +    move-result-object v1
@@ -1757,15 +1744,15 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    if-nez v1, :cond_49
 +
-+    .line 284
++    .line 306
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 275
++    .line 297
 +    return-object p3
 +
-+    .line 276
++    .line 298
 +    :cond_49
 +    const/4 v1, 0x4
 +
@@ -1781,25 +1768,25 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_4a .. :try_end_52} :catch_7a
 +    .catchall {:try_start_4a .. :try_end_52} :catchall_73
 +
-+    .line 277
++    .line 299
 +    if-nez p1, :cond_5a
 +
-+    .line 284
++    .line 306
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 277
++    .line 299
 +    return-object p3
 +
-+    .line 279
++    .line 301
 +    :cond_5a
 +    :try_start_5a
 +    new-instance v1, Landroid/os/Bundle;
 +
 +    invoke-direct {v1}, Landroid/os/Bundle;-><init>()V
 +
-+    .line 280
++    .line 302
 +    const-string/jumbo v2, "value"
 +
 +    const/4 v3, 0x0
@@ -1808,7 +1795,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    invoke-virtual {v1, v2, p1}, Landroid/os/Bundle;->putString(Ljava/lang/String;Ljava/lang/String;)V
 +
-+    .line 281
++    .line 303
 +    const-string/jumbo p1, "settings"
 +
 +    invoke-static {v0, p1, p0, p2}, Lio/mesalabs/unica/HmaPolicy;->event(Lio/mesalabs/unica/HmaPolicy$Config;Ljava/lang/String;ILjava/lang/String;)V
@@ -1816,18 +1803,18 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_5a .. :try_end_6c} :catch_7a
 +    .catchall {:try_start_5a .. :try_end_6c} :catchall_73
 +
-+    .line 282
++    .line 304
 +    nop
 +
-+    .line 284
++    .line 306
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 282
++    .line 304
 +    return-object v1
 +
-+    .line 284
++    .line 306
 +    :catchall_73
 +    move-exception p0
 +
@@ -1837,19 +1824,19 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    throw p0
 +
-+    .line 283
++    .line 305
 +    :catch_7a
 +    move-exception p0
 +
-+    .line 284
++    .line 306
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 283
++    .line 305
 +    return-object p3
 +
-+    .line 268
++    .line 290
 +    :cond_81
 +    :goto_81
 +    return-object p3
@@ -1858,7 +1845,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method public static filterCurrentInputMethod(ILandroid/view/inputmethod/InputMethodInfo;)Landroid/view/inputmethod/InputMethodInfo;
 +    .registers 3
 +
-+    .line 344
++    .line 366
 +    const-string/jumbo v0, "input_method"
 +
 +    invoke-static {p0, v0}, Lio/mesalabs/unica/HmaPolicy;->hideServiceList(ILjava/lang/String;)Z
@@ -1887,7 +1874,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +        }
 +    .end annotation
 +
-+    .line 337
++    .line 359
 +    if-eqz p1, :cond_14
 +
 +    const-string/jumbo v0, "input_method"
@@ -1900,7 +1887,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_14
 +
-+    .line 338
++    .line 360
 +    :cond_b
 +    invoke-static {}, Lio/mesalabs/unica/HmaPolicy;->fakeInputMethod()Landroid/view/inputmethod/InputMethodInfo;
 +
@@ -1912,7 +1899,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return-object p0
 +
-+    .line 337
++    .line 359
 +    :cond_14
 +    :goto_14
 +    return-object p1
@@ -1921,7 +1908,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method public static filterInputSubtype(ILandroid/view/inputmethod/InputMethodSubtype;)Landroid/view/inputmethod/InputMethodSubtype;
 +    .registers 3
 +
-+    .line 347
++    .line 369
 +    const-string/jumbo v0, "input_method"
 +
 +    invoke-static {p0, v0}, Lio/mesalabs/unica/HmaPolicy;->hideServiceList(ILjava/lang/String;)Z
@@ -1937,9 +1924,9 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.end method
 +
 +.method public static filterInputSubtypeList(ILjava/lang/Object;)Ljava/lang/Object;
-+    .registers 7
++    .registers 6
 +
-+    .line 350
++    .line 372
 +    if-eqz p1, :cond_2d
 +
 +    const-string/jumbo v0, "input_method"
@@ -1952,7 +1939,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_2d
 +
-+    .line 351
++    .line 373
 +    :cond_b
 +    :try_start_b
 +    invoke-virtual {p1}, Ljava/lang/Object;->getClass()Ljava/lang/Class;
@@ -1963,25 +1950,25 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    const/4 v1, 0x1
 +
-+    new-array v2, v1, [Ljava/lang/Class;
++    new-array v1, v1, [Ljava/lang/Class;
 +
-+    const-class v3, Ljava/util/List;
++    const-class v2, Ljava/util/List;
 +
-+    const/4 v4, 0x0
++    const/4 v3, 0x0
 +
-+    aput-object v3, v2, v4
++    aput-object v2, v1, v3
 +
-+    invoke-virtual {p0, v0, v2}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
++    invoke-virtual {p0, v0, v1}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
 +
 +    move-result-object p0
 +
-+    new-array v0, v1, [Ljava/lang/Object;
-+
 +    invoke-static {}, Ljava/util/Collections;->emptyList()Ljava/util/List;
 +
-+    move-result-object v1
++    move-result-object v0
 +
-+    aput-object v1, v0, v4
++    filled-new-array {v0}, [Ljava/lang/Object;
++
++    move-result-object v0
 +
 +    const/4 v1, 0x0
 +
@@ -1993,13 +1980,13 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return-object p0
 +
-+    .line 352
++    .line 374
 +    :catch_2b
 +    move-exception p0
 +
 +    return-object p1
 +
-+    .line 350
++    .line 372
 +    :cond_2d
 +    :goto_2d
 +    return-object p1
@@ -2008,7 +1995,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method public static filterInstallSourceInfo(Ljava/lang/String;ILjava/lang/Object;)Ljava/lang/Object;
 +    .registers 9
 +
-+    .line 221
++    .line 243
 +    if-eqz p2, :cond_6f
 +
 +    invoke-static {p1}, Lio/mesalabs/unica/HmaPolicy;->enter(I)Z
@@ -2019,14 +2006,14 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_6f
 +
-+    .line 223
++    .line 245
 +    :cond_9
 +    :try_start_9
 +    invoke-static {p1}, Lio/mesalabs/unica/HmaPolicy;->config(I)Lio/mesalabs/unica/HmaPolicy$Config;
 +
 +    move-result-object v0
 +
-+    .line 224
++    .line 246
 +    invoke-static {p1, v0}, Lio/mesalabs/unica/HmaPolicy;->sourceName(ILio/mesalabs/unica/HmaPolicy$Config;)Ljava/lang/String;
 +
 +    move-result-object v1
@@ -2041,7 +2028,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_5b
 +
-+    .line 225
++    .line 247
 +    :cond_1a
 +    iget-object v1, v0, Lio/mesalabs/unica/HmaPolicy$Config;->json:Lorg/json/JSONObject;
 +
@@ -2051,7 +2038,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move-result-object v1
 +
-+    .line 226
++    .line 248
 +    if-nez v1, :cond_26
 +
 +    const/4 v2, 0x0
@@ -2066,19 +2053,19 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_9 .. :try_end_2a} :catch_68
 +    .catchall {:try_start_9 .. :try_end_2a} :catchall_61
 +
-+    .line 227
++    .line 249
 +    :goto_2a
 +    if-nez v2, :cond_32
 +
-+    .line 231
++    .line 253
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 227
++    .line 249
 +    return-object p2
 +
-+    .line 228
++    .line 250
 +    :cond_32
 +    :try_start_32
 +    const-string/jumbo v3, "package"
@@ -2116,28 +2103,28 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_32 .. :try_end_54} :catch_68
 +    .catchall {:try_start_32 .. :try_end_54} :catchall_61
 +
-+    .line 229
++    .line 251
 +    nop
 +
-+    .line 231
++    .line 253
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 229
++    .line 251
 +    return-object v2
 +
-+    .line 231
++    .line 253
 +    :cond_5b
 +    :goto_5b
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 224
++    .line 246
 +    return-object p2
 +
-+    .line 231
++    .line 253
 +    :catchall_61
 +    move-exception p0
 +
@@ -2147,19 +2134,19 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    throw p0
 +
-+    .line 230
++    .line 252
 +    :catch_68
 +    move-exception p0
 +
-+    .line 231
++    .line 253
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 230
++    .line 252
 +    return-object p2
 +
-+    .line 221
++    .line 243
 +    :cond_6f
 +    :goto_6f
 +    return-object p2
@@ -2168,7 +2155,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method public static filterInstallerPackageName(Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
 +    .registers 8
 +
-+    .line 234
++    .line 256
 +    if-nez p2, :cond_60
 +
 +    invoke-static {p1}, Lio/mesalabs/unica/HmaPolicy;->enter(I)Z
@@ -2179,14 +2166,14 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_60
 +
-+    .line 236
++    .line 258
 +    :cond_9
 +    :try_start_9
 +    invoke-static {p1}, Lio/mesalabs/unica/HmaPolicy;->config(I)Lio/mesalabs/unica/HmaPolicy$Config;
 +
 +    move-result-object v0
 +
-+    .line 237
++    .line 259
 +    invoke-static {p1, v0}, Lio/mesalabs/unica/HmaPolicy;->sourceName(ILio/mesalabs/unica/HmaPolicy$Config;)Ljava/lang/String;
 +
 +    move-result-object v1
@@ -2196,15 +2183,15 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    if-nez v1, :cond_19
 +
-+    .line 243
++    .line 265
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 237
++    .line 259
 +    return-object p2
 +
-+    .line 238
++    .line 260
 +    :cond_19
 +    :try_start_19
 +    iget-object v1, v0, Lio/mesalabs/unica/HmaPolicy$Config;->json:Lorg/json/JSONObject;
@@ -2218,18 +2205,18 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_19 .. :try_end_21} :catch_59
 +    .catchall {:try_start_19 .. :try_end_21} :catchall_52
 +
-+    .line 239
++    .line 261
 +    if-nez v1, :cond_29
 +
-+    .line 243
++    .line 265
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 239
++    .line 261
 +    return-object p2
 +
-+    .line 240
++    .line 262
 +    :cond_29
 +    :try_start_29
 +    const-string/jumbo v2, "package"
@@ -2267,18 +2254,18 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_29 .. :try_end_4b} :catch_59
 +    .catchall {:try_start_29 .. :try_end_4b} :catchall_52
 +
-+    .line 241
++    .line 263
 +    nop
 +
-+    .line 243
++    .line 265
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 241
++    .line 263
 +    return-object v1
 +
-+    .line 243
++    .line 265
 +    :catchall_52
 +    move-exception p0
 +
@@ -2288,19 +2275,19 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    throw p0
 +
-+    .line 242
++    .line 264
 +    :catch_59
 +    move-exception p0
 +
-+    .line 243
++    .line 265
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 242
++    .line 264
 +    return-object p2
 +
-+    .line 234
++    .line 256
 +    :cond_60
 +    :goto_60
 +    return-object p2
@@ -2309,7 +2296,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method public static filterQuery(Landroid/content/ContentProvider;Landroid/net/Uri;Landroid/database/Cursor;)Landroid/database/Cursor;
 +    .registers 20
 +
-+    .line 287
++    .line 309
 +    move-object/from16 v1, p2
 +
 +    if-eqz v1, :cond_100
@@ -2340,7 +2327,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto/16 :goto_100
 +
-+    .line 288
++    .line 310
 +    :cond_1e
 +    invoke-virtual/range {p0 .. p0}, Landroid/content/ContentProvider;->getContext()Landroid/content/Context;
 +
@@ -2348,12 +2335,12 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    sput-object v0, Lio/mesalabs/unica/HmaPolicy;->context:Landroid/content/Context;
 +
-+    .line 289
++    .line 311
 +    invoke-static {}, Landroid/os/Binder;->getCallingUid()I
 +
 +    move-result v0
 +
-+    .line 290
++    .line 312
 +    invoke-static {v0}, Lio/mesalabs/unica/HmaPolicy;->enter(I)Z
 +
 +    move-result v3
@@ -2362,19 +2349,19 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return-object v1
 +
-+    .line 291
++    .line 313
 +    :cond_2f
 +    invoke-interface/range {p2 .. p2}, Landroid/database/Cursor;->getPosition()I
 +
 +    move-result v3
 +
-+    .line 293
++    .line 315
 +    :try_start_33
 +    invoke-static {v0}, Lio/mesalabs/unica/HmaPolicy;->config(I)Lio/mesalabs/unica/HmaPolicy$Config;
 +
 +    move-result-object v4
 +
-+    .line 294
++    .line 316
 +    invoke-static {v0, v4}, Lio/mesalabs/unica/HmaPolicy;->caller(ILio/mesalabs/unica/HmaPolicy$Config;)Ljava/lang/String;
 +
 +    move-result-object v5
@@ -2384,15 +2371,15 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    if-nez v5, :cond_43
 +
-+    .line 316
++    .line 338
 +    sget-object v0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {v0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 294
++    .line 316
 +    return-object v1
 +
-+    .line 295
++    .line 317
 +    :cond_43
 +    :try_start_43
 +    invoke-virtual/range {p1 .. p1}, Landroid/net/Uri;->getPathSegments()Ljava/util/List;
@@ -2407,7 +2394,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    check-cast v5, Ljava/lang/String;
 +
-+    .line 296
++    .line 318
 +    const-string/jumbo v7, "name"
 +
 +    invoke-interface {v1, v7}, Landroid/database/Cursor;->getColumnIndex(Ljava/lang/String;)I
@@ -2423,18 +2410,18 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_43 .. :try_end_5a} :catch_f0
 +    .catchall {:try_start_43 .. :try_end_5a} :catchall_ee
 +
-+    .line 297
++    .line 319
 +    if-gez v8, :cond_62
 +
-+    .line 316
++    .line 338
 +    sget-object v0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {v0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 297
++    .line 319
 +    return-object v1
 +
-+    .line 298
++    .line 320
 +    :cond_62
 +    :try_start_62
 +    invoke-virtual/range {p1 .. p1}, Landroid/net/Uri;->getPathSegments()Ljava/util/List;
@@ -2467,21 +2454,21 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    :cond_78
 +    const/4 v9, 0x0
 +
-+    .line 299
++    .line 321
 +    :goto_79
 +    if-gez v7, :cond_83
 +
 +    if-nez v9, :cond_83
 +
-+    .line 316
++    .line 338
 +    sget-object v0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {v0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 299
++    .line 321
 +    return-object v1
 +
-+    .line 300
++    .line 322
 +    :cond_83
 +    :try_start_83
 +    new-instance v11, Landroid/database/MatrixCursor;
@@ -2492,15 +2479,15 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    invoke-direct {v11, v12}, Landroid/database/MatrixCursor;-><init>([Ljava/lang/String;)V
 +
-+    .line 301
++    .line 323
 +    const/4 v12, -0x1
 +
 +    invoke-interface {v1, v12}, Landroid/database/Cursor;->moveToPosition(I)Z
 +
-+    .line 302
++    .line 324
 +    move v12, v6
 +
-+    .line 303
++    .line 325
 +    :goto_91
 +    invoke-interface/range {p2 .. p2}, Landroid/database/Cursor;->moveToNext()Z
 +
@@ -2508,14 +2495,14 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    if-eqz v13, :cond_c0
 +
-+    .line 304
++    .line 326
 +    invoke-interface/range {p2 .. p2}, Landroid/database/Cursor;->getColumnCount()I
 +
 +    move-result v13
 +
 +    new-array v14, v13, [Ljava/lang/Object;
 +
-+    .line 305
++    .line 327
 +    move v15, v6
 +
 +    :goto_9e
@@ -2531,7 +2518,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_9e
 +
-+    .line 306
++    .line 328
 +    :cond_a9
 +    if-gez v7, :cond_ad
 +
@@ -2544,13 +2531,13 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move-result-object v13
 +
-+    .line 307
++    .line 329
 +    :goto_b1
 +    invoke-static {v4, v5, v13}, Lio/mesalabs/unica/HmaPolicy;->replacement(Lio/mesalabs/unica/HmaPolicy$Config;Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;
 +
 +    move-result-object v13
 +
-+    .line 308
++    .line 330
 +    if-eqz v13, :cond_bc
 +
 +    aget-object v12, v13, v6
@@ -2559,14 +2546,14 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move v12, v10
 +
-+    .line 309
++    .line 331
 +    :cond_bc
 +    invoke-virtual {v11, v14}, Landroid/database/MatrixCursor;->addRow([Ljava/lang/Object;)V
 +
-+    .line 310
++    .line 332
 +    goto :goto_91
 +
-+    .line 311
++    .line 333
 +    :cond_c0
 +    if-nez v12, :cond_ce
 +
@@ -2577,20 +2564,20 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_83 .. :try_end_c8} :catch_f0
 +    .catchall {:try_start_83 .. :try_end_c8} :catchall_ee
 +
-+    .line 316
++    .line 338
 +    sget-object v0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {v0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 311
++    .line 333
 +    return-object v1
 +
-+    .line 312
++    .line 334
 +    :cond_ce
 +    :try_start_ce
 +    invoke-interface/range {p2 .. p2}, Landroid/database/Cursor;->close()V
 +
-+    .line 313
++    .line 335
 +    new-instance v6, Ljava/lang/StringBuilder;
 +
 +    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
@@ -2614,24 +2601,24 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_ce .. :try_end_e7} :catch_f0
 +    .catchall {:try_start_ce .. :try_end_e7} :catchall_ee
 +
-+    .line 314
++    .line 336
 +    nop
 +
-+    .line 316
++    .line 338
 +    sget-object v0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {v0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 314
++    .line 336
 +    return-object v11
 +
-+    .line 316
++    .line 338
 +    :catchall_ee
 +    move-exception v0
 +
 +    goto :goto_fa
 +
-+    .line 315
++    .line 337
 +    :catch_f0
 +    move-exception v0
 +
@@ -2640,15 +2627,15 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    :try_end_f4
 +    .catchall {:try_start_f1 .. :try_end_f4} :catchall_ee
 +
-+    .line 316
++    .line 338
 +    sget-object v0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {v0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 315
++    .line 337
 +    return-object v1
 +
-+    .line 316
++    .line 338
 +    :goto_fa
 +    sget-object v1, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
@@ -2656,7 +2643,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    throw v0
 +
-+    .line 287
++    .line 309
 +    :cond_100
 +    :goto_100
 +    return-object v1
@@ -2665,7 +2652,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method private static getContext()Landroid/content/Context;
 +    .registers 5
 +
-+    .line 72
++    .line 74
 +    sget-object v0, Lio/mesalabs/unica/HmaPolicy;->context:Landroid/content/Context;
 +
 +    if-eqz v0, :cond_7
@@ -2674,7 +2661,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return-object v0
 +
-+    .line 74
++    .line 76
 +    :cond_7
 +    :try_start_7
 +    const-string/jumbo v0, "android.app.ActivityThread"
@@ -2683,7 +2670,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move-result-object v0
 +
-+    .line 75
++    .line 77
 +    const-string/jumbo v1, "currentActivityThread"
 +
 +    const/4 v2, 0x0
@@ -2702,7 +2689,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move-result-object v1
 +
-+    .line 76
++    .line 78
 +    const-string/jumbo v3, "getSystemContext"
 +
 +    new-array v4, v2, [Ljava/lang/Class;
@@ -2725,14 +2712,14 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_31
 +
-+    .line 77
++    .line 79
 +    :catch_30
 +    move-exception v0
 +
 +    :goto_31
 +    nop
 +
-+    .line 78
++    .line 80
 +    sget-object v0, Lio/mesalabs/unica/HmaPolicy;->context:Landroid/content/Context;
 +
 +    return-object v0
@@ -2741,7 +2728,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method private static hidden(Lio/mesalabs/unica/HmaPolicy$Config;ILjava/lang/String;Ljava/lang/String;)Z
 +    .registers 8
 +
-+    .line 139
++    .line 161
 +    const/4 v0, 0x0
 +
 +    if-eqz p3, :cond_b8
@@ -2778,13 +2765,13 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto/16 :goto_b8
 +
-+    .line 140
++    .line 162
 +    :cond_23
 +    invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
 +
 +    move-result-wide v1
 +
-+    .line 142
++    .line 164
 +    :try_start_27
 +    invoke-static {}, Lio/mesalabs/unica/HmaPolicy;->getContext()Landroid/content/Context;
 +
@@ -2798,7 +2785,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move-result-object v3
 +
-+    .line 143
++    .line 165
 +    if-eqz v3, :cond_43
 +
 +    invoke-static {v3}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
@@ -2813,17 +2800,17 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    if-eqz v3, :cond_43
 +
-+    .line 144
++    .line 166
 +    invoke-static {v1, v2}, Landroid/os/Binder;->restoreCallingIdentity(J)V
 +
-+    .line 143
++    .line 165
 +    return v0
 +
-+    .line 144
++    .line 166
 +    :cond_43
 +    invoke-static {v1, v2}, Landroid/os/Binder;->restoreCallingIdentity(J)V
 +
-+    .line 145
++    .line 167
 +    new-instance v1, Ljava/lang/StringBuilder;
 +
 +    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
@@ -2850,7 +2837,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move-result-object v1
 +
-+    .line 146
++    .line 168
 +    sget-object v2, Lio/mesalabs/unica/HmaPolicy;->facts:Ljava/util/concurrent/ConcurrentHashMap;
 +
 +    invoke-virtual {v2, v1}, Ljava/util/concurrent/ConcurrentHashMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
@@ -2859,12 +2846,12 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    check-cast v1, Lio/mesalabs/unica/HmaPolicy$Facts;
 +
-+    .line 147
++    .line 169
 +    if-nez v1, :cond_6e
 +
 +    invoke-static {p3, p1}, Lio/mesalabs/unica/HmaPolicy;->requestScan(Ljava/lang/String;I)V
 +
-+    .line 149
++    .line 171
 +    :cond_6e
 +    iget-object p1, p0, Lio/mesalabs/unica/HmaPolicy$Config;->json:Lorg/json/JSONObject;
 +
@@ -2895,7 +2882,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    :cond_87
 +    return v0
 +
-+    .line 150
++    .line 172
 +    :cond_88
 +    iget-object p1, p0, Lio/mesalabs/unica/HmaPolicy$Config;->json:Lorg/json/JSONObject;
 +
@@ -2909,7 +2896,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return v3
 +
-+    .line 151
++    .line 173
 +    :cond_93
 +    if-eqz v1, :cond_b2
 +
@@ -2944,11 +2931,11 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return v3
 +
-+    .line 152
++    .line 174
 +    :cond_b2
 +    return v0
 +
-+    .line 144
++    .line 166
 +    :catchall_b3
 +    move-exception p0
 +
@@ -2956,7 +2943,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    throw p0
 +
-+    .line 139
++    .line 161
 +    :cond_b8
 +    :goto_b8
 +    return v0
@@ -2965,7 +2952,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method public static hideServiceList(ILjava/lang/String;)Z
 +    .registers 7
 +
-+    .line 319
++    .line 341
 +    invoke-static {p0}, Lio/mesalabs/unica/HmaPolicy;->enter(I)Z
 +
 +    move-result v0
@@ -2976,14 +2963,14 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return v1
 +
-+    .line 321
++    .line 343
 +    :cond_8
 +    :try_start_8
 +    invoke-static {p0}, Lio/mesalabs/unica/HmaPolicy;->config(I)Lio/mesalabs/unica/HmaPolicy$Config;
 +
 +    move-result-object v0
 +
-+    .line 322
++    .line 344
 +    invoke-static {p0, v0}, Lio/mesalabs/unica/HmaPolicy;->caller(ILio/mesalabs/unica/HmaPolicy$Config;)Ljava/lang/String;
 +
 +    move-result-object v2
@@ -3011,7 +2998,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    :cond_1e
 +    move v2, v1
 +
-+    .line 323
++    .line 345
 +    :goto_1f
 +    if-eqz v2, :cond_37
 +
@@ -3038,19 +3025,19 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_14 .. :try_end_37} :catch_45
 +    .catchall {:try_start_14 .. :try_end_37} :catchall_3e
 +
-+    .line 324
++    .line 346
 +    :cond_37
 +    nop
 +
-+    .line 326
++    .line 348
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 324
++    .line 346
 +    return v2
 +
-+    .line 326
++    .line 348
 +    :catchall_3e
 +    move-exception p0
 +
@@ -3060,37 +3047,37 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    throw p0
 +
-+    .line 325
++    .line 347
 +    :catch_45
 +    move-exception p0
 +
-+    .line 326
++    .line 348
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 325
++    .line 347
 +    return v1
 +.end method
 +
 +.method public static init(Landroid/content/Context;)V
 +    .registers 2
 +
-+    .line 45
++    .line 47
 +    if-nez p0, :cond_3
 +
 +    return-void
 +
-+    .line 46
++    .line 48
 +    :cond_3
 +    sput-object p0, Lio/mesalabs/unica/HmaPolicy;->context:Landroid/content/Context;
 +
-+    .line 47
++    .line 49
 +    const-class p0, Lio/mesalabs/unica/HmaPolicy;
 +
 +    monitor-enter p0
 +
-+    .line 48
++    .line 50
 +    :try_start_8
 +    sget-boolean v0, Lio/mesalabs/unica/HmaPolicy;->registered:Z
 +
@@ -3100,18 +3087,18 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return-void
 +
-+    .line 49
++    .line 51
 +    :cond_e
 +    const/4 v0, 0x1
 +
 +    sput-boolean v0, Lio/mesalabs/unica/HmaPolicy;->registered:Z
 +
-+    .line 50
++    .line 52
 +    monitor-exit p0
 +    :try_end_12
 +    .catchall {:try_start_8 .. :try_end_12} :catchall_1d
 +
-+    .line 51
++    .line 53
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->scanner:Ljava/util/concurrent/ExecutorService;
 +
 +    new-instance v0, Lio/mesalabs/unica/HmaPolicy$1;
@@ -3120,10 +3107,10 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    invoke-interface {p0, v0}, Ljava/util/concurrent/ExecutorService;->execute(Ljava/lang/Runnable;)V
 +
-+    .line 69
++    .line 71
 +    return-void
 +
-+    .line 50
++    .line 52
 +    :catchall_1d
 +    move-exception v0
 +
@@ -3136,111 +3123,111 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.end method
 +
 +.method private static installSourceInfo(Ljava/lang/String;)Ljava/lang/Object;
-+    .registers 12
++    .registers 11
 +
-+    .line 170
-+    const/4 v0, 0x0
++    .line 192
++    :try_start_0
++    const-string/jumbo v0, "android.content.pm.InstallSourceInfo"
 +
-+    :try_start_1
-+    const-string/jumbo v1, "android.content.pm.InstallSourceInfo"
++    invoke-static {v0}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
++
++    move-result-object v0
++
++    .line 193
++    const-string/jumbo v1, "android.content.pm.SigningInfo"
 +
 +    invoke-static {v1}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
 +
 +    move-result-object v1
 +
-+    .line 171
-+    const-string/jumbo v2, "android.content.pm.SigningInfo"
++    .line 194
++    const/4 v2, 0x6
 +
-+    invoke-static {v2}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
++    new-array v2, v2, [Ljava/lang/Class;
 +
-+    move-result-object v2
++    const-class v3, Ljava/lang/String;
 +
-+    .line 172
-+    const/4 v3, 0x6
++    const/4 v4, 0x0
 +
-+    new-array v4, v3, [Ljava/lang/Class;
++    aput-object v3, v2, v4
 +
-+    const-class v5, Ljava/lang/String;
++    const/4 v3, 0x1
++
++    aput-object v1, v2, v3
++
++    const-class v1, Ljava/lang/String;
++
++    const/4 v3, 0x2
++
++    aput-object v1, v2, v3
++
++    const-class v1, Ljava/lang/String;
++
++    const/4 v4, 0x3
++
++    aput-object v1, v2, v4
++
++    const-class v1, Ljava/lang/String;
++
++    const/4 v4, 0x4
++
++    aput-object v1, v2, v4
++
++    sget-object v1, Ljava/lang/Integer;->TYPE:Ljava/lang/Class;
++
++    const/4 v4, 0x5
++
++    aput-object v1, v2, v4
++
++    invoke-virtual {v0, v2}, Ljava/lang/Class;->getConstructor([Ljava/lang/Class;)Ljava/lang/reflect/Constructor;
++
++    move-result-object v0
++
++    .line 195
++    invoke-static {v3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object v9
++
++    const/4 v5, 0x0
 +
 +    const/4 v6, 0x0
 +
-+    aput-object v5, v4, v6
++    move-object v4, p0
 +
-+    const/4 v5, 0x1
++    move-object v7, p0
 +
-+    aput-object v2, v4, v5
++    move-object v8, p0
 +
-+    const-class v2, Ljava/lang/String;
-+
-+    const/4 v7, 0x2
-+
-+    aput-object v2, v4, v7
-+
-+    const-class v2, Ljava/lang/String;
-+
-+    const/4 v8, 0x3
-+
-+    aput-object v2, v4, v8
-+
-+    const-class v2, Ljava/lang/String;
-+
-+    const/4 v9, 0x4
-+
-+    aput-object v2, v4, v9
-+
-+    sget-object v2, Ljava/lang/Integer;->TYPE:Ljava/lang/Class;
-+
-+    const/4 v10, 0x5
-+
-+    aput-object v2, v4, v10
-+
-+    invoke-virtual {v1, v4}, Ljava/lang/Class;->getConstructor([Ljava/lang/Class;)Ljava/lang/reflect/Constructor;
-+
-+    move-result-object v1
-+
-+    .line 173
-+    new-array v2, v3, [Ljava/lang/Object;
-+
-+    aput-object p0, v2, v6
-+
-+    aput-object v0, v2, v5
-+
-+    aput-object v0, v2, v7
-+
-+    aput-object p0, v2, v8
-+
-+    aput-object p0, v2, v9
-+
-+    invoke-static {v7}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++    filled-new-array/range {v4 .. v9}, [Ljava/lang/Object;
 +
 +    move-result-object p0
 +
-+    aput-object p0, v2, v10
-+
-+    invoke-virtual {v1, v2}, Ljava/lang/reflect/Constructor;->newInstance([Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-virtual {v0, p0}, Ljava/lang/reflect/Constructor;->newInstance([Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    move-result-object p0
-+    :try_end_46
-+    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_46} :catch_47
++    :try_end_40
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_40} :catch_41
 +
 +    return-object p0
 +
-+    .line 174
-+    :catch_47
++    .line 196
++    :catch_41
 +    move-exception p0
 +
-+    return-object v0
++    const/4 p0, 0x0
++
++    return-object p0
 +.end method
 +
 +.method private static mapped(Lorg/json/JSONObject;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 +    .registers 3
 +
-+    .line 155
++    .line 177
 +    invoke-virtual {p0, p1}, Lorg/json/JSONObject;->optJSONObject(Ljava/lang/String;)Lorg/json/JSONObject;
 +
 +    move-result-object p0
 +
-+    .line 156
++    .line 178
 +    const/4 p1, 0x0
 +
 +    if-eqz p0, :cond_f
@@ -3260,7 +3247,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    :goto_f
 +    move-object p0, p1
 +
-+    .line 157
++    .line 179
 +    :goto_10
 +    if-eqz p0, :cond_1a
 +
@@ -3280,10 +3267,145 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    return-object p1
 +.end method
 +
++.method private static policyString(Landroid/content/ContentResolver;Ljava/lang/reflect/Method;I)Ljava/lang/String;
++    .registers 9
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 86
++    const-string/jumbo v0, "unica_hma_policy"
++
++    invoke-static {p0, p1, v0, p2}, Lio/mesalabs/unica/HmaPolicy;->secureString(Landroid/content/ContentResolver;Ljava/lang/reflect/Method;Ljava/lang/String;I)Ljava/lang/String;
++
++    move-result-object v0
++
++    .line 88
++    :try_start_6
++    new-instance v1, Lorg/json/JSONObject;
++
++    if-nez v0, :cond_d
++
++    const-string/jumbo v2, "{}"
++
++    goto :goto_e
++
++    :cond_d
++    move-object v2, v0
++
++    :goto_e
++    invoke-direct {v1, v2}, Lorg/json/JSONObject;-><init>(Ljava/lang/String;)V
++    :try_end_11
++    .catch Lorg/json/JSONException; {:try_start_6 .. :try_end_11} :catch_57
++
++    .line 89
++    nop
++
++    .line 90
++    const-string/jumbo v2, "_hma_chunked"
++
++    const/4 v3, 0x0
++
++    invoke-virtual {v1, v2, v3}, Lorg/json/JSONObject;->optBoolean(Ljava/lang/String;Z)Z
++
++    move-result v2
++
++    if-nez v2, :cond_1c
++
++    return-object v0
++
++    .line 91
++    :cond_1c
++    const-string/jumbo v2, "chunks"
++
++    invoke-virtual {v1, v2, v3}, Lorg/json/JSONObject;->optInt(Ljava/lang/String;I)I
++
++    move-result v1
++
++    .line 92
++    if-lez v1, :cond_56
++
++    const/16 v2, 0x20
++
++    if-le v1, v2, :cond_29
++
++    goto :goto_56
++
++    .line 93
++    :cond_29
++    new-instance v2, Ljava/lang/StringBuilder;
++
++    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
++
++    .line 94
++    nop
++
++    :goto_2f
++    if-ge v3, v1, :cond_51
++
++    .line 95
++    new-instance v4, Ljava/lang/StringBuilder;
++
++    invoke-direct {v4}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string/jumbo v5, "unica_hma_policy_chunk_"
++
++    invoke-virtual {v4, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v4
++
++    invoke-virtual {v4, v3}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    move-result-object v4
++
++    invoke-virtual {v4}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v4
++
++    invoke-static {p0, p1, v4, p2}, Lio/mesalabs/unica/HmaPolicy;->secureString(Landroid/content/ContentResolver;Ljava/lang/reflect/Method;Ljava/lang/String;I)Ljava/lang/String;
++
++    move-result-object v4
++
++    .line 96
++    if-nez v4, :cond_4b
++
++    return-object v0
++
++    .line 97
++    :cond_4b
++    invoke-virtual {v2, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    .line 94
++    add-int/lit8 v3, v3, 0x1
++
++    goto :goto_2f
++
++    .line 99
++    :cond_51
++    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++
++    .line 92
++    :cond_56
++    :goto_56
++    return-object v0
++
++    .line 89
++    :catch_57
++    move-exception p0
++
++    return-object v0
++.end method
++
 +.method private static reflectString(Ljava/lang/Object;Ljava/lang/String;)Ljava/lang/String;
 +    .registers 6
 +
-+    .line 161
++    .line 183
 +    const/4 v0, 0x0
 +
 +    if-nez p0, :cond_5
@@ -3312,7 +3434,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move-result-object p0
 +
-+    .line 162
++    .line 184
 +    :goto_16
 +    instance-of p1, p0, Ljava/lang/String;
 +
@@ -3327,7 +3449,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    :cond_1d
 +    return-object v0
 +
-+    .line 163
++    .line 185
 +    :catch_1e
 +    move-exception p0
 +
@@ -3335,16 +3457,16 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.end method
 +
 +.method private static replacement(Lio/mesalabs/unica/HmaPolicy$Config;Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;
-+    .registers 10
++    .registers 12
 +
-+    .line 247
++    .line 269
 +    const/4 v0, 0x0
 +
 +    if-nez p2, :cond_4
 +
 +    return-object v0
 +
-+    .line 248
++    .line 270
 +    :cond_4
 +    iget-object v1, p0, Lio/mesalabs/unica/HmaPolicy$Config;->json:Lorg/json/JSONObject;
 +
@@ -3360,27 +3482,39 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    const-string/jumbo v4, "0"
 +
-+    if-eqz v1, :cond_55
++    const/4 v5, 0x1
 +
-+    .line 249
++    const/4 v6, 0x0
++
++    if-eqz v1, :cond_5d
++
++    .line 271
 +    const-string/jumbo v1, "global"
 +
 +    invoke-virtual {v1, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result v1
 +
-+    if-eqz v1, :cond_42
++    if-eqz v1, :cond_4a
 +
-+    .line 250
-+    const-string/jumbo v1, "adb_wifi_enabled"
++    .line 272
++    const/4 v1, 0x3
 +
-+    const-string/jumbo v5, "development_settings_enabled"
++    new-array v1, v1, [Ljava/lang/String;
 +
-+    const-string/jumbo v6, "adb_enabled"
++    const-string/jumbo v7, "adb_enabled"
 +
-+    filled-new-array {v6, v1, v5}, [Ljava/lang/String;
++    aput-object v7, v1, v6
 +
-+    move-result-object v1
++    const-string/jumbo v7, "adb_wifi_enabled"
++
++    aput-object v7, v1, v5
++
++    const/4 v7, 0x2
++
++    const-string/jumbo v8, "development_settings_enabled"
++
++    aput-object v8, v1, v7
 +
 +    invoke-static {v1}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
 +
@@ -3390,37 +3524,37 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move-result v1
 +
-+    if-eqz v1, :cond_35
++    if-eqz v1, :cond_3d
 +
-+    filled-new-array {v4}, [Ljava/lang/String;
++    new-array p0, v5, [Ljava/lang/String;
 +
-+    move-result-object p0
++    aput-object v4, p0, v6
 +
 +    return-object p0
 +
-+    .line 251
-+    :cond_35
++    .line 273
++    :cond_3d
 +    const-string/jumbo v1, "hidden_api_policy"
 +
 +    invoke-virtual {v1, p2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result v1
 +
-+    if-eqz v1, :cond_42
++    if-eqz v1, :cond_4a
 +
-+    filled-new-array {v0}, [Ljava/lang/String;
++    new-array p0, v5, [Ljava/lang/String;
 +
-+    move-result-object p0
++    aput-object v0, p0, v6
 +
 +    return-object p0
 +
-+    .line 253
-+    :cond_42
++    .line 275
++    :cond_4a
 +    invoke-virtual {v2, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result v1
 +
-+    if-eqz v1, :cond_55
++    if-eqz v1, :cond_5d
 +
 +    const-string/jumbo v1, "mock_location"
 +
@@ -3428,23 +3562,23 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move-result v1
 +
-+    if-eqz v1, :cond_55
++    if-eqz v1, :cond_5d
 +
-+    filled-new-array {v4}, [Ljava/lang/String;
++    new-array p0, v5, [Ljava/lang/String;
 +
-+    move-result-object p0
++    aput-object v4, p0, v6
 +
 +    return-object p0
 +
-+    .line 255
-+    :cond_55
++    .line 277
++    :cond_5d
 +    invoke-virtual {v2, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result p1
 +
-+    if-eqz p1, :cond_a9
++    if-eqz p1, :cond_b1
 +
-+    .line 256
++    .line 278
 +    iget-object p1, p0, Lio/mesalabs/unica/HmaPolicy$Config;->json:Lorg/json/JSONObject;
 +
 +    const-string/jumbo v1, "accessibility"
@@ -3453,43 +3587,43 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move-result p1
 +
-+    if-eqz p1, :cond_81
++    if-eqz p1, :cond_89
 +
-+    .line 257
++    .line 279
 +    const-string/jumbo p1, "accessibility_enabled"
 +
 +    invoke-virtual {p1, p2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result p1
 +
-+    if-eqz p1, :cond_72
++    if-eqz p1, :cond_7a
 +
-+    filled-new-array {v4}, [Ljava/lang/String;
++    new-array p0, v5, [Ljava/lang/String;
 +
-+    move-result-object p0
++    aput-object v4, p0, v6
 +
 +    return-object p0
 +
-+    .line 258
-+    :cond_72
++    .line 280
++    :cond_7a
 +    const-string/jumbo p1, "enabled_accessibility_services"
 +
 +    invoke-virtual {p1, p2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result p1
 +
-+    if-eqz p1, :cond_81
++    if-eqz p1, :cond_89
 +
-+    const-string/jumbo p0, ""
++    new-array p0, v5, [Ljava/lang/String;
 +
-+    filled-new-array {p0}, [Ljava/lang/String;
++    const-string/jumbo p1, ""
 +
-+    move-result-object p0
++    aput-object p1, p0, v6
 +
 +    return-object p0
 +
-+    .line 260
-+    :cond_81
++    .line 282
++    :cond_89
 +    iget-object p0, p0, Lio/mesalabs/unica/HmaPolicy$Config;->json:Lorg/json/JSONObject;
 +
 +    const-string/jumbo p1, "input_method"
@@ -3498,52 +3632,52 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move-result p0
 +
-+    if-eqz p0, :cond_a9
++    if-eqz p0, :cond_b1
 +
-+    .line 261
++    .line 283
 +    const-string/jumbo p0, "default_input_method"
 +
 +    invoke-virtual {p0, p2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result p0
 +
-+    if-eqz p0, :cond_9a
++    if-eqz p0, :cond_a2
 +
-+    const-string/jumbo p0, "com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME"
++    new-array p0, v5, [Ljava/lang/String;
 +
-+    filled-new-array {p0}, [Ljava/lang/String;
++    const-string/jumbo p1, "com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME"
 +
-+    move-result-object p0
++    aput-object p1, p0, v6
 +
 +    return-object p0
 +
-+    .line 262
-+    :cond_9a
++    .line 284
++    :cond_a2
 +    const-string/jumbo p0, "tts_default_synth"
 +
 +    invoke-virtual {p0, p2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result p0
 +
-+    if-eqz p0, :cond_a9
++    if-eqz p0, :cond_b1
 +
-+    const-string/jumbo p0, "com.google.android.tts"
++    new-array p0, v5, [Ljava/lang/String;
 +
-+    filled-new-array {p0}, [Ljava/lang/String;
++    const-string/jumbo p1, "com.google.android.tts"
 +
-+    move-result-object p0
++    aput-object p1, p0, v6
 +
 +    return-object p0
 +
-+    .line 265
-+    :cond_a9
++    .line 287
++    :cond_b1
 +    return-object v0
 +.end method
 +
 +.method private static requestScan(Ljava/lang/String;I)V
 +    .registers 5
 +
-+    .line 355
++    .line 377
 +    new-instance v0, Ljava/lang/StringBuilder;
 +
 +    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
@@ -3566,7 +3700,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move-result-object v0
 +
-+    .line 356
++    .line 378
 +    sget-object v1, Lio/mesalabs/unica/HmaPolicy;->pending:Ljava/util/Set;
 +
 +    invoke-interface {v1, v0}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
@@ -3577,7 +3711,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return-void
 +
-+    .line 357
++    .line 379
 +    :cond_20
 +    sget-object v1, Lio/mesalabs/unica/HmaPolicy;->scanner:Ljava/util/concurrent/ExecutorService;
 +
@@ -3587,14 +3721,14 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    invoke-interface {v1, v2}, Ljava/util/concurrent/ExecutorService;->execute(Ljava/lang/Runnable;)V
 +
-+    .line 370
++    .line 392
 +    return-void
 +.end method
 +
 +.method public static restrictGids(I[I)[I
 +    .registers 16
 +
-+    .line 203
++    .line 225
 +    if-eqz p1, :cond_76
 +
 +    invoke-static {p0}, Lio/mesalabs/unica/HmaPolicy;->enter(I)Z
@@ -3605,14 +3739,14 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto/16 :goto_76
 +
-+    .line 205
++    .line 227
 +    :cond_a
 +    :try_start_a
 +    invoke-static {p0}, Lio/mesalabs/unica/HmaPolicy;->config(I)Lio/mesalabs/unica/HmaPolicy$Config;
 +
 +    move-result-object v0
 +
-+    .line 206
++    .line 228
 +    invoke-static {p0, v0}, Lio/mesalabs/unica/HmaPolicy;->caller(ILio/mesalabs/unica/HmaPolicy$Config;)Ljava/lang/String;
 +
 +    move-result-object v1
@@ -3622,25 +3756,25 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    if-nez v1, :cond_1a
 +
-+    .line 218
++    .line 240
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 206
++    .line 228
 +    return-object p1
 +
-+    .line 207
++    .line 229
 +    :cond_1a
 +    :try_start_1a
 +    array-length v1, p1
 +
 +    new-array v1, v1, [I
 +
-+    .line 208
++    .line 230
 +    nop
 +
-+    .line 209
++    .line 231
 +    array-length v2, p1
 +
 +    const/4 v3, 0x0
@@ -3654,10 +3788,10 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    aget v6, p1, v4
 +
-+    .line 210
++    .line 232
 +    nop
 +
-+    .line 211
++    .line 233
 +    sget-object v7, Lio/mesalabs/unica/HmaPolicy;->GIDS:[I
 +
 +    array-length v8, v7
@@ -3694,7 +3828,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_2c
 +
-+    .line 212
++    .line 234
 +    :cond_44
 +    if-nez v10, :cond_4b
 +
@@ -3704,13 +3838,13 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move v5, v7
 +
-+    .line 209
++    .line 231
 +    :cond_4b
 +    add-int/lit8 v4, v4, 0x1
 +
 +    goto :goto_22
 +
-+    .line 214
++    .line 236
 +    :cond_4e
 +    array-length v2, p1
 +    :try_end_4f
@@ -3719,15 +3853,15 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    if-ne v5, v2, :cond_57
 +
-+    .line 218
++    .line 240
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 214
++    .line 236
 +    return-object p1
 +
-+    .line 215
++    .line 237
 +    :cond_57
 +    :try_start_57
 +    const-string/jumbo v2, "other"
@@ -3736,7 +3870,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    invoke-static {v0, v2, p0, v3}, Lio/mesalabs/unica/HmaPolicy;->event(Lio/mesalabs/unica/HmaPolicy$Config;Ljava/lang/String;ILjava/lang/String;)V
 +
-+    .line 216
++    .line 238
 +    invoke-static {v1, v5}, Ljava/util/Arrays;->copyOf([II)[I
 +
 +    move-result-object p0
@@ -3744,15 +3878,15 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_57 .. :try_end_62} :catch_6f
 +    .catchall {:try_start_57 .. :try_end_62} :catchall_68
 +
-+    .line 218
++    .line 240
 +    sget-object p1, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p1}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 216
++    .line 238
 +    return-object p0
 +
-+    .line 218
++    .line 240
 +    :catchall_68
 +    move-exception p0
 +
@@ -3762,33 +3896,61 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    throw p0
 +
-+    .line 217
++    .line 239
 +    :catch_6f
 +    move-exception p0
 +
-+    .line 218
++    .line 240
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 217
++    .line 239
 +    return-object p1
 +
-+    .line 203
++    .line 225
 +    :cond_76
 +    :goto_76
 +    return-object p1
 +.end method
 +
++.method private static secureString(Landroid/content/ContentResolver;Ljava/lang/reflect/Method;Ljava/lang/String;I)Ljava/lang/String;
++    .registers 4
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 83
++    invoke-static {p3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object p3
++
++    filled-new-array {p0, p2, p3}, [Ljava/lang/Object;
++
++    move-result-object p0
++
++    const/4 p2, 0x0
++
++    invoke-virtual {p1, p2, p0}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object p0
++
++    check-cast p0, Ljava/lang/String;
++
++    return-object p0
++.end method
++
 +.method public static shouldHide(Landroid/content/Context;Ljava/lang/String;I)Z
 +    .registers 8
 +
-+    .line 177
++    .line 199
 +    if-eqz p0, :cond_4
 +
 +    sput-object p0, Lio/mesalabs/unica/HmaPolicy;->context:Landroid/content/Context;
 +
-+    .line 178
++    .line 200
 +    :cond_4
 +    invoke-static {p2}, Lio/mesalabs/unica/HmaPolicy;->enter(I)Z
 +
@@ -3800,19 +3962,19 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    return v0
 +
-+    .line 180
++    .line 202
 +    :cond_c
 +    :try_start_c
 +    invoke-static {p2}, Lio/mesalabs/unica/HmaPolicy;->config(I)Lio/mesalabs/unica/HmaPolicy$Config;
 +
 +    move-result-object p0
 +
-+    .line 181
++    .line 203
 +    invoke-static {p2, p0}, Lio/mesalabs/unica/HmaPolicy;->sourceName(ILio/mesalabs/unica/HmaPolicy$Config;)Ljava/lang/String;
 +
 +    move-result-object v1
 +
-+    .line 182
++    .line 204
 +    if-eqz v1, :cond_3a
 +
 +    iget-object v2, p0, Lio/mesalabs/unica/HmaPolicy$Config;->json:Lorg/json/JSONObject;
@@ -3858,7 +4020,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    :cond_3a
 +    move v2, v0
 +
-+    .line 183
++    .line 205
 +    :goto_3b
 +    if-eqz v2, :cond_59
 +
@@ -3891,19 +4053,19 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_c .. :try_end_59} :catch_67
 +    .catchall {:try_start_c .. :try_end_59} :catchall_60
 +
-+    .line 184
++    .line 206
 +    :cond_59
 +    nop
 +
-+    .line 186
++    .line 208
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 184
++    .line 206
 +    return v2
 +
-+    .line 186
++    .line 208
 +    :catchall_60
 +    move-exception p0
 +
@@ -3913,23 +4075,23 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    throw p0
 +
-+    .line 185
++    .line 207
 +    :catch_67
 +    move-exception p0
 +
-+    .line 186
++    .line 208
 +    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
 +
 +    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
 +
-+    .line 185
++    .line 207
 +    return v0
 +.end method
 +
 +.method private static sourceName(ILio/mesalabs/unica/HmaPolicy$Config;)Ljava/lang/String;
 +    .registers 9
 +
-+    .line 106
++    .line 128
 +    const/4 v0, 0x0
 +
 +    if-eqz p1, :cond_5a
@@ -3954,13 +4116,13 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_5a
 +
-+    .line 107
++    .line 129
 +    :cond_15
 +    invoke-static {}, Landroid/os/Binder;->clearCallingIdentity()J
 +
 +    move-result-wide v3
 +
-+    .line 109
++    .line 131
 +    :try_start_19
 +    invoke-static {}, Lio/mesalabs/unica/HmaPolicy;->getContext()Landroid/content/Context;
 +
@@ -3974,7 +4136,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    move-result-object p0
 +
-+    .line 110
++    .line 132
 +    if-eqz p0, :cond_45
 +
 +    array-length p1, p0
@@ -3986,7 +4148,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    aget-object v5, p0, v1
 +
-+    .line 111
++    .line 133
 +    const-string/jumbo v6, "com.android.settings"
 +
 +    invoke-virtual {v6, v5}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
@@ -4008,21 +4170,21 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    goto :goto_41
 +
-+    .line 110
++    .line 132
 +    :cond_3e
 +    add-int/lit8 v1, v1, 0x1
 +
 +    goto :goto_29
 +
-+    .line 115
++    .line 137
 +    :cond_41
 +    :goto_41
 +    invoke-static {v3, v4}, Landroid/os/Binder;->restoreCallingIdentity(J)V
 +
-+    .line 111
++    .line 133
 +    return-object v0
 +
-+    .line 113
++    .line 135
 +    :cond_45
 +    if-eqz p0, :cond_56
 +
@@ -4036,13 +4198,13 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    .catch Ljava/lang/RuntimeException; {:try_start_47 .. :try_end_4c} :catch_55
 +    .catchall {:try_start_47 .. :try_end_4c} :catchall_50
 +
-+    .line 115
++    .line 137
 +    invoke-static {v3, v4}, Landroid/os/Binder;->restoreCallingIdentity(J)V
 +
-+    .line 113
++    .line 135
 +    return-object p0
 +
-+    .line 115
++    .line 137
 +    :catchall_50
 +    move-exception p0
 +
@@ -4050,18 +4212,18 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +
 +    throw p0
 +
-+    .line 114
++    .line 136
 +    :catch_55
 +    move-exception p0
 +
-+    .line 115
++    .line 137
 +    :cond_56
 +    invoke-static {v3, v4}, Landroid/os/Binder;->restoreCallingIdentity(J)V
 +
-+    .line 116
++    .line 138
 +    return-object v0
 +
-+    .line 106
++    .line 128
 +    :cond_5a
 +    :goto_5a
 +    return-object v0
@@ -4070,7 +4232,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +.method private static unknownInstallSource(Ljava/lang/Object;)Z
 +    .registers 2
 +
-+    .line 166
++    .line 188
 +    if-eqz p0, :cond_14
 +
 +    const-string/jumbo v0, "getInstallingPackageName"
@@ -4099,10 +4261,177 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPolicy.smali b/smali_classes6/i
 +    :goto_15
 +    return p0
 +.end method
++
++
++.method private static encryptionProperty(Lio/mesalabs/unica/HmaPolicy$Config;Ljava/lang/String;)Ljava/lang/String;
++    .registers 5
++
++    .line 171
++    const/4 v0, 0x0
++
++    if-eqz p0, :cond_27
++
++    iget-object p0, p0, Lio/mesalabs/unica/HmaPolicy$Config;->json:Lorg/json/JSONObject;
++
++    const-string/jumbo v1, "apps"
++
++    const-string/jumbo v2, "encryption_spoof"
++
++    invoke-static {p0, v1, v2}, Lio/mesalabs/unica/HmaPolicy;->contains(Lorg/json/JSONObject;Ljava/lang/String;Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-nez p0, :cond_10
++
++    goto :goto_27
++
++    .line 172
++    :cond_10
++    const-string/jumbo p0, "ro.crypto.state"
++
++    invoke-virtual {p0, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_1b
++
++    const-string/jumbo p0, "encrypted"
++
++    return-object p0
++
++    .line 173
++    :cond_1b
++    const-string/jumbo p0, "ro.crypto.type"
++
++    invoke-virtual {p0, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_26
++
++    const-string/jumbo p0, "file"
++
++    return-object p0
++
++    .line 174
++    :cond_26
++    return-object v0
++
++    .line 171
++    :cond_27
++    :goto_27
++    return-object v0
++.end method
++
++
++.method public static systemProperty(Ljava/lang/String;)Ljava/lang/String;
++    .registers 4
++
++    .line 160
++    const-string/jumbo v0, "ro.crypto.state"
++
++    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    const/4 v1, 0x0
++
++    if-nez v0, :cond_12
++
++    const-string/jumbo v0, "ro.crypto.type"
++
++    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_12
++
++    return-object v1
++
++    .line 161
++    :cond_12
++    invoke-static {}, Landroid/os/Process;->myUid()I
++
++    move-result v0
++
++    .line 162
++    invoke-static {v0}, Lio/mesalabs/unica/HmaPolicy;->enter(I)Z
++
++    move-result v2
++
++    if-nez v2, :cond_1d
++
++    return-object v1
++
++    .line 164
++    :cond_1d
++    :try_start_1d
++    invoke-static {v0}, Lio/mesalabs/unica/HmaPolicy;->config(I)Lio/mesalabs/unica/HmaPolicy$Config;
++
++    move-result-object v2
++
++    .line 165
++    invoke-static {v0, v2}, Lio/mesalabs/unica/HmaPolicy;->caller(ILio/mesalabs/unica/HmaPolicy$Config;)Ljava/lang/String;
++
++    move-result-object v0
++    :try_end_25
++    .catch Ljava/lang/RuntimeException; {:try_start_1d .. :try_end_25} :catch_3e
++    .catchall {:try_start_1d .. :try_end_25} :catchall_37
++
++    if-nez v0, :cond_2d
++
++    .line 168
++    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
++
++    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
++
++    .line 165
++    return-object v1
++
++    .line 166
++    :cond_2d
++    :try_start_2d
++    invoke-static {v2, p0}, Lio/mesalabs/unica/HmaPolicy;->encryptionProperty(Lio/mesalabs/unica/HmaPolicy$Config;Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p0
++    :try_end_31
++    .catch Ljava/lang/RuntimeException; {:try_start_2d .. :try_end_31} :catch_3e
++    .catchall {:try_start_2d .. :try_end_31} :catchall_37
++
++    .line 168
++    sget-object v0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
++
++    invoke-virtual {v0}, Ljava/lang/ThreadLocal;->remove()V
++
++    .line 166
++    return-object p0
++
++    .line 168
++    :catchall_37
++    move-exception p0
++
++    sget-object v0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
++
++    invoke-virtual {v0}, Ljava/lang/ThreadLocal;->remove()V
++
++    throw p0
++
++    .line 167
++    :catch_3e
++    move-exception p0
++
++    .line 168
++    sget-object p0, Lio/mesalabs/unica/HmaPolicy;->busy:Ljava/lang/ThreadLocal;
++
++    invoke-virtual {p0}, Ljava/lang/ThreadLocal;->remove()V
++
++    .line 167
++    return-object v1
++.end method
 diff --git a/smali_classes6/io/mesalabs/unica/HmaPresets.smali b/smali_classes6/io/mesalabs/unica/HmaPresets.smali
 --- /dev/null
 +++ b/smali_classes6/io/mesalabs/unica/HmaPresets.smali
-@@ -0,0 +1,1465 @@
+@@ -0,0 +1,2117 @@
 +.class final Lio/mesalabs/unica/HmaPresets;
 +.super Ljava/lang/Object;
 +.source "HmaPresets.java"
@@ -4124,7 +4453,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPresets.smali b/smali_classes6/
 +
 +# direct methods
 +.method static constructor <clinit>()V
-+    .registers 74
++    .registers 27
 +
 +    .line 10
 +    new-instance v0, Ljava/util/HashMap;
@@ -4138,342 +4467,812 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPresets.smali b/smali_classes6/
 +
 +    new-instance v1, Ljava/util/HashSet;
 +
-+    const-string/jumbo v48, "com.flinkapps.safteynet"
++    const/16 v2, 0x30
 +
-+    const-string/jumbo v49, "com.bryancandi.knoxcheck"
++    new-array v3, v2, [Ljava/lang/String;
 +
-+    const-string/jumbo v2, "com.reveny.nativecheck"
++    const-string/jumbo v4, "com.reveny.nativecheck"
 +
-+    const-string/jumbo v3, "icu.nullptr.nativetest"
++    const/4 v5, 0x0
++
++    aput-object v4, v3, v5
++
++    const-string/jumbo v4, "icu.nullptr.nativetest"
++
++    const/4 v6, 0x1
++
++    aput-object v4, v3, v6
 +
 +    const-string/jumbo v4, "io.github.rabehx.securify"
 +
-+    const-string/jumbo v5, "com.zhenxi.hunter"
++    const/4 v7, 0x2
 +
-+    const-string/jumbo v6, "io.github.vvb2060.mahoshojo"
++    aput-object v4, v3, v7
 +
-+    const-string/jumbo v7, "io.github.huskydg.memorydetector"
++    const-string/jumbo v4, "com.zhenxi.hunter"
 +
-+    const-string/jumbo v8, "org.akanework.checker"
++    const/4 v8, 0x3
 +
-+    const-string/jumbo v9, "icu.nullptr.applistdetector"
++    aput-object v4, v3, v8
 +
-+    const-string/jumbo v10, "com.byxiaorun.detector"
++    const-string/jumbo v4, "io.github.vvb2060.mahoshojo"
 +
-+    const-string/jumbo v11, "com.kimchangyoun.rootbeerFresh.sample"
++    const/4 v9, 0x4
 +
-+    const-string/jumbo v12, "com.androidfung.drminfo"
++    aput-object v4, v3, v9
 +
-+    const-string/jumbo v13, "com.kikyps.crackme"
++    const-string/jumbo v4, "io.github.huskydg.memorydetector"
 +
-+    const-string/jumbo v14, "org.matrix.demo"
++    const/4 v10, 0x5
 +
-+    const-string/jumbo v15, "com.rem01gaming.disclosure"
++    aput-object v4, v3, v10
 +
-+    const-string/jumbo v16, "luna.safe.luna"
++    const-string/jumbo v4, "org.akanework.checker"
 +
-+    const-string/jumbo v17, "com.AndroLua"
++    const/4 v11, 0x6
 +
-+    const-string/jumbo v18, "com.detect.mt"
++    aput-object v4, v3, v11
 +
-+    const-string/jumbo v19, "io.liankong.riskdetector"
++    const-string/jumbo v4, "icu.nullptr.applistdetector"
 +
-+    const-string/jumbo v20, "com.suisho.rc"
++    const/4 v12, 0x7
 +
-+    const-string/jumbo v21, "com.ahmed.security_tester"
++    aput-object v4, v3, v12
 +
-+    const-string/jumbo v22, "id.my.pjm.qbcd_okr_dvii"
++    const-string/jumbo v4, "com.byxiaorun.detector"
 +
-+    const-string/jumbo v23, "wu.Zygisk.Detector"
++    const/16 v13, 0x8
 +
-+    const-string/jumbo v24, "com.atominvention.rootchecker"
++    aput-object v4, v3, v13
 +
-+    const-string/jumbo v25, "com.joeykrim.rootcheck"
++    const-string/jumbo v4, "com.kimchangyoun.rootbeerFresh.sample"
++
++    const/16 v14, 0x9
++
++    aput-object v4, v3, v14
++
++    const-string/jumbo v4, "com.androidfung.drminfo"
++
++    const/16 v15, 0xa
++
++    aput-object v4, v3, v15
++
++    const-string/jumbo v4, "com.kikyps.crackme"
++
++    const/16 v16, 0xb
++
++    aput-object v4, v3, v16
++
++    const-string/jumbo v4, "org.matrix.demo"
++
++    const/16 v17, 0xc
++
++    aput-object v4, v3, v17
++
++    const-string/jumbo v4, "com.rem01gaming.disclosure"
++
++    const/16 v18, 0xd
++
++    aput-object v4, v3, v18
++
++    const-string/jumbo v4, "luna.safe.luna"
++
++    const/16 v19, 0xe
++
++    aput-object v4, v3, v19
++
++    const-string/jumbo v4, "com.AndroLua"
++
++    const/16 v20, 0xf
++
++    aput-object v4, v3, v20
++
++    const-string/jumbo v4, "com.detect.mt"
++
++    const/16 v21, 0x10
++
++    aput-object v4, v3, v21
++
++    const-string/jumbo v4, "io.liankong.riskdetector"
++
++    const/16 v2, 0x11
++
++    aput-object v4, v3, v2
++
++    const-string/jumbo v4, "com.suisho.rc"
++
++    const/16 v23, 0x12
++
++    aput-object v4, v3, v23
++
++    const-string/jumbo v4, "com.ahmed.security_tester"
++
++    const/16 v24, 0x13
++
++    aput-object v4, v3, v24
++
++    const-string/jumbo v4, "id.my.pjm.qbcd_okr_dvii"
++
++    const/16 v25, 0x14
++
++    aput-object v4, v3, v25
++
++    const/16 v4, 0x15
++
++    const-string/jumbo v26, "wu.Zygisk.Detector"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x16
++
++    const-string/jumbo v26, "com.atominvention.rootchecker"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x17
++
++    const-string/jumbo v26, "com.joeykrim.rootcheck"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x18
 +
 +    const-string/jumbo v26, "com.studio.duckdetector"
 +
-+    const-string/jumbo v27, "com.eltavine.duckdetector"
++    aput-object v26, v3, v4
 +
-+    const-string/jumbo v28, "com.chuqniudetector"
++    const/16 v4, 0x19
 +
-+    const-string/jumbo v29, "com.chunqiudetector"
++    const-string/jumbo v26, "com.eltavine.duckdetector"
 +
-+    const-string/jumbo v30, "com.longz.detector"
++    aput-object v26, v3, v4
 +
-+    const-string/jumbo v31, "com.anycheck.app"
++    const/16 v4, 0x1a
 +
-+    const-string/jumbo v32, "com.lingqing.detector"
++    const-string/jumbo v26, "com.chuqniudetector"
 +
-+    const-string/jumbo v33, "com.android.nativetest"
++    aput-object v26, v3, v4
 +
-+    const-string/jumbo v34, "com.youhu.laifu"
++    const/16 v4, 0x1b
 +
-+    const-string/jumbo v35, "chunqiu.safe.detector"
++    const-string/jumbo v26, "com.chunqiudetector"
 +
-+    const-string/jumbo v36, "chunqiu.safe"
++    aput-object v26, v3, v4
 +
-+    const-string/jumbo v37, "wu.Rookie.Detector"
++    const/16 v4, 0x1c
 +
-+    const-string/jumbo v38, "com.fkjc.zcro"
++    const-string/jumbo v26, "com.longz.detector"
 +
-+    const-string/jumbo v39, "wu.keyChain.test"
++    aput-object v26, v3, v4
 +
-+    const-string/jumbo v40, "at.persie0.root_detection_app"
++    const/16 v4, 0x1d
 +
-+    const-string/jumbo v41, "at.austriao.fake_gps_detector_app"
++    const-string/jumbo v26, "com.anycheck.app"
 +
-+    const-string/jumbo v42, "io.ngankbakaa.lineage.detector"
++    aput-object v26, v3, v4
 +
-+    const-string/jumbo v43, "com.dexprotector.detector.envchecks"
++    const/16 v4, 0x1e
 +
-+    const-string/jumbo v44, "krypton.tbsafetychecker"
++    const-string/jumbo v26, "com.lingqing.detector"
 +
-+    const-string/jumbo v45, "gr.nikolasspyr.integritycheck"
++    aput-object v26, v3, v4
 +
-+    const-string/jumbo v46, "com.henrikherzig.playintegritychecker"
++    const/16 v4, 0x1f
 +
-+    const-string/jumbo v47, "com.thend.integritychecker"
++    const-string/jumbo v26, "com.android.nativetest"
 +
-+    filled-new-array/range {v2 .. v49}, [Ljava/lang/String;
++    aput-object v26, v3, v4
 +
-+    move-result-object v2
++    const/16 v4, 0x20
 +
-+    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++    const-string/jumbo v26, "com.youhu.laifu"
 +
-+    move-result-object v2
++    aput-object v26, v3, v4
 +
-+    invoke-direct {v1, v2}, Ljava/util/HashSet;-><init>(Ljava/util/Collection;)V
++    const/16 v4, 0x21
 +
-+    const-string/jumbo v2, "detector_apps"
++    const-string/jumbo v26, "chunqiu.safe.detector"
 +
-+    invoke-interface {v0, v2, v1}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x22
++
++    const-string/jumbo v26, "chunqiu.safe"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x23
++
++    const-string/jumbo v26, "wu.Rookie.Detector"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x24
++
++    const-string/jumbo v26, "com.fkjc.zcro"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x25
++
++    const-string/jumbo v26, "wu.keyChain.test"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x26
++
++    const-string/jumbo v26, "at.persie0.root_detection_app"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x27
++
++    const-string/jumbo v26, "at.austriao.fake_gps_detector_app"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x28
++
++    const-string/jumbo v26, "io.ngankbakaa.lineage.detector"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x29
++
++    const-string/jumbo v26, "com.dexprotector.detector.envchecks"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x2a
++
++    const-string/jumbo v26, "krypton.tbsafetychecker"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x2b
++
++    const-string/jumbo v26, "gr.nikolasspyr.integritycheck"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x2c
++
++    const-string/jumbo v26, "com.henrikherzig.playintegritychecker"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x2d
++
++    const-string/jumbo v26, "com.thend.integritychecker"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x2e
++
++    const-string/jumbo v26, "com.flinkapps.safteynet"
++
++    aput-object v26, v3, v4
++
++    const/16 v4, 0x2f
++
++    const-string/jumbo v26, "com.bryancandi.knoxcheck"
++
++    aput-object v26, v3, v4
++
++    invoke-static {v3}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++
++    move-result-object v3
++
++    invoke-direct {v1, v3}, Ljava/util/HashSet;-><init>(Ljava/util/Collection;)V
++
++    const-string/jumbo v3, "detector_apps"
++
++    invoke-interface {v0, v3, v1}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    .line 13
 +    sget-object v0, Lio/mesalabs/unica/HmaPresets;->EXACT:Ljava/util/Map;
 +
 +    new-instance v1, Ljava/util/HashSet;
 +
-+    const-string/jumbo v72, "me.bmax.apatch"
++    const/16 v3, 0x48
 +
-+    const-string/jumbo v73, "org.lsposed.manager"
++    new-array v3, v3, [Ljava/lang/String;
 +
-+    const-string/jumbo v2, "io.github.a13e300.ksuwebui"
++    const-string/jumbo v4, "io.github.a13e300.ksuwebui"
 +
-+    const-string/jumbo v3, "com.fox2code.mmm"
++    aput-object v4, v3, v5
++
++    const-string/jumbo v4, "com.fox2code.mmm"
++
++    aput-object v4, v3, v6
 +
 +    const-string/jumbo v4, "id.kuato.diskhealth"
 +
-+    const-string/jumbo v5, "com.sunilpaulmathew.debloater"
++    aput-object v4, v3, v7
 +
-+    const-string/jumbo v6, "com.garyodernichts.downgrader"
++    const-string/jumbo v4, "com.sunilpaulmathew.debloater"
 +
-+    const-string/jumbo v7, "eu.roggstar.getmitokens"
++    aput-object v4, v3, v8
 +
-+    const-string/jumbo v8, "io.github.domi04151309.powerapp"
++    const-string/jumbo v4, "com.garyodernichts.downgrader"
 +
-+    const-string/jumbo v9, "eu.roggstar.luigithehunter.batterycalibrate"
++    aput-object v4, v3, v9
 +
-+    const-string/jumbo v10, "at.or.at.plugoffairplane"
++    const-string/jumbo v4, "eu.roggstar.getmitokens"
 +
-+    const-string/jumbo v11, "tk.giesecke.phoenix"
++    aput-object v4, v3, v10
 +
-+    const-string/jumbo v12, "com.corphish.nightlight.generic"
++    const-string/jumbo v4, "io.github.domi04151309.powerapp"
 +
-+    const-string/jumbo v13, "com.zinaro.cachecleanerwidget"
++    aput-object v4, v3, v11
 +
-+    const-string/jumbo v14, "de.buttercookie.simbadroid"
++    const-string/jumbo v4, "eu.roggstar.luigithehunter.batterycalibrate"
 +
-+    const-string/jumbo v15, "simple.reboot.com"
++    aput-object v4, v3, v12
 +
-+    const-string/jumbo v16, "ru.evgeniy.dpitunnel"
++    const-string/jumbo v4, "at.or.at.plugoffairplane"
 +
-+    const-string/jumbo v17, "ca.mudar.fairphone.peaceofmind"
++    aput-object v4, v3, v13
 +
-+    const-string/jumbo v18, "com.gitlab.giwiniswut.rwremount"
++    const-string/jumbo v4, "tk.giesecke.phoenix"
 +
-+    const-string/jumbo v19, "com.machiav3lli.backup"
++    aput-object v4, v3, v14
 +
-+    const-string/jumbo v20, "com.bartixxx.opflashcontrol"
++    const-string/jumbo v4, "com.corphish.nightlight.generic"
 +
-+    const-string/jumbo v21, "org.nuntius35.wrongpinshutdown"
++    aput-object v4, v3, v15
 +
-+    const-string/jumbo v22, "ru.nsu.bobrofon.easysshfs"
++    const-string/jumbo v4, "com.zinaro.cachecleanerwidget"
++
++    aput-object v4, v3, v16
++
++    const-string/jumbo v4, "de.buttercookie.simbadroid"
++
++    aput-object v4, v3, v17
++
++    const-string/jumbo v4, "simple.reboot.com"
++
++    aput-object v4, v3, v18
++
++    const-string/jumbo v4, "ru.evgeniy.dpitunnel"
++
++    aput-object v4, v3, v19
++
++    const-string/jumbo v4, "ca.mudar.fairphone.peaceofmind"
++
++    aput-object v4, v3, v20
++
++    const-string/jumbo v4, "com.gitlab.giwiniswut.rwremount"
++
++    aput-object v4, v3, v21
++
++    const-string/jumbo v4, "com.machiav3lli.backup"
++
++    aput-object v4, v3, v2
++
++    const-string/jumbo v4, "com.bartixxx.opflashcontrol"
++
++    aput-object v4, v3, v23
++
++    const-string/jumbo v4, "org.nuntius35.wrongpinshutdown"
++
++    aput-object v4, v3, v24
++
++    const-string/jumbo v4, "ru.nsu.bobrofon.easysshfs"
++
++    aput-object v4, v3, v25
++
++    const/16 v4, 0x15
 +
 +    const-string/jumbo v23, "x1125io.initdlight"
 +
-+    const-string/jumbo v24, "com.byyoung.setting"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v25, "web1n.stopapp"
++    const/16 v4, 0x16
 +
-+    const-string/jumbo v26, "org.adaway"
++    const-string/jumbo v23, "com.byyoung.setting"
 +
-+    const-string/jumbo v27, "com.mrsep.ttlchanger"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v28, "mattecarra.accapp"
++    const/16 v4, 0x17
 +
-+    const-string/jumbo v29, "io.github.saeeddev94.pixelnr"
++    const-string/jumbo v23, "web1n.stopapp"
 +
-+    const-string/jumbo v30, "com.js.nowakelock"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v31, "me.twrp.twrpapp"
++    const/16 v4, 0x18
 +
-+    const-string/jumbo v32, "com.slash.batterychargelimit"
++    const-string/jumbo v23, "org.adaway"
 +
-+    const-string/jumbo v33, "com.valhalla.thor"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v34, "me.itejo443.bindhosts"
++    const/16 v4, 0x19
 +
-+    const-string/jumbo v35, "com.softwarebakery.drivedroid"
++    const-string/jumbo v23, "com.mrsep.ttlchanger"
 +
-+    const-string/jumbo v36, "com.tester.wpswpatester"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v37, "com.paget96.lsandroid"
++    const/16 v4, 0x1a
 +
-+    const-string/jumbo v38, "ua.polodarb.gmsflags"
++    const-string/jumbo v23, "mattecarra.accapp"
 +
-+    const-string/jumbo v39, "com.tortel.syslog"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v40, "com.jhc.detach"
++    const/16 v4, 0x1b
 +
-+    const-string/jumbo v41, "com.sunilpaulmathew.debloater"
++    const-string/jumbo v23, "io.github.saeeddev94.pixelnr"
 +
-+    const-string/jumbo v42, "com.rk.taskmanager"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v43, "be.mygod.vpnhotspot"
++    const/16 v4, 0x1c
 +
-+    const-string/jumbo v44, "com.emanuelef.remote_capture"
++    const-string/jumbo v23, "com.js.nowakelock"
 +
-+    const-string/jumbo v45, "com.mayank.rucky"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v46, "org.csploit.android"
++    const/16 v4, 0x1d
 +
-+    const-string/jumbo v47, "whid.usb.injector"
++    const-string/jumbo v23, "me.twrp.twrpapp"
 +
-+    const-string/jumbo v48, "de.tu_darmstadt.seemoo.nexmon"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v49, "remote.hid.keyboard.client"
++    const/16 v4, 0x1e
 +
-+    const-string/jumbo v50, "de.srlabs.snoopsnitch"
++    const-string/jumbo v23, "com.slash.batterychargelimit"
 +
-+    const-string/jumbo v51, "com.hijacker"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v52, "su.sniff.cepter"
++    const/16 v4, 0x1f
 +
-+    const-string/jumbo v53, "me.jsonet.jshook"
++    const-string/jumbo v23, "com.valhalla.thor"
 +
-+    const-string/jumbo v54, "com.simo.fhook"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v55, "Core Edition"
++    const/16 v4, 0x20
 +
-+    const-string/jumbo v56, "com.omarea.vtools"
++    const-string/jumbo v23, "me.itejo443.bindhosts"
 +
-+    const-string/jumbo v57, "james.dsp"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v58, "flar2.exkernelmanager"
++    const/16 v4, 0x21
 +
-+    const-string/jumbo v59, "com.franco.kernel"
++    const-string/jumbo v23, "com.softwarebakery.drivedroid"
 +
-+    const-string/jumbo v60, "com.lybxlpsv.kernelmanager"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v61, "com.html6405.boefflakernelconfig"
++    const/16 v4, 0x22
 +
-+    const-string/jumbo v62, "ccc71.st.cpu"
++    const-string/jumbo v23, "com.tester.wpswpatester"
 +
-+    const-string/jumbo v63, "com.umang96.radon"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v64, "com.rve.rvkernelmanager"
++    const/16 v4, 0x23
 +
-+    const-string/jumbo v65, "id.xms.xtrakernelmanager"
++    const-string/jumbo v23, "com.paget96.lsandroid"
 +
-+    const-string/jumbo v66, "com.topjohnwu.magisk"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v67, "io.github.huskydg.magisk"
++    const/16 v4, 0x24
 +
-+    const-string/jumbo v68, "io.github.vvb2060.magisk"
++    const-string/jumbo v23, "ua.polodarb.gmsflags"
 +
-+    const-string/jumbo v69, "me.weishu.kernelsu"
++    aput-object v23, v3, v4
 +
-+    const-string/jumbo v70, "com.rifsxd.ksunext"
++    const/16 v4, 0x25
 +
-+    const-string/jumbo v71, "com.sukisu.ultra"
++    const-string/jumbo v23, "com.tortel.syslog"
 +
-+    filled-new-array/range {v2 .. v73}, [Ljava/lang/String;
++    aput-object v23, v3, v4
 +
-+    move-result-object v2
++    const/16 v4, 0x26
 +
-+    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++    const-string/jumbo v23, "com.jhc.detach"
 +
-+    move-result-object v2
++    aput-object v23, v3, v4
 +
-+    invoke-direct {v1, v2}, Ljava/util/HashSet;-><init>(Ljava/util/Collection;)V
++    const/16 v4, 0x27
 +
-+    const-string/jumbo v2, "root_apps"
++    const-string/jumbo v23, "com.sunilpaulmathew.debloater"
 +
-+    invoke-interface {v0, v2, v1}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    aput-object v23, v3, v4
++
++    const/16 v4, 0x28
++
++    const-string/jumbo v23, "com.rk.taskmanager"
++
++    aput-object v23, v3, v4
++
++    const/16 v4, 0x29
++
++    const-string/jumbo v23, "be.mygod.vpnhotspot"
++
++    aput-object v23, v3, v4
++
++    const/16 v4, 0x2a
++
++    const-string/jumbo v23, "com.emanuelef.remote_capture"
++
++    aput-object v23, v3, v4
++
++    const/16 v4, 0x2b
++
++    const-string/jumbo v23, "com.mayank.rucky"
++
++    aput-object v23, v3, v4
++
++    const/16 v4, 0x2c
++
++    const-string/jumbo v23, "org.csploit.android"
++
++    aput-object v23, v3, v4
++
++    const/16 v4, 0x2d
++
++    const-string/jumbo v23, "whid.usb.injector"
++
++    aput-object v23, v3, v4
++
++    const/16 v4, 0x2e
++
++    const-string/jumbo v23, "de.tu_darmstadt.seemoo.nexmon"
++
++    aput-object v23, v3, v4
++
++    const/16 v4, 0x2f
++
++    const-string/jumbo v23, "remote.hid.keyboard.client"
++
++    aput-object v23, v3, v4
++
++    const-string/jumbo v4, "de.srlabs.snoopsnitch"
++
++    const/16 v22, 0x30
++
++    aput-object v4, v3, v22
++
++    const/16 v4, 0x31
++
++    const-string/jumbo v22, "com.hijacker"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x32
++
++    const-string/jumbo v22, "su.sniff.cepter"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x33
++
++    const-string/jumbo v22, "me.jsonet.jshook"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x34
++
++    const-string/jumbo v22, "com.simo.fhook"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x35
++
++    const-string/jumbo v22, "Core Edition"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x36
++
++    const-string/jumbo v22, "com.omarea.vtools"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x37
++
++    const-string/jumbo v22, "james.dsp"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x38
++
++    const-string/jumbo v22, "flar2.exkernelmanager"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x39
++
++    const-string/jumbo v22, "com.franco.kernel"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x3a
++
++    const-string/jumbo v22, "com.lybxlpsv.kernelmanager"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x3b
++
++    const-string/jumbo v22, "com.html6405.boefflakernelconfig"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x3c
++
++    const-string/jumbo v22, "ccc71.st.cpu"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x3d
++
++    const-string/jumbo v22, "com.umang96.radon"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x3e
++
++    const-string/jumbo v22, "com.rve.rvkernelmanager"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x3f
++
++    const-string/jumbo v22, "id.xms.xtrakernelmanager"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x40
++
++    const-string/jumbo v22, "com.topjohnwu.magisk"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x41
++
++    const-string/jumbo v22, "io.github.huskydg.magisk"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x42
++
++    const-string/jumbo v22, "io.github.vvb2060.magisk"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x43
++
++    const-string/jumbo v22, "me.weishu.kernelsu"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x44
++
++    const-string/jumbo v22, "com.rifsxd.ksunext"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x45
++
++    const-string/jumbo v22, "com.sukisu.ultra"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x46
++
++    const-string/jumbo v22, "me.bmax.apatch"
++
++    aput-object v22, v3, v4
++
++    const/16 v4, 0x47
++
++    const-string/jumbo v22, "org.lsposed.manager"
++
++    aput-object v22, v3, v4
++
++    invoke-static {v3}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++
++    move-result-object v3
++
++    invoke-direct {v1, v3}, Ljava/util/HashSet;-><init>(Ljava/util/Collection;)V
++
++    const-string/jumbo v3, "root_apps"
++
++    invoke-interface {v0, v3, v1}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    .line 14
 +    sget-object v0, Lio/mesalabs/unica/HmaPresets;->EXACT:Ljava/util/Map;
 +
 +    new-instance v1, Ljava/util/HashSet;
 +
-+    const-string/jumbo v2, "com.rosan.dhizuku"
++    new-array v3, v6, [Ljava/lang/String;
 +
-+    filled-new-array {v2}, [Ljava/lang/String;
++    const-string/jumbo v4, "com.rosan.dhizuku"
 +
-+    move-result-object v2
++    aput-object v4, v3, v5
 +
-+    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
++    invoke-static {v3}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
 +
-+    move-result-object v2
++    move-result-object v3
 +
-+    invoke-direct {v1, v2}, Ljava/util/HashSet;-><init>(Ljava/util/Collection;)V
++    invoke-direct {v1, v3}, Ljava/util/HashSet;-><init>(Ljava/util/Collection;)V
 +
-+    const-string/jumbo v2, "shizuku_dhizuku"
++    const-string/jumbo v3, "shizuku_dhizuku"
 +
-+    invoke-interface {v0, v2, v1}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
++    invoke-interface {v0, v3, v1}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 +
 +    .line 15
 +    sget-object v0, Lio/mesalabs/unica/HmaPresets;->EXACT:Ljava/util/Map;
 +
 +    new-instance v1, Ljava/util/HashSet;
 +
-+    const-string/jumbo v17, "com.amaze.filemanager"
++    new-array v2, v2, [Ljava/lang/String;
 +
-+    const-string/jumbo v18, "com.ceco.gravitybox.unlocker"
++    const-string/jumbo v3, "com.reveny.vbmetafix.service"
 +
-+    const-string/jumbo v2, "com.reveny.vbmetafix.service"
++    aput-object v3, v2, v5
 +
 +    const-string/jumbo v3, "berserker.android.apps.sshdroid"
 +
-+    const-string/jumbo v4, "com.iamaner.oneclickfreeze"
++    aput-object v3, v2, v6
 +
-+    const-string/jumbo v5, "com.shamanland.privatescreenshots"
++    const-string/jumbo v3, "com.iamaner.oneclickfreeze"
 +
-+    const-string/jumbo v6, "org.connectbot"
++    aput-object v3, v2, v7
 +
-+    const-string/jumbo v7, "com.devolutions.remotedesktopmanager"
++    const-string/jumbo v3, "com.shamanland.privatescreenshots"
 +
-+    const-string/jumbo v8, "com.anydesk.anydeskandroid"
++    aput-object v3, v2, v8
 +
-+    const-string/jumbo v9, "com.carriez.flutter_hbb"
++    const-string/jumbo v3, "org.connectbot"
 +
-+    const-string/jumbo v10, "com.happymod.apk"
++    aput-object v3, v2, v9
 +
-+    const-string/jumbo v11, "com.pd.pdhelper"
++    const-string/jumbo v3, "com.devolutions.remotedesktopmanager"
 +
-+    const-string/jumbo v12, "cm.aptoide.pt"
++    aput-object v3, v2, v10
 +
-+    const-string/jumbo v13, "com.speedsoftware.rootexplorer"
++    const-string/jumbo v3, "com.anydesk.anydeskandroid"
 +
-+    const-string/jumbo v14, "me.zhanghai.android.files"
++    aput-object v3, v2, v11
 +
-+    const-string/jumbo v15, "com.lonelycatgames.Xplore"
++    const-string/jumbo v3, "com.carriez.flutter_hbb"
 +
-+    const-string/jumbo v16, "org.fossify.filemanager"
++    aput-object v3, v2, v12
 +
-+    filled-new-array/range {v2 .. v18}, [Ljava/lang/String;
++    const-string/jumbo v3, "com.happymod.apk"
 +
-+    move-result-object v2
++    aput-object v3, v2, v13
++
++    const-string/jumbo v3, "com.pd.pdhelper"
++
++    aput-object v3, v2, v14
++
++    const-string/jumbo v3, "cm.aptoide.pt"
++
++    aput-object v3, v2, v15
++
++    const-string/jumbo v3, "com.speedsoftware.rootexplorer"
++
++    aput-object v3, v2, v16
++
++    const-string/jumbo v3, "me.zhanghai.android.files"
++
++    aput-object v3, v2, v17
++
++    const-string/jumbo v3, "com.lonelycatgames.Xplore"
++
++    aput-object v3, v2, v18
++
++    const-string/jumbo v3, "org.fossify.filemanager"
++
++    aput-object v3, v2, v19
++
++    const-string/jumbo v3, "com.amaze.filemanager"
++
++    aput-object v3, v2, v20
++
++    const-string/jumbo v3, "com.ceco.gravitybox.unlocker"
++
++    aput-object v3, v2, v21
 +
 +    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
 +
@@ -4490,13 +5289,15 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPresets.smali b/smali_classes6/
 +
 +    new-instance v1, Ljava/util/HashSet;
 +
-+    const-string/jumbo v2, "io.chaldeaprjkt.gamespace"
++    new-array v2, v7, [Ljava/lang/String;
++
++    const-string/jumbo v3, "io.chaldeaprjkt.gamespace"
++
++    aput-object v3, v2, v5
 +
 +    const-string/jumbo v3, "powersaver.pro"
 +
-+    filled-new-array {v2, v3}, [Ljava/lang/String;
-+
-+    move-result-object v2
++    aput-object v3, v2, v6
 +
 +    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
 +
@@ -4513,11 +5314,11 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPresets.smali b/smali_classes6/
 +
 +    new-instance v1, Ljava/util/HashSet;
 +
-+    const-string/jumbo v2, "org.frknkrc44.hma_oss"
++    new-array v2, v6, [Ljava/lang/String;
 +
-+    filled-new-array {v2}, [Ljava/lang/String;
++    const-string/jumbo v3, "org.frknkrc44.hma_oss"
 +
-+    move-result-object v2
++    aput-object v3, v2, v5
 +
 +    invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
 +
@@ -4611,7 +5412,7 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPresets.smali b/smali_classes6/
 +.end method
 +
 +.method static scan(Landroid/content/pm/ApplicationInfo;)Lio/mesalabs/unica/HmaPolicy$Facts;
-+    .registers 30
++    .registers 22
 +    .annotation system Ldalvik/annotation/Throws;
 +        value = {
 +            Ljava/lang/Exception;
@@ -4679,290 +5480,432 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPresets.smali b/smali_classes6/
 +
 +    .line 26
 +    :cond_37
-+    const-string/jumbo v3, "me.garfieldhan."
++    const/4 v3, 0x1
 +
-+    filled-new-array {v3}, [Ljava/lang/String;
++    new-array v4, v3, [Ljava/lang/String;
 +
-+    move-result-object v3
++    const-string/jumbo v5, "me.garfieldhan."
 +
-+    invoke-static {v0, v3}, Lio/mesalabs/unica/HmaPresets;->starts(Ljava/lang/String;[Ljava/lang/String;)Z
++    const/4 v6, 0x0
 +
-+    move-result v3
++    aput-object v5, v4, v6
 +
-+    const-string/jumbo v4, "detector_apps"
++    invoke-static {v0, v4}, Lio/mesalabs/unica/HmaPresets;->starts(Ljava/lang/String;[Ljava/lang/String;)Z
 +
-+    if-nez v3, :cond_51
++    move-result v4
 +
-+    const-string/jumbo v3, ".keyattestation"
++    const-string/jumbo v5, "detector_apps"
 +
-+    filled-new-array {v3}, [Ljava/lang/String;
++    if-nez v4, :cond_53
 +
-+    move-result-object v3
++    new-array v4, v3, [Ljava/lang/String;
 +
-+    invoke-static {v0, v3}, Lio/mesalabs/unica/HmaPresets;->ends(Ljava/lang/String;[Ljava/lang/String;)Z
++    const-string/jumbo v7, ".keyattestation"
 +
-+    move-result v3
++    aput-object v7, v4, v6
 +
-+    if-eqz v3, :cond_56
++    invoke-static {v0, v4}, Lio/mesalabs/unica/HmaPresets;->ends(Ljava/lang/String;[Ljava/lang/String;)Z
 +
-+    :cond_51
-+    iget-object v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++    move-result v4
 +
-+    invoke-interface {v3, v4}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
++    if-eqz v4, :cond_58
++
++    :cond_53
++    iget-object v4, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++
++    invoke-interface {v4, v5}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
 +
 +    .line 27
-+    :cond_56
-+    const-string/jumbo v12, "com.smartpack."
++    :cond_58
++    const/16 v4, 0x9
 +
-+    const-string/jumbo v13, "org.fdroid.fdroid.privileged"
++    new-array v7, v4, [Ljava/lang/String;
 +
-+    const-string/jumbo v5, "dev.ukanth.ufirewall"
++    const-string/jumbo v8, "dev.ukanth.ufirewall"
 +
-+    const-string/jumbo v6, "xzr."
++    aput-object v8, v7, v6
 +
-+    const-string/jumbo v7, "moe.xzr."
++    const-string/jumbo v8, "xzr."
++
++    aput-object v8, v7, v3
++
++    const-string/jumbo v8, "moe.xzr."
++
++    const/4 v9, 0x2
++
++    aput-object v8, v7, v9
 +
 +    const-string/jumbo v8, "org.lsposed"
 +
-+    const-string/jumbo v9, "com.drdisagree.iconify"
++    const/4 v10, 0x3
 +
-+    const-string/jumbo v10, "com.dergoogler.mmrl"
++    aput-object v8, v7, v10
 +
-+    const-string/jumbo v11, "com.xayah.databackup"
++    const-string/jumbo v8, "com.drdisagree.iconify"
 +
-+    filled-new-array/range {v5 .. v13}, [Ljava/lang/String;
++    const/4 v11, 0x4
 +
-+    move-result-object v3
++    aput-object v8, v7, v11
 +
-+    invoke-static {v0, v3}, Lio/mesalabs/unica/HmaPresets;->starts(Ljava/lang/String;[Ljava/lang/String;)Z
++    const-string/jumbo v8, "com.dergoogler.mmrl"
 +
-+    move-result v3
++    const/4 v12, 0x5
 +
-+    const-string/jumbo v5, "root_apps"
++    aput-object v8, v7, v12
 +
-+    if-nez v3, :cond_94
++    const-string/jumbo v8, "com.xayah.databackup"
 +
-+    const-string/jumbo v3, ".magisk"
++    const/4 v13, 0x6
 +
-+    const-string/jumbo v6, ".apatch"
++    aput-object v8, v7, v13
 +
-+    const-string/jumbo v7, ".viper4android"
++    const-string/jumbo v8, "com.smartpack."
 +
-+    const-string/jumbo v8, ".viperfx"
++    const/4 v14, 0x7
 +
-+    filled-new-array {v7, v8, v3, v6}, [Ljava/lang/String;
++    aput-object v8, v7, v14
 +
-+    move-result-object v3
++    const-string/jumbo v8, "org.fdroid.fdroid.privileged"
 +
-+    invoke-static {v0, v3}, Lio/mesalabs/unica/HmaPresets;->ends(Ljava/lang/String;[Ljava/lang/String;)Z
++    const/16 v15, 0x8
 +
-+    move-result v3
++    aput-object v8, v7, v15
 +
-+    if-nez v3, :cond_94
++    invoke-static {v0, v7}, Lio/mesalabs/unica/HmaPresets;->starts(Ljava/lang/String;[Ljava/lang/String;)Z
 +
-+    const-string/jumbo v3, ".busybox"
++    move-result v7
 +
-+    const-string/jumbo v6, ".apatch."
++    const-string/jumbo v8, "root_apps"
 +
-+    filled-new-array {v3, v6}, [Ljava/lang/String;
++    if-nez v7, :cond_b8
 +
-+    move-result-object v3
++    new-array v7, v11, [Ljava/lang/String;
 +
-+    invoke-static {v0, v3}, Lio/mesalabs/unica/HmaPresets;->has(Ljava/lang/String;[Ljava/lang/String;)Z
++    const-string/jumbo v16, ".viper4android"
 +
-+    move-result v3
++    aput-object v16, v7, v6
 +
-+    if-eqz v3, :cond_99
++    const-string/jumbo v16, ".viperfx"
 +
-+    :cond_94
-+    iget-object v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++    aput-object v16, v7, v3
 +
-+    invoke-interface {v3, v5}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
++    const-string/jumbo v16, ".magisk"
++
++    aput-object v16, v7, v9
++
++    const-string/jumbo v16, ".apatch"
++
++    aput-object v16, v7, v10
++
++    invoke-static {v0, v7}, Lio/mesalabs/unica/HmaPresets;->ends(Ljava/lang/String;[Ljava/lang/String;)Z
++
++    move-result v7
++
++    if-nez v7, :cond_b8
++
++    new-array v7, v9, [Ljava/lang/String;
++
++    const-string/jumbo v16, ".busybox"
++
++    aput-object v16, v7, v6
++
++    const-string/jumbo v16, ".apatch."
++
++    aput-object v16, v7, v3
++
++    invoke-static {v0, v7}, Lio/mesalabs/unica/HmaPresets;->has(Ljava/lang/String;[Ljava/lang/String;)Z
++
++    move-result v7
++
++    if-eqz v7, :cond_bd
++
++    :cond_b8
++    iget-object v7, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++
++    invoke-interface {v7, v8}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
 +
 +    .line 28
-+    :cond_99
-+    const-string/jumbo v3, "moe.shizuku."
++    :cond_bd
++    new-array v7, v3, [Ljava/lang/String;
 +
-+    filled-new-array {v3}, [Ljava/lang/String;
++    const-string/jumbo v16, "moe.shizuku."
 +
-+    move-result-object v3
++    aput-object v16, v7, v6
 +
-+    invoke-static {v0, v3}, Lio/mesalabs/unica/HmaPresets;->starts(Ljava/lang/String;[Ljava/lang/String;)Z
++    invoke-static {v0, v7}, Lio/mesalabs/unica/HmaPresets;->starts(Ljava/lang/String;[Ljava/lang/String;)Z
 +
-+    move-result v3
++    move-result v7
 +
-+    const-string/jumbo v6, "shizuku_dhizuku"
++    const-string/jumbo v4, "shizuku_dhizuku"
 +
-+    if-eqz v3, :cond_ac
++    if-eqz v7, :cond_d0
 +
-+    iget-object v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++    iget-object v7, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
 +
-+    invoke-interface {v3, v6}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
++    invoke-interface {v7, v4}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
 +
 +    .line 29
-+    :cond_ac
-+    const-string/jumbo v16, "com.microsoft.rdc."
++    :cond_d0
++    const/16 v7, 0xb
 +
-+    const-string/jumbo v17, "com.teamviewer."
++    new-array v15, v7, [Ljava/lang/String;
 +
-+    const-string/jumbo v7, "com.offsec."
++    const-string/jumbo v18, "com.offsec."
 +
-+    const-string/jumbo v8, "com.termux"
++    aput-object v18, v15, v6
 +
-+    const-string/jumbo v9, "com.realvnc."
++    const-string/jumbo v18, "com.termux"
 +
-+    const-string/jumbo v10, "nextapp.fx"
++    aput-object v18, v15, v3
 +
-+    const-string/jumbo v11, "com.ghisler."
++    const-string/jumbo v18, "com.realvnc."
 +
-+    const-string/jumbo v12, "ru.zdevs."
++    aput-object v18, v15, v9
 +
-+    const-string/jumbo v13, "com.mixplorer"
++    const-string/jumbo v18, "nextapp.fx"
 +
-+    const-string/jumbo v14, "bin.mt."
++    aput-object v18, v15, v10
 +
-+    const-string/jumbo v15, "com.x0.strai."
++    const-string/jumbo v18, "com.ghisler."
 +
-+    filled-new-array/range {v7 .. v17}, [Ljava/lang/String;
++    aput-object v18, v15, v11
 +
-+    move-result-object v3
++    const-string/jumbo v18, "ru.zdevs."
 +
-+    invoke-static {v0, v3}, Lio/mesalabs/unica/HmaPresets;->starts(Ljava/lang/String;[Ljava/lang/String;)Z
++    aput-object v18, v15, v12
 +
-+    move-result v3
++    const-string/jumbo v18, "com.mixplorer"
++
++    aput-object v18, v15, v13
++
++    const-string/jumbo v18, "bin.mt."
++
++    aput-object v18, v15, v14
++
++    const-string/jumbo v18, "com.x0.strai."
++
++    const/16 v17, 0x8
++
++    aput-object v18, v15, v17
++
++    const-string/jumbo v18, "com.microsoft.rdc."
++
++    const/16 v16, 0x9
++
++    aput-object v18, v15, v16
++
++    const-string/jumbo v18, "com.teamviewer."
++
++    const/16 v19, 0xa
++
++    aput-object v18, v15, v19
++
++    invoke-static {v0, v15}, Lio/mesalabs/unica/HmaPresets;->starts(Ljava/lang/String;[Ljava/lang/String;)Z
++
++    move-result v15
 +
 +    const-string/jumbo v7, "sus_apps"
 +
-+    if-eqz v3, :cond_d3
++    if-eqz v15, :cond_113
 +
-+    iget-object v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++    iget-object v15, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
 +
-+    invoke-interface {v3, v7}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
++    invoke-interface {v15, v7}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
 +
 +    .line 30
-+    :cond_d3
-+    const-string/jumbo v27, "com.potato."
++    :cond_113
++    const/16 v15, 0x15
 +
-+    const-string/jumbo v28, "eu.xiaomi."
++    new-array v15, v15, [Ljava/lang/String;
 +
-+    const-string/jumbo v8, "lineageos."
++    const-string/jumbo v20, "lineageos."
 +
-+    const-string/jumbo v9, "org.lineageos."
++    aput-object v20, v15, v6
 +
-+    const-string/jumbo v10, "com.caf."
++    const-string/jumbo v20, "org.lineageos."
 +
-+    const-string/jumbo v11, "org.calyxos."
++    aput-object v20, v15, v3
 +
-+    const-string/jumbo v12, "co.aospa."
++    const-string/jumbo v20, "com.caf."
 +
-+    const-string/jumbo v13, "org.omnirom."
++    aput-object v20, v15, v9
 +
-+    const-string/jumbo v14, "org.protonaosp."
++    const-string/jumbo v20, "org.calyxos."
 +
-+    const-string/jumbo v15, "org.evolution."
++    aput-object v20, v15, v10
 +
-+    const-string/jumbo v16, "org.evolutionx."
++    const-string/jumbo v20, "co.aospa."
++
++    aput-object v20, v15, v11
++
++    const-string/jumbo v20, "org.omnirom."
++
++    aput-object v20, v15, v12
++
++    const-string/jumbo v20, "org.protonaosp."
++
++    aput-object v20, v15, v13
++
++    const-string/jumbo v20, "org.evolution."
++
++    aput-object v20, v15, v14
++
++    const-string/jumbo v20, "org.evolutionx."
++
++    const/16 v17, 0x8
++
++    aput-object v20, v15, v17
 +
 +    const-string/jumbo v17, "com.android.system.switch."
 +
-+    const-string/jumbo v18, "com.accents."
++    const/16 v16, 0x9
 +
-+    const-string/jumbo v19, "com.alpha."
++    aput-object v17, v15, v16
 +
-+    const-string/jumbo v20, "com.android.systemui."
++    const-string/jumbo v16, "com.accents."
 +
-+    const-string/jumbo v21, "com.android.theme."
++    aput-object v16, v15, v19
 +
-+    const-string/jumbo v22, "com.bootleggers."
++    const-string/jumbo v16, "com.alpha."
 +
-+    const-string/jumbo v23, "com.custom.overlay."
++    const/16 v17, 0xb
 +
-+    const-string/jumbo v24, "com.gnonymous.gvisualmod."
++    aput-object v16, v15, v17
 +
-+    const-string/jumbo v25, "com.libremobileos."
++    const/16 v16, 0xc
 +
-+    const-string/jumbo v26, "com.nikgapps."
++    const-string/jumbo v17, "com.android.systemui."
 +
-+    filled-new-array/range {v8 .. v28}, [Ljava/lang/String;
++    aput-object v17, v15, v16
 +
-+    move-result-object v3
++    const/16 v16, 0xd
 +
-+    invoke-static {v0, v3}, Lio/mesalabs/unica/HmaPresets;->starts(Ljava/lang/String;[Ljava/lang/String;)Z
++    const-string/jumbo v17, "com.android.theme."
 +
-+    move-result v3
++    aput-object v17, v15, v16
 +
-+    if-nez v3, :cond_127
++    const/16 v16, 0xe
 +
-+    const-string/jumbo v3, ".evolutionx"
++    const-string/jumbo v17, "com.bootleggers."
 +
-+    const-string/jumbo v8, ".overlay.fog"
++    aput-object v17, v15, v16
 +
-+    const-string/jumbo v9, ".evolution"
++    const/16 v16, 0xf
 +
-+    filled-new-array {v9, v3, v8}, [Ljava/lang/String;
++    const-string/jumbo v17, "com.custom.overlay."
 +
-+    move-result-object v3
++    aput-object v17, v15, v16
 +
-+    invoke-static {v0, v3}, Lio/mesalabs/unica/HmaPresets;->ends(Ljava/lang/String;[Ljava/lang/String;)Z
++    const/16 v16, 0x10
 +
-+    move-result v3
++    const-string/jumbo v17, "com.gnonymous.gvisualmod."
 +
-+    if-nez v3, :cond_127
++    aput-object v17, v15, v16
 +
-+    iget-object v3, v1, Landroid/content/pm/ApplicationInfo;->sourceDir:Ljava/lang/String;
++    const/16 v16, 0x11
 +
-+    const-string/jumbo v8, "_lineage"
++    const-string/jumbo v17, "com.libremobileos."
 +
-+    const-string/jumbo v9, "lineage_"
++    aput-object v17, v15, v16
 +
-+    filled-new-array {v8, v9}, [Ljava/lang/String;
++    const/16 v16, 0x12
 +
-+    move-result-object v8
++    const-string/jumbo v17, "com.nikgapps."
 +
-+    invoke-static {v3, v8}, Lio/mesalabs/unica/HmaPresets;->has(Ljava/lang/String;[Ljava/lang/String;)Z
++    aput-object v17, v15, v16
 +
-+    move-result v3
++    const/16 v16, 0x13
 +
-+    if-eqz v3, :cond_12e
++    const-string/jumbo v17, "com.potato."
 +
-+    :cond_127
-+    iget-object v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++    aput-object v17, v15, v16
 +
-+    const-string/jumbo v8, "custom_rom"
++    const/16 v16, 0x14
 +
-+    invoke-interface {v3, v8}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
++    const-string/jumbo v17, "eu.xiaomi."
++
++    aput-object v17, v15, v16
++
++    invoke-static {v0, v15}, Lio/mesalabs/unica/HmaPresets;->starts(Ljava/lang/String;[Ljava/lang/String;)Z
++
++    move-result v15
++
++    if-nez v15, :cond_1af
++
++    new-array v15, v10, [Ljava/lang/String;
++
++    const-string/jumbo v16, ".evolution"
++
++    aput-object v16, v15, v6
++
++    const-string/jumbo v16, ".evolutionx"
++
++    aput-object v16, v15, v3
++
++    const-string/jumbo v16, ".overlay.fog"
++
++    aput-object v16, v15, v9
++
++    invoke-static {v0, v15}, Lio/mesalabs/unica/HmaPresets;->ends(Ljava/lang/String;[Ljava/lang/String;)Z
++
++    move-result v15
++
++    if-nez v15, :cond_1af
++
++    iget-object v15, v1, Landroid/content/pm/ApplicationInfo;->sourceDir:Ljava/lang/String;
++
++    new-array v14, v9, [Ljava/lang/String;
++
++    const-string/jumbo v17, "_lineage"
++
++    aput-object v17, v14, v6
++
++    const-string/jumbo v17, "lineage_"
++
++    aput-object v17, v14, v3
++
++    invoke-static {v15, v14}, Lio/mesalabs/unica/HmaPresets;->has(Ljava/lang/String;[Ljava/lang/String;)Z
++
++    move-result v14
++
++    if-eqz v14, :cond_1b6
++
++    :cond_1af
++    iget-object v14, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++
++    const-string/jumbo v15, "custom_rom"
++
++    invoke-interface {v14, v15}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
 +
 +    .line 31
-+    :cond_12e
-+    const-string/jumbo v3, "com.anydesk.anydeskandroid"
++    :cond_1b6
++    const-string/jumbo v14, "com.anydesk.anydeskandroid"
 +
-+    invoke-virtual {v3, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++    invoke-virtual {v14, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
 +
 +    move-result v0
 +
-+    const/4 v3, 0x1
-+
-+    if-eqz v0, :cond_139
++    if-eqz v0, :cond_1c0
 +
 +    iput-boolean v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->risky:Z
 +
 +    .line 32
-+    :cond_139
-+    new-instance v8, Ljava/util/ArrayList;
++    :cond_1c0
++    new-instance v14, Ljava/util/ArrayList;
 +
-+    invoke-direct {v8}, Ljava/util/ArrayList;-><init>()V
++    invoke-direct {v14}, Ljava/util/ArrayList;-><init>()V
 +
 +    iget-object v0, v1, Landroid/content/pm/ApplicationInfo;->sourceDir:Ljava/lang/String;
 +
-+    invoke-interface {v8, v0}, Ljava/util/List;->add(Ljava/lang/Object;)Z
++    invoke-interface {v14, v0}, Ljava/util/List;->add(Ljava/lang/Object;)Z
 +
 +    .line 33
-+    :try_start_143
++    :try_start_1ca
 +    const-class v0, Landroid/content/pm/ApplicationInfo;
 +
-+    const-string/jumbo v9, "splitSourceDirs"
++    const-string/jumbo v15, "splitSourceDirs"
 +
-+    invoke-virtual {v0, v9}, Ljava/lang/Class;->getField(Ljava/lang/String;)Ljava/lang/reflect/Field;
++    invoke-virtual {v0, v15}, Ljava/lang/Class;->getField(Ljava/lang/String;)Ljava/lang/reflect/Field;
 +
 +    move-result-object v0
 +
@@ -4972,111 +5915,113 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPresets.smali b/smali_classes6/
 +
 +    check-cast v0, [Ljava/lang/String;
 +
-+    if-eqz v0, :cond_15c
++    if-eqz v0, :cond_1e3
 +
 +    invoke-static {v0}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
 +
 +    move-result-object v0
 +
-+    invoke-interface {v8, v0}, Ljava/util/List;->addAll(Ljava/util/Collection;)Z
-+    :try_end_15a
-+    .catch Ljava/lang/ReflectiveOperationException; {:try_start_143 .. :try_end_15a} :catch_15b
++    invoke-interface {v14, v0}, Ljava/util/List;->addAll(Ljava/util/Collection;)Z
++    :try_end_1e1
++    .catch Ljava/lang/ReflectiveOperationException; {:try_start_1ca .. :try_end_1e1} :catch_1e2
 +
-+    goto :goto_15c
++    goto :goto_1e3
 +
-+    :catch_15b
++    :catch_1e2
 +    move-exception v0
 +
 +    .line 34
-+    :cond_15c
-+    :goto_15c
-+    invoke-interface {v8}, Ljava/util/List;->iterator()Ljava/util/Iterator;
++    :cond_1e3
++    :goto_1e3
++    invoke-interface {v14}, Ljava/util/List;->iterator()Ljava/util/Iterator;
 +
 +    move-result-object v0
 +
-+    :goto_160
++    :goto_1e7
 +    invoke-interface {v0}, Ljava/util/Iterator;->hasNext()Z
 +
-+    move-result v8
++    move-result v14
 +
-+    if-eqz v8, :cond_328
++    if-eqz v14, :cond_3c0
 +
 +    invoke-interface {v0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
 +
-+    move-result-object v8
++    move-result-object v14
 +
-+    check-cast v8, Ljava/lang/String;
++    check-cast v14, Ljava/lang/String;
 +
 +    .line 35
-+    new-instance v9, Ljava/util/zip/ZipFile;
++    new-instance v15, Ljava/util/zip/ZipFile;
 +
-+    invoke-direct {v9, v8}, Ljava/util/zip/ZipFile;-><init>(Ljava/lang/String;)V
++    invoke-direct {v15, v14}, Ljava/util/zip/ZipFile;-><init>(Ljava/lang/String;)V
 +
 +    .line 37
-+    :try_start_171
-+    const-string/jumbo v8, "AndroidManifest.xml"
++    :try_start_1f8
++    const-string/jumbo v14, "AndroidManifest.xml"
 +
-+    invoke-virtual {v9, v8}, Ljava/util/zip/ZipFile;->getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
++    invoke-virtual {v15, v14}, Ljava/util/zip/ZipFile;->getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
 +
-+    move-result-object v8
-+    :try_end_177
-+    .catchall {:try_start_171 .. :try_end_177} :catchall_323
++    move-result-object v14
++    :try_end_1fe
++    .catchall {:try_start_1f8 .. :try_end_1fe} :catchall_3bb
 +
 +    .line 38
 +    nop
 +
 +    .line 39
-+    const-string/jumbo v10, ""
++    const-string/jumbo v12, ""
 +
-+    const/4 v11, 0x0
-+
-+    if-eqz v8, :cond_1c1
++    if-eqz v14, :cond_249
 +
 +    .line 40
-+    :try_start_17d
-+    invoke-virtual {v9, v8}, Ljava/util/zip/ZipFile;->getInputStream(Ljava/util/zip/ZipEntry;)Ljava/io/InputStream;
++    :try_start_203
++    invoke-virtual {v15, v14}, Ljava/util/zip/ZipFile;->getInputStream(Ljava/util/zip/ZipEntry;)Ljava/io/InputStream;
 +
-+    move-result-object v8
++    move-result-object v14
 +
 +    .line 41
-+    new-instance v12, Ljava/io/ByteArrayOutputStream;
++    new-instance v11, Ljava/io/ByteArrayOutputStream;
 +
-+    invoke-direct {v12}, Ljava/io/ByteArrayOutputStream;-><init>()V
-+    :try_end_186
-+    .catchall {:try_start_17d .. :try_end_186} :catchall_323
++    invoke-direct {v11}, Ljava/io/ByteArrayOutputStream;-><init>()V
++    :try_end_20c
++    .catchall {:try_start_203 .. :try_end_20c} :catchall_3bb
 +
 +    .line 42
-+    const/16 v13, 0x2000
++    const/16 v10, 0x2000
 +
-+    :try_start_188
-+    new-array v13, v13, [B
++    :try_start_20e
++    new-array v10, v10, [B
 +
-+    :goto_18a
-+    invoke-virtual {v8, v13}, Ljava/io/InputStream;->read([B)I
++    :goto_210
++    invoke-virtual {v14, v10}, Ljava/io/InputStream;->read([B)I
 +
-+    move-result v14
++    move-result v13
 +
-+    const/4 v15, -0x1
++    const/4 v3, -0x1
 +
-+    if-eq v14, v15, :cond_1a7
++    if-eq v13, v3, :cond_22f
 +
-+    invoke-virtual {v12}, Ljava/io/ByteArrayOutputStream;->size()I
++    invoke-virtual {v11}, Ljava/io/ByteArrayOutputStream;->size()I
 +
-+    move-result v15
++    move-result v3
 +
-+    add-int/2addr v15, v14
++    add-int/2addr v3, v13
 +
-+    const/high16 v3, 0x400000
++    const/high16 v9, 0x400000
 +
-+    if-gt v15, v3, :cond_19f
++    if-gt v3, v9, :cond_227
 +
-+    invoke-virtual {v12, v13, v11, v14}, Ljava/io/ByteArrayOutputStream;->write([BII)V
++    invoke-virtual {v11, v10, v6, v13}, Ljava/io/ByteArrayOutputStream;->write([BII)V
 +
 +    const/4 v3, 0x1
 +
-+    goto :goto_18a
++    const/4 v9, 0x2
 +
-+    :cond_19f
++    const/4 v13, 0x6
++
++    goto :goto_210
++
++    :cond_227
 +    new-instance v0, Ljava/io/IOException;
 +
 +    const-string/jumbo v1, "Manifest too large"
@@ -5084,454 +6029,490 @@ diff --git a/smali_classes6/io/mesalabs/unica/HmaPresets.smali b/smali_classes6/
 +    invoke-direct {v0, v1}, Ljava/io/IOException;-><init>(Ljava/lang/String;)V
 +
 +    throw v0
-+    :try_end_1a7
-+    .catchall {:try_start_188 .. :try_end_1a7} :catchall_1bc
++    :try_end_22f
++    .catchall {:try_start_20e .. :try_end_22f} :catchall_244
 +
 +    .line 43
-+    :cond_1a7
-+    :try_start_1a7
-+    invoke-virtual {v8}, Ljava/io/InputStream;->close()V
++    :cond_22f
++    :try_start_22f
++    invoke-virtual {v14}, Ljava/io/InputStream;->close()V
 +
 +    .line 45
 +    new-instance v3, Ljava/lang/String;
 +
-+    invoke-virtual {v12}, Ljava/io/ByteArrayOutputStream;->toByteArray()[B
++    invoke-virtual {v11}, Ljava/io/ByteArrayOutputStream;->toByteArray()[B
 +
-+    move-result-object v8
++    move-result-object v9
 +
-+    const-string/jumbo v12, "ISO-8859-1"
++    const-string/jumbo v10, "ISO-8859-1"
 +
-+    invoke-direct {v3, v8, v12}, Ljava/lang/String;-><init>([BLjava/lang/String;)V
++    invoke-direct {v3, v9, v10}, Ljava/lang/String;-><init>([BLjava/lang/String;)V
 +
-+    const-string/jumbo v8, "\u0000"
++    const-string/jumbo v9, "\u0000"
 +
-+    invoke-virtual {v3, v8, v10}, Ljava/lang/String;->replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
++    invoke-virtual {v3, v9, v12}, Ljava/lang/String;->replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
 +
-+    move-result-object v10
++    move-result-object v12
 +
-+    goto :goto_1c1
++    goto :goto_249
 +
 +    .line 43
-+    :catchall_1bc
++    :catchall_244
 +    move-exception v0
 +
-+    invoke-virtual {v8}, Ljava/io/InputStream;->close()V
++    invoke-virtual {v14}, Ljava/io/InputStream;->close()V
 +
 +    throw v0
 +
 +    .line 47
-+    :cond_1c1
-+    :goto_1c1
++    :cond_249
++    :goto_249
 +    const/4 v3, 0x2
 +
-+    new-array v8, v3, [Ljava/lang/String;
++    new-array v9, v3, [Ljava/lang/String;
 +
-+    const-string/jumbo v12, "com.google.android.gms."
++    const-string/jumbo v3, "com.google.android.gms."
 +
-+    aput-object v12, v8, v11
++    aput-object v3, v9, v6
 +
-+    const-string/jumbo v12, "com.google.firebase."
++    const-string/jumbo v3, "com.google.firebase."
 +
-+    const/4 v13, 0x1
++    const/4 v10, 0x1
 +
-+    aput-object v12, v8, v13
++    aput-object v3, v9, v10
 +
-+    invoke-static {v10, v8}, Lio/mesalabs/unica/HmaPresets;->has(Ljava/lang/String;[Ljava/lang/String;)Z
++    invoke-static {v12, v9}, Lio/mesalabs/unica/HmaPresets;->has(Ljava/lang/String;[Ljava/lang/String;)Z
 +
-+    move-result v8
++    move-result v3
 +
-+    if-eqz v8, :cond_1d5
++    if-eqz v3, :cond_25d
 +
-+    iput-boolean v13, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->risky:Z
++    iput-boolean v10, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->risky:Z
 +
 +    .line 48
-+    :cond_1d5
-+    iget-object v8, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++    :cond_25d
++    iget-object v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
 +
-+    invoke-interface {v8, v4}, Ljava/util/Set;->contains(Ljava/lang/Object;)Z
++    invoke-interface {v3, v5}, Ljava/util/Set;->contains(Ljava/lang/Object;)Z
 +
-+    move-result v8
++    move-result v3
 +
-+    if-nez v8, :cond_1f7
++    if-nez v3, :cond_27f
 +
-+    iget v8, v1, Landroid/content/pm/ApplicationInfo;->flags:I
++    iget v3, v1, Landroid/content/pm/ApplicationInfo;->flags:I
 +
-+    and-int/lit16 v8, v8, 0x81
++    and-int/lit16 v3, v3, 0x81
 +
-+    if-nez v8, :cond_1f7
++    if-nez v3, :cond_27f
 +
-+    const/4 v8, 0x1
++    const/4 v3, 0x1
 +
-+    new-array v12, v8, [Ljava/lang/String;
++    new-array v9, v3, [Ljava/lang/String;
 +
-+    const-string/jumbo v8, "android.permission.BIND_ACCESSIBILITY_SERVICE"
++    const-string/jumbo v3, "android.permission.BIND_ACCESSIBILITY_SERVICE"
 +
-+    aput-object v8, v12, v11
++    aput-object v3, v9, v6
 +
-+    invoke-static {v10, v12}, Lio/mesalabs/unica/HmaPresets;->has(Ljava/lang/String;[Ljava/lang/String;)Z
++    invoke-static {v12, v9}, Lio/mesalabs/unica/HmaPresets;->has(Ljava/lang/String;[Ljava/lang/String;)Z
 +
-+    move-result v8
++    move-result v3
 +
-+    if-eqz v8, :cond_1f7
++    if-eqz v3, :cond_27f
 +
-+    iget-object v8, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++    iget-object v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
 +
-+    const-string/jumbo v12, "accessibility_apps"
++    const-string/jumbo v9, "accessibility_apps"
 +
-+    invoke-interface {v8, v12}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
++    invoke-interface {v3, v9}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
 +
 +    .line 49
-+    :cond_1f7
-+    new-array v8, v3, [Ljava/lang/String;
++    :cond_27f
++    const/4 v3, 0x2
 +
-+    const-string/jumbo v12, "rikka.shizuku.ShizukuProvider"
++    new-array v9, v3, [Ljava/lang/String;
 +
-+    aput-object v12, v8, v11
++    const-string/jumbo v3, "rikka.shizuku.ShizukuProvider"
 +
-+    const-string/jumbo v12, "com.rosan.dhizuku.server.provider"
++    aput-object v3, v9, v6
 +
-+    const/4 v13, 0x1
++    const-string/jumbo v3, "com.rosan.dhizuku.server.provider"
 +
-+    aput-object v12, v8, v13
++    const/4 v10, 0x1
 +
-+    invoke-static {v10, v8}, Lio/mesalabs/unica/HmaPresets;->has(Ljava/lang/String;[Ljava/lang/String;)Z
++    aput-object v3, v9, v10
 +
-+    move-result v8
++    invoke-static {v12, v9}, Lio/mesalabs/unica/HmaPresets;->has(Ljava/lang/String;[Ljava/lang/String;)Z
 +
-+    if-eqz v8, :cond_20d
++    move-result v3
 +
-+    iget-object v8, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++    if-eqz v3, :cond_296
 +
-+    invoke-interface {v8, v6}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
++    iget-object v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++
++    invoke-interface {v3, v4}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
 +
 +    .line 50
-+    :cond_20d
-+    const-string/jumbo v8, "assets/xposed_init"
++    :cond_296
++    const-string/jumbo v3, "assets/xposed_init"
 +
-+    invoke-virtual {v9, v8}, Ljava/util/zip/ZipFile;->getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
++    invoke-virtual {v15, v3}, Ljava/util/zip/ZipFile;->getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
 +
-+    move-result-object v8
++    move-result-object v3
 +
-+    if-nez v8, :cond_21d
++    if-nez v3, :cond_2a6
 +
-+    const-string/jumbo v8, "META-INF/xposed/module.prop"
++    const-string/jumbo v3, "META-INF/xposed/module.prop"
 +
-+    invoke-virtual {v9, v8}, Ljava/util/zip/ZipFile;->getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
++    invoke-virtual {v15, v3}, Ljava/util/zip/ZipFile;->getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
 +
-+    move-result-object v8
++    move-result-object v3
 +
-+    if-eqz v8, :cond_224
++    if-eqz v3, :cond_2ad
 +
-+    :cond_21d
-+    iget-object v8, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++    :cond_2a6
++    iget-object v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
 +
-+    const-string/jumbo v12, "xposed"
++    const-string/jumbo v9, "xposed"
 +
-+    invoke-interface {v8, v12}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
++    invoke-interface {v3, v9}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
 +
 +    .line 51
-+    :cond_224
-+    iget-object v8, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++    :cond_2ad
++    iget-object v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
 +
-+    invoke-interface {v8, v4}, Ljava/util/Set;->contains(Ljava/lang/Object;)Z
++    invoke-interface {v3, v5}, Ljava/util/Set;->contains(Ljava/lang/Object;)Z
 +
-+    move-result v8
++    move-result v3
 +
-+    const/4 v12, 0x3
-+
-+    if-nez v8, :cond_2e5
++    if-nez v3, :cond_375
 +
 +    .line 52
-+    const/4 v8, 0x1
++    const/4 v3, 0x1
 +
-+    new-array v13, v8, [Ljava/lang/String;
++    new-array v9, v3, [Ljava/lang/String;
 +
-+    const-string/jumbo v8, "android.permission.ACCESS_SUPERUSER"
++    const-string/jumbo v3, "android.permission.ACCESS_SUPERUSER"
 +
-+    aput-object v8, v13, v11
++    aput-object v3, v9, v6
 +
-+    invoke-static {v10, v13}, Lio/mesalabs/unica/HmaPresets;->has(Ljava/lang/String;[Ljava/lang/String;)Z
++    invoke-static {v12, v9}, Lio/mesalabs/unica/HmaPresets;->has(Ljava/lang/String;[Ljava/lang/String;)Z
 +
-+    move-result v8
++    move-result v3
 +
-+    const/4 v13, 0x5
++    if-eqz v3, :cond_2ed
 +
-+    const/4 v14, 0x4
++    const/4 v3, 0x6
 +
-+    const/4 v15, 0x6
++    new-array v9, v3, [Ljava/lang/String;
 +
-+    if-eqz v8, :cond_264
++    const-string/jumbo v3, "org.mozilla.gecko"
 +
-+    new-array v8, v15, [Ljava/lang/String;
++    aput-object v3, v9, v6
 +
-+    const-string/jumbo v17, "org.mozilla.gecko"
++    const-string/jumbo v3, "MEIZUPUSH"
 +
-+    aput-object v17, v8, v11
++    const/4 v10, 0x1
 +
-+    const-string/jumbo v17, "MEIZUPUSH"
++    aput-object v3, v9, v10
 +
-+    const/16 v16, 0x1
++    const-string/jumbo v3, "hk.alipay.wallet"
 +
-+    aput-object v17, v8, v16
++    const/4 v10, 0x2
 +
-+    const-string/jumbo v17, "hk.alipay.wallet"
++    aput-object v3, v9, v10
 +
-+    aput-object v17, v8, v3
++    const-string/jumbo v3, "com.tencent.mm"
 +
-+    const-string/jumbo v17, "com.tencent.mm"
++    const/4 v10, 0x3
 +
-+    aput-object v17, v8, v12
++    aput-object v3, v9, v10
 +
-+    const-string/jumbo v17, "com.heytap."
++    const-string/jumbo v3, "com.heytap."
 +
-+    aput-object v17, v8, v14
++    const/4 v10, 0x4
 +
-+    const-string/jumbo v17, "com.netmera.Netmera"
++    aput-object v3, v9, v10
 +
-+    aput-object v17, v8, v13
++    const-string/jumbo v3, "com.netmera.Netmera"
 +
-+    invoke-static {v10, v8}, Lio/mesalabs/unica/HmaPresets;->has(Ljava/lang/String;[Ljava/lang/String;)Z
++    const/4 v10, 0x5
 +
-+    move-result v8
++    aput-object v3, v9, v10
 +
-+    if-nez v8, :cond_264
++    invoke-static {v12, v9}, Lio/mesalabs/unica/HmaPresets;->has(Ljava/lang/String;[Ljava/lang/String;)Z
 +
-+    iget-object v8, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++    move-result v3
 +
-+    invoke-interface {v8, v5}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
++    if-nez v3, :cond_2ed
++
++    iget-object v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++
++    invoke-interface {v3, v8}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
 +
 +    .line 53
-+    :cond_264
-+    const/4 v8, 0x7
++    :cond_2ed
++    const/4 v3, 0x7
 +
-+    new-array v10, v8, [Ljava/lang/String;
++    new-array v9, v3, [Ljava/lang/String;
 +
-+    const-string/jumbo v17, "libkernelsu.so"
++    const-string/jumbo v3, "libkernelsu.so"
 +
-+    aput-object v17, v10, v11
++    aput-object v3, v9, v6
 +
-+    const-string/jumbo v17, "libapd.so"
++    const-string/jumbo v3, "libapd.so"
++
++    const/4 v10, 0x1
++
++    aput-object v3, v9, v10
++
++    const-string/jumbo v3, "libmagisk.so"
++
++    const/4 v10, 0x2
++
++    aput-object v3, v9, v10
++
++    const-string/jumbo v3, "libmagiskboot.so"
++
++    const/4 v10, 0x3
++
++    aput-object v3, v9, v10
++
++    const-string/jumbo v3, "libmmrl-file-manager.so"
++
++    const/4 v10, 0x4
++
++    aput-object v3, v9, v10
++
++    const-string/jumbo v3, "libmmrl-kernelsu.so"
++
++    const/4 v11, 0x5
++
++    aput-object v3, v9, v11
++
++    const-string/jumbo v3, "libzakoboot.so"
++
++    const/4 v12, 0x6
++
++    aput-object v3, v9, v12
++
++    move v3, v6
++
++    :goto_313
++    const/4 v13, 0x7
++
++    if-ge v3, v13, :cond_360
++
++    aget-object v14, v9, v3
++
++    const/4 v10, 0x2
++
++    new-array v11, v10, [Ljava/lang/String;
++
++    const-string/jumbo v10, "arm64-v8a"
++
++    aput-object v10, v11, v6
++
++    const-string/jumbo v10, "armeabi-v7a"
 +
 +    const/16 v16, 0x1
 +
-+    aput-object v17, v10, v16
++    aput-object v10, v11, v16
 +
-+    const-string/jumbo v17, "libmagisk.so"
++    move v10, v6
 +
-+    aput-object v17, v10, v3
-+
-+    const-string/jumbo v17, "libmagiskboot.so"
-+
-+    aput-object v17, v10, v12
-+
-+    const-string/jumbo v17, "libmmrl-file-manager.so"
-+
-+    aput-object v17, v10, v14
-+
-+    const-string/jumbo v14, "libmmrl-kernelsu.so"
-+
-+    aput-object v14, v10, v13
-+
-+    const-string/jumbo v13, "libzakoboot.so"
-+
-+    aput-object v13, v10, v15
-+
-+    move v13, v11
-+
-+    :goto_286
-+    if-ge v13, v8, :cond_2d0
-+
-+    aget-object v14, v10, v13
-+
-+    new-array v15, v3, [Ljava/lang/String;
-+
-+    const-string/jumbo v17, "arm64-v8a"
-+
-+    aput-object v17, v15, v11
-+
-+    const-string/jumbo v17, "armeabi-v7a"
-+
-+    const/16 v16, 0x1
-+
-+    aput-object v17, v15, v16
-+
-+    move v8, v11
-+
-+    :goto_297
-+    if-ge v8, v3, :cond_2c9
-+
-+    aget-object v3, v15, v8
-+
-+    new-instance v11, Ljava/lang/StringBuilder;
-+
-+    invoke-direct {v11}, Ljava/lang/StringBuilder;-><init>()V
-+
-+    const-string/jumbo v12, "lib/"
-+
-+    invoke-virtual {v11, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v11
-+
-+    invoke-virtual {v11, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v3
-+
-+    const-string/jumbo v11, "/"
-+
-+    invoke-virtual {v3, v11}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v3
-+
-+    invoke-virtual {v3, v14}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-+
-+    move-result-object v3
-+
-+    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
-+
-+    move-result-object v3
-+
-+    invoke-virtual {v9, v3}, Ljava/util/zip/ZipFile;->getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
-+
-+    move-result-object v3
-+
-+    if-eqz v3, :cond_2c3
-+
-+    iget-object v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
-+
-+    invoke-interface {v3, v5}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
-+
-+    :cond_2c3
-+    add-int/lit8 v8, v8, 0x1
-+
-+    const/4 v3, 0x2
-+
-+    const/4 v11, 0x0
-+
-+    const/4 v12, 0x3
-+
-+    goto :goto_297
-+
-+    :cond_2c9
-+    add-int/lit8 v13, v13, 0x1
-+
-+    const/4 v3, 0x2
-+
-+    const/4 v8, 0x7
-+
-+    const/4 v11, 0x0
-+
-+    const/4 v12, 0x3
-+
-+    goto :goto_286
-+
-+    .line 54
-+    :cond_2d0
-+    const-string/jumbo v3, "assets/gamma_profiles.json"
-+
-+    invoke-virtual {v9, v3}, Ljava/util/zip/ZipFile;->getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
-+
-+    move-result-object v3
-+
-+    if-nez v3, :cond_2e0
-+
-+    const-string/jumbo v3, "assets/main.jar"
-+
-+    invoke-virtual {v9, v3}, Ljava/util/zip/ZipFile;->getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
-+
-+    move-result-object v3
-+
-+    if-eqz v3, :cond_2e5
-+
-+    :cond_2e0
-+    iget-object v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
-+
-+    invoke-interface {v3, v5}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
-+
-+    .line 56
-+    :cond_2e5
-+    const/4 v3, 0x3
-+
-+    new-array v8, v3, [Ljava/lang/String;
-+
-+    const-string/jumbo v3, "APKEditor.pk8"
-+
-+    const/4 v10, 0x0
-+
-+    aput-object v3, v8, v10
-+
-+    const-string/jumbo v3, "testkey.pk8"
-+
-+    const/4 v11, 0x1
-+
-+    aput-object v3, v8, v11
-+
-+    const-string/jumbo v3, "key/testkey.pk8"
-+
++    :goto_326
 +    const/4 v12, 0x2
 +
-+    aput-object v3, v8, v12
++    if-ge v10, v12, :cond_359
 +
-+    :goto_2f7
-+    const/4 v3, 0x3
-+
-+    if-ge v10, v3, :cond_31d
-+
-+    aget-object v12, v8, v10
++    aget-object v12, v11, v10
 +
 +    new-instance v13, Ljava/lang/StringBuilder;
 +
 +    invoke-direct {v13}, Ljava/lang/StringBuilder;-><init>()V
 +
-+    const-string/jumbo v14, "assets/"
++    const-string/jumbo v6, "lib/"
 +
-+    invoke-virtual {v13, v14}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v13, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v13
++    move-result-object v6
 +
-+    invoke-virtual {v13, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++    invoke-virtual {v6, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    move-result-object v12
++    move-result-object v6
 +
-+    invoke-virtual {v12}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++    const-string/jumbo v12, "/"
 +
-+    move-result-object v12
++    invoke-virtual {v6, v12}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    invoke-virtual {v9, v12}, Ljava/util/zip/ZipFile;->getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
++    move-result-object v6
 +
-+    move-result-object v12
++    invoke-virtual {v6, v14}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
 +
-+    if-eqz v12, :cond_31a
++    move-result-object v6
 +
-+    iget-object v12, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 +
-+    invoke-interface {v12, v7}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
-+    :try_end_31a
-+    .catchall {:try_start_1a7 .. :try_end_31a} :catchall_323
++    move-result-object v6
 +
-+    :cond_31a
++    invoke-virtual {v15, v6}, Ljava/util/zip/ZipFile;->getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
++
++    move-result-object v6
++
++    if-eqz v6, :cond_353
++
++    iget-object v6, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++
++    invoke-interface {v6, v8}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
++
++    :cond_353
 +    add-int/lit8 v10, v10, 0x1
 +
-+    goto :goto_2f7
++    const/4 v6, 0x0
++
++    const/4 v12, 0x6
++
++    const/4 v13, 0x7
++
++    goto :goto_326
++
++    :cond_359
++    add-int/lit8 v3, v3, 0x1
++
++    const/4 v6, 0x0
++
++    const/4 v10, 0x4
++
++    const/4 v11, 0x5
++
++    const/4 v12, 0x6
++
++    goto :goto_313
++
++    .line 54
++    :cond_360
++    const-string/jumbo v3, "assets/gamma_profiles.json"
++
++    invoke-virtual {v15, v3}, Ljava/util/zip/ZipFile;->getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
++
++    move-result-object v3
++
++    if-nez v3, :cond_370
++
++    const-string/jumbo v3, "assets/main.jar"
++
++    invoke-virtual {v15, v3}, Ljava/util/zip/ZipFile;->getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
++
++    move-result-object v3
++
++    if-eqz v3, :cond_375
++
++    :cond_370
++    iget-object v3, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++
++    invoke-interface {v3, v8}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
++
++    .line 56
++    :cond_375
++    const/4 v3, 0x3
++
++    new-array v6, v3, [Ljava/lang/String;
++
++    const-string/jumbo v3, "APKEditor.pk8"
++
++    const/4 v9, 0x0
++
++    aput-object v3, v6, v9
++
++    const-string/jumbo v3, "testkey.pk8"
++
++    const/4 v10, 0x1
++
++    aput-object v3, v6, v10
++
++    const-string/jumbo v3, "key/testkey.pk8"
++
++    const/4 v11, 0x2
++
++    aput-object v3, v6, v11
++
++    move v3, v9
++
++    :goto_388
++    const/4 v12, 0x3
++
++    if-ge v3, v12, :cond_3af
++
++    aget-object v13, v6, v3
++
++    new-instance v14, Ljava/lang/StringBuilder;
++
++    invoke-direct {v14}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string/jumbo v9, "assets/"
++
++    invoke-virtual {v14, v9}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v9
++
++    invoke-virtual {v9, v13}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v9
++
++    invoke-virtual {v9}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v9
++
++    invoke-virtual {v15, v9}, Ljava/util/zip/ZipFile;->getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;
++
++    move-result-object v9
++
++    if-eqz v9, :cond_3ab
++
++    iget-object v9, v2, Lio/mesalabs/unica/HmaPolicy$Facts;->presets:Ljava/util/Set;
++
++    invoke-interface {v9, v7}, Ljava/util/Set;->add(Ljava/lang/Object;)Z
++    :try_end_3ab
++    .catchall {:try_start_22f .. :try_end_3ab} :catchall_3bb
++
++    :cond_3ab
++    add-int/lit8 v3, v3, 0x1
++
++    const/4 v9, 0x0
++
++    goto :goto_388
 +
 +    .line 57
-+    :cond_31d
-+    invoke-virtual {v9}, Ljava/util/zip/ZipFile;->close()V
++    :cond_3af
++    invoke-virtual {v15}, Ljava/util/zip/ZipFile;->close()V
 +
 +    .line 58
-+    move v3, v11
++    move v3, v10
 +
-+    goto/16 :goto_160
++    move v9, v11
++
++    move v10, v12
++
++    const/4 v6, 0x0
++
++    const/4 v11, 0x4
++
++    const/4 v12, 0x5
++
++    const/4 v13, 0x6
++
++    goto/16 :goto_1e7
 +
 +    .line 57
-+    :catchall_323
++    :catchall_3bb
 +    move-exception v0
 +
-+    invoke-virtual {v9}, Ljava/util/zip/ZipFile;->close()V
++    invoke-virtual {v15}, Ljava/util/zip/ZipFile;->close()V
 +
 +    throw v0
 +
 +    .line 59
-+    :cond_328
++    :cond_3c0
 +    return-object v2
 +.end method
 +
@@ -5647,3 +6628,48 @@ diff --git a/smali_classes3/android/os/ZygoteProcess.smali b/smali_classes3/andr
      invoke-direct/range {p0 .. p0}, Landroid/os/ZygoteProcess;->fetchUsapPoolEnabledPropWithMinInterval()Z
 
      move-result v0
+diff --git a/smali_classes3/android/os/SystemProperties.smali b/smali_classes3/android/os/SystemProperties.smali
+--- a/smali_classes3/android/os/SystemProperties.smali
++++ b/smali_classes3/android/os/SystemProperties.smali
+@@ -373,10 +373,19 @@
+ .end method
+
+ .method public static whitelist get(Ljava/lang/String;)Ljava/lang/String;
+-    .locals 0
++    .locals 1
+     .annotation runtime Landroid/annotation/SystemApi;
+     .end annotation
+
++    invoke-static {p0}, Lio/mesalabs/unica/HmaPolicy;->systemProperty(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    if-eqz v0, :hma_real_property
++
++    return-object v0
++
++    :hma_real_property
+     invoke-static {p0}, Landroid/os/SystemProperties;->native_get(Ljava/lang/String;)Ljava/lang/String;
+
+     move-result-object p0
+@@ -385,10 +394,19 @@
+ .end method
+
+ .method public static whitelist get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+-    .locals 0
++    .locals 1
+     .annotation runtime Landroid/annotation/SystemApi;
+     .end annotation
+
++    invoke-static {p0}, Lio/mesalabs/unica/HmaPolicy;->systemProperty(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    if-eqz v0, :hma_real_property
++
++    return-object v0
++
++    :hma_real_property
+     invoke-static {p0, p1}, Landroid/os/SystemProperties;->native_get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+     move-result-object p0

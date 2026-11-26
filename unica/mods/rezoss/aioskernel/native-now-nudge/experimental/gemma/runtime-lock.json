@@ -1,0 +1,68 @@
+[
+  {
+    "file": "litertlm-android-0.19.0.aar",
+    "url": "https://dl.google.com/dl/android/maven2/com/google/ai/edge/litertlm/litertlm-android/0.19.0/litertlm-android-0.19.0.aar",
+    "size": 21197249,
+    "sha256": "e5c7a86048225efba8ab6d35fcd91f5870c86c65ca2538c07c3c1f63d02efa2b"
+  },
+  {
+    "file": "kotlin-stdlib.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.4.0/kotlin-stdlib-2.4.0.jar",
+    "size": 1841929,
+    "sha256": "ccb14ff83fabcb11458b798dbc9824748ccdffeec79c9aba789e6ed1cda86b1c"
+  },
+  {
+    "file": "kotlin-reflect.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-reflect/2.4.0/kotlin-reflect-2.4.0.jar",
+    "size": 3750099,
+    "sha256": "f0d8e8908624eb4478bb131e9f887366680d2e239741195e548fa5c906963b90"
+  },
+  {
+    "file": "coroutines-android.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.11.0/kotlinx-coroutines-android-1.11.0.jar",
+    "size": 17819,
+    "sha256": "c2cb206d27017c7d1bf5ff179787397543d13748dbabb0d7237e1585e0b29044"
+  },
+  {
+    "file": "coroutines-core.jar",
+    "url": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.11.0/kotlinx-coroutines-core-jvm-1.11.0.jar",
+    "size": 1577052,
+    "sha256": "d1d75aa01dffbb4d1c520e67e4c4e7f5f6174718e7cb4632412503f2f0e604fa"
+  },
+  {
+    "file": "gson.jar",
+    "url": "https://repo.maven.apache.org/maven2/com/google/code/gson/gson/2.14.0/gson-2.14.0.jar",
+    "size": 313604,
+    "sha256": "2cbd119bf1961c28788310963dc80ba65f58cdeec1dd139c8bdb1240faa2c36f"
+  },
+  {
+    "file": "libLiteRtGpuAccelerator.so",
+    "url": "https://media.githubusercontent.com/media/google-ai-edge/LiteRT-LM/v0.19.0/prebuilt/android_arm64/libLiteRtGpuAccelerator.so",
+    "size": 3431800,
+    "sha256": "49055120bddce4f4bfb681ae1b929094ef22b238b5d9b91e8e57aeddcd58f8c8"
+  },
+  {
+    "file": "libLiteRtOpenClAccelerator.so",
+    "url": "https://media.githubusercontent.com/media/google-ai-edge/LiteRT-LM/v0.19.0/prebuilt/android_arm64/libLiteRtOpenClAccelerator.so",
+    "size": 3202416,
+    "sha256": "ef9776d87b0a4fe4793e8fa3f325dd9fecca4a2faaace14973bae6c6be2698a5"
+  },
+  {
+    "file": "libLiteRtWebGpuAccelerator.so",
+    "url": "https://media.githubusercontent.com/media/google-ai-edge/LiteRT-LM/v0.19.0/prebuilt/android_arm64/libLiteRtWebGpuAccelerator.so",
+    "size": 3218808,
+    "sha256": "5952041260e13c719754903c95d2400c813785b1f7d0de6495f401b2d0ef956c"
+  },
+  {
+    "file": "libwebgpu_dawn.so",
+    "url": "https://media.githubusercontent.com/media/google-ai-edge/LiteRT-LM/v0.19.0/prebuilt/android_arm64/libwebgpu_dawn.so",
+    "size": 19747368,
+    "sha256": "bfaa7e59f07cc6b828262830832c8a9703db1b045346944c48b00af4a7290bb9"
+  },
+  {
+    "file": "LiteRT-LM-LICENSE",
+    "url": "https://raw.githubusercontent.com/google-ai-edge/LiteRT-LM/v0.19.0/LICENSE",
+    "size": 11357,
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  }
+]

@@ -1,0 +1,206 @@
+--- a/wlan/wonder/main.c
++++ b/wlan/wonder/main.c
+@@ -21,6 +21,7 @@
+ #include "mac80211.h"
+ #include "wonder_log.h"
+ #include "include/wonder/wondertap.h"
++#include "include/wonder/s23u_provider.h"
+ #include "wondertap_internal.h"
+ 
+ 
+@@ -58,7 +59,7 @@
+ static int wonder_master_bind(struct device *dev)
+ {
+ 	struct wondertap_data *wondertap = dev_get_drvdata(dev);
+-	struct platform_device *wlan_pdev;
++	struct device *provider;
+ 	struct wondertap_priv *wlan_priv;
+ 	int ret;
+ 
+@@ -68,14 +69,22 @@
+ 	if (ret)
+ 		return ret;
+ 
+-	wlan_pdev = of_find_device_by_node(wondertap->wlan_node);
+-	if (!wlan_pdev) {
++	if (wondertap->provider_dev) {
++		provider = get_device(wondertap->provider_dev);
++	} else {
++		struct platform_device *wlan_pdev;
++
++		wlan_pdev = of_find_device_by_node(wondertap->wlan_node);
++		provider = wlan_pdev ? &wlan_pdev->dev : NULL;
++	}
++	if (!provider) {
+ 		dev_err(dev, "%s(): Cannot find wlan platform device!\n", __func__);
+ 		component_unbind_all(dev, NULL);
+ 		return -ENODEV;
+ 	}
+ 
+-	wlan_priv = platform_get_drvdata(wlan_pdev);
++	ret = -EINVAL;
++	wlan_priv = dev_get_drvdata(provider);
+ 	if (!wlan_priv || !wlan_priv->wonder_ops)
+ 		goto err;
+ 
+@@ -85,7 +94,9 @@
+ 		goto err;
+ 	}
+ 	/* All matched, hook the ops to wondertap interface. */
+-	wondertap_register_ops(wlan_priv->wonder_ops);
++	ret = wondertap_register_ops(wlan_priv->wonder_ops);
++	if (ret)
++		goto err;
+ 	wondertap->wonder_ops = wlan_priv->wonder_ops;
+ 	wondertap->wifi_ver = wlan_priv->ver;
+ 	dev_info(dev, "%s(): Connected to wlan ver %d (cur: wonder ver %d)!\n",
+@@ -93,15 +104,17 @@
+ 	ret = wondertap_get_capabilities(wondertap, &wondertap->cap);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to get wondertap capabilities, error: %d\n", ret);
+-		goto err;
+-	}
+-	put_device(&wlan_pdev->dev);
++		wondertap_unregister_ops(wondertap->wonder_ops);
++		wondertap->wonder_ops = NULL;
++		goto err;
++	}
++	put_device(provider);
+ 	return 0;
+ err:
+ 	dev_err(dev, "%s(): wlan driver data invalid!\n", __func__);
+-	put_device(&wlan_pdev->dev);
++	put_device(provider);
+ 	component_unbind_all(dev, NULL);
+-	return -EINVAL;
++	return ret;
+ }
+ 
+ static void wonder_master_unbind(struct device *dev)
+@@ -111,6 +124,7 @@
+ 	dev_info(dev, "%s(): Unbinding...\n", __func__);
+ 
+ 	wondertap_unregister_ops(wondertap->wonder_ops);
++	wondertap->wonder_ops = NULL;
+ 	component_unbind_all(dev, NULL);
+ }
+ 
+@@ -122,6 +136,21 @@
+ static int wonder_compare_dev(struct device *dev, void *data)
+ {
+ 	return (dev->of_node == data);
++}
++
++static int wonder_compare_provider(struct device *dev, void *data)
++{
++	return dev == data;
++}
++
++static void wonder_release_provider(struct device *dev, void *data)
++{
++	put_device(data);
++}
++
++static void wonder_release_node(struct device *dev, void *data)
++{
++	of_node_put(data);
+ }
+ 
+ static int wonder_probe(struct platform_device *pdev)
+@@ -130,6 +159,7 @@
+ 	struct wondertap_data *wondertap;
+ 	struct component_match *match = NULL;
+ 	struct device_node *provider_node;
++	const struct s23u_wonder_platform_data *pdata = dev_get_platdata(&pdev->dev);
+ 	int ret;
+ 
+ 	dev_info(&pdev->dev, "%s(): probe\n", __func__);
+@@ -139,30 +169,49 @@
+ 
+ 	wondertap = &wonder->wondertap_data;
+ 	provider_node = of_parse_phandle(pdev->dev.of_node, "wondertap-provider", 0);
+-	if (!provider_node) {
++	if (provider_node) {
++		wondertap->wlan_node = provider_node;
++		component_match_add_release(&pdev->dev, &match, wonder_release_node,
++					   wonder_compare_dev, provider_node);
++	} else if (pdata && pdata->magic == S23U_WONDER_PROVIDER_MAGIC &&
++		   pdata->provider) {
++		wondertap->provider_dev = get_device(pdata->provider);
++		component_match_add_release(&pdev->dev, &match,
++					   wonder_release_provider,
++					   wonder_compare_provider,
++					   get_device(pdata->provider));
++	} else {
+ 		dev_err(&pdev->dev, "%s(): Missing 'wondertap-provider' in DTS\n", __func__);
+-		return -ENODEV;
+-	}
+-	wondertap->wlan_node = provider_node;
++		ret = -ENODEV;
++		goto err_free;
++	}
+ 	/* Assign wondertap interface version will be used in the match process. */
+ 	wondertap->ver = WONDER_VERSION_1_6_5;
+ 	platform_set_drvdata(pdev, wondertap);
+-	component_match_add_release(&pdev->dev, &match, NULL,
+-							wonder_compare_dev, provider_node);
+-
+-	of_node_put(provider_node);
+ 	ret = component_master_add_with_match(&pdev->dev, &wonder_comp_ops, match);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "%s(): Missing component\n", __func__);
+-		return -ENODEV;
+-	}
+-	return wonder_debugfs_init(wonder);
++		goto err_free;
++	}
++	ret = wonder_debugfs_init(wonder);
++	if (!ret)
++		return 0;
++	component_master_del(&pdev->dev, &wonder_comp_ops);
++err_free:
++	put_device(wondertap->provider_dev);
++	platform_set_drvdata(pdev, NULL);
++	wonder_mac80211_exit();
++	return ret;
+ }
+ 
+ static void wonder_remove(struct platform_device *pdev)
+ {
++	struct wondertap_data *wondertap = platform_get_drvdata(pdev);
++
+ 	component_master_del(&pdev->dev, &wonder_comp_ops);
+ 	wonder_debugfs_exit();
++	put_device(wondertap->provider_dev);
++	platform_set_drvdata(pdev, NULL);
+ 	wonder_mac80211_exit();
+ }
+ 
+--- a/wlan/wonder/wondertap_internal.h
++++ b/wlan/wonder/wondertap_internal.h
+@@ -49,6 +49,7 @@
+ 	enum wondertap_ver ver;
+ 	enum wondertap_ver wifi_ver;
+ 	struct device_node *wlan_node;
++	struct device *provider_dev;
+ 	/* MAC address for station query via debugfs */
+ 	u8 query_mac_addr[ETH_ALEN];
+ 	const struct wondertap_ops *wonder_ops;
+--- /dev/null
++++ b/wlan/wonder/include/wonder/s23u_provider.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _WONDER_S23U_PROVIDER_H
++#define _WONDER_S23U_PROVIDER_H
++
++#include <linux/device.h>
++
++/* Optional board registration for devices without a Wonder DT node. */
++#define S23U_WONDER_PROVIDER_MAGIC 0x57545031U
++struct s23u_wonder_platform_data {
++	u32 magic;
++	struct device *provider;
++};
++
++int cnss_set_vendor_wonder_priv_data(const void *priv_data);
++#endif

@@ -1,0 +1,15 @@
+PrivateLM upstream release: 1.0.7-cluster
+Repository: https://github.com/orailnoor/cross-platform-llm-client
+APK: https://github.com/orailnoor/cross-platform-llm-client/releases/download/1.0.7-cluster/PrivateLM-1.0.7.apk
+SHA-256 (matches GitHub asset digest): 2a5a70db468920494d23d62c6ba180b1ebf63014596229e998a2630786715556
+
+Original upstream APK and signing certificate preserved. No platform signing,
+privileged placement, model bundling, permission pregrants, or backend rerouting.
+45 MiB .00 through .03 chunks use the existing UN1CA split-file reconstruction.
+The complete APK is ignored by Git and retained for local builds.
+License: MIT, see LICENSE.
+
+Signature verification: APK v2 signature passes. Upstream uses an Android Debug
+certificate (SHA-256 11486ac4c4e458e219d8eeabdcd3e20d794a3bd9d6d7d7288553b198ffff068f).
+Future in-place updates require the same signing identity; this is preserved,
+not replaced with the ROM platform key.

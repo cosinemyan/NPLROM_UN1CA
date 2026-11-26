@@ -1,0 +1,37 @@
+--- a/examples/qualcomm/oss_scripts/llama/runner/multimodal_runner/multimodal_runner.cpp
++++ b/examples/qualcomm/oss_scripts/llama/runner/multimodal_runner/multimodal_runner.cpp
+@@ -246,8 +246,17 @@
+   int32_t max_ar_len = 0;
+   // atten mask: [1, 1, AR-N, CL]
+   auto atten_mask_meta_token = method_meta->input_tensor_meta(1);
+-  token_generator_ar_len = atten_mask_meta_token->sizes()[2];
+-  context_len_ = atten_mask_meta_token->sizes()[3];
++  auto token_mask_shape = atten_mask_meta_token->sizes();
++  ET_CHECK_MSG(token_mask_shape.size() == 3 || token_mask_shape.size() == 4,
++               "Unsupported attention mask rank");
++  token_generator_ar_len = token_mask_shape[token_mask_shape.size() - 2];
++  context_len_ = token_mask_shape[token_mask_shape.size() - 1];
++  ET_CHECK_MSG(context_len_ > 0 && context_len_ <= 8192 &&
++                   token_generator_ar_len > 0 &&
++                   token_generator_ar_len <= context_len_,
++               "Invalid attention mask dimensions");
++  ET_LOG(Info, "Verified context length %d, KV AR length %d",
++         context_len_, token_generator_ar_len);
+   if (eval_mode_ == EvalMode::kKVCached) {
+     prompt_processor_ar_len = token_generator_ar_len;
+   } else if (
+@@ -256,7 +265,13 @@
+     auto atten_mask_meta_prompt =
+         text_decoder_->method_meta(prompt_processor_method_name)
+             ->input_tensor_meta(1);
+-    prompt_processor_ar_len = atten_mask_meta_prompt->sizes()[2];
++    auto prompt_mask_shape = atten_mask_meta_prompt->sizes();
++    ET_CHECK_MSG(prompt_mask_shape.size() == token_mask_shape.size() &&
++                     prompt_mask_shape[prompt_mask_shape.size() - 1] == context_len_,
++                 "Inconsistent prefill attention mask");
++    prompt_processor_ar_len = prompt_mask_shape[prompt_mask_shape.size() - 2];
++    ET_CHECK_MSG(prompt_processor_ar_len > 0 && prompt_processor_ar_len <= context_len_,
++                 "Invalid prefill AR length");
+   }
+   if (prompt_processor_ar_len == context_len_)
+     max_cache_len = context_len_;

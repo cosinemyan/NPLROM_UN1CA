@@ -1,0 +1,180 @@
+From: UN1CA <unica@local>
+Subject: [PATCH] Add designed Audio and Battery Performance submenus
+
+Add-only DashboardFragment classes based on UISettingsFragment. Existing
+controllers, preference keys and action handlers are unchanged.
+
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/design/AudioTweaksFragment.smali
+@@ -0,0 +1,69 @@
++.class public Lio/mesalabs/unica/settings/design/AudioTweaksFragment;
++.super Lcom/android/settings/dashboard/DashboardFragment;
++.source "AudioTweaksFragment.java"
++
++
++# static fields
++.field public static final SEARCH_INDEX_DATA_PROVIDER:Lcom/android/settings/search/BaseSearchIndexProvider;
++
++
++# direct methods
++.method public static constructor <clinit>()V
++    .locals 3
++
++    new-instance v0, Lcom/android/settings/search/BaseSearchIndexProvider;
++
++    const-string v1, "xml"
++
++    const-string v2, "unica_audio_tweaks_settings"
++
++    invoke-static {v1, v2}, Lio/mesalabs/unica/utils/Utils;->getResourceId(Ljava/lang/String;Ljava/lang/String;)I
++
++    move-result v1
++
++    invoke-direct {v0, v1}, Lcom/android/settings/search/BaseSearchIndexProvider;-><init>(I)V
++
++    sput-object v0, Lio/mesalabs/unica/settings/design/AudioTweaksFragment;->SEARCH_INDEX_DATA_PROVIDER:Lcom/android/settings/search/BaseSearchIndexProvider;
++
++    return-void
++.end method
++
++.method public constructor <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Lcom/android/settings/dashboard/DashboardFragment;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final getLogTag()Ljava/lang/String;
++    .locals 0
++
++    const-string p0, "AudioTweaksFragment"
++
++    return-object p0
++.end method
++
++.method public final getMetricsCategory()I
++    .locals 0
++
++    const/16 p0, 0x2e8
++
++    return p0
++.end method
++
++.method public final getPreferenceScreenResId()I
++    .locals 1
++
++    const-string p0, "xml"
++
++    const-string v0, "unica_audio_tweaks_settings"
++
++    invoke-static {p0, v0}, Lio/mesalabs/unica/utils/Utils;->getResourceId(Ljava/lang/String;Ljava/lang/String;)I
++
++    move-result p0
++
++    return p0
++.end method
+
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/settings/design/BatteryPerformanceFragment.smali
+@@ -0,0 +1,69 @@
++.class public Lio/mesalabs/unica/settings/design/BatteryPerformanceFragment;
++.super Lcom/android/settings/dashboard/DashboardFragment;
++.source "BatteryPerformanceFragment.java"
++
++
++# static fields
++.field public static final SEARCH_INDEX_DATA_PROVIDER:Lcom/android/settings/search/BaseSearchIndexProvider;
++
++
++# direct methods
++.method public static constructor <clinit>()V
++    .locals 3
++
++    new-instance v0, Lcom/android/settings/search/BaseSearchIndexProvider;
++
++    const-string v1, "xml"
++
++    const-string v2, "unica_battery_performance_settings"
++
++    invoke-static {v1, v2}, Lio/mesalabs/unica/utils/Utils;->getResourceId(Ljava/lang/String;Ljava/lang/String;)I
++
++    move-result v1
++
++    invoke-direct {v0, v1}, Lcom/android/settings/search/BaseSearchIndexProvider;-><init>(I)V
++
++    sput-object v0, Lio/mesalabs/unica/settings/design/BatteryPerformanceFragment;->SEARCH_INDEX_DATA_PROVIDER:Lcom/android/settings/search/BaseSearchIndexProvider;
++
++    return-void
++.end method
++
++.method public constructor <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Lcom/android/settings/dashboard/DashboardFragment;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final getLogTag()Ljava/lang/String;
++    .locals 0
++
++    const-string p0, "BatteryPerformanceFragment"
++
++    return-object p0
++.end method
++
++.method public final getMetricsCategory()I
++    .locals 0
++
++    const/16 p0, 0x2e8
++
++    return p0
++.end method
++
++.method public final getPreferenceScreenResId()I
++    .locals 1
++
++    const-string p0, "xml"
++
++    const-string v0, "unica_battery_performance_settings"
++
++    invoke-static {p0, v0}, Lio/mesalabs/unica/utils/Utils;->getResourceId(Ljava/lang/String;Ljava/lang/String;)I
++
++    move-result p0
++
++    return p0
++.end method
+
+--- a/smali_classes4/io/mesalabs/unica/search/UnicaSearchIndexableResources.smali
++++ b/smali_classes4/io/mesalabs/unica/search/UnicaSearchIndexableResources.smali
+@@ -49,5 +49,25 @@
+ 
+     invoke-virtual {p0, v0}, Lio/mesalabs/unica/search/UnicaSearchIndexableResources;->addIndex(Lcom/android/settingslib/search/SearchIndexableData;)V
+ 
++    new-instance v0, Lcom/android/settingslib/search/SearchIndexableData;
++
++    const-class v1, Lio/mesalabs/unica/settings/design/AudioTweaksFragment;
++
++    sget-object v2, Lio/mesalabs/unica/settings/design/AudioTweaksFragment;->SEARCH_INDEX_DATA_PROVIDER:Lcom/android/settings/search/BaseSearchIndexProvider;
++
++    invoke-direct {v0, v1, v2}, Lcom/android/settingslib/search/SearchIndexableData;-><init>(Ljava/lang/Class;Lcom/android/settingslib/search/Indexable$SearchIndexProvider;)V
++
++    invoke-virtual {p0, v0}, Lio/mesalabs/unica/search/UnicaSearchIndexableResources;->addIndex(Lcom/android/settingslib/search/SearchIndexableData;)V
++
++    new-instance v0, Lcom/android/settingslib/search/SearchIndexableData;
++
++    const-class v1, Lio/mesalabs/unica/settings/design/BatteryPerformanceFragment;
++
++    sget-object v2, Lio/mesalabs/unica/settings/design/BatteryPerformanceFragment;->SEARCH_INDEX_DATA_PROVIDER:Lcom/android/settings/search/BaseSearchIndexProvider;
++
++    invoke-direct {v0, v1, v2}, Lcom/android/settingslib/search/SearchIndexableData;-><init>(Ljava/lang/Class;Lcom/android/settingslib/search/Indexable$SearchIndexProvider;)V
++
++    invoke-virtual {p0, v0}, Lio/mesalabs/unica/search/UnicaSearchIndexableResources;->addIndex(Lcom/android/settingslib/search/SearchIndexableData;)V
++
+     return-void
+ .end method

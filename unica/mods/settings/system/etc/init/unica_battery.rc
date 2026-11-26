@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Fixed-control worker: no shell, Binder, networking, Linux capabilities or su.
+service unica_battery /system/bin/unica-battery
+    user root
+    group system
+    capabilities
+    seclabel u:r:unica_battery:s0
+    disabled
+    oneshot
+
+on post-fs-data
+    mkdir /data/misc/unica_battery 0750 root system
+    restorecon /data/misc/unica_battery
+    mkdir /data/misc/unica_battery/requests 0770 system system
+    mkdir /data/misc/unica_battery/responses 0750 root system
+    restorecon_recursive /data/misc/unica_battery
+
+on property:sys.unica.battery.request=*
+    start unica_battery

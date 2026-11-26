@@ -1,0 +1,43 @@
+Subject: [PATCH] Use Gemma diagnostic context and output budgets
+
+--- a/backend/java/io/mesalabs/rezoss/nudge/TextBackend.java
++++ b/backend/java/io/mesalabs/rezoss/nudge/TextBackend.java
+@@ -193,10 +193,10 @@
+         Bundle config=api.diagnosticConfig();boolean online=config.getBoolean("online");
+         config.putInt("chat_protocol",1);
+         // Conservative transport budgets; local tokenization remains authoritative.
+-        config.putInt("chat_max_chars",online?12000:2200);
+-        config.putInt("chat_section_chars",online?8000:800);
+-        config.putInt("chat_output_tokens",online?1024:256);
+-        config.putInt("chat_context_tokens",online?0:1024);
++        config.putInt("chat_max_chars",online?12000:10000);
++        config.putInt("chat_section_chars",online?8000:4000);
++        config.putInt("chat_output_tokens",online?1024:768);
++        config.putInt("chat_context_tokens",online?0:4096);
+         return config;
+     }
+     String generateChat(String input,String destination,boolean consent,Control control)throws Exception {
+@@ -230,20 +230,9 @@
+         } finally { runnerLock.unlock(); }
+     }
+     private String diagnosticLocal(String prompt,Control control)throws Exception {
+-        prepareModel(control.deadline());
+-        if(count(prompt,control)>700)throw new IOException("context_limit");
+-        File job=Files.createTempDirectory(context.getCacheDir().toPath(),"diagnostic-").toFile();
+-        Process process=null;
+-        try {
+-            process=launch(job,prompt,null,256);control.process(process);
+-            if(control.cancelled())throw new InterruptedIOException();
+-            if(!process.waitFor(Math.max(1,control.deadline()-SystemClock.elapsedRealtime()),TimeUnit.MILLISECONDS))throw new IOException("deadline");
+-            if(process.exitValue()!=0)throw new IOException("runner_failed");
+-            return ModelOutput.completion(new String(Files.readAllBytes(new File(job,"output.txt").toPath()),"UTF-8")).trim();
+-        } finally {
+-            if(process!=null)process.destroyForcibly();control.process(null);
+-            File[] files=job.listFiles();if(files!=null)for(File file:files)file.delete();job.delete();
+-        }
++        boolean chat=prompt.startsWith("You help diagnose Samsung UN1CA");
++        if(gemma.count(prompt,control)>(chat?3072:700))throw new IOException("context_limit");
++        return gemma.generate(prompt,chat?768:256,control);
+     }
+     String generateLocal(String input,boolean summary,Control control)throws Exception {
+         return generateControlled(input,summary,false,control);

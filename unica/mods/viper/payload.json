@@ -1,0 +1,17 @@
+{
+  "app": {
+    "repository": "https://github.com/likelikeslike/ViPER4Android",
+    "commit": "1f0c824f3f28040f64790a4fd2c22543059152a4",
+    "version": "2.1.1"
+  },
+  "driver": {
+    "repository": "https://github.com/likelikeslike/ViPERFX_RE",
+    "release": "v2.1.1",
+    "variant": "non-AIDL"
+  },
+  "sha256": {
+    "ViPER4Android.apk": "c0b93dc3cef8817f79cdb4bec924821c0e0cbeed10c69da6a296f63f40c84f2e",
+    "ViPER4Android-RE-v2.1.1.zip": "c8f769f9d9f470e47f8278d69615c899d54af3916d10291d853fbd299ee847a2",
+    "upstream-app-2.1.1.tar.gz": "b2143adef41de0b76bf452f15b76e9a16ac8cc82cde94edd5d7c6e2b8b3f957b"
+  }
+}

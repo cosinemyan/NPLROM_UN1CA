@@ -1,0 +1,429 @@
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -42,6 +42,8 @@
+     <uses-permission android:name="com.samsung.android.settings.intelligence.READ_SETTINGS_SEARCH_DATA_PROVIDER"/>
+     <permission android:name="com.samsung.android.app.memory.EXTERNAL_VOICE_CAPTURE" android:protectionLevel="signatureOrSystem"/>
+     <queries>
++        <package android:name="com.samsung.android.aioskernelservice" />
++        <intent><action android:name="android.intellivoiceservice.SpacClientService" /></intent>
+         <package android:name="com.samsung.android.smartsuggestions"/>
+         <package android:name="com.osp.app.signin"/>
+         <intent>
+@@ -164,6 +166,7 @@
+     <uses-permission android:name="com.sec.android.app.apex.permission.ACCESS_APEX_SERVICE"/>
+     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+     <uses-permission android:name="com.samsung.android.sume.nn.service.permission.ACCESS_SUME_NN_SERVICE"/>
++    <uses-permission android:name="io.mesalabs.rezoss.permission.QWEN_ENGINE" />
+     <application android:allowBackup="false" android:appComponentFactory="androidx.core.app.CoreComponentFactory" android:dataExtractionRules="@xml/data_extraction_rules" android:enableOnBackInvokedCallback="true" android:extractNativeLibs="false" android:fullBackupContent="@xml/backup_rules" android:hardwareAccelerated="true" android:icon="@mipmap/ic_launcher" android:label="@string/app_name" android:largeHeap="true" android:name="com.samsung.android.app.memory.MemoryApplication" android:roundIcon="@mipmap/ic_launcher_round" android:supportsRtl="true" android:theme="@style/Theme.Memory">
+         <meta-data android:name="ROUTINE_METADATA_XML_SOURCE" android:value="asset"/>
+         <meta-data android:name="com.samsung.android.sdk.routines.v3.meta.ACTION_ASSET" android:value="metadata/memory_actions_provider.xml"/>
+--- a/smali_classes2/ai/a0.smali
++++ b/smali_classes2/ai/a0.smali
+@@ -62,6 +62,8 @@
+ 
+ .field private final isAvailable:Z
+ 
++
++.field public static final enum UN1CA_AI_BACKEND:Lai/a0;
+ 
+ # direct methods
+ .method static constructor <clinit>()V
+@@ -747,6 +749,36 @@
+ 
+     .line 351
+     .line 352
++    # Append a real enum and stable, programmatically inflated view ID.
++    new-instance v0, Lai/a0;
++    const/16 v1, 0x13
++    const v2, 0x00ee0001
++    const-string v3, "UN1CA_AI_BACKEND"
++    const/4 v4, 0x1
++    invoke-direct {v0, v1, v2, v3, v4}, Lai/a0;-><init>(IILjava/lang/String;Z)V
++    sput-object v0, Lai/a0;->UN1CA_AI_BACKEND:Lai/a0;
++    sput-object v0, Lai/a0;->debugDefault:Lai/a0;
++    sput-object v0, Lai/a0;->releaseDefault:Lai/a0;
++    sget-object v1, Lai/a0;->$VALUES:[Lai/a0;
++    const/16 v2, 0x14
++    invoke-static {v1, v2}, Ljava/util/Arrays;->copyOf([Ljava/lang/Object;I)[Ljava/lang/Object;
++    move-result-object v1
++    check-cast v1, [Lai/a0;
++    const/16 v2, 0x13
++    aput-object v0, v1, v2
++    sput-object v1, Lai/a0;->$VALUES:[Lai/a0;
++    invoke-static {v1}, Lct/i;->j([Ljava/lang/Enum;)Lu20/b;
++    move-result-object v1
++    sput-object v1, Lai/a0;->$ENTRIES:Lu20/a;
++    sget-object v1, Lai/a0;->RELEASE_SUPPORTED_MODEL_IDS:[I
++    invoke-static {v1}, Lio/mesalabs/rezoss/memory/MemoryBackend;->appendId([I)[I
++    move-result-object v1
++    sput-object v1, Lai/a0;->RELEASE_SUPPORTED_MODEL_IDS:[I
++    sget-object v1, Lai/a0;->DEBUG_SUPPORTED_MODEL_IDS:[I
++    invoke-static {v1}, Lio/mesalabs/rezoss/memory/MemoryBackend;->appendId([I)[I
++    move-result-object v1
++    sput-object v1, Lai/a0;->DEBUG_SUPPORTED_MODEL_IDS:[I
++
+     return-void
+ 
+     .line 353
+--- a/smali_classes2/com/samsung/android/app/memory/analysis/develop/menu/ModelConfigurationActivity.smali
++++ b/smali_classes2/com/samsung/android/app/memory/analysis/develop/menu/ModelConfigurationActivity.smali
+@@ -1355,6 +1355,8 @@
+     .line 7
+     invoke-virtual {p0, p1}, Lh/m;->setContentView(I)V
+ 
++    invoke-static {p0}, Lio/mesalabs/rezoss/memory/MemoryBackend;->addModel(Landroid/app/Activity;)V
++
+     .line 8
+     .line 9
+     .line 10
+--- a/smali_classes2/com/samsung/android/libaihub/aicore/util/device/AITestUtils.smali
++++ b/smali_classes2/com/samsung/android/libaihub/aicore/util/device/AITestUtils.smali
+@@ -334,300 +334,10 @@
+ .end method
+ 
+ .method public static final getAnalysisModelValue(Landroid/content/Context;)Ljava/lang/String;
+-    .locals 8
+-
+-    .line 1
+-    const-string v0, "SCS_SPAC_GEMMA_4_31B_MEMORY"
+-
+-    .line 2
+-    .line 3
+-    if-eqz p0, :cond_b
+-
+-    .line 4
+-    .line 5
+-    const-string v1, "com.samsung.android.app.develop_preferences"
+-
+-    .line 6
+-    .line 7
+-    const/4 v2, 0x0
+-
+-    .line 8
+-    invoke-virtual {p0, v1, v2}, Landroid/content/Context;->getSharedPreferences(Ljava/lang/String;I)Landroid/content/SharedPreferences;
+-
+-    .line 9
+-    .line 10
+-    .line 11
+-    move-result-object p0
+-
+-    .line 12
+-    if-nez p0, :cond_0
+-
+-    .line 13
+-    .line 14
+-    goto/16 :goto_2
+-
+-    .line 15
+-    .line 16
+-    :cond_0
+-    const-string v1, "preferences_analysis_model"
+-
+-    .line 17
+-    .line 18
+-    invoke-interface {p0, v1, v0}, Landroid/content/SharedPreferences;->getString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+-
+-    .line 19
+-    .line 20
+-    .line 21
+-    move-result-object v3
+-
+-    .line 22
+-    if-nez v3, :cond_1
+-
+-    .line 23
+-    .line 24
+-    move-object v3, v0
+-
+-    .line 25
+-    :cond_1
+-    const-string v4, "preferences_analysis_model_scs_default_migrated"
+-
+-    .line 26
+-    .line 27
+-    invoke-interface {p0, v4, v2}, Landroid/content/SharedPreferences;->getBoolean(Ljava/lang/String;Z)Z
+-
+-    .line 28
+-    .line 29
+-    .line 30
+-    move-result v5
+-
+-    .line 31
+-    invoke-virtual {v3}, Ljava/lang/String;->hashCode()I
+-
+-    .line 32
+-    .line 33
+-    .line 34
+-    move-result v6
+-
+-    .line 35
+-    const v7, -0x61152364
+-
+-    .line 36
+-    .line 37
+-    .line 38
+-    if-eq v6, v7, :cond_5
+-
+-    .line 39
+-    .line 40
+-    const v7, 0x7d987a3
+-
+-    .line 41
+-    .line 42
+-    .line 43
+-    if-eq v6, v7, :cond_3
+-
+-    .line 44
+-    .line 45
+-    const v7, 0x715262b7
+-
+-    .line 46
+-    .line 47
+-    .line 48
+-    if-eq v6, v7, :cond_2
+-
+-    .line 49
+-    .line 50
+-    goto :goto_0
+-
+-    .line 51
+-    :cond_2
+-    const-string v6, "SCS_SPAC_GEMMA_4_31B_BASE"
+-
+-    .line 52
+-    .line 53
+-    invoke-virtual {v3, v6}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    .line 54
+-    .line 55
+-    .line 56
+-    move-result v6
+-
+-    .line 57
+-    if-nez v6, :cond_7
+-
+-    .line 58
+-    .line 59
+-    goto :goto_0
+-
+-    .line 60
+-    :cond_3
+-    const-string v6, "SPAC_GEMMA_4_31B_MEMORY"
+-
+-    .line 61
+-    .line 62
+-    invoke-virtual {v3, v6}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    .line 63
+-    .line 64
+-    .line 65
+-    move-result v6
+-
+-    .line 66
+-    if-nez v6, :cond_4
+-
+-    .line 67
+-    .line 68
+-    goto :goto_0
+-
+-    .line 69
+-    :cond_4
+-    if-nez v5, :cond_6
+-
+-    .line 70
+-    .line 71
+-    goto :goto_1
+-
+-    .line 72
+-    :cond_5
+-    const-string v6, "SCS_SPAC_QWEN_6_35B_A3B"
+-
+-    .line 73
+-    .line 74
+-    invoke-virtual {v3, v6}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+-
+-    .line 75
+-    .line 76
+-    .line 77
+-    move-result v6
+-
+-    .line 78
+-    if-nez v6, :cond_7
+-
+-    .line 79
+-    .line 80
+-    :cond_6
+-    :goto_0
+-    move-object v0, v3
+-
+-    .line 81
+-    :cond_7
+-    :goto_1
+-    if-eqz v5, :cond_8
+-
+-    .line 82
+-    .line 83
+-    invoke-virtual {v0, v3}, Ljava/lang/Object;->equals(Ljava/lang/Object;)Z
+-
+-    .line 84
+-    .line 85
+-    .line 86
+-    move-result v6
+-
+-    .line 87
+-    if-nez v6, :cond_b
+-
+-    .line 88
+-    .line 89
+-    :cond_8
+-    invoke-interface {p0}, Landroid/content/SharedPreferences;->edit()Landroid/content/SharedPreferences$Editor;
+-
+-    .line 90
+-    .line 91
+-    .line 92
+-    move-result-object p0
+-
+-    .line 93
+-    invoke-virtual {v0, v3}, Ljava/lang/Object;->equals(Ljava/lang/Object;)Z
+-
+-    .line 94
+-    .line 95
+-    .line 96
+-    move-result v6
+-
+-    .line 97
+-    if-nez v6, :cond_9
+-
+-    .line 98
+-    .line 99
+-    invoke-interface {p0, v1, v0}, Landroid/content/SharedPreferences$Editor;->putString(Ljava/lang/String;Ljava/lang/String;)Landroid/content/SharedPreferences$Editor;
+-
+-    .line 100
+-    .line 101
+-    .line 102
+-    :cond_9
+-    if-nez v5, :cond_a
+-
+-    .line 103
+-    .line 104
+-    const/4 v1, 0x1
+-
+-    .line 105
+-    invoke-interface {p0, v4, v1}, Landroid/content/SharedPreferences$Editor;->putBoolean(Ljava/lang/String;Z)Landroid/content/SharedPreferences$Editor;
+-
+-    .line 106
+-    .line 107
+-    .line 108
+-    :cond_a
+-    invoke-interface {p0}, Landroid/content/SharedPreferences$Editor;->apply()V
+-
+-    .line 109
+-    .line 110
+-    .line 111
+-    invoke-virtual {v0, v3}, Ljava/lang/Object;->equals(Ljava/lang/Object;)Z
+-
+-    .line 112
+-    .line 113
+-    .line 114
+-    move-result p0
+-
+-    .line 115
+-    if-nez p0, :cond_b
+-
+-    .line 116
+-    .line 117
+-    sget-object p0, Lcom/samsung/android/libaihub/aicore/util/log/Logger;->Companion:Lcom/samsung/android/libaihub/aicore/util/log/Logger$Companion;
+-
+-    .line 118
+-    .line 119
+-    const-class v1, Lcom/samsung/android/libaihub/aicore/util/device/AITestUtils;
+-
+-    .line 120
+-    .line 121
+-    invoke-virtual {p0, v1}, Lcom/samsung/android/libaihub/aicore/util/log/Logger$Companion;->getLogger(Ljava/lang/Class;)Lcom/samsung/android/libaihub/aicore/util/log/Logger;
+-
+-    .line 122
+-    .line 123
+-    .line 124
+-    move-result-object p0
+-
+-    .line 125
+-    const-string v1, "Analysis model migrated: "
+-
+-    .line 126
+-    .line 127
+-    const-string v4, " -> "
+-
+-    .line 128
+-    .line 129
+-    invoke-static {v1, v3, v4, v0}, Lcom/google/api/a;->l(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+-
+-    .line 130
+-    .line 131
+-    .line 132
+-    move-result-object v1
+-
+-    .line 133
+-    new-array v2, v2, [Ljava/lang/Object;
+-
+-    .line 134
+-    .line 135
+-    invoke-interface {p0, v1, v2}, Lcom/samsung/android/libaihub/aicore/util/log/Logger;->error(Ljava/lang/String;[Ljava/lang/Object;)V
+-
+-    .line 136
+-    .line 137
+-    .line 138
+-    :cond_b
+-    :goto_2
+-    return-object v0
++    .locals 0
++    invoke-static {p0}, Lio/mesalabs/rezoss/memory/MemoryBackend;->model(Landroid/content/Context;)Ljava/lang/String;
++    move-result-object p0
++    return-object p0
+ .end method
+ 
+ .method public static final getAnalysisPromptValue(Landroid/content/Context;)Ljava/lang/String;
+--- a/smali_classes2/com/samsung/android/libaihub/geminihub/model/gemini/delegate/VertexAIDelegate$getRequestResult$2$deferred$1$1.smali
++++ b/smali_classes2/com/samsung/android/libaihub/geminihub/model/gemini/delegate/VertexAIDelegate$getRequestResult$2$deferred$1$1.smali
+@@ -325,6 +325,8 @@
+ 
+     .line 67
+     :cond_3
++    invoke-static {v0}, Lio/mesalabs/rezoss/memory/MemoryFailurePolicy;->throwIfEligible(Ljava/lang/Throwable;)V
++
+     invoke-static {p0}, Lcom/samsung/android/libaihub/geminihub/model/gemini/delegate/VertexAIDelegate;->access$getLog$p(Lcom/samsung/android/libaihub/geminihub/model/gemini/delegate/VertexAIDelegate;)Lcom/samsung/android/libaihub/aicore/util/log/Logger;
+ 
+     .line 68
+--- a/smali_classes2/li/p.smali
++++ b/smali_classes2/li/p.smali
+@@ -74,7 +74,7 @@
+     move-object v5, p0
+ 
+     .line 17
+-    invoke-virtual/range {v0 .. v5}, Lli/w;->g(Landroid/content/Context;Ldi/c;Lci/a;Lcom/samsung/android/libaihub/aicore/prompt/PromptType;Lt20/c;)Ljava/lang/Object;
++    invoke-virtual/range {v0 .. v5}, Lli/w;->memoryCloud(Landroid/content/Context;Ldi/c;Lci/a;Lcom/samsung/android/libaihub/aicore/prompt/PromptType;Lt20/c;)Ljava/lang/Object;
+ 
+     .line 18
+     .line 19
+--- a/smali_classes2/li/w.smali
++++ b/smali_classes2/li/w.smali
+@@ -1722,7 +1722,7 @@
+ 
+ 
+ # virtual methods
+-.method public final g(Landroid/content/Context;Ldi/c;Lci/a;Lcom/samsung/android/libaihub/aicore/prompt/PromptType;Lt20/c;)Ljava/lang/Object;
++.method public final memoryCloud(Landroid/content/Context;Ldi/c;Lci/a;Lcom/samsung/android/libaihub/aicore/prompt/PromptType;Lt20/c;)Ljava/lang/Object;
+     .locals 22
+ 
+     .line 1
+@@ -3174,3 +3174,10 @@
+     :cond_6
+     throw p0
+ .end method
++
++.method public final g(Landroid/content/Context;Ldi/c;Lci/a;Lcom/samsung/android/libaihub/aicore/prompt/PromptType;Lt20/c;)Ljava/lang/Object;
++    .locals 0
++    invoke-static/range {p0 .. p5}, Lio/mesalabs/rezoss/memory/MemoryBackend;->request(Lli/w;Landroid/content/Context;Ldi/c;Lci/a;Lcom/samsung/android/libaihub/aicore/prompt/PromptType;Lt20/c;)Ljava/lang/Object;
++    move-result-object p0
++    return-object p0
++.end method

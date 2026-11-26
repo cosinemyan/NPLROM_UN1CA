@@ -9,7 +9,7 @@ diff --git a/smali/com/samsung/android/app/facewidget/utils/KeyguardClockProvide
 
 +    iget-object v1, p0, Lcom/samsung/android/app/facewidget/utils/KeyguardClockProvider;->context:Landroid/content/Context;
 +
-+    invoke-static {v1}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->syncAodStretchFontType(Landroid/content/Context;)V
++    invoke-static {v1}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->syncAodLockClockStyle(Landroid/content/Context;)V
 +
      const-string v0, "initialize"
 
@@ -20,9 +20,9 @@ diff --git a/smali_classes2/com/samsung/android/app/aodservice/provider/AODConte
 @@ -1905,6 +1905,8 @@
      move-result-object v0
 
-     iput-object v0, p0, Lcom/samsung/android/app/aodservice/provider/AODContentProvider;->p:Lcom/samsung/android/app/aodservice/common/provider/DB/DBAdapter;
+     iput-object v0, p0, Lcom/samsung/android/app/aodservice/provider/AODContentProvider;->q:Lcom/samsung/android/app/aodservice/common/provider/DB/DBAdapter;
 +
-+    invoke-static {v1}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->syncAodStretchFontType(Landroid/content/Context;)V
++    invoke-static {v1}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->syncAodLockClockStyle(Landroid/content/Context;)V
 
      const/4 p0, 0x1
 
@@ -31,7 +31,7 @@ new file mode 100644
 index 0000000..0ec08f4
 --- /dev/null
 +++ b/smali_classes2/io/mesalabs/unica/aod/ClockFontSettingsSync.smali
-@@ -0,0 +1,158 @@
+@@ -0,0 +1,265 @@
 +.class public final Lio/mesalabs/unica/aod/ClockFontSettingsSync;
 +.super Ljava/lang/Object;
 +.source "ClockFontSettingsSync.java"
@@ -87,6 +87,113 @@ index 0000000..0ec08f4
 +    invoke-virtual {p0, v0, v1}, Landroid/content/ContentResolver;->notifyChange(Landroid/net/Uri;Landroid/database/ContentObserver;)V
 +
 +    :cond_0
++    return-void
++.end method
++
++.method private static notifyAodClockType(Landroid/content/Context;)V
++    .locals 2
++
++    if-eqz p0, :cond_0
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const-string v0, "content://com.samsung.android.app.aodservice.provider/settings/aod_clock_type"
++
++    invoke-static {v0}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
++
++    move-result-object v0
++
++    const/4 v1, 0x0
++
++    invoke-virtual {p0, v0, v1}, Landroid/content/ContentResolver;->notifyChange(Landroid/net/Uri;Landroid/database/ContentObserver;)V
++
++    :cond_0
++    return-void
++.end method
++
++.method public static syncAodLockClockStyle(Landroid/content/Context;)V
++    .locals 6
++
++    if-eqz p0, :cond_done
++
++    :try_start_0
++    new-instance v0, Lcom/samsung/android/app/aodservice/common/provider/settingdata/LockClockSettingData;
++
++    invoke-direct {v0, p0}, Lcom/samsung/android/app/aodservice/common/provider/settingdata/LockClockSettingData;-><init>(Landroid/content/Context;)V
++
++    iget-object v0, v0, Lcom/samsung/android/app/aodservice/common/provider/settingdata/LockClockSettingData;->e:Laod/fc;
++
++    invoke-virtual {v0}, Laod/fc;->c()Ljava/lang/Object;
++
++    move-result-object v0
++
++    const/4 v1, 0x0
++
++    invoke-static {v0, v1}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->getInt(Ljava/lang/Object;I)I
++
++    move-result v0
++
++    new-instance v2, Laod/i1;
++
++    invoke-direct {v2, p0}, Laod/i1;-><init>(Landroid/content/Context;)V
++
++    iget-object v2, v2, Laod/i1;->e:Laod/fc;
++
++    invoke-virtual {v2}, Laod/fc;->c()Ljava/lang/Object;
++
++    move-result-object v3
++
++    invoke-static {v3, v1}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->getInt(Ljava/lang/Object;I)I
++
++    move-result v3
++
++    if-eq v3, v0, :cond_sync_font
++
++    invoke-static {v0}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object v4
++
++    invoke-virtual {v2, v4}, Laod/fc;->z(Ljava/lang/Object;)V
++
++    invoke-virtual {v2}, Laod/fc;->a()V
++
++    invoke-static {p0}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->notifyAodClockType(Landroid/content/Context;)V
++
++    new-instance v2, Ljava/lang/StringBuilder;
++
++    const-string v3, "Mirrored AOD clock type="
++
++    invoke-direct {v2, v3}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
++
++    invoke-virtual {v2, v0}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v0
++
++    const-string v2, "UnicaAODFont"
++
++    invoke-static {v2, v0}, Landroid/util/Log;->i(Ljava/lang/String;Ljava/lang/String;)I
++
++    :cond_sync_font
++    invoke-static {p0}, Lio/mesalabs/unica/aod/ClockFontSettingsSync;->syncAodStretchFontType(Landroid/content/Context;)V
++    :try_end_0
++    .catch Ljava/lang/Throwable; {:try_start_0 .. :try_end_0} :catch_0
++
++    :cond_done
++    return-void
++
++    :catch_0
++    move-exception p0
++
++    const-string v0, "UnicaAODFont"
++
++    const-string v1, "syncAodLockClockStyle failed"
++
++    invoke-static {v0, v1, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
 +    return-void
 +.end method
 +

@@ -1,0 +1,4 @@
+/system/bin/unica-ota-stage u:object_r:unica_ota_exec:s0
+/data/misc/unica_ota(/.*)? u:object_r:unica_ota_data:s0
+/data/misc/unica_ota/request(/.*)? u:object_r:unica_ota_request:s0
+/data/misc/unica_ota/staged(/.*)? u:object_r:unica_ota_staged:s0

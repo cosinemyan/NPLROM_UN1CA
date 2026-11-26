@@ -1,0 +1,4946 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: UN1CA <unica@local>
+Subject: [PATCH] Add opt-in Move Certificate manager
+
+Generated from settings/movecertificate/java.
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/AdcertController$0.smali b/smali_classes4/io/mesalabs/unica/movecertificate/AdcertController$0.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/AdcertController$0.smali
+@@ -0,0 +1,38 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/AdcertController$0;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/io/FileFilter;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/AdcertController;"
++    method = "lambda$personal$0"
++    proto = "(Ljava/io/File;)Z"
++.end annotation
++
++
++# direct methods
++.method public synthetic constructor <init>()V
++    .registers 1
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final accept(Ljava/io/File;)Z
++    .registers 2
++
++    .line 0
++    invoke-static {p1}, Lio/mesalabs/unica/movecertificate/AdcertController;->lambda$personal$0(Ljava/io/File;)Z
++
++    move-result p1
++
++    return p1
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/AdcertController$1.smali b/smali_classes4/io/mesalabs/unica/movecertificate/AdcertController$1.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/AdcertController$1.smali
+@@ -0,0 +1,42 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/AdcertController$1;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/util/Comparator;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/AdcertController;"
++    method = "lambda$personal$1"
++    proto = "(Ljava/io/File;Ljava/io/File;)I"
++.end annotation
++
++
++# direct methods
++.method public synthetic constructor <init>()V
++    .registers 1
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final compare(Ljava/lang/Object;Ljava/lang/Object;)I
++    .registers 3
++
++    .line 0
++    check-cast p1, Ljava/io/File;
++
++    check-cast p2, Ljava/io/File;
++
++    invoke-static {p1, p2}, Lio/mesalabs/unica/movecertificate/AdcertController;->lambda$personal$1(Ljava/io/File;Ljava/io/File;)I
++
++    move-result p1
++
++    return p1
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/AdcertController.smali b/smali_classes4/io/mesalabs/unica/movecertificate/AdcertController.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/AdcertController.smali
+@@ -0,0 +1,801 @@
++.class public final Lio/mesalabs/unica/movecertificate/AdcertController;
++.super Lcom/android/settings/core/TogglePreferenceController;
++.source "AdcertController.java"
++
++# interfaces
++.implements Lcom/android/settingslib/core/lifecycle/LifecycleObserver;
++.implements Lcom/android/settingslib/core/lifecycle/events/OnStart;
++
++
++# static fields
++.field private static final FLAG:Ljava/io/File;
++
++.field private static final ROOT:Ljava/io/File;
++
++.field private static final USER:Ljava/io/File;
++
++
++# instance fields
++.field private final context:Landroid/content/Context;
++
++.field private preference:Landroidx/preference/TwoStatePreference;
++
++
++# direct methods
++.method static constructor <clinit>()V
++    .registers 3
++
++    .line 21
++    new-instance v0, Ljava/io/File;
++
++    const-string v1, "/data/misc/unica_movecert"
++
++    invoke-direct {v0, v1}, Ljava/io/File;-><init>(Ljava/lang/String;)V
++
++    sput-object v0, Lio/mesalabs/unica/movecertificate/AdcertController;->ROOT:Ljava/io/File;
++
++    new-instance v0, Ljava/io/File;
++
++    sget-object v1, Lio/mesalabs/unica/movecertificate/AdcertController;->ROOT:Ljava/io/File;
++
++    const-string v2, "request/adcert_enabled"
++
++    invoke-direct {v0, v1, v2}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
++
++    sput-object v0, Lio/mesalabs/unica/movecertificate/AdcertController;->FLAG:Ljava/io/File;
++
++    new-instance v0, Ljava/io/File;
++
++    const-string v1, "/data/misc/user/0/cacerts-added"
++
++    invoke-direct {v0, v1}, Ljava/io/File;-><init>(Ljava/lang/String;)V
++
++    sput-object v0, Lio/mesalabs/unica/movecertificate/AdcertController;->USER:Ljava/io/File;
++
++    return-void
++.end method
++
++.method public constructor <init>(Landroid/content/Context;Ljava/lang/String;)V
++    .registers 3
++
++    .line 23
++    invoke-direct {p0, p1, p2}, Lcom/android/settings/core/TogglePreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;)V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/AdcertController;->context:Landroid/content/Context;
++
++    return-void
++.end method
++
++.method private configured()Z
++    .registers 5
++
++    .line 41
++    const/4 v0, 0x0
++
++    :try_start_1
++    new-instance v1, Ljava/io/FileInputStream;
++
++    sget-object v2, Lio/mesalabs/unica/movecertificate/AdcertController;->FLAG:Ljava/io/File;
++
++    invoke-direct {v1, v2}, Ljava/io/FileInputStream;-><init>(Ljava/io/File;)V
++    :try_end_8
++    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_8} :catch_21
++
++    :try_start_8
++    invoke-virtual {v1}, Ljava/io/FileInputStream;->read()I
++
++    move-result v2
++    :try_end_c
++    .catchall {:try_start_8 .. :try_end_c} :catchall_17
++
++    const/16 v3, 0x31
++
++    if-ne v2, v3, :cond_12
++
++    const/4 v2, 0x1
++
++    goto :goto_13
++
++    :cond_12
++    move v2, v0
++
++    :goto_13
++    :try_start_13
++    invoke-virtual {v1}, Ljava/io/FileInputStream;->close()V
++    :try_end_16
++    .catch Ljava/lang/Exception; {:try_start_13 .. :try_end_16} :catch_21
++
++    return v2
++
++    :catchall_17
++    move-exception v2
++
++    :try_start_18
++    invoke-virtual {v1}, Ljava/io/FileInputStream;->close()V
++    :try_end_1b
++    .catchall {:try_start_18 .. :try_end_1b} :catchall_1c
++
++    goto :goto_20
++
++    :catchall_1c
++    move-exception v1
++
++    :try_start_1d
++    invoke-virtual {v2, v1}, Ljava/lang/Throwable;->addSuppressed(Ljava/lang/Throwable;)V
++
++    :goto_20
++    throw v2
++    :try_end_21
++    .catch Ljava/lang/Exception; {:try_start_1d .. :try_end_21} :catch_21
++
++    :catch_21
++    move-exception v1
++
++    return v0
++.end method
++
++.method private disableMissing()V
++    .registers 4
++
++    .line 42
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/AdcertController;->configured()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_15
++
++    :try_start_6
++    sget-object v0, Lio/mesalabs/unica/movecertificate/AdcertController;->FLAG:Ljava/io/File;
++
++    const-string v1, "0\n"
++
++    sget-object v2, Ljava/nio/charset/StandardCharsets;->US_ASCII:Ljava/nio/charset/Charset;
++
++    invoke-virtual {v1, v2}, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
++
++    move-result-object v1
++
++    invoke-static {v0, v1}, Lio/mesalabs/unica/movecertificate/Certificates;->atomic(Ljava/io/File;[B)V
++    :try_end_13
++    .catch Ljava/io/IOException; {:try_start_6 .. :try_end_13} :catch_14
++
++    goto :goto_15
++
++    :catch_14
++    move-exception v0
++
++    :cond_15
++    :goto_15
++    return-void
++.end method
++
++.method static synthetic lambda$personal$0(Ljava/io/File;)Z
++    .registers 2
++
++    .line 29
++    invoke-virtual {p0}, Ljava/io/File;->isFile()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_14
++
++    invoke-virtual {p0}, Ljava/io/File;->getName()Ljava/lang/String;
++
++    move-result-object p0
++
++    const-string v0, "0f4ed297\\.[0-9]{1,5}"
++
++    invoke-virtual {p0, v0}, Ljava/lang/String;->matches(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_14
++
++    const/4 p0, 0x1
++
++    goto :goto_15
++
++    :cond_14
++    const/4 p0, 0x0
++
++    :goto_15
++    return p0
++.end method
++
++.method static synthetic lambda$personal$1(Ljava/io/File;Ljava/io/File;)I
++    .registers 3
++
++    .line 31
++    invoke-virtual {p1}, Ljava/io/File;->getName()Ljava/lang/String;
++
++    move-result-object p1
++
++    const/16 v0, 0x9
++
++    invoke-virtual {p1, v0}, Ljava/lang/String;->substring(I)Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-static {p1}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
++
++    move-result p1
++
++    invoke-virtual {p0}, Ljava/io/File;->getName()Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {p0, v0}, Ljava/lang/String;->substring(I)Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-static {p0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
++
++    move-result p0
++
++    invoke-static {p1, p0}, Ljava/lang/Integer;->compare(II)I
++
++    move-result p0
++
++    return p0
++.end method
++
++.method private owner()Z
++    .registers 3
++
++    .line 27
++    invoke-static {}, Landroid/os/Process;->myUid()I
++
++    move-result v0
++
++    const v1, 0x186a0
++
++    div-int/2addr v0, v1
++
++    if-nez v0, :cond_c
++
++    const/4 v0, 0x1
++
++    goto :goto_d
++
++    :cond_c
++    const/4 v0, 0x0
++
++    :goto_d
++    return v0
++.end method
++
++.method static personal(Ljava/io/File;)Ljava/io/File;
++    .registers 6
++
++    .line 29
++    new-instance v0, Lio/mesalabs/unica/movecertificate/AdcertController$0;
++
++    invoke-direct {v0}, Lio/mesalabs/unica/movecertificate/AdcertController$0;-><init>()V
++
++    invoke-virtual {p0, v0}, Ljava/io/File;->listFiles(Ljava/io/FileFilter;)[Ljava/io/File;
++
++    move-result-object p0
++
++    .line 30
++    const/4 v0, 0x0
++
++    if-nez p0, :cond_d
++
++    return-object v0
++
++    .line 31
++    :cond_d
++    new-instance v1, Lio/mesalabs/unica/movecertificate/AdcertController$1;
++
++    invoke-direct {v1}, Lio/mesalabs/unica/movecertificate/AdcertController$1;-><init>()V
++
++    invoke-static {p0, v1}, Ljava/util/Arrays;->sort([Ljava/lang/Object;Ljava/util/Comparator;)V
++
++    .line 32
++    array-length v1, p0
++
++    if-nez v1, :cond_19
++
++    return-object v0
++
++    .line 34
++    :cond_19
++    :try_start_19
++    new-instance v1, Ljava/io/FileInputStream;
++
++    const/4 v2, 0x0
++
++    aget-object v3, p0, v2
++
++    invoke-direct {v1, v3}, Ljava/io/FileInputStream;-><init>(Ljava/io/File;)V
++    :try_end_21
++    .catch Ljava/lang/Exception; {:try_start_19 .. :try_end_21} :catch_50
++
++    .line 35
++    :try_start_21
++    invoke-static {v1}, Lio/mesalabs/unica/movecertificate/Certificates;->read(Ljava/io/InputStream;)[B
++
++    move-result-object v3
++
++    invoke-static {v3}, Lio/mesalabs/unica/movecertificate/Certificates;->parse([B)Ljava/security/cert/X509Certificate;
++
++    move-result-object v3
++
++    invoke-virtual {v3}, Ljava/security/cert/X509Certificate;->checkValidity()V
++
++    .line 36
++    invoke-virtual {v3}, Ljava/security/cert/X509Certificate;->getSubjectX500Principal()Ljavax/security/auth/x500/X500Principal;
++
++    move-result-object v3
++
++    invoke-virtual {v3}, Ljavax/security/auth/x500/X500Principal;->getName()Ljava/lang/String;
++
++    move-result-object v3
++
++    .line 37
++    const-string v4, "CN=AdGuard Personal CA,O=AdGuard,C=EN"
++
++    invoke-virtual {v3, v4}, Ljava/lang/String;->equalsIgnoreCase(Ljava/lang/String;)Z
++
++    move-result v3
++    :try_end_3a
++    .catchall {:try_start_21 .. :try_end_3a} :catchall_46
++
++    if-nez v3, :cond_40
++
++    .line 39
++    :try_start_3c
++    invoke-virtual {v1}, Ljava/io/FileInputStream;->close()V
++    :try_end_3f
++    .catch Ljava/lang/Exception; {:try_start_3c .. :try_end_3f} :catch_50
++
++    .line 37
++    return-object v0
++
++    .line 38
++    :cond_40
++    :try_start_40
++    aget-object p0, p0, v2
++    :try_end_42
++    .catchall {:try_start_40 .. :try_end_42} :catchall_46
++
++    .line 39
++    :try_start_42
++    invoke-virtual {v1}, Ljava/io/FileInputStream;->close()V
++    :try_end_45
++    .catch Ljava/lang/Exception; {:try_start_42 .. :try_end_45} :catch_50
++
++    .line 38
++    return-object p0
++
++    .line 34
++    :catchall_46
++    move-exception p0
++
++    :try_start_47
++    invoke-virtual {v1}, Ljava/io/FileInputStream;->close()V
++    :try_end_4a
++    .catchall {:try_start_47 .. :try_end_4a} :catchall_4b
++
++    goto :goto_4f
++
++    :catchall_4b
++    move-exception v1
++
++    :try_start_4c
++    invoke-virtual {p0, v1}, Ljava/lang/Throwable;->addSuppressed(Ljava/lang/Throwable;)V
++
++    :goto_4f
++    throw p0
++    :try_end_50
++    .catch Ljava/lang/Exception; {:try_start_4c .. :try_end_50} :catch_50
++
++    .line 39
++    :catch_50
++    move-exception p0
++
++    return-object v0
++.end method
++
++.method private render()V
++    .registers 6
++
++    .line 48
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/AdcertController;->preference:Landroidx/preference/TwoStatePreference;
++
++    if-nez v0, :cond_5
++
++    return-void
++
++    :cond_5
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/AdcertController;->owner()Z
++
++    move-result v0
++
++    const/4 v1, 0x1
++
++    const/4 v2, 0x0
++
++    if-eqz v0, :cond_17
++
++    sget-object v0, Lio/mesalabs/unica/movecertificate/AdcertController;->ROOT:Ljava/io/File;
++
++    invoke-virtual {v0}, Ljava/io/File;->isDirectory()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_17
++
++    move v0, v1
++
++    goto :goto_18
++
++    :cond_17
++    move v0, v2
++
++    :goto_18
++    if-eqz v0, :cond_24
++
++    sget-object v3, Lio/mesalabs/unica/movecertificate/AdcertController;->USER:Ljava/io/File;
++
++    invoke-static {v3}, Lio/mesalabs/unica/movecertificate/AdcertController;->personal(Ljava/io/File;)Ljava/io/File;
++
++    move-result-object v3
++
++    if-eqz v3, :cond_24
++
++    move v3, v1
++
++    goto :goto_25
++
++    :cond_24
++    move v3, v2
++
++    .line 49
++    :goto_25
++    if-eqz v0, :cond_2c
++
++    if-nez v3, :cond_2c
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/AdcertController;->disableMissing()V
++
++    .line 50
++    :cond_2c
++    if-eqz v3, :cond_35
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/AdcertController;->configured()Z
++
++    move-result v4
++
++    if-eqz v4, :cond_35
++
++    goto :goto_36
++
++    :cond_35
++    move v1, v2
++
++    :goto_36
++    iget-object v2, p0, Lio/mesalabs/unica/movecertificate/AdcertController;->preference:Landroidx/preference/TwoStatePreference;
++
++    invoke-virtual {v2, v3}, Landroidx/preference/TwoStatePreference;->setEnabled(Z)V
++
++    iget-object v2, p0, Lio/mesalabs/unica/movecertificate/AdcertController;->preference:Landroidx/preference/TwoStatePreference;
++
++    invoke-virtual {v2, v1}, Landroidx/preference/TwoStatePreference;->setChecked(Z)V
++
++    .line 51
++    iget-object v2, p0, Lio/mesalabs/unica/movecertificate/AdcertController;->preference:Landroidx/preference/TwoStatePreference;
++
++    if-nez v0, :cond_47
++
++    const-string v0, "unavailable"
++
++    goto :goto_53
++
++    :cond_47
++    if-nez v3, :cond_4c
++
++    const-string v0, "missing"
++
++    goto :goto_53
++
++    :cond_4c
++    if-eqz v1, :cond_51
++
++    const-string v0, "on"
++
++    goto :goto_53
++
++    :cond_51
++    const-string v0, "off"
++
++    :goto_53
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/AdcertController;->text(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-virtual {v2, v0}, Landroidx/preference/TwoStatePreference;->setSummary(Ljava/lang/CharSequence;)V
++
++    .line 52
++    return-void
++.end method
++
++.method private text(Ljava/lang/String;)Ljava/lang/String;
++    .registers 5
++
++    .line 26
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/AdcertController;->context:Landroid/content/Context;
++
++    invoke-virtual {v0}, Landroid/content/Context;->getResources()Landroid/content/res/Resources;
++
++    move-result-object v0
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v2, "unica_adcert_"
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p1
++
++    iget-object v1, p0, Lio/mesalabs/unica/movecertificate/AdcertController;->context:Landroid/content/Context;
++
++    invoke-virtual {v1}, Landroid/content/Context;->getPackageName()Ljava/lang/String;
++
++    move-result-object v1
++
++    const-string v2, "string"
++
++    invoke-virtual {v0, p1, v2, v1}, Landroid/content/res/Resources;->getIdentifier(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I
++
++    move-result p1
++
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/AdcertController;->context:Landroid/content/Context;
++
++    invoke-virtual {v0, p1}, Landroid/content/Context;->getString(I)Ljava/lang/String;
++
++    move-result-object p1
++
++    return-object p1
++.end method
++
++
++# virtual methods
++.method public displayPreference(Landroidx/preference/PreferenceScreen;)V
++    .registers 3
++
++    .line 44
++    invoke-super {p0, p1}, Lcom/android/settings/core/TogglePreferenceController;->displayPreference(Landroidx/preference/PreferenceScreen;)V
++
++    const-string v0, "unica_adcert"
++
++    invoke-virtual {p1, v0}, Landroidx/preference/PreferenceScreen;->findPreference(Ljava/lang/CharSequence;)Landroidx/preference/Preference;
++
++    move-result-object p1
++
++    check-cast p1, Landroidx/preference/TwoStatePreference;
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/AdcertController;->preference:Landroidx/preference/TwoStatePreference;
++
++    iget-object p1, p0, Lio/mesalabs/unica/movecertificate/AdcertController;->preference:Landroidx/preference/TwoStatePreference;
++
++    if-eqz p1, :cond_17
++
++    iget-object p1, p0, Lio/mesalabs/unica/movecertificate/AdcertController;->preference:Landroidx/preference/TwoStatePreference;
++
++    const/4 v0, 0x0
++
++    invoke-virtual {p1, v0}, Landroidx/preference/TwoStatePreference;->setPersistent(Z)V
++
++    :cond_17
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/AdcertController;->render()V
++
++    return-void
++.end method
++
++.method public getAvailabilityStatus()I
++    .registers 2
++
++    .line 24
++    const/4 v0, 0x0
++
++    return v0
++.end method
++
++.method public getSliceHighlightMenuRes()I
++    .registers 2
++
++    .line 25
++    const/4 v0, 0x0
++
++    return v0
++.end method
++
++.method public isChecked()Z
++    .registers 2
++
++    .line 43
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/AdcertController;->owner()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_1e
++
++    sget-object v0, Lio/mesalabs/unica/movecertificate/AdcertController;->ROOT:Ljava/io/File;
++
++    invoke-virtual {v0}, Ljava/io/File;->isDirectory()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_1e
++
++    sget-object v0, Lio/mesalabs/unica/movecertificate/AdcertController;->USER:Ljava/io/File;
++
++    invoke-static {v0}, Lio/mesalabs/unica/movecertificate/AdcertController;->personal(Ljava/io/File;)Ljava/io/File;
++
++    move-result-object v0
++
++    if-eqz v0, :cond_1e
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/AdcertController;->configured()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_1e
++
++    const/4 v0, 0x1
++
++    goto :goto_1f
++
++    :cond_1e
++    const/4 v0, 0x0
++
++    :goto_1f
++    return v0
++.end method
++
++.method public onStart()V
++    .registers 1
++
++    .line 46
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/AdcertController;->render()V
++
++    return-void
++.end method
++
++.method public setChecked(Z)Z
++    .registers 6
++
++    .line 54
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/AdcertController;->owner()Z
++
++    move-result v0
++
++    const/4 v1, 0x0
++
++    if-eqz v0, :cond_54
++
++    sget-object v0, Lio/mesalabs/unica/movecertificate/AdcertController;->ROOT:Ljava/io/File;
++
++    invoke-virtual {v0}, Ljava/io/File;->isDirectory()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_54
++
++    if-eqz p1, :cond_1a
++
++    sget-object v0, Lio/mesalabs/unica/movecertificate/AdcertController;->USER:Ljava/io/File;
++
++    invoke-static {v0}, Lio/mesalabs/unica/movecertificate/AdcertController;->personal(Ljava/io/File;)Ljava/io/File;
++
++    move-result-object v0
++
++    if-nez v0, :cond_1a
++
++    goto :goto_54
++
++    .line 55
++    :cond_1a
++    const/4 v0, 0x1
++
++    :try_start_1b
++    sget-object v2, Lio/mesalabs/unica/movecertificate/AdcertController;->FLAG:Ljava/io/File;
++
++    if-eqz p1, :cond_22
++
++    const-string p1, "1\n"
++
++    goto :goto_24
++
++    :cond_22
++    const-string p1, "0\n"
++
++    :goto_24
++    sget-object v3, Ljava/nio/charset/StandardCharsets;->US_ASCII:Ljava/nio/charset/Charset;
++
++    invoke-virtual {p1, v3}, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
++
++    move-result-object p1
++
++    invoke-static {v2, p1}, Lio/mesalabs/unica/movecertificate/Certificates;->atomic(Ljava/io/File;[B)V
++
++    iget-object p1, p0, Lio/mesalabs/unica/movecertificate/AdcertController;->context:Landroid/content/Context;
++
++    const-string v2, "reboot"
++
++    invoke-direct {p0, v2}, Lio/mesalabs/unica/movecertificate/AdcertController;->text(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-static {p1, v2, v0}, Landroid/widget/Toast;->makeText(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Landroid/widget/Toast;->show()V
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/AdcertController;->render()V
++    :try_end_3f
++    .catch Ljava/io/IOException; {:try_start_1b .. :try_end_3f} :catch_40
++
++    return v0
++
++    .line 56
++    :catch_40
++    move-exception p1
++
++    iget-object p1, p0, Lio/mesalabs/unica/movecertificate/AdcertController;->context:Landroid/content/Context;
++
++    const-string v2, "write_failed"
++
++    invoke-direct {p0, v2}, Lio/mesalabs/unica/movecertificate/AdcertController;->text(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-static {p1, v2, v0}, Landroid/widget/Toast;->makeText(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Landroid/widget/Toast;->show()V
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/AdcertController;->render()V
++
++    return v1
++
++    .line 54
++    :cond_54
++    :goto_54
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/AdcertController;->render()V
++
++    return v1
++.end method
++
++.method public updateState(Landroidx/preference/Preference;)V
++    .registers 3
++
++    .line 45
++    invoke-super {p0, p1}, Lcom/android/settings/core/TogglePreferenceController;->updateState(Landroidx/preference/Preference;)V
++
++    instance-of v0, p1, Landroidx/preference/TwoStatePreference;
++
++    if-eqz v0, :cond_b
++
++    check-cast p1, Landroidx/preference/TwoStatePreference;
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/AdcertController;->preference:Landroidx/preference/TwoStatePreference;
++
++    :cond_b
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/AdcertController;->render()V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/Certificates$0.smali b/smali_classes4/io/mesalabs/unica/movecertificate/Certificates$0.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/Certificates$0.smali
+@@ -0,0 +1,38 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/Certificates$0;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/io/FileFilter;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/Certificates;"
++    method = "lambda$files$0"
++    proto = "(Ljava/io/File;)Z"
++.end annotation
++
++
++# direct methods
++.method public synthetic constructor <init>()V
++    .registers 1
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final accept(Ljava/io/File;)Z
++    .registers 2
++
++    .line 0
++    invoke-static {p1}, Lio/mesalabs/unica/movecertificate/Certificates;->lambda$files$0(Ljava/io/File;)Z
++
++    move-result p1
++
++    return p1
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/Certificates.smali b/smali_classes4/io/mesalabs/unica/movecertificate/Certificates.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/Certificates.smali
+@@ -0,0 +1,833 @@
++.class public final Lio/mesalabs/unica/movecertificate/Certificates;
++.super Ljava/lang/Object;
++.source "Certificates.java"
++
++
++# static fields
++.field public static final MAX_BYTES:I = 0x10000
++
++.field public static final MAX_CERTS:I = 0x40
++
++
++# direct methods
++.method public constructor <init>()V
++    .registers 1
++
++    .line 12
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method public static atomic(Ljava/io/File;[B)V
++    .registers 6
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/io/IOException;
++        }
++    .end annotation
++
++    .line 49
++    new-instance v0, Ljava/io/File;
++
++    invoke-virtual {p0}, Ljava/io/File;->getParentFile()Ljava/io/File;
++
++    move-result-object v1
++
++    new-instance v2, Ljava/lang/StringBuilder;
++
++    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {p0}, Ljava/io/File;->getName()Ljava/lang/String;
++
++    move-result-object v3
++
++    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v2
++
++    const-string v3, ".tmp"
++
++    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v2
++
++    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-direct {v0, v1, v2}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
++
++    .line 50
++    new-instance v1, Ljava/io/FileOutputStream;
++
++    invoke-direct {v1, v0}, Ljava/io/FileOutputStream;-><init>(Ljava/io/File;)V
++
++    :try_start_25
++    invoke-virtual {v1, p1}, Ljava/io/FileOutputStream;->write([B)V
++
++    invoke-virtual {v1}, Ljava/io/FileOutputStream;->getFD()Ljava/io/FileDescriptor;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Ljava/io/FileDescriptor;->sync()V
++    :try_end_2f
++    .catchall {:try_start_25 .. :try_end_2f} :catchall_51
++
++    invoke-virtual {v1}, Ljava/io/FileOutputStream;->close()V
++
++    .line 53
++    const/4 p1, 0x1
++
++    const/4 v1, 0x0
++
++    invoke-virtual {v0, p1, v1}, Ljava/io/File;->setReadable(ZZ)Z
++
++    move-result p1
++
++    if-eqz p1, :cond_49
++
++    .line 54
++    invoke-virtual {v0, p0}, Ljava/io/File;->renameTo(Ljava/io/File;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_41
++
++    .line 55
++    return-void
++
++    .line 54
++    :cond_41
++    new-instance p0, Ljava/io/IOException;
++
++    const-string p1, "Cannot save certificate configuration"
++
++    invoke-direct {p0, p1}, Ljava/io/IOException;-><init>(Ljava/lang/String;)V
++
++    throw p0
++
++    .line 53
++    :cond_49
++    new-instance p0, Ljava/io/IOException;
++
++    const-string p1, "Cannot set certificate permissions"
++
++    invoke-direct {p0, p1}, Ljava/io/IOException;-><init>(Ljava/lang/String;)V
++
++    throw p0
++
++    .line 50
++    :catchall_51
++    move-exception p0
++
++    :try_start_52
++    invoke-virtual {v1}, Ljava/io/FileOutputStream;->close()V
++    :try_end_55
++    .catchall {:try_start_52 .. :try_end_55} :catchall_56
++
++    goto :goto_5a
++
++    :catchall_56
++    move-exception p1
++
++    invoke-virtual {p0, p1}, Ljava/lang/Throwable;->addSuppressed(Ljava/lang/Throwable;)V
++
++    :goto_5a
++    throw p0
++.end method
++
++.method public static files(Ljava/io/File;)[Ljava/io/File;
++    .registers 2
++
++    .line 45
++    new-instance v0, Lio/mesalabs/unica/movecertificate/Certificates$0;
++
++    invoke-direct {v0}, Lio/mesalabs/unica/movecertificate/Certificates$0;-><init>()V
++
++    invoke-virtual {p0, v0}, Ljava/io/File;->listFiles(Ljava/io/FileFilter;)[Ljava/io/File;
++
++    move-result-object p0
++
++    .line 46
++    if-nez p0, :cond_f
++
++    const/4 p0, 0x0
++
++    new-array p0, p0, [Ljava/io/File;
++
++    return-object p0
++
++    :cond_f
++    invoke-static {p0}, Ljava/util/Arrays;->sort([Ljava/lang/Object;)V
++
++    return-object p0
++.end method
++
++.method public static fingerprint(Ljava/security/cert/X509Certificate;)Ljava/lang/String;
++    .registers 7
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 37
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    .line 38
++    const-string v1, "SHA-256"
++
++    invoke-static {v1}, Ljava/security/MessageDigest;->getInstance(Ljava/lang/String;)Ljava/security/MessageDigest;
++
++    move-result-object v1
++
++    invoke-virtual {p0}, Ljava/security/cert/X509Certificate;->getEncoded()[B
++
++    move-result-object p0
++
++    invoke-virtual {v1, p0}, Ljava/security/MessageDigest;->digest([B)[B
++
++    move-result-object p0
++
++    array-length v1, p0
++
++    const/4 v2, 0x0
++
++    :goto_15
++    if-ge v2, v1, :cond_3c
++
++    aget-byte v3, p0, v2
++
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->length()I
++
++    move-result v4
++
++    if-lez v4, :cond_24
++
++    const/16 v4, 0x3a
++
++    invoke-virtual {v0, v4}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
++
++    :cond_24
++    sget-object v4, Ljava/util/Locale;->ROOT:Ljava/util/Locale;
++
++    and-int/lit16 v3, v3, 0xff
++
++    invoke-static {v3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object v3
++
++    filled-new-array {v3}, [Ljava/lang/Object;
++
++    move-result-object v3
++
++    const-string v5, "%02X"
++
++    invoke-static {v4, v5, v3}, Ljava/lang/String;->format(Ljava/util/Locale;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
++
++    move-result-object v3
++
++    invoke-virtual {v0, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    add-int/lit8 v2, v2, 0x1
++
++    goto :goto_15
++
++    .line 39
++    :cond_3c
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public static hash(Ljava/security/cert/X509Certificate;)Ljava/lang/String;
++    .registers 8
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 32
++    const-string v0, "MD5"
++
++    invoke-static {v0}, Ljava/security/MessageDigest;->getInstance(Ljava/lang/String;)Ljava/security/MessageDigest;
++
++    move-result-object v0
++
++    invoke-virtual {p0}, Ljava/security/cert/X509Certificate;->getSubjectX500Principal()Ljavax/security/auth/x500/X500Principal;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljavax/security/auth/x500/X500Principal;->getEncoded()[B
++
++    move-result-object p0
++
++    invoke-virtual {v0, p0}, Ljava/security/MessageDigest;->digest([B)[B
++
++    move-result-object p0
++
++    .line 33
++    const-wide/16 v0, 0x0
++
++    const/4 v2, 0x0
++
++    :goto_15
++    const/4 v3, 0x4
++
++    if-ge v2, v3, :cond_25
++
++    aget-byte v3, p0, v2
++
++    int-to-long v3, v3
++
++    const-wide/16 v5, 0xff
++
++    and-long/2addr v3, v5
++
++    mul-int/lit8 v5, v2, 0x8
++
++    shl-long/2addr v3, v5
++
++    or-long/2addr v0, v3
++
++    add-int/lit8 v2, v2, 0x1
++
++    goto :goto_15
++
++    .line 34
++    :cond_25
++    sget-object p0, Ljava/util/Locale;->ROOT:Ljava/util/Locale;
++
++    invoke-static {v0, v1}, Ljava/lang/Long;->valueOf(J)Ljava/lang/Long;
++
++    move-result-object v0
++
++    filled-new-array {v0}, [Ljava/lang/Object;
++
++    move-result-object v0
++
++    const-string v1, "%08x"
++
++    invoke-static {p0, v1, v0}, Ljava/lang/String;->format(Ljava/util/Locale;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public static install(Ljava/io/File;Ljava/security/cert/X509Certificate;)V
++    .registers 9
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 57
++    invoke-virtual {p1}, Ljava/security/cert/X509Certificate;->checkValidity()V
++
++    invoke-static {p0}, Lio/mesalabs/unica/movecertificate/Certificates;->files(Ljava/io/File;)[Ljava/io/File;
++
++    move-result-object v0
++
++    .line 58
++    array-length v1, v0
++
++    const/4 v2, 0x0
++
++    move v3, v2
++
++    :goto_a
++    if-ge v3, v1, :cond_41
++
++    aget-object v4, v0, v3
++
++    new-instance v5, Ljava/io/FileInputStream;
++
++    invoke-direct {v5, v4}, Ljava/io/FileInputStream;-><init>(Ljava/io/File;)V
++
++    :try_start_13
++    invoke-static {v5}, Lio/mesalabs/unica/movecertificate/Certificates;->read(Ljava/io/InputStream;)[B
++
++    move-result-object v4
++
++    invoke-static {v4}, Lio/mesalabs/unica/movecertificate/Certificates;->parse([B)Ljava/security/cert/X509Certificate;
++
++    move-result-object v4
++
++    invoke-virtual {v4}, Ljava/security/cert/X509Certificate;->getEncoded()[B
++
++    move-result-object v4
++
++    invoke-virtual {p1}, Ljava/security/cert/X509Certificate;->getEncoded()[B
++
++    move-result-object v6
++
++    invoke-static {v4, v6}, Ljava/util/Arrays;->equals([B[B)Z
++
++    move-result v4
++    :try_end_27
++    .catchall {:try_start_13 .. :try_end_27} :catchall_37
++
++    if-nez v4, :cond_2f
++
++    invoke-virtual {v5}, Ljava/io/InputStream;->close()V
++
++    add-int/lit8 v3, v3, 0x1
++
++    goto :goto_a
++
++    :cond_2f
++    :try_start_2f
++    new-instance p0, Ljava/io/IOException;
++
++    const-string p1, "Certificate is already imported"
++
++    invoke-direct {p0, p1}, Ljava/io/IOException;-><init>(Ljava/lang/String;)V
++
++    throw p0
++    :try_end_37
++    .catchall {:try_start_2f .. :try_end_37} :catchall_37
++
++    :catchall_37
++    move-exception p0
++
++    :try_start_38
++    invoke-virtual {v5}, Ljava/io/InputStream;->close()V
++    :try_end_3b
++    .catchall {:try_start_38 .. :try_end_3b} :catchall_3c
++
++    goto :goto_40
++
++    :catchall_3c
++    move-exception p1
++
++    invoke-virtual {p0, p1}, Ljava/lang/Throwable;->addSuppressed(Ljava/lang/Throwable;)V
++
++    :goto_40
++    throw p0
++
++    .line 59
++    :cond_41
++    array-length v0, v0
++
++    const/16 v1, 0x40
++
++    if-ge v0, v1, :cond_91
++
++    .line 60
++    invoke-static {p1}, Lio/mesalabs/unica/movecertificate/Certificates;->hash(Ljava/security/cert/X509Certificate;)Ljava/lang/String;
++
++    move-result-object v0
++
++    :goto_4a
++    new-instance v1, Ljava/io/File;
++
++    new-instance v3, Ljava/lang/StringBuilder;
++
++    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {v3, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v3
++
++    const-string v4, "."
++
++    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v3
++
++    invoke-virtual {v3, v2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    move-result-object v3
++
++    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v3
++
++    invoke-direct {v1, p0, v3}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
++
++    invoke-virtual {v1}, Ljava/io/File;->exists()Z
++
++    move-result v1
++
++    if-eqz v1, :cond_6f
++
++    add-int/lit8 v2, v2, 0x1
++
++    goto :goto_4a
++
++    .line 61
++    :cond_6f
++    new-instance v1, Ljava/io/File;
++
++    new-instance v3, Ljava/lang/StringBuilder;
++
++    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {v3, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(I)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-direct {v1, p0, v0}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
++
++    invoke-static {p1}, Lio/mesalabs/unica/movecertificate/Certificates;->pem(Ljava/security/cert/X509Certificate;)[B
++
++    move-result-object p0
++
++    invoke-static {v1, p0}, Lio/mesalabs/unica/movecertificate/Certificates;->atomic(Ljava/io/File;[B)V
++
++    .line 62
++    return-void
++
++    .line 59
++    :cond_91
++    new-instance p0, Ljava/io/IOException;
++
++    const-string p1, "Maximum of 64 imported CAs reached"
++
++    invoke-direct {p0, p1}, Ljava/io/IOException;-><init>(Ljava/lang/String;)V
++
++    throw p0
++.end method
++
++.method static synthetic lambda$files$0(Ljava/io/File;)Z
++    .registers 2
++
++    .line 45
++    invoke-virtual {p0}, Ljava/io/File;->isFile()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_14
++
++    invoke-virtual {p0}, Ljava/io/File;->getName()Ljava/lang/String;
++
++    move-result-object p0
++
++    const-string v0, "[0-9a-f]{8}\\.[0-9]+"
++
++    invoke-virtual {p0, v0}, Ljava/lang/String;->matches(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_14
++
++    const/4 p0, 0x1
++
++    goto :goto_15
++
++    :cond_14
++    const/4 p0, 0x0
++
++    :goto_15
++    return p0
++.end method
++
++.method public static parse([B)Ljava/security/cert/X509Certificate;
++    .registers 4
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 21
++    const-string v0, "X.509"
++
++    invoke-static {v0}, Ljava/security/cert/CertificateFactory;->getInstance(Ljava/lang/String;)Ljava/security/cert/CertificateFactory;
++
++    move-result-object v0
++
++    new-instance v1, Ljava/io/ByteArrayInputStream;
++
++    invoke-direct {v1, p0}, Ljava/io/ByteArrayInputStream;-><init>([B)V
++
++    invoke-virtual {v0, v1}, Ljava/security/cert/CertificateFactory;->generateCertificates(Ljava/io/InputStream;)Ljava/util/Collection;
++
++    move-result-object p0
++
++    .line 22
++    invoke-interface {p0}, Ljava/util/Collection;->size()I
++
++    move-result v0
++
++    const/4 v1, 0x1
++
++    if-ne v0, v1, :cond_6d
++
++    .line 23
++    invoke-interface {p0}, Ljava/util/Collection;->iterator()Ljava/util/Iterator;
++
++    move-result-object p0
++
++    invoke-interface {p0}, Ljava/util/Iterator;->next()Ljava/lang/Object;
++
++    move-result-object p0
++
++    check-cast p0, Ljava/security/cert/X509Certificate;
++
++    .line 24
++    invoke-virtual {p0}, Ljava/security/cert/X509Certificate;->getBasicConstraints()I
++
++    move-result v0
++
++    if-ltz v0, :cond_65
++
++    .line 25
++    invoke-virtual {p0}, Ljava/security/cert/X509Certificate;->getKeyUsage()[Z
++
++    move-result-object v0
++
++    .line 26
++    if-eqz v0, :cond_3d
++
++    array-length v1, v0
++
++    const/4 v2, 0x5
++
++    if-le v1, v2, :cond_35
++
++    aget-boolean v0, v0, v2
++
++    if-eqz v0, :cond_35
++
++    goto :goto_3d
++
++    :cond_35
++    new-instance p0, Ljava/security/cert/CertificateException;
++
++    const-string v0, "CA certificate signing is not permitted"
++
++    invoke-direct {p0, v0}, Ljava/security/cert/CertificateException;-><init>(Ljava/lang/String;)V
++
++    throw p0
++
++    .line 27
++    :cond_3d
++    :goto_3d
++    invoke-virtual {p0}, Ljava/security/cert/X509Certificate;->getSubjectX500Principal()Ljavax/security/auth/x500/X500Principal;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljavax/security/auth/x500/X500Principal;->getName()Ljava/lang/String;
++
++    move-result-object v0
++
++    sget-object v1, Ljava/util/Locale;->ROOT:Ljava/util/Locale;
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->toLowerCase(Ljava/util/Locale;)Ljava/lang/String;
++
++    move-result-object v0
++
++    .line 28
++    const-string v1, "adguard"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_64
++
++    const-string v1, "intermediate"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_5c
++
++    goto :goto_64
++
++    :cond_5c
++    new-instance p0, Ljava/security/cert/CertificateException;
++
++    const-string v0, "Keep the AdGuard Intermediate CA in the Android user store; import the Personal CA here"
++
++    invoke-direct {p0, v0}, Ljava/security/cert/CertificateException;-><init>(Ljava/lang/String;)V
++
++    throw p0
++
++    .line 29
++    :cond_64
++    :goto_64
++    return-object p0
++
++    .line 24
++    :cond_65
++    new-instance p0, Ljava/security/cert/CertificateException;
++
++    const-string v0, "This is not a CA certificate"
++
++    invoke-direct {p0, v0}, Ljava/security/cert/CertificateException;-><init>(Ljava/lang/String;)V
++
++    throw p0
++
++    .line 22
++    :cond_6d
++    new-instance p0, Ljava/security/cert/CertificateException;
++
++    const-string v0, "Select a single CA certificate"
++
++    invoke-direct {p0, v0}, Ljava/security/cert/CertificateException;-><init>(Ljava/lang/String;)V
++
++    throw p0
++.end method
++
++.method public static pem(Ljava/security/cert/X509Certificate;)[B
++    .registers 5
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 42
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v1, "-----BEGIN CERTIFICATE-----\n"
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    const/4 v1, 0x1
++
++    new-array v1, v1, [B
++
++    const/16 v2, 0xa
++
++    const/4 v3, 0x0
++
++    aput-byte v2, v1, v3
++
++    const/16 v2, 0x40
++
++    invoke-static {v2, v1}, Ljava/util/Base64;->getMimeEncoder(I[B)Ljava/util/Base64$Encoder;
++
++    move-result-object v1
++
++    invoke-virtual {p0}, Ljava/security/cert/X509Certificate;->getEncoded()[B
++
++    move-result-object p0
++
++    invoke-virtual {v1, p0}, Ljava/util/Base64$Encoder;->encodeToString([B)Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-virtual {v0, p0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p0
++
++    const-string v0, "\n-----END CERTIFICATE-----\n"
++
++    invoke-virtual {p0, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p0
++
++    sget-object v0, Ljava/nio/charset/StandardCharsets;->US_ASCII:Ljava/nio/charset/Charset;
++
++    invoke-virtual {p0, v0}, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
++
++    move-result-object p0
++
++    return-object p0
++.end method
++
++.method public static read(Ljava/io/InputStream;)[B
++    .registers 6
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/io/IOException;
++        }
++    .end annotation
++
++    .line 15
++    if-eqz p0, :cond_2d
++
++    .line 16
++    new-instance v0, Ljava/io/ByteArrayOutputStream;
++
++    invoke-direct {v0}, Ljava/io/ByteArrayOutputStream;-><init>()V
++
++    const/16 v1, 0x1000
++
++    new-array v1, v1, [B
++
++    .line 17
++    :goto_b
++    invoke-virtual {p0, v1}, Ljava/io/InputStream;->read([B)I
++
++    move-result v2
++
++    const/4 v3, -0x1
++
++    if-eq v2, v3, :cond_28
++
++    invoke-virtual {v0}, Ljava/io/ByteArrayOutputStream;->size()I
++
++    move-result v3
++
++    add-int/2addr v3, v2
++
++    const/high16 v4, 0x10000
++
++    if-gt v3, v4, :cond_20
++
++    const/4 v3, 0x0
++
++    invoke-virtual {v0, v1, v3, v2}, Ljava/io/ByteArrayOutputStream;->write([BII)V
++
++    goto :goto_b
++
++    :cond_20
++    new-instance p0, Ljava/io/IOException;
++
++    const-string v0, "Certificate exceeds 64 KiB"
++
++    invoke-direct {p0, v0}, Ljava/io/IOException;-><init>(Ljava/lang/String;)V
++
++    throw p0
++
++    .line 18
++    :cond_28
++    invoke-virtual {v0}, Ljava/io/ByteArrayOutputStream;->toByteArray()[B
++
++    move-result-object p0
++
++    return-object p0
++
++    .line 15
++    :cond_2d
++    new-instance p0, Ljava/io/IOException;
++
++    const-string v0, "Cannot open certificate"
++
++    invoke-direct {p0, v0}, Ljava/io/IOException;-><init>(Ljava/lang/String;)V
++
++    throw p0
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$0.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$0.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$0.smali
+@@ -0,0 +1,50 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$0;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Landroid/content/DialogInterface$OnClickListener;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "lambda$details$8"
++    proto = "(Ljava/io/File;Landroid/content/DialogInterface;I)V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++.field public final synthetic f$1:Ljava/io/File;
++
++
++# direct methods
++.method public synthetic constructor <init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Ljava/io/File;)V
++    .registers 3
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$0;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iput-object p2, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$0;->f$1:Ljava/io/File;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final onClick(Landroid/content/DialogInterface;I)V
++    .registers 5
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$0;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iget-object v1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$0;->f$1:Ljava/io/File;
++
++    invoke-virtual {v0, v1, p1, p2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->lambda$details$8$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Ljava/io/File;Landroid/content/DialogInterface;I)V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$1.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$1.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$1.smali
+@@ -0,0 +1,44 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$1;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Landroid/content/DialogInterface$OnClickListener;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "lambda$draw$2"
++    proto = "(Landroid/content/DialogInterface;I)V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++
++# direct methods
++.method public synthetic constructor <init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;)V
++    .registers 2
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$1;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final onClick(Landroid/content/DialogInterface;I)V
++    .registers 4
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$1;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    invoke-virtual {v0, p1, p2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->lambda$draw$2$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Landroid/content/DialogInterface;I)V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$10.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$10.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$10.smali
+@@ -0,0 +1,50 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$10;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "lambda$onActivityResult$13"
++    proto = "(Landroid/content/Intent;)V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++.field public final synthetic f$1:Landroid/content/Intent;
++
++
++# direct methods
++.method public synthetic constructor <init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Landroid/content/Intent;)V
++    .registers 3
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$10;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iput-object p2, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$10;->f$1:Landroid/content/Intent;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final run()V
++    .registers 3
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$10;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iget-object v1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$10;->f$1:Landroid/content/Intent;
++
++    invoke-virtual {v0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->lambda$onActivityResult$13$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Landroid/content/Intent;)V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$11.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$11.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$11.smali
+@@ -0,0 +1,56 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$11;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "lambda$onActivityResult$11"
++    proto = "(Ljava/lang/String;Ljava/security/cert/X509Certificate;)V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++.field public final synthetic f$1:Ljava/lang/String;
++
++.field public final synthetic f$2:Ljava/security/cert/X509Certificate;
++
++
++# direct methods
++.method public synthetic constructor <init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Ljava/lang/String;Ljava/security/cert/X509Certificate;)V
++    .registers 4
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$11;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iput-object p2, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$11;->f$1:Ljava/lang/String;
++
++    iput-object p3, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$11;->f$2:Ljava/security/cert/X509Certificate;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final run()V
++    .registers 4
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$11;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iget-object v1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$11;->f$1:Ljava/lang/String;
++
++    iget-object v2, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$11;->f$2:Ljava/security/cert/X509Certificate;
++
++    invoke-virtual {v0, v1, v2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->lambda$onActivityResult$11$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Ljava/lang/String;Ljava/security/cert/X509Certificate;)V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$12.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$12.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$12.smali
+@@ -0,0 +1,50 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$12;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "lambda$onActivityResult$12"
++    proto = "(Ljava/lang/Exception;)V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++.field public final synthetic f$1:Ljava/lang/Exception;
++
++
++# direct methods
++.method public synthetic constructor <init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Ljava/lang/Exception;)V
++    .registers 3
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$12;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iput-object p2, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$12;->f$1:Ljava/lang/Exception;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final run()V
++    .registers 3
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$12;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iget-object v1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$12;->f$1:Ljava/lang/Exception;
++
++    invoke-virtual {v0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->lambda$onActivityResult$12$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Ljava/lang/Exception;)V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$13.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$13.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$13.smali
+@@ -0,0 +1,50 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$13;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Landroid/content/DialogInterface$OnClickListener;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "lambda$onActivityResult$10"
++    proto = "(Ljava/security/cert/X509Certificate;Landroid/content/DialogInterface;I)V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++.field public final synthetic f$1:Ljava/security/cert/X509Certificate;
++
++
++# direct methods
++.method public synthetic constructor <init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Ljava/security/cert/X509Certificate;)V
++    .registers 3
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$13;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iput-object p2, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$13;->f$1:Ljava/security/cert/X509Certificate;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final onClick(Landroid/content/DialogInterface;I)V
++    .registers 5
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$13;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iget-object v1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$13;->f$1:Ljava/security/cert/X509Certificate;
++
++    invoke-virtual {v0, v1, p1, p2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->lambda$onActivityResult$10$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Ljava/security/cert/X509Certificate;Landroid/content/DialogInterface;I)V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$14.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$14.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$14.smali
+@@ -0,0 +1,50 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$14;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Landroid/content/DialogInterface$OnClickListener;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "lambda$remove$9"
++    proto = "(Ljava/io/File;Landroid/content/DialogInterface;I)V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++.field public final synthetic f$1:Ljava/io/File;
++
++
++# direct methods
++.method public synthetic constructor <init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Ljava/io/File;)V
++    .registers 3
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$14;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iput-object p2, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$14;->f$1:Ljava/io/File;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final onClick(Landroid/content/DialogInterface;I)V
++    .registers 5
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$14;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iget-object v1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$14;->f$1:Ljava/io/File;
++
++    invoke-virtual {v0, v1, p1, p2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->lambda$remove$9$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Ljava/io/File;Landroid/content/DialogInterface;I)V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$2.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$2.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$2.smali
+@@ -0,0 +1,38 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$2;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Landroid/view/View$OnApplyWindowInsetsListener;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "lambda$draw$1"
++    proto = "(Landroid/view/View;Landroid/view/WindowInsets;)Landroid/view/WindowInsets;"
++.end annotation
++
++
++# direct methods
++.method public synthetic constructor <init>()V
++    .registers 1
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final onApplyWindowInsets(Landroid/view/View;Landroid/view/WindowInsets;)Landroid/view/WindowInsets;
++    .registers 3
++
++    .line 0
++    invoke-static {p1, p2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->lambda$draw$1(Landroid/view/View;Landroid/view/WindowInsets;)Landroid/view/WindowInsets;
++
++    move-result-object p1
++
++    return-object p1
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$3.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$3.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$3.smali
+@@ -0,0 +1,44 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$3;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "lambda$draw$3"
++    proto = "()V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++
++# direct methods
++.method public synthetic constructor <init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;)V
++    .registers 2
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$3;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final run()V
++    .registers 2
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$3;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    invoke-virtual {v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->lambda$draw$3$io-mesalabs-unica-movecertificate-MoveCertificateActivity()V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$4.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$4.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$4.smali
+@@ -0,0 +1,44 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$4;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "draw"
++    proto = "()V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++
++# direct methods
++.method public synthetic constructor <init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;)V
++    .registers 2
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$4;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final run()V
++    .registers 2
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$4;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    invoke-static {v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->$r8$lambda$8EDpzmAt4sM_mWQWaDtJGcpgh1M(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;)V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$5.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$5.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$5.smali
+@@ -0,0 +1,44 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$5;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "lambda$draw$4"
++    proto = "()V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++
++# direct methods
++.method public synthetic constructor <init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;)V
++    .registers 2
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$5;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final run()V
++    .registers 2
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$5;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    invoke-virtual {v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->lambda$draw$4$io-mesalabs-unica-movecertificate-MoveCertificateActivity()V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$6.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$6.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$6.smali
+@@ -0,0 +1,56 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$6;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "lambda$draw$5"
++    proto = "(Ljava/io/File;Ljava/security/cert/X509Certificate;)V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++.field public final synthetic f$1:Ljava/io/File;
++
++.field public final synthetic f$2:Ljava/security/cert/X509Certificate;
++
++
++# direct methods
++.method public synthetic constructor <init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Ljava/io/File;Ljava/security/cert/X509Certificate;)V
++    .registers 4
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$6;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iput-object p2, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$6;->f$1:Ljava/io/File;
++
++    iput-object p3, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$6;->f$2:Ljava/security/cert/X509Certificate;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final run()V
++    .registers 4
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$6;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iget-object v1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$6;->f$1:Ljava/io/File;
++
++    iget-object v2, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$6;->f$2:Ljava/security/cert/X509Certificate;
++
++    invoke-virtual {v0, v1, v2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->lambda$draw$5$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Ljava/io/File;Ljava/security/cert/X509Certificate;)V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$7.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$7.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$7.smali
+@@ -0,0 +1,50 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$7;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "lambda$draw$6"
++    proto = "(Ljava/io/File;)V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++.field public final synthetic f$1:Ljava/io/File;
++
++
++# direct methods
++.method public synthetic constructor <init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Ljava/io/File;)V
++    .registers 3
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$7;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iput-object p2, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$7;->f$1:Ljava/io/File;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final run()V
++    .registers 3
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$7;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    iget-object v1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$7;->f$1:Ljava/io/File;
++
++    invoke-virtual {v0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->lambda$draw$6$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Ljava/io/File;)V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$8.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$8.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$8.smali
+@@ -0,0 +1,44 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$8;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "lambda$draw$7"
++    proto = "()V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++
++# direct methods
++.method public synthetic constructor <init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;)V
++    .registers 2
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$8;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final run()V
++    .registers 2
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$8;->f$0:Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++
++    invoke-virtual {v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->lambda$draw$7$io-mesalabs-unica-movecertificate-MoveCertificateActivity()V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$9.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$9.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity$9.smali
+@@ -0,0 +1,44 @@
++.class public final synthetic Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$9;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Landroid/view/View$OnClickListener;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;"
++    method = "lambda$row$0"
++    proto = "(Ljava/lang/Runnable;Landroid/view/View;)V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Ljava/lang/Runnable;
++
++
++# direct methods
++.method public synthetic constructor <init>(Ljava/lang/Runnable;)V
++    .registers 2
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$9;->f$0:Ljava/lang/Runnable;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final onClick(Landroid/view/View;)V
++    .registers 3
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$9;->f$0:Ljava/lang/Runnable;
++
++    invoke-static {v0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->lambda$row$0(Ljava/lang/Runnable;Landroid/view/View;)V
++
++    return-void
++.end method
+
+diff --git a/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity.smali b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity.smali
+new file mode 100644
+--- /dev/null
++++ b/smali_classes4/io/mesalabs/unica/movecertificate/MoveCertificateActivity.smali
+@@ -0,0 +1,2348 @@
++.class public final Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;
++.super Landroid/app/Activity;
++.source "MoveCertificateActivity.java"
++
++
++# static fields
++.field private static final CERTS:Ljava/io/File;
++
++.field private static final ENABLED:Ljava/io/File;
++
++.field private static final REQUEST:Ljava/io/File;
++
++.field private static final ROOT:Ljava/io/File;
++
++
++# instance fields
++.field private busy:Z
++
++.field private card:Landroid/widget/LinearLayout;
++
++.field private content:Landroid/widget/LinearLayout;
++
++.field private final worker:Ljava/util/concurrent/ExecutorService;
++
++
++# direct methods
++.method public static synthetic $r8$lambda$8EDpzmAt4sM_mWQWaDtJGcpgh1M(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;)V
++    .registers 1
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->draw()V
++
++    return-void
++.end method
++
++.method static constructor <clinit>()V
++    .registers 3
++
++    .line 20
++    new-instance v0, Ljava/io/File;
++
++    const-string v1, "/data/misc/unica_movecert"
++
++    invoke-direct {v0, v1}, Ljava/io/File;-><init>(Ljava/lang/String;)V
++
++    sput-object v0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->ROOT:Ljava/io/File;
++
++    new-instance v0, Ljava/io/File;
++
++    sget-object v1, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->ROOT:Ljava/io/File;
++
++    const-string v2, "request"
++
++    invoke-direct {v0, v1, v2}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
++
++    sput-object v0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->REQUEST:Ljava/io/File;
++
++    new-instance v0, Ljava/io/File;
++
++    sget-object v1, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->REQUEST:Ljava/io/File;
++
++    const-string v2, "certs"
++
++    invoke-direct {v0, v1, v2}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
++
++    sput-object v0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->CERTS:Ljava/io/File;
++
++    new-instance v0, Ljava/io/File;
++
++    sget-object v1, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->REQUEST:Ljava/io/File;
++
++    const-string v2, "enabled"
++
++    invoke-direct {v0, v1, v2}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
++
++    sput-object v0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->ENABLED:Ljava/io/File;
++
++    return-void
++.end method
++
++.method public constructor <init>()V
++    .registers 2
++
++    .line 19
++    invoke-direct {p0}, Landroid/app/Activity;-><init>()V
++
++    .line 21
++    invoke-static {}, Ljava/util/concurrent/Executors;->newSingleThreadExecutor()Ljava/util/concurrent/ExecutorService;
++
++    move-result-object v0
++
++    iput-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->worker:Ljava/util/concurrent/ExecutorService;
++
++    return-void
++.end method
++
++.method private changed()V
++    .registers 4
++
++    .line 73
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->draw()V
++
++    new-instance v0, Landroid/app/AlertDialog$Builder;
++
++    invoke-direct {v0, p0}, Landroid/app/AlertDialog$Builder;-><init>(Landroid/content/Context;)V
++
++    const-string v1, "saved"
++
++    invoke-direct {p0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Landroid/app/AlertDialog$Builder;->setTitle(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object v0
++
++    const-string v1, "reboot_summary"
++
++    invoke-direct {p0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Landroid/app/AlertDialog$Builder;->setMessage(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object v0
++
++    const v1, 0x104000a
++
++    const/4 v2, 0x0
++
++    invoke-virtual {v0, v1, v2}, Landroid/app/AlertDialog$Builder;->setPositiveButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
++
++    return-void
++.end method
++
++.method private color(Ljava/lang/String;I)I
++    .registers 6
++
++    .line 25
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getResources()Landroid/content/res/Resources;
++
++    move-result-object v0
++
++    const-string v1, "color"
++
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getPackageName()Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-virtual {v0, p1, v1, v2}, Landroid/content/res/Resources;->getIdentifier(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I
++
++    move-result p1
++
++    if-nez p1, :cond_11
++
++    goto :goto_15
++
++    :cond_11
++    invoke-virtual {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getColor(I)I
++
++    move-result p2
++
++    :goto_15
++    return p2
++.end method
++
++.method private dark()Z
++    .registers 3
++
++    .line 23
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getResources()Landroid/content/res/Resources;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Landroid/content/res/Resources;->getConfiguration()Landroid/content/res/Configuration;
++
++    move-result-object v0
++
++    iget v0, v0, Landroid/content/res/Configuration;->uiMode:I
++
++    and-int/lit8 v0, v0, 0x30
++
++    const/16 v1, 0x20
++
++    if-ne v0, v1, :cond_12
++
++    const/4 v0, 0x1
++
++    goto :goto_13
++
++    :cond_12
++    const/4 v0, 0x0
++
++    :goto_13
++    return v0
++.end method
++
++.method private describe(Ljava/security/cert/X509Certificate;)Ljava/lang/String;
++    .registers 5
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 70
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {p1}, Ljava/security/cert/X509Certificate;->getSubjectX500Principal()Ljavax/security/auth/x500/X500Principal;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljavax/security/auth/x500/X500Principal;->getName()Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    const-string v1, "\n\n"
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    const-string v2, "issuer"
++
++    invoke-direct {p0, v2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    const-string v2, ": "
++
++    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {p1}, Ljava/security/cert/X509Certificate;->getIssuerX500Principal()Ljavax/security/auth/x500/X500Principal;
++
++    move-result-object v2
++
++    invoke-virtual {v2}, Ljavax/security/auth/x500/X500Principal;->getName()Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-virtual {v0, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {p1}, Ljava/security/cert/X509Certificate;->getNotBefore()Ljava/util/Date;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    const-string v1, " \u2014 "
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {p1}, Ljava/security/cert/X509Certificate;->getNotAfter()Ljava/util/Date;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/Object;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    const-string v1, "\n\nSHA-256\n"
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-static {p1}, Lio/mesalabs/unica/movecertificate/Certificates;->fingerprint(Ljava/security/cert/X509Certificate;)Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-virtual {v0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p1
++
++    return-object p1
++.end method
++
++.method private details(Ljava/io/File;Ljava/security/cert/X509Certificate;)V
++    .registers 5
++
++    .line 71
++    :try_start_0
++    new-instance v0, Landroid/app/AlertDialog$Builder;
++
++    invoke-direct {v0, p0}, Landroid/app/AlertDialog$Builder;-><init>(Landroid/content/Context;)V
++
++    const-string v1, "details"
++
++    invoke-direct {p0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Landroid/app/AlertDialog$Builder;->setTitle(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object v0
++
++    invoke-direct {p0, p2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->describe(Ljava/security/cert/X509Certificate;)Ljava/lang/String;
++
++    move-result-object p2
++
++    invoke-virtual {v0, p2}, Landroid/app/AlertDialog$Builder;->setMessage(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object p2
++
++    const/high16 v0, 0x1040000
++
++    const/4 v1, 0x0
++
++    invoke-virtual {p2, v0, v1}, Landroid/app/AlertDialog$Builder;->setNegativeButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object p2
++
++    const-string v0, "remove"
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    new-instance v1, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$0;
++
++    invoke-direct {v1, p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$0;-><init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Ljava/io/File;)V
++
++    invoke-virtual {p2, v0, v1}, Landroid/app/AlertDialog$Builder;->setNeutralButton(Ljava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
++    :try_end_30
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_30} :catch_31
++
++    goto :goto_39
++
++    :catch_31
++    move-exception p1
++
++    invoke-virtual {p1}, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-direct {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->error(Ljava/lang/String;)V
++
++    :goto_39
++    return-void
++.end method
++
++.method private dp(I)I
++    .registers 3
++
++    .line 24
++    int-to-float p1, p1
++
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getResources()Landroid/content/res/Resources;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Landroid/content/res/Resources;->getDisplayMetrics()Landroid/util/DisplayMetrics;
++
++    move-result-object v0
++
++    iget v0, v0, Landroid/util/DisplayMetrics;->density:F
++
++    mul-float/2addr p1, v0
++
++    invoke-static {p1}, Ljava/lang/Math;->round(F)I
++
++    move-result p1
++
++    return p1
++.end method
++
++.method private draw()V
++    .registers 10
++
++    .line 52
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->isDestroyed()Z
++
++    move-result v0
++
++    if-nez v0, :cond_1a2
++
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->isFinishing()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_e
++
++    goto/16 :goto_1a2
++
++    .line 53
++    :cond_e
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    const-string v1, "unica_settings_bg_transparency_enabled"
++
++    const/4 v2, 0x0
++
++    invoke-static {v0, v1, v2}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result v0
++
++    const/4 v1, 0x1
++
++    if-eqz v0, :cond_1e
++
++    move v0, v1
++
++    goto :goto_1f
++
++    :cond_1e
++    move v0, v2
++
++    .line 54
++    :goto_1f
++    const/high16 v3, 0x100000
++
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getWindow()Landroid/view/Window;
++
++    move-result-object v4
++
++    if-eqz v0, :cond_2b
++
++    invoke-virtual {v4, v3}, Landroid/view/Window;->addFlags(I)V
++
++    goto :goto_2e
++
++    :cond_2b
++    invoke-virtual {v4, v3}, Landroid/view/Window;->clearFlags(I)V
++
++    .line 55
++    :goto_2e
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getWindow()Landroid/view/Window;
++
++    move-result-object v3
++
++    if-eqz v0, :cond_36
++
++    const/4 v4, -0x3
++
++    goto :goto_37
++
++    :cond_36
++    const/4 v4, -0x1
++
++    :goto_37
++    invoke-virtual {v3, v4}, Landroid/view/Window;->setFormat(I)V
++
++    .line 56
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getWindow()Landroid/view/Window;
++
++    move-result-object v3
++
++    new-instance v4, Landroid/graphics/drawable/ColorDrawable;
++
++    if-eqz v0, :cond_44
++
++    move v0, v2
++
++    goto :goto_72
++
++    :cond_44
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v5, "sesl_round_and_bgcolor_"
++
++    invoke-virtual {v0, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dark()Z
++
++    move-result v5
++
++    if-eqz v5, :cond_58
++
++    const-string v5, "dark"
++
++    goto :goto_5a
++
++    :cond_58
++    const-string v5, "light"
++
++    :goto_5a
++    invoke-virtual {v0, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dark()Z
++
++    move-result v5
++
++    if-eqz v5, :cond_6b
++
++    const/high16 v5, -0x1000000
++
++    goto :goto_6e
++
++    :cond_6b
++    const v5, -0xd0d0e
++
++    :goto_6e
++    invoke-direct {p0, v0, v5}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->color(Ljava/lang/String;I)I
++
++    move-result v0
++
++    :goto_72
++    invoke-direct {v4, v0}, Landroid/graphics/drawable/ColorDrawable;-><init>(I)V
++
++    invoke-virtual {v3, v4}, Landroid/view/Window;->setBackgroundDrawable(Landroid/graphics/drawable/Drawable;)V
++
++    .line 57
++    new-instance v0, Landroid/widget/ScrollView;
++
++    invoke-direct {v0, p0}, Landroid/widget/ScrollView;-><init>(Landroid/content/Context;)V
++
++    new-instance v3, Landroid/widget/LinearLayout;
++
++    invoke-direct {v3, p0}, Landroid/widget/LinearLayout;-><init>(Landroid/content/Context;)V
++
++    iput-object v3, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->content:Landroid/widget/LinearLayout;
++
++    iget-object v3, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->content:Landroid/widget/LinearLayout;
++
++    invoke-virtual {v3, v1}, Landroid/widget/LinearLayout;->setOrientation(I)V
++
++    iget-object v1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->content:Landroid/widget/LinearLayout;
++
++    const/16 v3, 0x10
++
++    invoke-direct {p0, v3}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dp(I)I
++
++    move-result v4
++
++    const/16 v5, 0x14
++
++    invoke-direct {p0, v5}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dp(I)I
++
++    move-result v5
++
++    invoke-direct {p0, v3}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dp(I)I
++
++    move-result v3
++
++    const/16 v6, 0x18
++
++    invoke-direct {p0, v6}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dp(I)I
++
++    move-result v6
++
++    invoke-virtual {v1, v4, v5, v3, v6}, Landroid/widget/LinearLayout;->setPadding(IIII)V
++
++    iget-object v1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->content:Landroid/widget/LinearLayout;
++
++    invoke-virtual {v0, v1}, Landroid/widget/ScrollView;->addView(Landroid/view/View;)V
++
++    invoke-virtual {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->setContentView(Landroid/view/View;)V
++
++    .line 58
++    new-instance v1, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$2;
++
++    invoke-direct {v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$2;-><init>()V
++
++    invoke-virtual {v0, v1}, Landroid/widget/ScrollView;->setOnApplyWindowInsetsListener(Landroid/view/View$OnApplyWindowInsetsListener;)V
++
++    .line 59
++    sget-object v0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->ROOT:Ljava/io/File;
++
++    invoke-virtual {v0}, Ljava/io/File;->isDirectory()Z
++
++    move-result v0
++
++    const/4 v1, 0x0
++
++    if-nez v0, :cond_d0
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->group()V
++
++    const-string v0, "unavailable"
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    const-string v2, "unsupported"
++
++    invoke-direct {p0, v2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-direct {p0, v0, v2, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->row(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Runnable;)V
++
++    return-void
++
++    .line 60
++    :cond_d0
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->group()V
++
++    const-string v0, "enabled"
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->enabled()Z
++
++    move-result v3
++
++    if-eqz v3, :cond_e2
++
++    const-string v3, "on"
++
++    goto :goto_e4
++
++    :cond_e2
++    const-string v3, "off"
++
++    :goto_e4
++    invoke-direct {p0, v3}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v3
++
++    new-instance v4, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$3;
++
++    invoke-direct {v4, p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$3;-><init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;)V
++
++    invoke-direct {p0, v0, v3, v4}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->row(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Runnable;)V
++
++    .line 62
++    const-string v0, "status"
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->status()Ljava/lang/String;
++
++    move-result-object v3
++
++    invoke-direct {p0, v0, v3, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->row(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Runnable;)V
++
++    const-string v0, "refresh"
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    const-string v3, "refresh_summary"
++
++    invoke-direct {p0, v3}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v3
++
++    new-instance v4, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$4;
++
++    invoke-direct {v4, p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$4;-><init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;)V
++
++    invoke-direct {p0, v0, v3, v4}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->row(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Runnable;)V
++
++    .line 63
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->group()V
++
++    const-string v0, "import"
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    const-string v3, "import_summary"
++
++    invoke-direct {p0, v3}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v3
++
++    new-instance v4, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$5;
++
++    invoke-direct {v4, p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$5;-><init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;)V
++
++    invoke-direct {p0, v0, v3, v4}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->row(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Runnable;)V
++
++    .line 64
++    sget-object v0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->CERTS:Ljava/io/File;
++
++    invoke-static {v0}, Lio/mesalabs/unica/movecertificate/Certificates;->files(Ljava/io/File;)[Ljava/io/File;
++
++    move-result-object v0
++
++    .line 65
++    array-length v3, v0
++
++    if-nez v3, :cond_140
++
++    const-string v3, "empty"
++
++    invoke-direct {p0, v3}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v3
++
++    const-string v4, "empty_summary"
++
++    invoke-direct {p0, v4}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v4
++
++    invoke-direct {p0, v3, v4, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->row(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Runnable;)V
++
++    .line 66
++    :cond_140
++    array-length v1, v0
++
++    :goto_141
++    if-ge v2, v1, :cond_18a
++
++    aget-object v3, v0, v2
++
++    :try_start_145
++    new-instance v4, Ljava/io/FileInputStream;
++
++    invoke-direct {v4, v3}, Ljava/io/FileInputStream;-><init>(Ljava/io/File;)V
++    :try_end_14a
++    .catch Ljava/lang/Exception; {:try_start_145 .. :try_end_14a} :catch_174
++
++    :try_start_14a
++    invoke-static {v4}, Lio/mesalabs/unica/movecertificate/Certificates;->read(Ljava/io/InputStream;)[B
++
++    move-result-object v5
++
++    invoke-static {v5}, Lio/mesalabs/unica/movecertificate/Certificates;->parse([B)Ljava/security/cert/X509Certificate;
++
++    move-result-object v5
++
++    invoke-virtual {v5}, Ljava/security/cert/X509Certificate;->getSubjectX500Principal()Ljavax/security/auth/x500/X500Principal;
++
++    move-result-object v6
++
++    invoke-virtual {v6}, Ljavax/security/auth/x500/X500Principal;->getName()Ljava/lang/String;
++
++    move-result-object v6
++
++    invoke-virtual {v3}, Ljava/io/File;->getName()Ljava/lang/String;
++
++    move-result-object v7
++
++    new-instance v8, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$6;
++
++    invoke-direct {v8, p0, v3, v5}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$6;-><init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Ljava/io/File;Ljava/security/cert/X509Certificate;)V
++
++    invoke-direct {p0, v6, v7, v8}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->row(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Runnable;)V
++    :try_end_166
++    .catchall {:try_start_14a .. :try_end_166} :catchall_16a
++
++    :try_start_166
++    invoke-virtual {v4}, Ljava/io/FileInputStream;->close()V
++    :try_end_169
++    .catch Ljava/lang/Exception; {:try_start_166 .. :try_end_169} :catch_174
++
++    goto :goto_187
++
++    :catchall_16a
++    move-exception v5
++
++    :try_start_16b
++    invoke-virtual {v4}, Ljava/io/FileInputStream;->close()V
++    :try_end_16e
++    .catchall {:try_start_16b .. :try_end_16e} :catchall_16f
++
++    goto :goto_173
++
++    :catchall_16f
++    move-exception v4
++
++    :try_start_170
++    invoke-virtual {v5, v4}, Ljava/lang/Throwable;->addSuppressed(Ljava/lang/Throwable;)V
++
++    :goto_173
++    throw v5
++    :try_end_174
++    .catch Ljava/lang/Exception; {:try_start_170 .. :try_end_174} :catch_174
++
++    :catch_174
++    move-exception v4
++
++    invoke-virtual {v3}, Ljava/io/File;->getName()Ljava/lang/String;
++
++    move-result-object v4
++
++    const-string v5, "invalid"
++
++    invoke-direct {p0, v5}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v5
++
++    new-instance v6, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$7;
++
++    invoke-direct {v6, p0, v3}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$7;-><init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Ljava/io/File;)V
++
++    invoke-direct {p0, v4, v5, v6}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->row(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Runnable;)V
++
++    :goto_187
++    add-int/lit8 v2, v2, 0x1
++
++    goto :goto_141
++
++    .line 67
++    :cond_18a
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->group()V
++
++    const-string v0, "about"
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    const-string v1, "about_summary"
++
++    invoke-direct {p0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    new-instance v2, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$8;
++
++    invoke-direct {v2, p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$8;-><init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;)V
++
++    invoke-direct {p0, v0, v1, v2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->row(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Runnable;)V
++
++    .line 68
++    return-void
++
++    .line 52
++    :cond_1a2
++    :goto_1a2
++    return-void
++.end method
++
++.method private enabled()Z
++    .registers 5
++
++    .line 46
++    const/4 v0, 0x0
++
++    :try_start_1
++    new-instance v1, Ljava/io/FileInputStream;
++
++    sget-object v2, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->ENABLED:Ljava/io/File;
++
++    invoke-direct {v1, v2}, Ljava/io/FileInputStream;-><init>(Ljava/io/File;)V
++    :try_end_8
++    .catch Ljava/io/IOException; {:try_start_1 .. :try_end_8} :catch_21
++
++    :try_start_8
++    invoke-virtual {v1}, Ljava/io/FileInputStream;->read()I
++
++    move-result v2
++    :try_end_c
++    .catchall {:try_start_8 .. :try_end_c} :catchall_17
++
++    const/16 v3, 0x31
++
++    if-ne v2, v3, :cond_12
++
++    const/4 v2, 0x1
++
++    goto :goto_13
++
++    :cond_12
++    move v2, v0
++
++    :goto_13
++    :try_start_13
++    invoke-virtual {v1}, Ljava/io/FileInputStream;->close()V
++    :try_end_16
++    .catch Ljava/io/IOException; {:try_start_13 .. :try_end_16} :catch_21
++
++    return v2
++
++    :catchall_17
++    move-exception v2
++
++    :try_start_18
++    invoke-virtual {v1}, Ljava/io/FileInputStream;->close()V
++    :try_end_1b
++    .catchall {:try_start_18 .. :try_end_1b} :catchall_1c
++
++    goto :goto_20
++
++    :catchall_1c
++    move-exception v1
++
++    :try_start_1d
++    invoke-virtual {v2, v1}, Ljava/lang/Throwable;->addSuppressed(Ljava/lang/Throwable;)V
++
++    :goto_20
++    throw v2
++    :try_end_21
++    .catch Ljava/io/IOException; {:try_start_1d .. :try_end_21} :catch_21
++
++    :catch_21
++    move-exception v1
++
++    return v0
++.end method
++
++.method private error(Ljava/lang/String;)V
++    .registers 4
++
++    .line 74
++    new-instance v0, Landroid/app/AlertDialog$Builder;
++
++    invoke-direct {v0, p0}, Landroid/app/AlertDialog$Builder;-><init>(Landroid/content/Context;)V
++
++    const-string v1, "failed"
++
++    invoke-direct {p0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Landroid/app/AlertDialog$Builder;->setTitle(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object v0
++
++    if-nez p1, :cond_17
++
++    const-string p1, "unavailable"
++
++    invoke-direct {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p1
++
++    :cond_17
++    invoke-virtual {v0, p1}, Landroid/app/AlertDialog$Builder;->setMessage(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object p1
++
++    const v0, 0x104000a
++
++    const/4 v1, 0x0
++
++    invoke-virtual {p1, v0, v1}, Landroid/app/AlertDialog$Builder;->setPositiveButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
++
++    return-void
++.end method
++
++.method private group()V
++    .registers 8
++
++    .line 32
++    new-instance v0, Landroid/widget/LinearLayout;
++
++    invoke-direct {v0, p0}, Landroid/widget/LinearLayout;-><init>(Landroid/content/Context;)V
++
++    iput-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->card:Landroid/widget/LinearLayout;
++
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->card:Landroid/widget/LinearLayout;
++
++    const/4 v1, 0x1
++
++    invoke-virtual {v0, v1}, Landroid/widget/LinearLayout;->setOrientation(I)V
++
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->card:Landroid/widget/LinearLayout;
++
++    invoke-virtual {v0, v1}, Landroid/widget/LinearLayout;->setClipToOutline(Z)V
++
++    .line 33
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    const-string v2, "unica_settings_bg_transparency_enabled"
++
++    const/4 v3, 0x0
++
++    invoke-static {v0, v2, v3}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result v0
++
++    if-eqz v0, :cond_20
++
++    goto :goto_21
++
++    :cond_20
++    move v1, v3
++
++    .line 34
++    :goto_21
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    const-string v2, "unica_settings_bg_transparency_level"
++
++    const/16 v3, 0x46
++
++    invoke-static {v0, v2, v3}, Landroid/provider/Settings$System;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result v0
++
++    const/16 v2, 0x64
++
++    invoke-static {v2, v0}, Ljava/lang/Math;->min(II)I
++
++    move-result v0
++
++    invoke-static {v3, v0}, Ljava/lang/Math;->max(II)I
++
++    move-result v0
++
++    .line 35
++    new-instance v3, Ljava/lang/StringBuilder;
++
++    invoke-direct {v3}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v4, "sesl_background_color_"
++
++    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v3
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dark()Z
++
++    move-result v4
++
++    if-eqz v4, :cond_4b
++
++    const-string v4, "dark"
++
++    goto :goto_4d
++
++    :cond_4b
++    const-string v4, "light"
++
++    :goto_4d
++    invoke-virtual {v3, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v3
++
++    invoke-virtual {v3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v3
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dark()Z
++
++    move-result v4
++
++    const/4 v5, -0x1
++
++    if-eqz v4, :cond_60
++
++    const v4, -0xe8e8e6
++
++    goto :goto_61
++
++    :cond_60
++    move v4, v5
++
++    :goto_61
++    invoke-direct {p0, v3, v4}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->color(Ljava/lang/String;I)I
++
++    move-result v3
++
++    .line 36
++    new-instance v4, Landroid/graphics/drawable/GradientDrawable;
++
++    invoke-direct {v4}, Landroid/graphics/drawable/GradientDrawable;-><init>()V
++
++    const/16 v6, 0x18
++
++    if-eqz v1, :cond_7a
++
++    const v1, 0xffffff
++
++    and-int/2addr v1, v3
++
++    mul-int/lit16 v0, v0, 0xff
++
++    div-int/2addr v0, v2
++
++    rsub-int v0, v0, 0xff
++
++    shl-int/2addr v0, v6
++
++    or-int v3, v1, v0
++
++    :cond_7a
++    invoke-virtual {v4, v3}, Landroid/graphics/drawable/GradientDrawable;->setColor(I)V
++
++    const/16 v0, 0x1e
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dp(I)I
++
++    move-result v0
++
++    int-to-float v0, v0
++
++    invoke-virtual {v4, v0}, Landroid/graphics/drawable/GradientDrawable;->setCornerRadius(F)V
++
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->card:Landroid/widget/LinearLayout;
++
++    invoke-virtual {v0, v4}, Landroid/widget/LinearLayout;->setBackground(Landroid/graphics/drawable/Drawable;)V
++
++    .line 37
++    new-instance v0, Landroid/widget/LinearLayout$LayoutParams;
++
++    const/4 v1, -0x2
++
++    invoke-direct {v0, v5, v1}, Landroid/widget/LinearLayout$LayoutParams;-><init>(II)V
++
++    invoke-direct {p0, v6}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dp(I)I
++
++    move-result v1
++
++    iput v1, v0, Landroid/widget/LinearLayout$LayoutParams;->bottomMargin:I
++
++    iget-object v1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->content:Landroid/widget/LinearLayout;
++
++    iget-object v2, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->card:Landroid/widget/LinearLayout;
++
++    invoke-virtual {v1, v2, v0}, Landroid/widget/LinearLayout;->addView(Landroid/view/View;Landroid/view/ViewGroup$LayoutParams;)V
++
++    .line 38
++    return-void
++.end method
++
++.method private label(Ljava/lang/String;I)Landroid/widget/TextView;
++    .registers 4
++
++    .line 30
++    new-instance v0, Landroid/widget/TextView;
++
++    invoke-direct {v0, p0}, Landroid/widget/TextView;-><init>(Landroid/content/Context;)V
++
++    invoke-virtual {v0, p1}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
++
++    int-to-float p1, p2
++
++    invoke-virtual {v0, p1}, Landroid/widget/TextView;->setTextSize(F)V
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dark()Z
++
++    move-result p1
++
++    if-eqz p1, :cond_16
++
++    const p1, -0xb0b0a
++
++    goto :goto_19
++
++    :cond_16
++    const p1, -0xe8e7e5
++
++    :goto_19
++    invoke-virtual {v0, p1}, Landroid/widget/TextView;->setTextColor(I)V
++
++    return-object v0
++.end method
++
++.method static synthetic lambda$draw$1(Landroid/view/View;Landroid/view/WindowInsets;)Landroid/view/WindowInsets;
++    .registers 6
++
++    .line 58
++    invoke-static {}, Landroid/view/WindowInsets$Type;->systemBars()I
++
++    move-result v0
++
++    invoke-virtual {p1, v0}, Landroid/view/WindowInsets;->getInsets(I)Landroid/graphics/Insets;
++
++    move-result-object v0
++
++    iget v1, v0, Landroid/graphics/Insets;->left:I
++
++    iget v2, v0, Landroid/graphics/Insets;->top:I
++
++    iget v3, v0, Landroid/graphics/Insets;->right:I
++
++    iget v0, v0, Landroid/graphics/Insets;->bottom:I
++
++    invoke-virtual {p0, v1, v2, v3, v0}, Landroid/view/View;->setPadding(IIII)V
++
++    return-object p1
++.end method
++
++.method static synthetic lambda$row$0(Ljava/lang/Runnable;Landroid/view/View;)V
++    .registers 2
++
++    .line 43
++    invoke-interface {p0}, Ljava/lang/Runnable;->run()V
++
++    return-void
++.end method
++
++.method private remove(Ljava/io/File;)V
++    .registers 5
++
++    .line 72
++    new-instance v0, Landroid/app/AlertDialog$Builder;
++
++    invoke-direct {v0, p0}, Landroid/app/AlertDialog$Builder;-><init>(Landroid/content/Context;)V
++
++    const-string v1, "remove_question"
++
++    invoke-direct {p0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Landroid/app/AlertDialog$Builder;->setTitle(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object v0
++
++    const-string v1, "reboot_summary"
++
++    invoke-direct {p0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Landroid/app/AlertDialog$Builder;->setMessage(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object v0
++
++    const/high16 v1, 0x1040000
++
++    const/4 v2, 0x0
++
++    invoke-virtual {v0, v1, v2}, Landroid/app/AlertDialog$Builder;->setNegativeButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object v0
++
++    const-string v1, "remove"
++
++    invoke-direct {p0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    new-instance v2, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$14;
++
++    invoke-direct {v2, p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$14;-><init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Ljava/io/File;)V
++
++    invoke-virtual {v0, v1, v2}, Landroid/app/AlertDialog$Builder;->setPositiveButton(Ljava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
++
++    return-void
++.end method
++
++.method private row(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Runnable;)V
++    .registers 14
++
++    .line 40
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->card:Landroid/widget/LinearLayout;
++
++    invoke-virtual {v0}, Landroid/widget/LinearLayout;->getChildCount()I
++
++    move-result v0
++
++    const/high16 v1, 0x18000000
++
++    const/4 v2, -0x1
++
++    const/16 v3, 0x18
++
++    const/4 v4, 0x1
++
++    const/4 v5, 0x0
++
++    if-lez v0, :cond_3b
++
++    new-instance v0, Landroid/view/View;
++
++    invoke-direct {v0, p0}, Landroid/view/View;-><init>(Landroid/content/Context;)V
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dark()Z
++
++    move-result v6
++
++    if-eqz v6, :cond_1e
++
++    const v6, 0x22ffffff
++
++    goto :goto_1f
++
++    :cond_1e
++    move v6, v1
++
++    :goto_1f
++    invoke-virtual {v0, v6}, Landroid/view/View;->setBackgroundColor(I)V
++
++    new-instance v6, Landroid/widget/LinearLayout$LayoutParams;
++
++    invoke-direct {p0, v4}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dp(I)I
++
++    move-result v7
++
++    invoke-direct {v6, v2, v7}, Landroid/widget/LinearLayout$LayoutParams;-><init>(II)V
++
++    invoke-direct {p0, v3}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dp(I)I
++
++    move-result v7
++
++    invoke-direct {p0, v3}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dp(I)I
++
++    move-result v8
++
++    invoke-virtual {v6, v7, v5, v8, v5}, Landroid/widget/LinearLayout$LayoutParams;->setMargins(IIII)V
++
++    iget-object v7, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->card:Landroid/widget/LinearLayout;
++
++    invoke-virtual {v7, v0, v6}, Landroid/widget/LinearLayout;->addView(Landroid/view/View;Landroid/view/ViewGroup$LayoutParams;)V
++
++    .line 41
++    :cond_3b
++    new-instance v0, Landroid/widget/LinearLayout;
++
++    invoke-direct {v0, p0}, Landroid/widget/LinearLayout;-><init>(Landroid/content/Context;)V
++
++    invoke-virtual {v0, v4}, Landroid/widget/LinearLayout;->setOrientation(I)V
++
++    invoke-direct {p0, v3}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dp(I)I
++
++    move-result v6
++
++    const/16 v7, 0x14
++
++    invoke-direct {p0, v7}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dp(I)I
++
++    move-result v8
++
++    invoke-direct {p0, v3}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dp(I)I
++
++    move-result v3
++
++    invoke-direct {p0, v7}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dp(I)I
++
++    move-result v9
++
++    invoke-virtual {v0, v6, v8, v3, v9}, Landroid/widget/LinearLayout;->setPaddingRelative(IIII)V
++
++    .line 42
++    invoke-direct {p0, p1, v7}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->label(Ljava/lang/String;I)Landroid/widget/TextView;
++
++    move-result-object p1
++
++    invoke-virtual {v0, p1}, Landroid/widget/LinearLayout;->addView(Landroid/view/View;)V
++
++    const/16 p1, 0xf
++
++    invoke-direct {p0, p2, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->label(Ljava/lang/String;I)Landroid/widget/TextView;
++
++    move-result-object p1
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dark()Z
++
++    move-result p2
++
++    if-eqz p2, :cond_6f
++
++    const p2, -0x403e39
++
++    goto :goto_72
++
++    :cond_6f
++    const p2, -0x9d9a95
++
++    :goto_72
++    invoke-virtual {p1, p2}, Landroid/widget/TextView;->setTextColor(I)V
++
++    const/4 p2, 0x6
++
++    invoke-direct {p0, p2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dp(I)I
++
++    move-result p2
++
++    invoke-virtual {p1, v5, p2, v5, v5}, Landroid/widget/TextView;->setPadding(IIII)V
++
++    invoke-virtual {v0, p1}, Landroid/widget/LinearLayout;->addView(Landroid/view/View;)V
++
++    .line 43
++    if-eqz p3, :cond_ba
++
++    new-instance p1, Landroid/graphics/drawable/RippleDrawable;
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->dark()Z
++
++    move-result p2
++
++    if-eqz p2, :cond_8d
++
++    const v1, 0x33ffffff
++
++    :cond_8d
++    invoke-static {v1}, Landroid/content/res/ColorStateList;->valueOf(I)Landroid/content/res/ColorStateList;
++
++    move-result-object p2
++
++    new-instance v1, Landroid/graphics/drawable/ColorDrawable;
++
++    invoke-direct {v1, v2}, Landroid/graphics/drawable/ColorDrawable;-><init>(I)V
++
++    const/4 v3, 0x0
++
++    invoke-direct {p1, p2, v3, v1}, Landroid/graphics/drawable/RippleDrawable;-><init>(Landroid/content/res/ColorStateList;Landroid/graphics/drawable/Drawable;Landroid/graphics/drawable/Drawable;)V
++
++    invoke-virtual {v0, p1}, Landroid/widget/LinearLayout;->setBackground(Landroid/graphics/drawable/Drawable;)V
++
++    invoke-virtual {v0, v4}, Landroid/widget/LinearLayout;->setFocusable(Z)V
++
++    iget-boolean p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->busy:Z
++
++    xor-int/2addr p1, v4
++
++    invoke-virtual {v0, p1}, Landroid/widget/LinearLayout;->setEnabled(Z)V
++
++    iget-boolean p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->busy:Z
++
++    if-eqz p1, :cond_ad
++
++    const/high16 p1, 0x3f000000    # 0.5f
++
++    goto :goto_af
++
++    :cond_ad
++    const/high16 p1, 0x3f800000    # 1.0f
++
++    :goto_af
++    invoke-virtual {v0, p1}, Landroid/widget/LinearLayout;->setAlpha(F)V
++
++    new-instance p1, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$9;
++
++    invoke-direct {p1, p3}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$9;-><init>(Ljava/lang/Runnable;)V
++
++    invoke-virtual {v0, p1}, Landroid/widget/LinearLayout;->setOnClickListener(Landroid/view/View$OnClickListener;)V
++
++    .line 44
++    :cond_ba
++    iget-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->card:Landroid/widget/LinearLayout;
++
++    new-instance p2, Landroid/widget/LinearLayout$LayoutParams;
++
++    const/4 p3, -0x2
++
++    invoke-direct {p2, v2, p3}, Landroid/widget/LinearLayout$LayoutParams;-><init>(II)V
++
++    invoke-virtual {p1, v0, p2}, Landroid/widget/LinearLayout;->addView(Landroid/view/View;Landroid/view/ViewGroup$LayoutParams;)V
++
++    .line 45
++    return-void
++.end method
++
++.method private saveEnabled(Z)V
++    .registers 4
++
++    .line 69
++    :try_start_0
++    sget-object v0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->ENABLED:Ljava/io/File;
++
++    if-eqz p1, :cond_7
++
++    const-string p1, "1\n"
++
++    goto :goto_9
++
++    :cond_7
++    const-string p1, "0\n"
++
++    :goto_9
++    sget-object v1, Ljava/nio/charset/StandardCharsets;->US_ASCII:Ljava/nio/charset/Charset;
++
++    invoke-virtual {p1, v1}, Ljava/lang/String;->getBytes(Ljava/nio/charset/Charset;)[B
++
++    move-result-object p1
++
++    invoke-static {v0, p1}, Lio/mesalabs/unica/movecertificate/Certificates;->atomic(Ljava/io/File;[B)V
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->changed()V
++    :try_end_15
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_15} :catch_16
++
++    goto :goto_1e
++
++    :catch_16
++    move-exception p1
++
++    invoke-virtual {p1}, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-direct {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->error(Ljava/lang/String;)V
++
++    :goto_1e
++    return-void
++.end method
++
++.method private status()Ljava/lang/String;
++    .registers 8
++
++    .line 47
++    const-string v0, "unavailable"
++
++    :try_start_2
++    new-instance v1, Ljava/io/FileInputStream;
++
++    new-instance v2, Ljava/io/File;
++
++    sget-object v3, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->ROOT:Ljava/io/File;
++
++    const-string v4, "status"
++
++    invoke-direct {v2, v3, v4}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
++
++    invoke-direct {v1, v2}, Ljava/io/FileInputStream;-><init>(Ljava/io/File;)V
++    :try_end_10
++    .catch Ljava/lang/Exception; {:try_start_2 .. :try_end_10} :catch_74
++
++    :try_start_10
++    new-instance v2, Ljava/io/FileInputStream;
++
++    const-string v3, "/proc/sys/kernel/random/boot_id"
++
++    invoke-direct {v2, v3}, Ljava/io/FileInputStream;-><init>(Ljava/lang/String;)V
++    :try_end_17
++    .catchall {:try_start_10 .. :try_end_17} :catchall_6a
++
++    .line 48
++    :try_start_17
++    new-instance v3, Ljava/lang/String;
++
++    invoke-static {v1}, Lio/mesalabs/unica/movecertificate/Certificates;->read(Ljava/io/InputStream;)[B
++
++    move-result-object v4
++
++    sget-object v5, Ljava/nio/charset/StandardCharsets;->UTF_8:Ljava/nio/charset/Charset;
++
++    invoke-direct {v3, v4, v5}, Ljava/lang/String;-><init>([BLjava/nio/charset/Charset;)V
++
++    new-instance v4, Ljava/lang/String;
++
++    invoke-static {v2}, Lio/mesalabs/unica/movecertificate/Certificates;->read(Ljava/io/InputStream;)[B
++
++    move-result-object v5
++
++    sget-object v6, Ljava/nio/charset/StandardCharsets;->UTF_8:Ljava/nio/charset/Charset;
++
++    invoke-direct {v4, v5, v6}, Ljava/lang/String;-><init>([BLjava/nio/charset/Charset;)V
++
++    invoke-virtual {v4}, Ljava/lang/String;->trim()Ljava/lang/String;
++
++    move-result-object v4
++
++    .line 49
++    const/16 v5, 0xa
++
++    invoke-virtual {v3, v5}, Ljava/lang/String;->indexOf(I)I
++
++    move-result v5
++
++    if-lez v5, :cond_55
++
++    invoke-virtual {v4}, Ljava/lang/String;->isEmpty()Z
++
++    move-result v6
++
++    if-nez v6, :cond_55
++
++    const/4 v6, 0x0
++
++    invoke-virtual {v3, v6, v5}, Ljava/lang/String;->substring(II)Ljava/lang/String;
++
++    move-result-object v6
++
++    invoke-virtual {v4, v6}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v4
++
++    if-eqz v4, :cond_55
++
++    add-int/lit8 v5, v5, 0x1
++
++    invoke-virtual {v3, v5}, Ljava/lang/String;->substring(I)Ljava/lang/String;
++
++    move-result-object v3
++
++    invoke-virtual {v3}, Ljava/lang/String;->trim()Ljava/lang/String;
++
++    move-result-object v3
++
++    goto :goto_59
++
++    :cond_55
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v3
++    :try_end_59
++    .catchall {:try_start_17 .. :try_end_59} :catchall_60
++
++    .line 50
++    :goto_59
++    :try_start_59
++    invoke-virtual {v2}, Ljava/io/FileInputStream;->close()V
++    :try_end_5c
++    .catchall {:try_start_59 .. :try_end_5c} :catchall_6a
++
++    :try_start_5c
++    invoke-virtual {v1}, Ljava/io/FileInputStream;->close()V
++    :try_end_5f
++    .catch Ljava/lang/Exception; {:try_start_5c .. :try_end_5f} :catch_74
++
++    .line 49
++    return-object v3
++
++    .line 47
++    :catchall_60
++    move-exception v3
++
++    :try_start_61
++    invoke-virtual {v2}, Ljava/io/FileInputStream;->close()V
++    :try_end_64
++    .catchall {:try_start_61 .. :try_end_64} :catchall_65
++
++    goto :goto_69
++
++    :catchall_65
++    move-exception v2
++
++    :try_start_66
++    invoke-virtual {v3, v2}, Ljava/lang/Throwable;->addSuppressed(Ljava/lang/Throwable;)V
++
++    :goto_69
++    throw v3
++    :try_end_6a
++    .catchall {:try_start_66 .. :try_end_6a} :catchall_6a
++
++    :catchall_6a
++    move-exception v2
++
++    :try_start_6b
++    invoke-virtual {v1}, Ljava/io/FileInputStream;->close()V
++    :try_end_6e
++    .catchall {:try_start_6b .. :try_end_6e} :catchall_6f
++
++    goto :goto_73
++
++    :catchall_6f
++    move-exception v1
++
++    :try_start_70
++    invoke-virtual {v2, v1}, Ljava/lang/Throwable;->addSuppressed(Ljava/lang/Throwable;)V
++
++    :goto_73
++    throw v2
++    :try_end_74
++    .catch Ljava/lang/Exception; {:try_start_70 .. :try_end_74} :catch_74
++
++    .line 50
++    :catch_74
++    move-exception v1
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    return-object v0
++.end method
++
++.method private str(Ljava/lang/String;)Ljava/lang/String;
++    .registers 5
++
++    .line 26
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getResources()Landroid/content/res/Resources;
++
++    move-result-object v0
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v2, "unica_movecert_"
++
++    invoke-virtual {v1, v2}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p1
++
++    const-string v1, "string"
++
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getPackageName()Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-virtual {v0, p1, v1, v2}, Landroid/content/res/Resources;->getIdentifier(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I
++
++    move-result p1
++
++    invoke-virtual {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getString(I)Ljava/lang/String;
++
++    move-result-object p1
++
++    return-object p1
++.end method
++
++
++# virtual methods
++.method synthetic lambda$details$8$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Ljava/io/File;Landroid/content/DialogInterface;I)V
++    .registers 4
++
++    .line 71
++    invoke-direct {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->remove(Ljava/io/File;)V
++
++    return-void
++.end method
++
++.method synthetic lambda$draw$2$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Landroid/content/DialogInterface;I)V
++    .registers 3
++
++    .line 61
++    const/4 p1, 0x1
++
++    invoke-direct {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->saveEnabled(Z)V
++
++    return-void
++.end method
++
++.method synthetic lambda$draw$3$io-mesalabs-unica-movecertificate-MoveCertificateActivity()V
++    .registers 4
++
++    .line 61
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->enabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_b
++
++    const/4 v0, 0x0
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->saveEnabled(Z)V
++
++    goto :goto_3d
++
++    :cond_b
++    new-instance v0, Landroid/app/AlertDialog$Builder;
++
++    invoke-direct {v0, p0}, Landroid/app/AlertDialog$Builder;-><init>(Landroid/content/Context;)V
++
++    const-string v1, "enable_question"
++
++    invoke-direct {p0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Landroid/app/AlertDialog$Builder;->setTitle(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object v0
++
++    const-string v1, "trust_warning"
++
++    invoke-direct {p0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Landroid/app/AlertDialog$Builder;->setMessage(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object v0
++
++    const/high16 v1, 0x1040000
++
++    const/4 v2, 0x0
++
++    invoke-virtual {v0, v1, v2}, Landroid/app/AlertDialog$Builder;->setNegativeButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object v0
++
++    const-string v1, "enable"
++
++    invoke-direct {p0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    new-instance v2, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$1;
++
++    invoke-direct {v2, p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$1;-><init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;)V
++
++    invoke-virtual {v0, v1, v2}, Landroid/app/AlertDialog$Builder;->setPositiveButton(Ljava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
++
++    .line 62
++    :goto_3d
++    return-void
++.end method
++
++.method synthetic lambda$draw$4$io-mesalabs-unica-movecertificate-MoveCertificateActivity()V
++    .registers 3
++
++    .line 63
++    new-instance v0, Landroid/content/Intent;
++
++    const-string v1, "android.intent.action.OPEN_DOCUMENT"
++
++    invoke-direct {v0, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
++
++    const-string v1, "*/*"
++
++    invoke-virtual {v0, v1}, Landroid/content/Intent;->setType(Ljava/lang/String;)Landroid/content/Intent;
++
++    move-result-object v0
++
++    const-string v1, "android.intent.category.OPENABLE"
++
++    invoke-virtual {v0, v1}, Landroid/content/Intent;->addCategory(Ljava/lang/String;)Landroid/content/Intent;
++
++    move-result-object v0
++
++    const/16 v1, 0x29
++
++    :try_start_15
++    invoke-virtual {p0, v0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->startActivityForResult(Landroid/content/Intent;I)V
++    :try_end_18
++    .catch Landroid/content/ActivityNotFoundException; {:try_start_15 .. :try_end_18} :catch_19
++
++    goto :goto_23
++
++    :catch_19
++    move-exception v0
++
++    const-string v0, "picker_missing"
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->error(Ljava/lang/String;)V
++
++    :goto_23
++    return-void
++.end method
++
++.method synthetic lambda$draw$5$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Ljava/io/File;Ljava/security/cert/X509Certificate;)V
++    .registers 3
++
++    .line 66
++    invoke-direct {p0, p1, p2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->details(Ljava/io/File;Ljava/security/cert/X509Certificate;)V
++
++    return-void
++.end method
++
++.method synthetic lambda$draw$6$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Ljava/io/File;)V
++    .registers 2
++
++    .line 66
++    invoke-direct {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->remove(Ljava/io/File;)V
++
++    return-void
++.end method
++
++.method synthetic lambda$draw$7$io-mesalabs-unica-movecertificate-MoveCertificateActivity()V
++    .registers 4
++
++    .line 67
++    new-instance v0, Landroid/content/Intent;
++
++    const-string v1, "https://github.com/ys1231/MoveCertificate"
++
++    invoke-static {v1}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
++
++    move-result-object v1
++
++    const-string v2, "android.intent.action.VIEW"
++
++    invoke-direct {v0, v2, v1}, Landroid/content/Intent;-><init>(Ljava/lang/String;Landroid/net/Uri;)V
++
++    invoke-virtual {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->startActivity(Landroid/content/Intent;)V
++
++    return-void
++.end method
++
++.method synthetic lambda$onActivityResult$10$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Ljava/security/cert/X509Certificate;Landroid/content/DialogInterface;I)V
++    .registers 4
++
++    .line 78
++    :try_start_0
++    sget-object p2, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->CERTS:Ljava/io/File;
++
++    invoke-static {p2, p1}, Lio/mesalabs/unica/movecertificate/Certificates;->install(Ljava/io/File;Ljava/security/cert/X509Certificate;)V
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->changed()V
++    :try_end_8
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_8} :catch_9
++
++    goto :goto_11
++
++    :catch_9
++    move-exception p1
++
++    invoke-virtual {p1}, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-direct {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->error(Ljava/lang/String;)V
++
++    :goto_11
++    return-void
++.end method
++
++.method synthetic lambda$onActivityResult$11$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Ljava/lang/String;Ljava/security/cert/X509Certificate;)V
++    .registers 5
++
++    .line 78
++    const/4 v0, 0x0
++
++    iput-boolean v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->busy:Z
++
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->isDestroyed()Z
++
++    move-result v0
++
++    if-nez v0, :cond_5c
++
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->isFinishing()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_10
++
++    goto :goto_5c
++
++    :cond_10
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->draw()V
++
++    new-instance v0, Landroid/app/AlertDialog$Builder;
++
++    invoke-direct {v0, p0}, Landroid/app/AlertDialog$Builder;-><init>(Landroid/content/Context;)V
++
++    const-string v1, "import_question"
++
++    invoke-direct {p0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {v0, v1}, Landroid/app/AlertDialog$Builder;->setTitle(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object v0
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {v1, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p1
++
++    const-string v1, "\n\n"
++
++    invoke-virtual {p1, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p1
++
++    const-string v1, "trust_warning"
++
++    invoke-direct {p0, v1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-virtual {p1, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-virtual {v0, p1}, Landroid/app/AlertDialog$Builder;->setMessage(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object p1
++
++    const/high16 v0, 0x1040000
++
++    const/4 v1, 0x0
++
++    invoke-virtual {p1, v0, v1}, Landroid/app/AlertDialog$Builder;->setNegativeButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object p1
++
++    const-string v0, "import"
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    new-instance v1, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$13;
++
++    invoke-direct {v1, p0, p2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$13;-><init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Ljava/security/cert/X509Certificate;)V
++
++    invoke-virtual {p1, v0, v1}, Landroid/app/AlertDialog$Builder;->setPositiveButton(Ljava/lang/CharSequence;Landroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
++
++    :cond_5c
++    :goto_5c
++    return-void
++.end method
++
++.method synthetic lambda$onActivityResult$12$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Ljava/lang/Exception;)V
++    .registers 3
++
++    .line 79
++    const/4 v0, 0x0
++
++    iput-boolean v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->busy:Z
++
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->isDestroyed()Z
++
++    move-result v0
++
++    if-nez v0, :cond_13
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->draw()V
++
++    invoke-virtual {p1}, Ljava/lang/Exception;->getMessage()Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-direct {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->error(Ljava/lang/String;)V
++
++    :cond_13
++    return-void
++.end method
++
++.method synthetic lambda$onActivityResult$13$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Landroid/content/Intent;)V
++    .registers 5
++
++    .line 76
++    :try_start_0
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    invoke-virtual {p1}, Landroid/content/Intent;->getData()Landroid/net/Uri;
++
++    move-result-object p1
++
++    invoke-virtual {v0, p1}, Landroid/content/ContentResolver;->openInputStream(Landroid/net/Uri;)Ljava/io/InputStream;
++
++    move-result-object p1
++    :try_end_c
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_c} :catch_35
++
++    .line 77
++    :try_start_c
++    invoke-static {p1}, Lio/mesalabs/unica/movecertificate/Certificates;->read(Ljava/io/InputStream;)[B
++
++    move-result-object v0
++
++    invoke-static {v0}, Lio/mesalabs/unica/movecertificate/Certificates;->parse([B)Ljava/security/cert/X509Certificate;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/security/cert/X509Certificate;->checkValidity()V
++
++    invoke-direct {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->describe(Ljava/security/cert/X509Certificate;)Ljava/lang/String;
++
++    move-result-object v1
++
++    .line 78
++    new-instance v2, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$11;
++
++    invoke-direct {v2, p0, v1, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$11;-><init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Ljava/lang/String;Ljava/security/cert/X509Certificate;)V
++
++    invoke-virtual {p0, v2}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->runOnUiThread(Ljava/lang/Runnable;)V
++    :try_end_23
++    .catchall {:try_start_c .. :try_end_23} :catchall_29
++
++    .line 79
++    if-eqz p1, :cond_3e
++
++    :try_start_25
++    invoke-virtual {p1}, Ljava/io/InputStream;->close()V
++    :try_end_28
++    .catch Ljava/lang/Exception; {:try_start_25 .. :try_end_28} :catch_35
++
++    goto :goto_3e
++
++    .line 76
++    :catchall_29
++    move-exception v0
++
++    if-eqz p1, :cond_34
++
++    :try_start_2c
++    invoke-virtual {p1}, Ljava/io/InputStream;->close()V
++    :try_end_2f
++    .catchall {:try_start_2c .. :try_end_2f} :catchall_30
++
++    goto :goto_34
++
++    :catchall_30
++    move-exception p1
++
++    :try_start_31
++    invoke-virtual {v0, p1}, Ljava/lang/Throwable;->addSuppressed(Ljava/lang/Throwable;)V
++
++    :cond_34
++    :goto_34
++    throw v0
++    :try_end_35
++    .catch Ljava/lang/Exception; {:try_start_31 .. :try_end_35} :catch_35
++
++    .line 79
++    :catch_35
++    move-exception p1
++
++    new-instance v0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$12;
++
++    invoke-direct {v0, p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$12;-><init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Ljava/lang/Exception;)V
++
++    invoke-virtual {p0, v0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->runOnUiThread(Ljava/lang/Runnable;)V
++
++    :cond_3e
++    :goto_3e
++    return-void
++.end method
++
++.method synthetic lambda$remove$9$io-mesalabs-unica-movecertificate-MoveCertificateActivity(Ljava/io/File;Landroid/content/DialogInterface;I)V
++    .registers 4
++
++    .line 72
++    invoke-virtual {p1}, Ljava/io/File;->delete()Z
++
++    move-result p1
++
++    if-eqz p1, :cond_a
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->changed()V
++
++    goto :goto_13
++
++    :cond_a
++    const-string p1, "remove_failed"
++
++    invoke-direct {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-direct {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->error(Ljava/lang/String;)V
++
++    :goto_13
++    return-void
++.end method
++
++.method protected onActivityResult(IILandroid/content/Intent;)V
++    .registers 5
++
++    .line 75
++    invoke-super {p0, p1, p2, p3}, Landroid/app/Activity;->onActivityResult(IILandroid/content/Intent;)V
++
++    const/16 v0, 0x29
++
++    if-ne p1, v0, :cond_28
++
++    const/4 p1, -0x1
++
++    if-ne p2, p1, :cond_28
++
++    if-eqz p3, :cond_28
++
++    invoke-virtual {p3}, Landroid/content/Intent;->getData()Landroid/net/Uri;
++
++    move-result-object p1
++
++    if-eqz p1, :cond_28
++
++    iget-boolean p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->busy:Z
++
++    if-eqz p1, :cond_17
++
++    goto :goto_28
++
++    .line 76
++    :cond_17
++    const/4 p1, 0x1
++
++    iput-boolean p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->busy:Z
++
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->draw()V
++
++    iget-object p1, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->worker:Ljava/util/concurrent/ExecutorService;
++
++    new-instance p2, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$10;
++
++    invoke-direct {p2, p0, p3}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity$10;-><init>(Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;Landroid/content/Intent;)V
++
++    invoke-interface {p1, p2}, Ljava/util/concurrent/ExecutorService;->submit(Ljava/lang/Runnable;)Ljava/util/concurrent/Future;
++
++    .line 80
++    return-void
++
++    .line 75
++    :cond_28
++    :goto_28
++    return-void
++.end method
++
++.method public onCreate(Landroid/os/Bundle;)V
++    .registers 3
++
++    .line 27
++    invoke-super {p0, p1}, Landroid/app/Activity;->onCreate(Landroid/os/Bundle;)V
++
++    invoke-static {}, Landroid/os/Process;->myUid()I
++
++    move-result p1
++
++    const v0, 0x186a0
++
++    div-int/2addr p1, v0
++
++    const/4 v0, 0x1
++
++    if-eqz p1, :cond_1f
++
++    const-string p1, "owner_only"
++
++    invoke-direct {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-static {p0, p1, v0}, Landroid/widget/Toast;->makeText(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Landroid/widget/Toast;->show()V
++
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->finish()V
++
++    return-void
++
++    :cond_1f
++    const-string p1, "title"
++
++    invoke-direct {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->str(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-virtual {p0, p1}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->setTitle(Ljava/lang/CharSequence;)V
++
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getActionBar()Landroid/app/ActionBar;
++
++    move-result-object p1
++
++    if-eqz p1, :cond_35
++
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->getActionBar()Landroid/app/ActionBar;
++
++    move-result-object p1
++
++    invoke-virtual {p1, v0}, Landroid/app/ActionBar;->setDisplayHomeAsUpEnabled(Z)V
++
++    :cond_35
++    invoke-direct {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->draw()V
++
++    return-void
++.end method
++
++.method protected onDestroy()V
++    .registers 2
++
++    .line 29
++    iget-object v0, p0, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->worker:Ljava/util/concurrent/ExecutorService;
++
++    invoke-interface {v0}, Ljava/util/concurrent/ExecutorService;->shutdownNow()Ljava/util/List;
++
++    invoke-super {p0}, Landroid/app/Activity;->onDestroy()V
++
++    return-void
++.end method
++
++.method public onOptionsItemSelected(Landroid/view/MenuItem;)Z
++    .registers 4
++
++    .line 28
++    invoke-interface {p1}, Landroid/view/MenuItem;->getItemId()I
++
++    move-result v0
++
++    const v1, 0x102002c
++
++    if-ne v0, v1, :cond_e
++
++    invoke-virtual {p0}, Lio/mesalabs/unica/movecertificate/MoveCertificateActivity;->finish()V
++
++    const/4 p1, 0x1
++
++    return p1
++
++    :cond_e
++    invoke-super {p0, p1}, Landroid/app/Activity;->onOptionsItemSelected(Landroid/view/MenuItem;)Z
++
++    move-result p1
++
++    return p1
++.end method
+

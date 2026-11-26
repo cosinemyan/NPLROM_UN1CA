@@ -1,0 +1,4 @@
+id=tee-simulator
+name=UN1CA TEE Simulator backend
+author=JingMatrix, Rezoss
+description=Native KeyMint interception controlled by the existing UN1CA keybox Settings.

@@ -1,0 +1,173 @@
+From: UN1CA <noreply@unica.local>
+Subject: [PATCH] Match Java property reads to PIF version overrides
+
+diff --git a/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
+--- a/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
++++ b/smali_classes6/io/mesalabs/unica/PlayIntegrityHooks.smali
+@@ -4,6 +4,10 @@
+
+
+ # static fields
++.field private static sPifSecurityPatch:Ljava/lang/String;
++
++.field private static sPifFirstApiLevel:Ljava/lang/String;
++
+ .field private static final blacklist DEBUG:Z = false
+
+ .field private static final blacklist GMS_ADD_ACCOUNT_ACTIVITY:Landroid/content/ComponentName;
+@@ -984,6 +988,8 @@
+
+     invoke-static {v2}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
+
++    sput-object v0, Lio/mesalabs/unica/PlayIntegrityHooks;->sPifSecurityPatch:Ljava/lang/String;
++
+     const-string v2, "SECURITY_PATCH"
+
+     invoke-static {v2, v0}, Lio/mesalabs/unica/PlayIntegrityHooks;->setVersionFieldString(Ljava/lang/String;Ljava/lang/String;)V
+@@ -1019,6 +1025,8 @@
+
+     invoke-static {v1}, Lio/mesalabs/unica/PlayIntegrityHooks;->dlog(Ljava/lang/String;)V
+
++    sput-object v0, Lio/mesalabs/unica/PlayIntegrityHooks;->sPifFirstApiLevel:Ljava/lang/String;
++
+     const-string v1, "DEVICE_INITIAL_SDK_INT"
+
+     invoke-static {v0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
+@@ -1030,3 +1038,46 @@
+     :cond_a
+     return-void
+ .end method
++
++.method public static onSystemPropertiesGet(Ljava/lang/String;)Ljava/lang/String;
++    .locals 1
++
++    const-string v0, "ro.build.version.security_patch"
++
++    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :check_first_api
++
++    sget-object p0, Lio/mesalabs/unica/PlayIntegrityHooks;->sPifSecurityPatch:Ljava/lang/String;
++
++    goto :check_enabled
++
++    :check_first_api
++    const-string v0, "ro.product.first_api_level"
++
++    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :no_override
++
++    sget-object p0, Lio/mesalabs/unica/PlayIntegrityHooks;->sPifFirstApiLevel:Ljava/lang/String;
++
++    :check_enabled
++    if-eqz p0, :no_override
++
++    invoke-static {}, Lio/mesalabs/unica/PlayIntegrityHooks;->isPIFEnabled()Z
++
++    move-result v0
++
++    if-eqz v0, :no_override
++
++    return-object p0
++
++    :no_override
++    const/4 v0, 0x0
++
++    return-object v0
++.end method
+diff --git a/smali_classes3/android/os/SystemProperties.smali b/smali_classes3/android/os/SystemProperties.smali
+--- a/smali_classes3/android/os/SystemProperties.smali
++++ b/smali_classes3/android/os/SystemProperties.smali
+@@ -404,3 +404,12 @@
++    invoke-static {p0}, Lio/mesalabs/unica/PlayIntegrityHooks;->onSystemPropertiesGet(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    if-eqz v0, :pif_real_property
++
++    return-object v0
++
++    :pif_real_property
+     invoke-static {p0}, Landroid/os/SystemProperties;->native_get(Ljava/lang/String;)Ljava/lang/String;
+
+     move-result-object p0
+@@ -443,3 +452,12 @@
++    invoke-static {p0}, Lio/mesalabs/unica/PlayIntegrityHooks;->onSystemPropertiesGet(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    if-eqz v0, :pif_real_property
++
++    return-object v0
++
++    :pif_real_property
+     invoke-static {p0, p1}, Landroid/os/SystemProperties;->native_get(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+
+     move-result-object p0
+@@ -463,10 +481,29 @@
+ .end method
+
+ .method public static whitelist getInt(Ljava/lang/String;I)I
+-    .locals 0
++    .locals 1
+     .annotation runtime Landroid/annotation/SystemApi;
+     .end annotation
+
++    invoke-static {p0}, Lio/mesalabs/unica/PlayIntegrityHooks;->onSystemPropertiesGet(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    if-eqz v0, :pif_real_property
++
++    :pif_parse_start
++    invoke-static {v0}, Ljava/lang/Integer;->parseInt(Ljava/lang/String;)I
++
++    move-result p0
++    :pif_parse_end
++    .catch Ljava/lang/NumberFormatException; {:pif_parse_start .. :pif_parse_end} :pif_invalid
++
++    return p0
++
++    :pif_invalid
++    move-exception v0
++
++    :pif_real_property
+     invoke-static {p0, p1}, Landroid/os/SystemProperties;->native_get_int(Ljava/lang/String;I)I
+
+     move-result p0
+@@ -475,10 +512,29 @@
+ .end method
+
+ .method public static whitelist getLong(Ljava/lang/String;J)J
+-    .locals 0
++    .locals 1
+     .annotation runtime Landroid/annotation/SystemApi;
+     .end annotation
+
++    invoke-static {p0}, Lio/mesalabs/unica/PlayIntegrityHooks;->onSystemPropertiesGet(Ljava/lang/String;)Ljava/lang/String;
++
++    move-result-object v0
++
++    if-eqz v0, :pif_real_property
++
++    :pif_parse_start
++    invoke-static {v0}, Ljava/lang/Long;->parseLong(Ljava/lang/String;)J
++
++    move-result-wide p0
++    :pif_parse_end
++    .catch Ljava/lang/NumberFormatException; {:pif_parse_start .. :pif_parse_end} :pif_invalid
++
++    return-wide p0
++
++    :pif_invalid
++    move-exception v0
++
++    :pif_real_property
+     invoke-static {p0, p1, p2}, Landroid/os/SystemProperties;->native_get_long(Ljava/lang/String;J)J
+
+     move-result-wide p0

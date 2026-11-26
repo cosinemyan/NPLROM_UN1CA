@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <allow-association target="com.samsung.android.smartsuggestions" allowed="io.mesalabs.unica.localsummary" />
+    <allow-association target="io.mesalabs.unica.localsummary" allowed="com.samsung.android.smartsuggestions" />
+    <allow-association target="io.mesalabs.unica.localsummary" allowed="android" />
+    <allow-association target="io.mesalabs.rezoss.qwen" allowed="io.mesalabs.unica.localsummary" />
+    <allow-association target="io.mesalabs.unica.localsummary" allowed="io.mesalabs.rezoss.qwen" />
+    <!-- Keep existing peers; permit the shared V73 service/model-provider path. -->
+    <allow-association target="io.mesalabs.unica.localsummary" allowed="com.samsung.android.aioskernelservice" />
+    <allow-association target="io.mesalabs.rezoss.qwen" allowed="com.samsung.android.aioskernelservice" />
+    <allow-association target="com.samsung.android.aioskernelservice" allowed="com.samsung.android.ssco" />
+    <allow-association target="com.samsung.android.ssco" allowed="com.samsung.android.aioskernelservice" />
+    <!-- Declaring a target restricts its peers. Keep the Samsung callers and
+         existing local-summary consumer alongside the new SSCO inference link. -->
+    <allow-association target="com.samsung.android.aioskernelservice" allowed="com.samsung.android.offline.languagemodel" />
+    <allow-association target="com.samsung.android.aioskernelservice" allowed="io.mesalabs.unica.localsummary" />
+    <allow-association target="com.samsung.android.aioskernelservice" allowed="io.mesalabs.rezoss.qwen" />
+    <!-- Memory uses its own task/provider selection in the shared AIOS service. -->
+    <allow-association target="com.samsung.android.aioskernelservice" allowed="com.samsung.android.app.memory" />
+    <allow-association target="com.samsung.android.ssco" allowed="com.samsung.android.aicore" />
+    <allow-association target="com.samsung.android.ssco" allowed="com.samsung.android.smartsuggestions" />
+    <!-- Settings search reads SemanticDataProvider while indexing device Q&A. -->
+    <allow-association target="com.samsung.android.ssco" allowed="com.android.settings.intelligence" />
+    <!-- AIOS may open user-selected files from Internal storage or Downloads.
+         Do not restrict these shared providers by declaring them as targets. -->
+    <allow-association target="com.samsung.android.aioskernelservice" allowed="com.android.externalstorage" />
+    <allow-association target="com.samsung.android.aioskernelservice" allowed="com.android.providers.downloads" />
+</config>

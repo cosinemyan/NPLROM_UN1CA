@@ -1,0 +1,645 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: UN1CA <unica@local>
+Subject: [PATCH] Add protected marker control and report policy initialization
+
+Generated from settings/thermal/java by thermal/build.sh.
+
+diff --git a/smali/io/mesalabs/unica/thermal/RelaxPolicyReceiver$0.smali b/smali/io/mesalabs/unica/thermal/RelaxPolicyReceiver$0.smali
+new file mode 100644
+--- /dev/null
++++ b/smali/io/mesalabs/unica/thermal/RelaxPolicyReceiver$0.smali
+@@ -0,0 +1,36 @@
++.class public final synthetic Lio/mesalabs/unica/thermal/RelaxPolicyReceiver$0;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Ljava/lang/Runnable;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;"
++    method = "lambda$onReceive$0"
++    proto = "()V"
++.end annotation
++
++
++# direct methods
++.method public synthetic constructor <init>()V
++    .registers 1
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final run()V
++    .registers 1
++
++    .line 0
++    invoke-static {}, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->lambda$onReceive$0()V
++
++    return-void
++.end method
+
+diff --git a/smali/io/mesalabs/unica/thermal/RelaxPolicyReceiver.smali b/smali/io/mesalabs/unica/thermal/RelaxPolicyReceiver.smali
+new file mode 100644
+--- /dev/null
++++ b/smali/io/mesalabs/unica/thermal/RelaxPolicyReceiver.smali
+@@ -0,0 +1,569 @@
++.class public final Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;
++.super Landroid/content/BroadcastReceiver;
++.source "RelaxPolicyReceiver.java"
++
++
++# static fields
++.field public static final ACTION:Ljava/lang/String; = "io.mesalabs.unica.thermal.POLICY"
++
++.field private static volatile parsedPolicy:I
++
++.field private static restarting:Z
++
++
++# direct methods
++.method public constructor <init>()V
++    .registers 1
++
++    .line 24
++    invoke-direct {p0}, Landroid/content/BroadcastReceiver;-><init>()V
++
++    return-void
++.end method
++
++.method static synthetic lambda$onReceive$0()V
++    .registers 1
++
++    .line 80
++    invoke-static {}, Landroid/os/Process;->myPid()I
++
++    move-result v0
++
++    invoke-static {v0}, Landroid/os/Process;->killProcess(I)V
++
++    .line 81
++    return-void
++.end method
++
++.method private static markerExists(Ljava/io/File;)Z
++    .registers 5
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 97
++    :try_start_0
++    invoke-virtual {p0}, Ljava/io/File;->getPath()Ljava/lang/String;
++
++    move-result-object p0
++
++    invoke-static {p0}, Landroid/system/Os;->lstat(Ljava/lang/String;)Landroid/system/StructStat;
++
++    move-result-object p0
++
++    .line 98
++    iget v0, p0, Landroid/system/StructStat;->st_mode:I
++
++    invoke-static {v0}, Landroid/system/OsConstants;->S_ISREG(I)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_2c
++
++    iget v0, p0, Landroid/system/StructStat;->st_uid:I
++
++    const/16 v1, 0x3e8
++
++    if-ne v0, v1, :cond_2c
++
++    iget v0, p0, Landroid/system/StructStat;->st_gid:I
++
++    if-ne v0, v1, :cond_2c
++
++    iget-wide v0, p0, Landroid/system/StructStat;->st_size:J
++
++    const-wide/16 v2, 0x0
++
++    cmp-long v0, v0, v2
++
++    if-nez v0, :cond_2c
++
++    iget-wide v0, p0, Landroid/system/StructStat;->st_nlink:J
++
++    const-wide/16 v2, 0x1
++
++    cmp-long p0, v0, v2
++
++    if-nez p0, :cond_2c
++
++    .line 102
++    const/4 p0, 0x1
++
++    return p0
++
++    .line 100
++    :cond_2c
++    new-instance p0, Ljava/lang/SecurityException;
++
++    const-string v0, "Refusing an unexpected marker file"
++
++    invoke-direct {p0, v0}, Ljava/lang/SecurityException;-><init>(Ljava/lang/String;)V
++
++    throw p0
++    :try_end_34
++    .catch Landroid/system/ErrnoException; {:try_start_0 .. :try_end_34} :catch_34
++
++    .line 103
++    :catch_34
++    move-exception p0
++
++    .line 104
++    iget v0, p0, Landroid/system/ErrnoException;->errno:I
++
++    sget v1, Landroid/system/OsConstants;->ENOENT:I
++
++    if-ne v0, v1, :cond_3d
++
++    const/4 p0, 0x0
++
++    return p0
++
++    .line 105
++    :cond_3d
++    throw p0
++.end method
++
++.method public static policyParsed(Ljava/lang/String;)V
++    .registers 1
++
++    .line 31
++    if-nez p0, :cond_a
++
++    sget-boolean p0, Ln5/i0;->b:Z
++
++    if-eqz p0, :cond_8
++
++    const/4 p0, 0x2
++
++    goto :goto_b
++
++    :cond_8
++    const/4 p0, 0x1
++
++    goto :goto_b
++
++    :cond_a
++    const/4 p0, -0x1
++
++    :goto_b
++    sput p0, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->parsedPolicy:I
++
++    .line 32
++    return-void
++.end method
++
++
++# virtual methods
++.method public onReceive(Landroid/content/Context;Landroid/content/Intent;)V
++    .registers 15
++
++    .line 35
++    const-string v0, "enabled"
++
++    const-string v1, "io.mesalabs.unica.thermal.POLICY"
++
++    invoke-virtual {p2}, Landroid/content/Intent;->getAction()Ljava/lang/String;
++
++    move-result-object v2
++
++    invoke-virtual {v1, v2}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_143
++
++    invoke-virtual {p0}, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->isOrderedBroadcast()Z
++
++    move-result v1
++
++    if-eqz v1, :cond_143
++
++    .line 36
++    invoke-virtual {p0}, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->getSentFromUid()I
++
++    move-result v1
++
++    const/16 v2, 0x3e8
++
++    if-ne v1, v2, :cond_143
++
++    .line 37
++    invoke-virtual {p0}, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->getSentFromPackage()Ljava/lang/String;
++
++    move-result-object v1
++
++    const-string v3, "com.android.settings"
++
++    invoke-virtual {v3, v1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_143
++
++    .line 38
++    invoke-static {}, Landroid/os/Process;->myUid()I
++
++    move-result v1
++
++    if-eq v1, v2, :cond_30
++
++    goto/16 :goto_143
++
++    .line 39
++    :cond_30
++    new-instance v1, Landroid/os/Bundle;
++
++    invoke-direct {v1}, Landroid/os/Bundle;-><init>()V
++
++    .line 40
++    const-string v3, "protocol"
++
++    const/4 v4, 0x1
++
++    invoke-virtual {v1, v3, v4}, Landroid/os/Bundle;->putInt(Ljava/lang/String;I)V
++
++    .line 41
++    const-string v3, "pid"
++
++    invoke-static {}, Landroid/os/Process;->myPid()I
++
++    move-result v5
++
++    invoke-virtual {v1, v3, v5}, Landroid/os/Bundle;->putInt(Ljava/lang/String;I)V
++
++    .line 43
++    const/4 v3, 0x0
++
++    const/4 v5, 0x0
++
++    :try_start_46
++    invoke-virtual {p1}, Landroid/content/Context;->getDataDir()Ljava/io/File;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Ljava/io/File;->getCanonicalFile()Ljava/io/File;
++
++    move-result-object p1
++
++    .line 44
++    new-instance v6, Ljava/io/File;
++
++    const-string v7, "/data/user/0/com.sec.android.sdhms"
++
++    invoke-direct {v6, v7}, Ljava/io/File;-><init>(Ljava/lang/String;)V
++
++    invoke-virtual {v6}, Ljava/io/File;->getCanonicalFile()Ljava/io/File;
++
++    move-result-object v6
++
++    invoke-virtual {p1, v6}, Ljava/io/File;->equals(Ljava/lang/Object;)Z
++
++    move-result v6
++
++    if-eqz v6, :cond_12f
++
++    .line 47
++    new-instance v6, Ljava/io/File;
++
++    const-string v7, "ssrm.disable"
++
++    invoke-direct {v6, p1, v7}, Ljava/io/File;-><init>(Ljava/io/File;Ljava/lang/String;)V
++
++    .line 48
++    invoke-static {v6}, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->markerExists(Ljava/io/File;)Z
++
++    move-result v7
++
++    .line 49
++    const-string v8, "sdhms"
++
++    invoke-static {v8}, Landroid/os/ServiceManager;->checkService(Ljava/lang/String;)Landroid/os/IBinder;
++
++    move-result-object v8
++
++    .line 50
++    sget v9, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->parsedPolicy:I
++
++    if-lez v9, :cond_88
++
++    invoke-static {}, Lcom/sec/android/sdhms/settings/k;->g()Lcom/sec/android/sdhms/settings/k;
++
++    move-result-object v9
++
++    invoke-virtual {v9}, Lcom/sec/android/sdhms/settings/k;->l()Z
++
++    move-result v9
++
++    if-eqz v9, :cond_88
++
++    if-eqz v8, :cond_88
++
++    .line 51
++    invoke-interface {v8}, Landroid/os/IBinder;->pingBinder()Z
++
++    move-result v8
++
++    if-eqz v8, :cond_88
++
++    move v8, v4
++
++    goto :goto_89
++
++    :cond_88
++    move v8, v5
++
++    .line 52
++    :goto_89
++    sget v9, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->parsedPolicy:I
++
++    const/4 v10, 0x2
++
++    if-ne v9, v10, :cond_90
++
++    move v9, v4
++
++    goto :goto_91
++
++    :cond_90
++    move v9, v5
++
++    .line 53
++    :goto_91
++    invoke-virtual {p2, v0}, Landroid/content/Intent;->hasExtra(Ljava/lang/String;)Z
++
++    move-result v10
++
++    if-eqz v10, :cond_110
++
++    .line 54
++    invoke-virtual {p2, v0, v5}, Landroid/content/Intent;->getBooleanExtra(Ljava/lang/String;Z)Z
++
++    move-result p2
++
++    .line 55
++    sget-boolean v0, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->restarting:Z
++
++    if-nez v0, :cond_108
++
++    if-eqz p2, :cond_a3
++
++    if-eqz v8, :cond_108
++
++    .line 58
++    :cond_a3
++    if-eq p2, v7, :cond_ee
++
++    .line 59
++    if-eqz p2, :cond_ce
++
++    .line 60
++    invoke-virtual {v6}, Ljava/io/File;->getPath()Ljava/lang/String;
++
++    move-result-object v0
++
++    sget v7, Landroid/system/OsConstants;->O_WRONLY:I
++
++    sget v10, Landroid/system/OsConstants;->O_CREAT:I
++
++    or-int/2addr v7, v10
++
++    sget v10, Landroid/system/OsConstants;->O_EXCL:I
++
++    or-int/2addr v7, v10
++
++    sget v10, Landroid/system/OsConstants;->O_NOFOLLOW:I
++
++    or-int/2addr v7, v10
++
++    const/16 v10, 0x180
++
++    invoke-static {v0, v7, v10}, Landroid/system/Os;->open(Ljava/lang/String;II)Ljava/io/FileDescriptor;
++
++    move-result-object v0
++    :try_end_bc
++    .catch Ljava/lang/Exception; {:try_start_46 .. :try_end_bc} :catch_137
++
++    .line 63
++    :try_start_bc
++    invoke-static {v0, v2, v2}, Landroid/system/Os;->fchown(Ljava/io/FileDescriptor;II)V
++
++    .line 64
++    invoke-static {v0, v10}, Landroid/system/Os;->fchmod(Ljava/io/FileDescriptor;I)V
++
++    .line 65
++    invoke-static {v0}, Landroid/system/Os;->fsync(Ljava/io/FileDescriptor;)V
++    :try_end_c5
++    .catchall {:try_start_bc .. :try_end_c5} :catchall_c9
++
++    .line 66
++    :try_start_c5
++    invoke-static {v0}, Landroid/system/Os;->close(Ljava/io/FileDescriptor;)V
++
++    .line 67
++    goto :goto_d5
++
++    .line 66
++    :catchall_c9
++    move-exception p1
++
++    invoke-static {v0}, Landroid/system/Os;->close(Ljava/io/FileDescriptor;)V
++
++    throw p1
++
++    .line 68
++    :cond_ce
++    invoke-virtual {v6}, Ljava/io/File;->toPath()Ljava/nio/file/Path;
++
++    move-result-object v0
++
++    invoke-static {v0}, Ljava/nio/file/Files;->delete(Ljava/nio/file/Path;)V
++
++    .line 70
++    :goto_d5
++    invoke-virtual {p1}, Ljava/io/File;->getPath()Ljava/lang/String;
++
++    move-result-object p1
++
++    sget v0, Landroid/system/OsConstants;->O_RDONLY:I
++
++    sget v2, Landroid/system/OsConstants;->O_NOFOLLOW:I
++
++    or-int/2addr v0, v2
++
++    invoke-static {p1, v0, v5}, Landroid/system/Os;->open(Ljava/lang/String;II)Ljava/io/FileDescriptor;
++
++    move-result-object p1
++    :try_end_e2
++    .catch Ljava/lang/Exception; {:try_start_c5 .. :try_end_e2} :catch_137
++
++    .line 72
++    :try_start_e2
++    invoke-static {p1}, Landroid/system/Os;->fsync(Ljava/io/FileDescriptor;)V
++    :try_end_e5
++    .catchall {:try_start_e2 .. :try_end_e5} :catchall_e9
++
++    :try_start_e5
++    invoke-static {p1}, Landroid/system/Os;->close(Ljava/io/FileDescriptor;)V
++
++    goto :goto_ee
++
++    :catchall_e9
++    move-exception p2
++
++    invoke-static {p1}, Landroid/system/Os;->close(Ljava/io/FileDescriptor;)V
++
++    throw p2
++
++    .line 74
++    :cond_ee
++    :goto_ee
++    if-ne p2, v9, :cond_f2
++
++    if-nez v8, :cond_110
++
++    .line 75
++    :cond_f2
++    sput-boolean v4, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->restarting:Z
++
++    .line 79
++    new-instance p1, Landroid/os/Handler;
++
++    invoke-static {}, Landroid/os/Looper;->getMainLooper()Landroid/os/Looper;
++
++    move-result-object p2
++
++    invoke-direct {p1, p2}, Landroid/os/Handler;-><init>(Landroid/os/Looper;)V
++
++    new-instance p2, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver$0;
++
++    invoke-direct {p2}, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver$0;-><init>()V
++
++    const-wide/16 v10, 0x3e8
++
++    invoke-virtual {p1, p2, v10, v11}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
++
++    goto :goto_110
++
++    .line 56
++    :cond_108
++    new-instance p1, Ljava/lang/IllegalStateException;
++
++    const-string p2, "SDHMS is still starting"
++
++    invoke-direct {p1, p2}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
++
++    throw p1
++
++    .line 84
++    :cond_110
++    :goto_110
++    const-string p1, "marker"
++
++    invoke-static {v6}, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->markerExists(Ljava/io/File;)Z
++
++    move-result p2
++
++    invoke-virtual {v1, p1, p2}, Landroid/os/Bundle;->putBoolean(Ljava/lang/String;Z)V
++
++    .line 85
++    const-string p1, "loaded"
++
++    invoke-virtual {v1, p1, v9}, Landroid/os/Bundle;->putBoolean(Ljava/lang/String;Z)V
++
++    .line 86
++    const-string p1, "ready"
++
++    invoke-virtual {v1, p1, v8}, Landroid/os/Bundle;->putBoolean(Ljava/lang/String;Z)V
++
++    .line 87
++    const-string p1, "restarting"
++
++    sget-boolean p2, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->restarting:Z
++
++    invoke-virtual {v1, p1, p2}, Landroid/os/Bundle;->putBoolean(Ljava/lang/String;Z)V
++
++    .line 88
++    const/4 p1, -0x1
++
++    invoke-virtual {p0, p1, v3, v1}, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->setResult(ILjava/lang/String;Landroid/os/Bundle;)V
++
++    .line 92
++    goto :goto_142
++
++    .line 45
++    :cond_12f
++    new-instance p1, Ljava/lang/SecurityException;
++
++    const-string p2, "Unexpected SDHMS data directory"
++
++    invoke-direct {p1, p2}, Ljava/lang/SecurityException;-><init>(Ljava/lang/String;)V
++
++    throw p1
++    :try_end_137
++    .catch Ljava/lang/Exception; {:try_start_e5 .. :try_end_137} :catch_137
++
++    .line 89
++    :catch_137
++    move-exception p1
++
++    .line 90
++    const-string p2, "UnicaRelaxSDHMS"
++
++    const-string v0, "Policy request failed"
++
++    invoke-static {p2, v0, p1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    .line 91
++    invoke-virtual {p0, v5, v3, v1}, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->setResult(ILjava/lang/String;Landroid/os/Bundle;)V
++
++    .line 93
++    :goto_142
++    return-void
++
++    .line 38
++    :cond_143
++    :goto_143
++    return-void
++.end method
+
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -76,5 +76,6 @@
+         <uses-native-library android:name="libsnap_sdhms.so" android:required="false"/>
+         <provider android:authorities="com.sec.android.sdhms.fasprovider" android:enabled="true" android:exported="true" android:multiprocess="false" android:name="com.sec.android.sdhms.mars.database.FASProvider" android:readPermission="com.samsung.android.permission.SEM_APP_RESTRICTION" android:singleUser="true" android:writePermission="com.samsung.android.permission.SEM_APP_RESTRICTION"/>
+         <service android:directBootAware="true" android:exported="false" android:name="androidx.room.MultiInstanceInvalidationService"/>
++        <receiver android:name="io.mesalabs.unica.thermal.RelaxPolicyReceiver" android:exported="true" android:permission="android.permission.WRITE_SECURE_SETTINGS"/>
+     </application>
+ </manifest>
+diff --git a/smali/com/sec/android/sdhms/settings/k.smali b/smali/com/sec/android/sdhms/settings/k.smali
+--- a/smali/com/sec/android/sdhms/settings/k.smali
++++ b/smali/com/sec/android/sdhms/settings/k.smali
+@@ -750,6 +750,8 @@
+     invoke-static {v0, p2}, Ln5/o0;->b(Ljava/lang/String;Ljava/lang/String;)V
+ 
+     :goto_3
++    invoke-static {p2}, Lio/mesalabs/unica/thermal/RelaxPolicyReceiver;->policyParsed(Ljava/lang/String;)V
++
+     if-eqz p2, :cond_6
+ 
+     new-instance v0, Landroid/os/Handler;

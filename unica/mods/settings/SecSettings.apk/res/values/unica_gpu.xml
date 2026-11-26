@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unica_gpu_title">Advanced GPU Tuning (Konabess)</string>
+    <string name="unica_gpu_summary">GPU frequency and voltage table trial with recovery rollback</string>
+</resources>

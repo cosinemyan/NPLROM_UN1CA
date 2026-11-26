@@ -1,0 +1,2131 @@
+Subject: [PATCH] Add optional Maximum essential app switches
+
+--- a/smali_classes2/yl/c.smali
++++ b/smali_classes2/yl/c.smali
+@@ -179,8 +179,10 @@
+     goto :goto_2
+
+     :cond_4
+     :goto_0
++    move-object v9, v1
++
+     iget-object p0, p0, Lyl/c;->e:Ljava/util/ArrayList;
+
+     invoke-static {p0, p1}, Lyl/d;->e(Ljava/util/ArrayList;Landroid/content/pm/ApplicationInfo;)Z
+
+@@ -243,12 +245,16 @@
+     iget p0, p1, Landroid/content/pm/ApplicationInfo;->uid:I
+
+     iput p0, v0, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->f:I
+
++    invoke-static {v9, v0}, Lio/mesalabs/unica/maximum/EssentialApps;->adjust(Landroid/content/Context;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;)V
++
+     return-object v0
+
+     :cond_6
+     :goto_2
++    move-object v9, v1
++
+     new-instance p0, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;
+
+     invoke-direct {p0}, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;-><init>()V
+
+@@ -307,6 +313,8 @@
+     iget p1, p1, Landroid/content/pm/ApplicationInfo;->uid:I
+
+     iput p1, p0, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->f:I
+
++    invoke-static {v9, p0}, Lio/mesalabs/unica/maximum/EssentialApps;->adjust(Landroid/content/Context;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;)V
++
+     return-object p0
+ .end method
+--- a/smali_classes2/cm/c.smali
++++ b/smali_classes2/cm/c.smali
+@@ -820,8 +820,18 @@
+
+     invoke-virtual {v6, v0}, Landroid/view/View;->setOnClickListener(Landroid/view/View$OnClickListener;)V
+
+     :cond_15
++    invoke-virtual {v2}, Lcm/a;->r()Lcom/samsung/android/sm/common/view/RoundedCornerRelativeLayout;
++
++    move-result-object v0
++
++    invoke-virtual {v2}, Lcm/a;->t()Landroidx/appcompat/widget/SwitchCompat;
++
++    move-result-object v1
++
++    invoke-static {v0, v1, v4}, Lio/mesalabs/unica/maximum/EssentialApps;->bind(Landroid/view/View;Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;)V
++
+     return-void
+
+     :cond_16
+     invoke-static {v10}, Lkotlin/jvm/internal/l;->m(Ljava/lang/String;)V
+--- a/smali_classes2/yl/i.smali
++++ b/smali_classes2/yl/i.smali
+@@ -980,8 +980,14 @@
+
+ .method public final g(Z[Ljava/lang/String;I)V
+     .locals 4
+
++    invoke-virtual {p0}, Lyl/i;->a()Landroid/content/Context;
++
++    move-result-object v0
++
++    invoke-static {v0, p1, p2, p3}, Lio/mesalabs/unica/maximum/EssentialApps;->beforeSuspend(Landroid/content/Context;Z[Ljava/lang/String;I)V
++
+     array-length v0, p2
+
+     const-string v1, " + packageNames  size: "
+
+--- a/smali_classes2/yl/a.smali
++++ b/smali_classes2/yl/a.smali
+@@ -66,8 +66,22 @@
+ # virtual methods
+ .method public final a(I)V
+     .locals 12
+
++    iget-object v0, p0, Lyl/a;->a:Lmx/g;
++
++    invoke-interface {v0}, Lmx/g;->getValue()Ljava/lang/Object;
++
++    move-result-object v0
++
++    check-cast v0, Lyl/i;
++
++    invoke-virtual {v0}, Lyl/i;->a()Landroid/content/Context;
++
++    move-result-object v0
++
++    invoke-static {v0, p1}, Lio/mesalabs/unica/maximum/EssentialApps;->onMode(Landroid/content/Context;I)V
++
+     iget-object v0, p0, Lyl/a;->b:Lmx/g;
+
+     iget-object p0, p0, Lyl/a;->a:Lmx/g;
+
+--- a/smali_classes2/com/samsung/android/sm/powermode/ebs/service/EbsInitService.smali
++++ b/smali_classes2/com/samsung/android/sm/powermode/ebs/service/EbsInitService.smali
+@@ -60,8 +60,10 @@
+ # virtual methods
+ .method public final a(Landroid/content/Intent;)V
+     .locals 9
+
++    invoke-static {p0}, Lio/mesalabs/unica/maximum/EssentialApps;->recoverIfInactive(Landroid/content/Context;)V
++
+     const-string v0, "DcEbs.EbsInitService"
+
+     if-nez p1, :cond_0
+
+--- a/smali_classes2/io/mesalabs/unica/maximum/EssentialApps$0.smali
++++ b/smali_classes2/io/mesalabs/unica/maximum/EssentialApps$0.smali
+@@ -0,0 +1,56 @@
++.class public final synthetic Lio/mesalabs/unica/maximum/EssentialApps$0;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Landroid/view/View$OnClickListener;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/maximum/EssentialApps;"
++    method = "lambda$bind$1"
++    proto = "(Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;Landroid/content/Context;Landroid/view/View;)V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Landroid/widget/CompoundButton;
++
++.field public final synthetic f$1:Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;
++
++.field public final synthetic f$2:Landroid/content/Context;
++
++
++# direct methods
++.method public synthetic constructor <init>(Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;Landroid/content/Context;)V
++    .registers 4
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/maximum/EssentialApps$0;->f$0:Landroid/widget/CompoundButton;
++
++    iput-object p2, p0, Lio/mesalabs/unica/maximum/EssentialApps$0;->f$1:Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;
++
++    iput-object p3, p0, Lio/mesalabs/unica/maximum/EssentialApps$0;->f$2:Landroid/content/Context;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final onClick(Landroid/view/View;)V
++    .registers 5
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/maximum/EssentialApps$0;->f$0:Landroid/widget/CompoundButton;
++
++    iget-object v1, p0, Lio/mesalabs/unica/maximum/EssentialApps$0;->f$1:Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;
++
++    iget-object v2, p0, Lio/mesalabs/unica/maximum/EssentialApps$0;->f$2:Landroid/content/Context;
++
++    invoke-static {v0, v1, v2, p1}, Lio/mesalabs/unica/maximum/EssentialApps;->lambda$bind$1(Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;Landroid/content/Context;Landroid/view/View;)V
++
++    return-void
++.end method
+--- a/smali_classes2/io/mesalabs/unica/maximum/EssentialApps$1.smali
++++ b/smali_classes2/io/mesalabs/unica/maximum/EssentialApps$1.smali
+@@ -0,0 +1,56 @@
++.class public final synthetic Lio/mesalabs/unica/maximum/EssentialApps$1;
++.super Ljava/lang/Object;
++.source "D8$$SyntheticClass"
++
++# interfaces
++.implements Landroid/content/DialogInterface$OnClickListener;
++
++
++# annotations
++.annotation runtime Lcom/android/tools/r8/annotations/LambdaMethod;
++    holder = "Lio/mesalabs/unica/maximum/EssentialApps;"
++    method = "lambda$bind$0"
++    proto = "(Landroid/content/Context;Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;Landroid/content/DialogInterface;I)V"
++.end annotation
++
++
++# instance fields
++.field public final synthetic f$0:Landroid/content/Context;
++
++.field public final synthetic f$1:Landroid/widget/CompoundButton;
++
++.field public final synthetic f$2:Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;
++
++
++# direct methods
++.method public synthetic constructor <init>(Landroid/content/Context;Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;)V
++    .registers 4
++
++    .line 0
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    iput-object p1, p0, Lio/mesalabs/unica/maximum/EssentialApps$1;->f$0:Landroid/content/Context;
++
++    iput-object p2, p0, Lio/mesalabs/unica/maximum/EssentialApps$1;->f$1:Landroid/widget/CompoundButton;
++
++    iput-object p3, p0, Lio/mesalabs/unica/maximum/EssentialApps$1;->f$2:Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public final onClick(Landroid/content/DialogInterface;I)V
++    .registers 6
++
++    .line 0
++    iget-object v0, p0, Lio/mesalabs/unica/maximum/EssentialApps$1;->f$0:Landroid/content/Context;
++
++    iget-object v1, p0, Lio/mesalabs/unica/maximum/EssentialApps$1;->f$1:Landroid/widget/CompoundButton;
++
++    iget-object v2, p0, Lio/mesalabs/unica/maximum/EssentialApps$1;->f$2:Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;
++
++    invoke-static {v0, v1, v2, p1, p2}, Lio/mesalabs/unica/maximum/EssentialApps;->lambda$bind$0(Landroid/content/Context;Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;Landroid/content/DialogInterface;I)V
++
++    return-void
++.end method
+--- a/smali_classes2/io/mesalabs/unica/maximum/EssentialApps.smali
++++ b/smali_classes2/io/mesalabs/unica/maximum/EssentialApps.smali
+@@ -0,0 +1,1377 @@
++.class public final Lio/mesalabs/unica/maximum/EssentialApps;
++.super Ljava/lang/Object;
++.source "EssentialApps.java"
++
++
++# direct methods
++.method private constructor <init>()V
++    .registers 1
++
++    .line 19
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method public static adjust(Landroid/content/Context;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;)V
++    .registers 7
++
++    .line 23
++    const-string v0, "unica_maximum_essential_known_"
++
++    :try_start_2
++    iget-object v1, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-static {p0, v1}, Lio/mesalabs/unica/maximum/MaximumPolicy;->fixed(Landroid/content/Context;Ljava/lang/String;)Z
++
++    move-result v1
++
++    const/4 v2, 0x0
++
++    const/4 v3, 0x1
++
++    if-eqz v1, :cond_12
++
++    .line 24
++    iput-boolean v2, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->d:Z
++
++    .line 25
++    iput-boolean v3, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->e:Z
++
++    goto/16 :goto_81
++
++    .line 26
++    :cond_12
++    iget-object v1, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-static {v1}, Lio/mesalabs/unica/maximum/MaximumPolicy;->optional(Ljava/lang/String;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_81
++
++    iget v1, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->a:I
++
++    invoke-static {}, Lio/mesalabs/unica/maximum/MaximumPolicy;->ownUser()I
++
++    move-result v4
++
++    if-ne v1, v4, :cond_81
++
++    .line 27
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    iget-object v4, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-virtual {v1, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    iget v4, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->a:I
++
++    invoke-static {p0, v1, v4}, Lio/mesalabs/unica/maximum/MaximumPolicy;->secure(Landroid/content/Context;Ljava/lang/String;I)I
++
++    move-result v1
++
++    if-ne v1, v3, :cond_3f
++
++    move v1, v3
++
++    goto :goto_40
++
++    :cond_3f
++    move v1, v2
++
++    .line 28
++    :goto_40
++    iget-boolean v4, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->d:Z
++
++    if-eqz v4, :cond_47
++
++    if-nez v1, :cond_47
++
++    return-void
++
++    .line 29
++    :cond_47
++    if-nez v1, :cond_5f
++
++    new-instance v1, Ljava/lang/StringBuilder;
++
++    invoke-direct {v1}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {v1, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    iget-object v1, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v0
++
++    invoke-static {p0, v0, v3}, Lio/mesalabs/unica/maximum/EssentialApps;->write(Landroid/content/Context;Ljava/lang/String;Z)V
++
++    .line 31
++    :cond_5f
++    iput-boolean v2, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->d:Z
++
++    .line 32
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v1, "unica_maximum_essential_off_"
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    iget-object v1, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v0
++
++    iget v1, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->a:I
++
++    invoke-static {p0, v0, v1}, Lio/mesalabs/unica/maximum/MaximumPolicy;->secure(Landroid/content/Context;Ljava/lang/String;I)I
++
++    move-result p0
++
++    if-eq p0, v3, :cond_7f
++
++    move v2, v3
++
++    :cond_7f
++    iput-boolean v2, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->e:Z
++    :try_end_81
++    .catch Ljava/lang/Exception; {:try_start_2 .. :try_end_81} :catch_82
++
++    .line 36
++    :cond_81
++    :goto_81
++    goto :goto_8a
++
++    .line 34
++    :catch_82
++    move-exception p0
++
++    .line 35
++    const-string p1, "UnicaMaximum"
++
++    const-string v0, "Keeping stock essential-app state"
++
++    invoke-static {p1, v0, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    .line 37
++    :goto_8a
++    return-void
++.end method
++
++.method public static beforeSuspend(Landroid/content/Context;Z[Ljava/lang/String;I)V
++    .registers 9
++
++    .line 119
++    if-eqz p1, :cond_5a
++
++    invoke-static {}, Lio/mesalabs/unica/maximum/MaximumPolicy;->ownUser()I
++
++    move-result p1
++
++    if-eq p3, p1, :cond_9
++
++    goto :goto_5a
++
++    .line 120
++    :cond_9
++    array-length p1, p2
++
++    const/4 v0, 0x0
++
++    :goto_b
++    if-ge v0, p1, :cond_59
++
++    aget-object v1, p2, v0
++
++    .line 121
++    invoke-static {v1}, Lio/mesalabs/unica/maximum/MaximumPolicy;->optional(Ljava/lang/String;)Z
++
++    move-result v2
++
++    if-nez v2, :cond_16
++
++    goto :goto_4d
++
++    .line 123
++    :cond_16
++    :try_start_16
++    invoke-static {p0, v1}, Lio/mesalabs/unica/maximum/MaximumPolicy;->fixed(Landroid/content/Context;Ljava/lang/String;)Z
++
++    move-result v2
++
++    if-nez v2, :cond_4c
++
++    new-instance v2, Ljava/lang/StringBuilder;
++
++    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v3, "unica_maximum_essential_off_"
++
++    invoke-virtual {v2, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v2
++
++    invoke-virtual {v2, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v2
++
++    invoke-virtual {v2}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v2
++
++    .line 124
++    invoke-static {p0, v2, p3}, Lio/mesalabs/unica/maximum/MaximumPolicy;->secure(Landroid/content/Context;Ljava/lang/String;I)I
++
++    move-result v2
++
++    const/4 v3, 0x1
++
++    if-ne v2, v3, :cond_4c
++
++    .line 125
++    new-instance v2, Ljava/lang/StringBuilder;
++
++    invoke-direct {v2}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v4, "unica_maximum_essential_pending_"
++
++    invoke-virtual {v2, v4}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v2
++
++    invoke-virtual {v2, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v1
++
++    invoke-virtual {v1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v1
++
++    invoke-static {p0, v1, v3}, Lio/mesalabs/unica/maximum/EssentialApps;->write(Landroid/content/Context;Ljava/lang/String;Z)V
++    :try_end_4c
++    .catch Ljava/lang/Exception; {:try_start_16 .. :try_end_4c} :catch_50
++
++    .line 129
++    :cond_4c
++    nop
++
++    .line 120
++    :goto_4d
++    add-int/lit8 v0, v0, 0x1
++
++    goto :goto_b
++
++    .line 126
++    :catch_50
++    move-exception p0
++
++    .line 128
++    new-instance p1, Ljava/lang/IllegalStateException;
++
++    const-string p2, "Could not journal Maximum suspension"
++
++    invoke-direct {p1, p2, p0}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;Ljava/lang/Throwable;)V
++
++    throw p1
++
++    .line 131
++    :cond_59
++    return-void
++
++    .line 119
++    :cond_5a
++    :goto_5a
++    return-void
++.end method
++
++.method public static bind(Landroid/view/View;Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;)V
++    .registers 8
++
++    .line 40
++    invoke-virtual {p0}, Landroid/view/View;->getContext()Landroid/content/Context;
++
++    move-result-object v0
++
++    .line 41
++    const/4 v1, 0x0
++
++    invoke-virtual {p1, v1}, Landroid/widget/CompoundButton;->setOnClickListener(Landroid/view/View$OnClickListener;)V
++
++    .line 42
++    const/4 v2, 0x0
++
++    invoke-virtual {p1, v2}, Landroid/widget/CompoundButton;->setClickable(Z)V
++
++    .line 43
++    iget-boolean v3, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->d:Z
++
++    if-eqz v3, :cond_11
++
++    return-void
++
++    .line 44
++    :cond_11
++    invoke-virtual {p0, v1}, Landroid/view/View;->setOnClickListener(Landroid/view/View$OnClickListener;)V
++
++    .line 45
++    invoke-virtual {p1, v1}, Landroid/widget/CompoundButton;->setOnCheckedChangeListener(Landroid/widget/CompoundButton$OnCheckedChangeListener;)V
++
++    .line 46
++    const/16 v1, 0x8
++
++    invoke-virtual {p1, v1}, Landroid/widget/CompoundButton;->setVisibility(I)V
++
++    .line 47
++    invoke-virtual {p0, v2}, Landroid/view/View;->setClickable(Z)V
++
++    .line 49
++    :try_start_1f
++    iget-object v3, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-static {v0, v3}, Lio/mesalabs/unica/maximum/MaximumPolicy;->fixed(Landroid/content/Context;Ljava/lang/String;)Z
++
++    move-result v3
++
++    if-nez v3, :cond_58
++
++    iget-object v3, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-static {v3}, Lio/mesalabs/unica/maximum/MaximumPolicy;->optional(Ljava/lang/String;)Z
++
++    move-result v3
++
++    if-eqz v3, :cond_58
++
++    iget v3, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->a:I
++
++    .line 50
++    invoke-static {}, Lio/mesalabs/unica/maximum/MaximumPolicy;->ownUser()I
++
++    move-result v4
++
++    if-eq v3, v4, :cond_38
++
++    goto :goto_58
++
++    .line 51
++    :cond_38
++    invoke-virtual {p1, v2}, Landroid/widget/CompoundButton;->setVisibility(I)V
++
++    .line 52
++    const/4 v2, 0x1
++
++    invoke-virtual {p1, v2}, Landroid/widget/CompoundButton;->setEnabled(Z)V
++
++    .line 53
++    iget-boolean v2, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->e:Z
++
++    invoke-virtual {p1, v2}, Landroid/widget/CompoundButton;->setChecked(Z)V
++
++    .line 54
++    iget-object v2, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->c:Ljava/lang/String;
++
++    invoke-virtual {p1, v2}, Landroid/widget/CompoundButton;->setContentDescription(Ljava/lang/CharSequence;)V
++
++    .line 55
++    invoke-virtual {p1}, Landroid/widget/CompoundButton;->jumpDrawablesToCurrentState()V
++
++    .line 56
++    new-instance v2, Lio/mesalabs/unica/maximum/EssentialApps$0;
++
++    invoke-direct {v2, p1, p2, v0}, Lio/mesalabs/unica/maximum/EssentialApps$0;-><init>(Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;Landroid/content/Context;)V
++
++    .line 69
++    invoke-virtual {p1, v2}, Landroid/widget/CompoundButton;->setOnClickListener(Landroid/view/View$OnClickListener;)V
++
++    .line 70
++    invoke-virtual {p0, v2}, Landroid/view/View;->setOnClickListener(Landroid/view/View$OnClickListener;)V
++    :try_end_57
++    .catch Ljava/lang/Exception; {:try_start_1f .. :try_end_57} :catch_59
++
++    .line 74
++    goto :goto_64
++
++    .line 50
++    :cond_58
++    :goto_58
++    return-void
++
++    .line 71
++    :catch_59
++    move-exception p0
++
++    .line 72
++    const-string p2, "UnicaMaximum"
++
++    const-string v0, "Cannot bind essential switch"
++
++    invoke-static {p2, v0, p0}, Landroid/util/Log;->w(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    .line 73
++    invoke-virtual {p1, v1}, Landroid/widget/CompoundButton;->setVisibility(I)V
++
++    .line 75
++    :goto_64
++    return-void
++.end method
++
++.method private static change(Landroid/content/Context;Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;Z)V
++    .registers 12
++
++    .line 85
++    const-string v0, "unica_maximum_essential_off_"
++
++    const-string v1, "unica_maximum_essential_pending_"
++
++    iget-boolean v2, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->e:Z
++
++    .line 86
++    nop
++
++    .line 88
++    const/4 v3, 0x1
++
++    const/4 v4, 0x0
++
++    :try_start_9
++    iget-object v5, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-static {p0, v5}, Lio/mesalabs/unica/maximum/MaximumPolicy;->fixed(Landroid/content/Context;Ljava/lang/String;)Z
++
++    move-result v5
++
++    if-nez v5, :cond_ae
++
++    iget-object v5, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-static {v5}, Lio/mesalabs/unica/maximum/MaximumPolicy;->optional(Ljava/lang/String;)Z
++
++    move-result v5
++
++    if-eqz v5, :cond_ae
++
++    iget v5, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->a:I
++
++    .line 89
++    invoke-static {}, Lio/mesalabs/unica/maximum/MaximumPolicy;->ownUser()I
++
++    move-result v6
++
++    if-eq v5, v6, :cond_23
++
++    goto/16 :goto_ae
++
++    .line 90
++    :cond_23
++    iget v5, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->a:I
++
++    invoke-static {p0, v5}, Lio/mesalabs/unica/maximum/MaximumPolicy;->active(Landroid/content/Context;I)Z
++
++    move-result v5
++
++    .line 92
++    if-nez p3, :cond_43
++
++    if-eqz v5, :cond_43
++
++    new-instance v6, Ljava/lang/StringBuilder;
++
++    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {v6, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v6
++
++    iget-object v7, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v6
++
++    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v6
++
++    invoke-static {p0, v6, v3}, Lio/mesalabs/unica/maximum/EssentialApps;->write(Landroid/content/Context;Ljava/lang/String;Z)V
++
++    .line 93
++    :cond_43
++    new-instance v6, Ljava/lang/StringBuilder;
++
++    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {v6, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v6
++
++    iget-object v7, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v6
++
++    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v6
++
++    if-nez p3, :cond_5a
++
++    move v7, v3
++
++    goto :goto_5b
++
++    :cond_5a
++    move v7, v4
++
++    :goto_5b
++    invoke-static {p0, v6, v7}, Lio/mesalabs/unica/maximum/EssentialApps;->write(Landroid/content/Context;Ljava/lang/String;Z)V
++
++    .line 94
++    if-nez v5, :cond_80
++
++    if-eqz p3, :cond_7e
++
++    new-instance v5, Ljava/lang/StringBuilder;
++
++    invoke-direct {v5}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {v5, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v5
++
++    iget-object v6, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-virtual {v5, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v5
++
++    invoke-virtual {v5}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v5
++
++    iget v6, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->a:I
++
++    invoke-static {p0, v5, v6}, Lio/mesalabs/unica/maximum/MaximumPolicy;->secure(Landroid/content/Context;Ljava/lang/String;I)I
++
++    move-result v5
++    :try_end_7b
++    .catch Ljava/lang/Exception; {:try_start_9 .. :try_end_7b} :catch_af
++    .catch Ljava/lang/LinkageError; {:try_start_9 .. :try_end_7b} :catch_af
++
++    if-ne v5, v3, :cond_7e
++
++    goto :goto_80
++
++    .line 99
++    :cond_7e
++    move v5, v4
++
++    goto :goto_a6
++
++    .line 95
++    :cond_80
++    :goto_80
++    nop
++
++    .line 96
++    :try_start_81
++    iget-object v5, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    if-nez p3, :cond_87
++
++    move v6, v3
++
++    goto :goto_88
++
++    :cond_87
++    move v6, v4
++
++    :goto_88
++    iget v7, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->a:I
++
++    invoke-static {p0, v5, v6, v7}, Lio/mesalabs/unica/maximum/EssentialApps;->suspend(Landroid/content/Context;Ljava/lang/String;ZI)V
++
++    .line 97
++    if-eqz p3, :cond_a5
++
++    new-instance v5, Ljava/lang/StringBuilder;
++
++    invoke-direct {v5}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {v5, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v5
++
++    iget-object v6, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-virtual {v5, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v5
++
++    invoke-virtual {v5}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v5
++
++    invoke-static {p0, v5, v4}, Lio/mesalabs/unica/maximum/EssentialApps;->write(Landroid/content/Context;Ljava/lang/String;Z)V
++    :try_end_a5
++    .catch Ljava/lang/Exception; {:try_start_81 .. :try_end_a5} :catch_ab
++    .catch Ljava/lang/LinkageError; {:try_start_81 .. :try_end_a5} :catch_ab
++
++    .line 99
++    :cond_a5
++    move v5, v3
++
++    :goto_a6
++    :try_start_a6
++    iput-boolean p3, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->e:Z
++    :try_end_a8
++    .catch Ljava/lang/Exception; {:try_start_a6 .. :try_end_a8} :catch_a9
++    .catch Ljava/lang/LinkageError; {:try_start_a6 .. :try_end_a8} :catch_a9
++
++    .line 113
++    goto :goto_104
++
++    .line 100
++    :catch_a9
++    move-exception p3
++
++    goto :goto_b1
++
++    :catch_ab
++    move-exception p3
++
++    move v5, v3
++
++    goto :goto_b1
++
++    .line 89
++    :cond_ae
++    :goto_ae
++    return-void
++
++    .line 100
++    :catch_af
++    move-exception p3
++
++    move v5, v4
++
++    .line 101
++    :goto_b1
++    const-string v6, "Essential-app change failed"
++
++    const-string v7, "UnicaMaximum"
++
++    invoke-static {v7, v6, p3}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    .line 103
++    :try_start_b8
++    new-instance p3, Ljava/lang/StringBuilder;
++
++    invoke-direct {p3}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {p3, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p3
++
++    iget-object v0, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-virtual {p3, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p3
++
++    invoke-virtual {p3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p3
++
++    if-nez v2, :cond_cf
++
++    move v0, v3
++
++    goto :goto_d0
++
++    :cond_cf
++    move v0, v4
++
++    :goto_d0
++    invoke-static {p0, p3, v0}, Lio/mesalabs/unica/maximum/EssentialApps;->write(Landroid/content/Context;Ljava/lang/String;Z)V
++
++    .line 105
++    if-eqz v5, :cond_f4
++
++    if-eqz v2, :cond_f4
++
++    .line 106
++    iget-object p3, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    iget v0, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->a:I
++
++    invoke-static {p0, p3, v4, v0}, Lio/mesalabs/unica/maximum/EssentialApps;->suspend(Landroid/content/Context;Ljava/lang/String;ZI)V
++
++    .line 107
++    new-instance p3, Ljava/lang/StringBuilder;
++
++    invoke-direct {p3}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {p3, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p3
++
++    iget-object v0, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->b:Ljava/lang/String;
++
++    invoke-virtual {p3, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p3
++
++    invoke-virtual {p3}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p3
++
++    invoke-static {p0, p3, v4}, Lio/mesalabs/unica/maximum/EssentialApps;->write(Landroid/content/Context;Ljava/lang/String;Z)V
++    :try_end_f4
++    .catch Ljava/lang/Exception; {:try_start_b8 .. :try_end_f4} :catch_f5
++
++    .line 111
++    :cond_f4
++    goto :goto_fb
++
++    .line 109
++    :catch_f5
++    move-exception p3
++
++    .line 110
++    const-string v0, "Restoration pending; journal retained"
++
++    invoke-static {v7, v0, p3}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    .line 112
++    :goto_fb
++    const-string p3, "Could not change essential access. Android may protect this app. Try again or leave Maximum mode."
++
++    invoke-static {p0, p3, v3}, Landroid/widget/Toast;->makeText(Landroid/content/Context;Ljava/lang/CharSequence;I)Landroid/widget/Toast;
++
++    move-result-object p0
++
++    invoke-virtual {p0}, Landroid/widget/Toast;->show()V
++
++    .line 114
++    :goto_104
++    iget-boolean p0, p2, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->e:Z
++
++    invoke-virtual {p1, p0}, Landroid/widget/CompoundButton;->setChecked(Z)V
++
++    .line 115
++    return-void
++.end method
++
++.method static synthetic lambda$bind$0(Landroid/content/Context;Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;Landroid/content/DialogInterface;I)V
++    .registers 5
++
++    .line 63
++    const/4 p3, 0x0
++
++    invoke-static {p0, p1, p2, p3}, Lio/mesalabs/unica/maximum/EssentialApps;->change(Landroid/content/Context;Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;Z)V
++
++    return-void
++.end method
++
++.method static synthetic lambda$bind$1(Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;Landroid/content/Context;Landroid/view/View;)V
++    .registers 6
++
++    .line 58
++    iget-boolean p3, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->e:Z
++
++    invoke-virtual {p0, p3}, Landroid/widget/CompoundButton;->setChecked(Z)V
++
++    .line 59
++    iget-boolean p3, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->e:Z
++
++    if-eqz p3, :cond_31
++
++    .line 60
++    new-instance p3, Landroid/app/AlertDialog$Builder;
++
++    invoke-direct {p3, p2}, Landroid/app/AlertDialog$Builder;-><init>(Landroid/content/Context;)V
++
++    iget-object v0, p1, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->c:Ljava/lang/String;
++
++    invoke-virtual {p3, v0}, Landroid/app/AlertDialog$Builder;->setTitle(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object p3
++
++    .line 61
++    const-string v0, "Turn off essential access in Maximum power saving? This app may be unavailable and its notifications may stop until you turn it back on or leave Maximum mode. Turning off Phone or Messages can interrupt calls or messages."
++
++    invoke-virtual {p3, v0}, Landroid/app/AlertDialog$Builder;->setMessage(Ljava/lang/CharSequence;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object p3
++
++    .line 62
++    const/high16 v0, 0x1040000
++
++    const/4 v1, 0x0
++
++    invoke-virtual {p3, v0, v1}, Landroid/app/AlertDialog$Builder;->setNegativeButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object p3
++
++    new-instance v0, Lio/mesalabs/unica/maximum/EssentialApps$1;
++
++    invoke-direct {v0, p2, p0, p1}, Lio/mesalabs/unica/maximum/EssentialApps$1;-><init>(Landroid/content/Context;Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;)V
++
++    .line 63
++    const p0, 0x104000a
++
++    invoke-virtual {p3, p0, v0}, Landroid/app/AlertDialog$Builder;->setPositiveButton(ILandroid/content/DialogInterface$OnClickListener;)Landroid/app/AlertDialog$Builder;
++
++    move-result-object p0
++
++    .line 64
++    invoke-virtual {p0}, Landroid/app/AlertDialog$Builder;->show()Landroid/app/AlertDialog;
++
++    goto :goto_35
++
++    .line 66
++    :cond_31
++    const/4 p3, 0x1
++
++    invoke-static {p2, p0, p1, p3}, Lio/mesalabs/unica/maximum/EssentialApps;->change(Landroid/content/Context;Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;Z)V
++
++    .line 68
++    :goto_35
++    return-void
++.end method
++
++.method public static onMode(Landroid/content/Context;I)V
++    .registers 11
++
++    .line 135
++    const-string v0, "unica_maximum_essential_pending_"
++
++    const/4 v1, 0x1
++
++    if-ne p1, v1, :cond_6
++
++    return-void
++
++    .line 136
++    :cond_6
++    sget-object p1, Lio/mesalabs/unica/maximum/MaximumPolicy;->OPTIONAL:[Ljava/lang/String;
++
++    array-length v2, p1
++
++    const/4 v3, 0x0
++
++    move v4, v3
++
++    :goto_b
++    if-ge v4, v2, :cond_62
++
++    aget-object v5, p1, v4
++
++    .line 138
++    :try_start_f
++    new-instance v6, Ljava/lang/StringBuilder;
++
++    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {v6, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v6
++
++    invoke-virtual {v6, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v6
++
++    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v6
++
++    invoke-static {}, Lio/mesalabs/unica/maximum/MaximumPolicy;->ownUser()I
++
++    move-result v7
++
++    invoke-static {p0, v6, v7}, Lio/mesalabs/unica/maximum/MaximumPolicy;->secure(Landroid/content/Context;Ljava/lang/String;I)I
++
++    move-result v6
++
++    if-ne v6, v1, :cond_45
++
++    .line 139
++    invoke-static {}, Lio/mesalabs/unica/maximum/MaximumPolicy;->ownUser()I
++
++    move-result v6
++
++    invoke-static {p0, v5, v3, v6}, Lio/mesalabs/unica/maximum/EssentialApps;->suspend(Landroid/content/Context;Ljava/lang/String;ZI)V
++
++    .line 140
++    new-instance v6, Ljava/lang/StringBuilder;
++
++    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {v6, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v6
++
++    invoke-virtual {v6, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v6
++
++    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v6
++
++    invoke-static {p0, v6, v3}, Lio/mesalabs/unica/maximum/EssentialApps;->write(Landroid/content/Context;Ljava/lang/String;Z)V
++    :try_end_45
++    .catch Ljava/lang/Exception; {:try_start_f .. :try_end_45} :catch_46
++    .catch Ljava/lang/LinkageError; {:try_start_f .. :try_end_45} :catch_46
++
++    .line 144
++    :cond_45
++    goto :goto_5f
++
++    .line 142
++    :catch_46
++    move-exception v6
++
++    .line 143
++    new-instance v7, Ljava/lang/StringBuilder;
++
++    invoke-direct {v7}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v8, "Restoration pending for "
++
++    invoke-virtual {v7, v8}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v7
++
++    invoke-virtual {v7, v5}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v5
++
++    invoke-virtual {v5}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v5
++
++    const-string v7, "UnicaMaximum"
++
++    invoke-static {v7, v5, v6}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    .line 136
++    :goto_5f
++    add-int/lit8 v4, v4, 0x1
++
++    goto :goto_b
++
++    .line 146
++    :cond_62
++    return-void
++.end method
++
++.method public static recoverIfInactive(Landroid/content/Context;)V
++    .registers 3
++
++    .line 150
++    :try_start_0
++    invoke-static {}, Lio/mesalabs/unica/maximum/MaximumPolicy;->ownUser()I
++
++    move-result v0
++
++    invoke-static {p0, v0}, Lio/mesalabs/unica/maximum/MaximumPolicy;->active(Landroid/content/Context;I)Z
++
++    move-result v0
++
++    if-nez v0, :cond_e
++
++    const/4 v0, 0x0
++
++    invoke-static {p0, v0}, Lio/mesalabs/unica/maximum/EssentialApps;->onMode(Landroid/content/Context;I)V
++    :try_end_e
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_e} :catch_f
++
++    .line 153
++    :cond_e
++    goto :goto_17
++
++    .line 151
++    :catch_f
++    move-exception p0
++
++    .line 152
++    const-string v0, "UnicaMaximum"
++
++    const-string v1, "Could not check pending restoration"
++
++    invoke-static {v0, v1, p0}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
++
++    .line 154
++    :goto_17
++    return-void
++.end method
++
++.method private static suspend(Landroid/content/Context;Ljava/lang/String;ZI)V
++    .registers 17
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 157
++    const-string v0, "android.app.AppGlobals"
++
++    invoke-static {v0}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
++
++    move-result-object v0
++
++    const/4 v1, 0x0
++
++    new-array v2, v1, [Ljava/lang/Class;
++
++    const-string v3, "getPackageManager"
++
++    invoke-virtual {v0, v3, v2}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
++
++    move-result-object v0
++
++    new-array v2, v1, [Ljava/lang/Object;
++
++    const/4 v3, 0x0
++
++    invoke-virtual {v0, v3, v2}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object v0
++
++    .line 158
++    const-string v2, "android.content.pm.IPackageManager"
++
++    invoke-static {v2}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
++
++    move-result-object v2
++
++    .line 159
++    const-string v4, "android.content.pm.SuspendDialogInfo"
++
++    invoke-static {v4}, Ljava/lang/Class;->forName(Ljava/lang/String;)Ljava/lang/Class;
++
++    move-result-object v4
++
++    .line 160
++    const/16 v5, 0x9
++
++    new-array v5, v5, [Ljava/lang/Class;
++
++    const-class v6, [Ljava/lang/String;
++
++    aput-object v6, v5, v1
++
++    sget-object v6, Ljava/lang/Boolean;->TYPE:Ljava/lang/Class;
++
++    const/4 v7, 0x1
++
++    aput-object v6, v5, v7
++
++    const/4 v6, 0x2
++
++    const-class v8, Landroid/os/PersistableBundle;
++
++    aput-object v8, v5, v6
++
++    const/4 v6, 0x3
++
++    const-class v8, Landroid/os/PersistableBundle;
++
++    aput-object v8, v5, v6
++
++    const/4 v6, 0x4
++
++    aput-object v4, v5, v6
++
++    const/4 v4, 0x5
++
++    sget-object v6, Ljava/lang/Integer;->TYPE:Ljava/lang/Class;
++
++    aput-object v6, v5, v4
++
++    const/4 v4, 0x6
++
++    const-class v6, Ljava/lang/String;
++
++    aput-object v6, v5, v4
++
++    const/4 v4, 0x7
++
++    sget-object v6, Ljava/lang/Integer;->TYPE:Ljava/lang/Class;
++
++    aput-object v6, v5, v4
++
++    const/16 v4, 0x8
++
++    sget-object v6, Ljava/lang/Integer;->TYPE:Ljava/lang/Class;
++
++    aput-object v6, v5, v4
++
++    const-string v4, "setPackagesSuspendedAsUser"
++
++    invoke-virtual {v2, v4, v5}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
++
++    move-result-object v2
++
++    .line 162
++    if-eqz p2, :cond_5d
++
++    invoke-static {v7}, Lyl/i;->e(Z)Ljava/lang/Object;
++
++    move-result-object v3
++
++    :cond_5d
++    move-object v8, v3
++
++    .line 163
++    filled-new-array {p1}, [Ljava/lang/String;
++
++    move-result-object v4
++
++    invoke-static {p2}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
++
++    move-result-object v5
++
++    invoke-static {v1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object v9
++
++    .line 164
++    invoke-virtual {p0}, Landroid/content/Context;->getPackageName()Ljava/lang/String;
++
++    move-result-object v10
++
++    invoke-static {}, Lio/mesalabs/unica/maximum/MaximumPolicy;->ownUser()I
++
++    move-result v1
++
++    invoke-static {v1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object v11
++
++    invoke-static/range {p3 .. p3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object v12
++
++    const/4 v6, 0x0
++
++    const/4 v7, 0x0
++
++    filled-new-array/range {v4 .. v12}, [Ljava/lang/Object;
++
++    move-result-object v1
++
++    .line 163
++    invoke-virtual {v2, v0, v1}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object v0
++
++    .line 165
++    instance-of v1, v0, [Ljava/lang/String;
++
++    if-eqz v1, :cond_cd
++
++    check-cast v0, [Ljava/lang/String;
++
++    array-length v0, v0
++
++    if-nez v0, :cond_cd
++
++    .line 167
++    if-eqz p2, :cond_b3
++
++    invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
++
++    move-result-object v0
++
++    invoke-virtual {v0, p1}, Landroid/content/pm/PackageManager;->isPackageSuspended(Ljava/lang/String;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_9a
++
++    goto :goto_b3
++
++    .line 168
++    :cond_9a
++    new-instance p0, Ljava/lang/IllegalStateException;
++
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v1, "PackageManager did not suspend "
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-direct {p0, p1}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
++
++    throw p0
++
++    .line 169
++    :cond_b3
++    :goto_b3
++    new-instance v0, Ljava/util/ArrayList;
++
++    invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
++
++    .line 170
++    invoke-virtual {v0, p1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
++
++    .line 171
++    new-instance p1, Lzl/a;
++
++    invoke-direct {p1, p0}, Lzl/a;-><init>(Landroid/content/Context;)V
++
++    if-eqz p2, :cond_c5
++
++    const-string p0, "com.android.server.am.MARS_TRIGGER_MPSM_POLICY"
++
++    goto :goto_c7
++
++    .line 172
++    :cond_c5
++    const-string p0, "com.android.server.am.MARS_CANCEL_MPSM_POLICY"
++
++    .line 171
++    :goto_c7
++    move/from16 v1, p3
++
++    invoke-virtual {p1, v1, v0, p0}, Lzl/a;->a(ILjava/util/ArrayList;Ljava/lang/String;)V
++
++    .line 173
++    return-void
++
++    .line 166
++    :cond_cd
++    new-instance p0, Ljava/lang/IllegalStateException;
++
++    new-instance v0, Ljava/lang/StringBuilder;
++
++    invoke-direct {v0}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v1, "PackageManager rejected suspension change for "
++
++    invoke-virtual {v0, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v0
++
++    invoke-virtual {v0, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-direct {p0, p1}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
++
++    throw p0
++.end method
++
++.method private static write(Landroid/content/Context;Ljava/lang/String;Z)V
++    .registers 4
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 78
++    nop
++
++    .line 79
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    invoke-static {v0, p1, p2}, Landroid/provider/Settings$Secure;->putInt(Landroid/content/ContentResolver;Ljava/lang/String;I)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_17
++
++    .line 80
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    const/4 v0, -0x1
++
++    invoke-static {p0, p1, v0}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p0
++
++    if-ne p0, p2, :cond_17
++
++    .line 82
++    return-void
++
++    .line 81
++    :cond_17
++    new-instance p0, Ljava/lang/IllegalStateException;
++
++    new-instance p2, Ljava/lang/StringBuilder;
++
++    invoke-direct {p2}, Ljava/lang/StringBuilder;-><init>()V
++
++    const-string v0, "Setting was not saved: "
++
++    invoke-virtual {p2, v0}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p2
++
++    invoke-virtual {p2, p1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object p1
++
++    invoke-virtual {p1}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object p1
++
++    invoke-direct {p0, p1}, Ljava/lang/IllegalStateException;-><init>(Ljava/lang/String;)V
++
++    throw p0
++.end method
+--- a/smali_classes2/io/mesalabs/unica/maximum/MaximumPolicy.smali
++++ b/smali_classes2/io/mesalabs/unica/maximum/MaximumPolicy.smali
+@@ -0,0 +1,513 @@
++.class public final Lio/mesalabs/unica/maximum/MaximumPolicy;
++.super Ljava/lang/Object;
++.source "MaximumPolicy.java"
++
++
++# static fields
++.field public static final KNOWN:Ljava/lang/String; = "unica_maximum_essential_known_"
++
++.field public static final OFF:Ljava/lang/String; = "unica_maximum_essential_off_"
++
++.field public static final OPTIONAL:[Ljava/lang/String;
++
++.field public static final PENDING:Ljava/lang/String; = "unica_maximum_essential_pending_"
++
++.field public static final SMART_MANAGER:Ljava/lang/String; = "com.samsung.android.sm_cn"
++
++
++# direct methods
++.method static constructor <clinit>()V
++    .registers 7
++
++    .line 17
++    const-string v5, "com.samsung.android.dialer"
++
++    const-string v6, "com.google.android.dialer"
++
++    const-string v0, "com.android.vending"
++
++    const-string v1, "com.google.android.apps.walletnfcrel"
++
++    const-string v2, "com.samsung.android.spay"
++
++    const-string v3, "com.samsung.android.messaging"
++
++    const-string v4, "com.google.android.apps.messaging"
++
++    filled-new-array/range {v0 .. v6}, [Ljava/lang/String;
++
++    move-result-object v0
++
++    sput-object v0, Lio/mesalabs/unica/maximum/MaximumPolicy;->OPTIONAL:[Ljava/lang/String;
++
++    return-void
++.end method
++
++.method private constructor <init>()V
++    .registers 1
++
++    .line 24
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method public static active(Landroid/content/Context;I)Z
++    .registers 5
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 59
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object v0
++
++    const-string v1, "low_power"
++
++    const/4 v2, 0x0
++
++    invoke-static {v0, v1, v2}, Landroid/provider/Settings$Global;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result v0
++
++    const/4 v1, 0x1
++
++    if-ne v0, v1, :cond_18
++
++    .line 60
++    const-string v0, "sem_power_mode_ebs_option"
++
++    invoke-static {p0, v0, p1}, Lio/mesalabs/unica/maximum/MaximumPolicy;->secure(Landroid/content/Context;Ljava/lang/String;I)I
++
++    move-result p0
++
++    if-ne p0, v1, :cond_18
++
++    move v2, v1
++
++    goto :goto_19
++
++    :cond_18
++    nop
++
++    .line 59
++    :goto_19
++    return v2
++.end method
++
++.method public static fixed(Landroid/content/Context;Ljava/lang/String;)Z
++    .registers 5
++
++    .line 32
++    const/4 v0, 0x1
++
++    if-eqz p1, :cond_5e
++
++    const-string v1, "com.samsung.android.sm_cn"
++
++    invoke-virtual {v1, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-nez v1, :cond_5e
++
++    const-string v1, "com.samsung.android.lool"
++
++    invoke-virtual {v1, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-nez v1, :cond_5e
++
++    .line 33
++    const-string v1, "com.android.settings"
++
++    invoke-virtual {v1, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-nez v1, :cond_5e
++
++    const-string v1, "com.sec.android.app.clockpackage"
++
++    invoke-virtual {v1, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-nez v1, :cond_5e
++
++    .line 34
++    const-string v1, "com.android.deskclock"
++
++    invoke-virtual {v1, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-nez v1, :cond_5e
++
++    const-string v1, "com.google.android.deskclock"
++
++    invoke-virtual {v1, p1}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v1
++
++    if-eqz v1, :cond_34
++
++    goto :goto_5e
++
++    .line 35
++    :cond_34
++    new-instance v1, Landroid/content/Intent;
++
++    const-string v2, "android.intent.action.MAIN"
++
++    invoke-direct {v1, v2}, Landroid/content/Intent;-><init>(Ljava/lang/String;)V
++
++    const-string v2, "android.intent.category.HOME"
++
++    invoke-virtual {v1, v2}, Landroid/content/Intent;->addCategory(Ljava/lang/String;)Landroid/content/Intent;
++
++    move-result-object v1
++
++    .line 36
++    invoke-virtual {p0}, Landroid/content/Context;->getPackageManager()Landroid/content/pm/PackageManager;
++
++    move-result-object p0
++
++    const/high16 v2, 0x10000
++
++    invoke-virtual {p0, v1, v2}, Landroid/content/pm/PackageManager;->resolveActivity(Landroid/content/Intent;I)Landroid/content/pm/ResolveInfo;
++
++    move-result-object p0
++
++    .line 37
++    if-eqz p0, :cond_5c
++
++    iget-object v1, p0, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
++
++    if-eqz v1, :cond_5c
++
++    iget-object p0, p0, Landroid/content/pm/ResolveInfo;->activityInfo:Landroid/content/pm/ActivityInfo;
++
++    iget-object p0, p0, Landroid/content/pm/ActivityInfo;->packageName:Ljava/lang/String;
++
++    invoke-virtual {p1, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_5c
++
++    goto :goto_5d
++
++    :cond_5c
++    const/4 v0, 0x0
++
++    :goto_5d
++    return v0
++
++    .line 34
++    :cond_5e
++    :goto_5e
++    return v0
++.end method
++
++.method public static fixedForUser(Landroid/content/Context;Ljava/lang/String;I)Z
++    .registers 8
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 41
++    invoke-static {}, Lio/mesalabs/unica/maximum/MaximumPolicy;->ownUser()I
++
++    move-result v0
++
++    if-ne p2, v0, :cond_b
++
++    invoke-static {p0, p1}, Lio/mesalabs/unica/maximum/MaximumPolicy;->fixed(Landroid/content/Context;Ljava/lang/String;)Z
++
++    move-result p0
++
++    return p0
++
++    .line 43
++    :cond_b
++    const-class v0, Landroid/os/UserHandle;
++
++    const/4 v1, 0x1
++
++    new-array v2, v1, [Ljava/lang/Class;
++
++    sget-object v3, Ljava/lang/Integer;->TYPE:Ljava/lang/Class;
++
++    const/4 v4, 0x0
++
++    aput-object v3, v2, v4
++
++    const-string v3, "of"
++
++    invoke-virtual {v0, v3, v2}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
++
++    move-result-object v0
++
++    invoke-static {p2}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object p2
++
++    filled-new-array {p2}, [Ljava/lang/Object;
++
++    move-result-object p2
++
++    const/4 v2, 0x0
++
++    invoke-virtual {v0, v2, p2}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object p2
++
++    .line 44
++    const-class v0, Landroid/content/Context;
++
++    const/4 v2, 0x2
++
++    new-array v2, v2, [Ljava/lang/Class;
++
++    const-class v3, Landroid/os/UserHandle;
++
++    aput-object v3, v2, v4
++
++    sget-object v3, Ljava/lang/Integer;->TYPE:Ljava/lang/Class;
++
++    aput-object v3, v2, v1
++
++    const-string v1, "createContextAsUser"
++
++    invoke-virtual {v0, v1, v2}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
++
++    move-result-object v0
++
++    .line 45
++    invoke-static {v4}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object v1
++
++    filled-new-array {p2, v1}, [Ljava/lang/Object;
++
++    move-result-object p2
++
++    invoke-virtual {v0, p0, p2}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object p0
++
++    check-cast p0, Landroid/content/Context;
++
++    .line 46
++    invoke-static {p0, p1}, Lio/mesalabs/unica/maximum/MaximumPolicy;->fixed(Landroid/content/Context;Ljava/lang/String;)Z
++
++    move-result p0
++
++    return p0
++.end method
++
++.method public static optional(Ljava/lang/String;)Z
++    .registers 6
++
++    .line 27
++    sget-object v0, Lio/mesalabs/unica/maximum/MaximumPolicy;->OPTIONAL:[Ljava/lang/String;
++
++    array-length v1, v0
++
++    const/4 v2, 0x0
++
++    move v3, v2
++
++    :goto_5
++    if-ge v3, v1, :cond_14
++
++    aget-object v4, v0, v3
++
++    invoke-virtual {v4, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v4
++
++    if-eqz v4, :cond_11
++
++    const/4 p0, 0x1
++
++    return p0
++
++    :cond_11
++    add-int/lit8 v3, v3, 0x1
++
++    goto :goto_5
++
++    .line 28
++    :cond_14
++    return v2
++.end method
++
++.method public static ownUser()I
++    .registers 2
++
++    .line 49
++    invoke-static {}, Landroid/os/Process;->myUid()I
++
++    move-result v0
++
++    const v1, 0x186a0
++
++    div-int/2addr v0, v1
++
++    return v0
++.end method
++
++.method public static requestAllowed(Ljava/lang/String;IIZZZZZ)Z
++    .registers 11
++
++    .line 66
++    const v0, 0x186a0
++
++    rem-int v1, p1, v0
++
++    .line 67
++    const/16 v2, 0x3e8
++
++    if-eq v1, v2, :cond_d
++
++    const/16 v2, 0x2710
++
++    if-lt v1, v2, :cond_22
++
++    :cond_d
++    div-int/2addr p1, v0
++
++    if-ne p1, p2, :cond_22
++
++    if-eqz p3, :cond_22
++
++    if-eqz p4, :cond_22
++
++    .line 68
++    invoke-static {p0}, Lio/mesalabs/unica/maximum/MaximumPolicy;->optional(Ljava/lang/String;)Z
++
++    move-result p0
++
++    if-eqz p0, :cond_22
++
++    if-nez p5, :cond_22
++
++    if-eqz p6, :cond_22
++
++    if-eqz p7, :cond_22
++
++    const/4 p0, 0x1
++
++    goto :goto_23
++
++    :cond_22
++    const/4 p0, 0x0
++
++    .line 67
++    :goto_23
++    return p0
++.end method
++
++.method public static secure(Landroid/content/Context;Ljava/lang/String;I)I
++    .registers 8
++    .annotation system Ldalvik/annotation/Throws;
++        value = {
++            Ljava/lang/Exception;
++        }
++    .end annotation
++
++    .line 52
++    invoke-static {}, Lio/mesalabs/unica/maximum/MaximumPolicy;->ownUser()I
++
++    move-result v0
++
++    const/4 v1, 0x0
++
++    if-ne p2, v0, :cond_10
++
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    invoke-static {p0, p1, v1}, Landroid/provider/Settings$Secure;->getInt(Landroid/content/ContentResolver;Ljava/lang/String;I)I
++
++    move-result p0
++
++    return p0
++
++    .line 53
++    :cond_10
++    const-class v0, Landroid/provider/Settings$Secure;
++
++    const/4 v2, 0x4
++
++    new-array v2, v2, [Ljava/lang/Class;
++
++    const-class v3, Landroid/content/ContentResolver;
++
++    aput-object v3, v2, v1
++
++    const/4 v3, 0x1
++
++    const-class v4, Ljava/lang/String;
++
++    aput-object v4, v2, v3
++
++    const/4 v3, 0x2
++
++    sget-object v4, Ljava/lang/Integer;->TYPE:Ljava/lang/Class;
++
++    aput-object v4, v2, v3
++
++    const/4 v3, 0x3
++
++    sget-object v4, Ljava/lang/Integer;->TYPE:Ljava/lang/Class;
++
++    aput-object v4, v2, v3
++
++    const-string v3, "getIntForUser"
++
++    invoke-virtual {v0, v3, v2}, Ljava/lang/Class;->getMethod(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;
++
++    move-result-object v0
++
++    .line 55
++    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
++
++    move-result-object p0
++
++    invoke-static {v1}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object v1
++
++    invoke-static {p2}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
++
++    move-result-object p2
++
++    filled-new-array {p0, p1, v1, p2}, [Ljava/lang/Object;
++
++    move-result-object p0
++
++    const/4 p1, 0x0
++
++    invoke-virtual {v0, p1, p0}, Ljava/lang/reflect/Method;->invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
++
++    move-result-object p0
++
++    check-cast p0, Ljava/lang/Integer;
++
++    .line 53
++    invoke-virtual {p0}, Ljava/lang/Integer;->intValue()I
++
++    move-result p0
++
++    return p0
++.end method

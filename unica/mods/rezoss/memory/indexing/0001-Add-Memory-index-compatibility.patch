@@ -1,0 +1,42 @@
+--- a/smali/com/google/android/gms/internal/mlkit_genai_prompt/ts.smali
++++ b/smali/com/google/android/gms/internal/mlkit_genai_prompt/ts.smali
+@@ -1159,7 +1159,7 @@
+     move-result-object v6
+ 
+     .line 140
+-    invoke-virtual {v5, v6, v15, v3}, Landroid/content/ContentResolver;->delete(Landroid/net/Uri;Ljava/lang/String;[Ljava/lang/String;)I
++    invoke-static {v5, v6, v15, v3}, Lio/mesalabs/rezoss/memory/MemoryIndexAdapter;->delete(Landroid/content/ContentResolver;Landroid/net/Uri;Ljava/lang/String;[Ljava/lang/String;)I
+ 
+     .line 141
+     .line 142
+@@ -1213,7 +1213,7 @@
+     .line 163
+     .line 164
+     .line 165
+-    invoke-virtual {v5, v6, v7, v15, v3}, Landroid/content/ContentResolver;->update(Landroid/net/Uri;Landroid/content/ContentValues;Ljava/lang/String;[Ljava/lang/String;)I
++    invoke-static {v5, v6, v7, v15, v3}, Lio/mesalabs/rezoss/memory/MemoryIndexAdapter;->update(Landroid/content/ContentResolver;Landroid/net/Uri;Landroid/content/ContentValues;Ljava/lang/String;[Ljava/lang/String;)I
+     :try_end_1
+     .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
+ 
+--- a/smali/t8/c.smali
++++ b/smali/t8/c.smali
+@@ -325,7 +325,7 @@
+     .line 57
+     .line 58
+     .line 59
+-    invoke-virtual {p1, p2, p3, p4, p6}, Landroid/content/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Landroid/os/Bundle;Landroid/os/CancellationSignal;)Landroid/database/Cursor;
++    invoke-static {p1, p2, p3, p4, p6}, Lio/mesalabs/rezoss/memory/MemoryIndexAdapter;->query(Landroid/content/ContentResolver;Landroid/net/Uri;[Ljava/lang/String;Landroid/os/Bundle;Landroid/os/CancellationSignal;)Landroid/database/Cursor;
+ 
+     .line 60
+     .line 61
+--- a/smali_classes2/com/samsung/android/app/memory/data/provider/SearchCraftProvider.smali
++++ b/smali_classes2/com/samsung/android/app/memory/data/provider/SearchCraftProvider.smali
+@@ -6230,7 +6230,7 @@
+ 
+     .line 627
+     .line 628
+-    invoke-virtual {p0, v0, v4, v6, v5}, Landroid/content/ContentResolver;->call(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Landroid/os/Bundle;)Landroid/os/Bundle;
++    invoke-static {p0, v0, v4, v6, v5}, Lio/mesalabs/rezoss/memory/MemoryIndexAdapter;->call(Landroid/content/ContentResolver;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Landroid/os/Bundle;)Landroid/os/Bundle;
+ 
+     .line 629
+     .line 630

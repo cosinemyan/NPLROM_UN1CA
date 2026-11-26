@@ -1,4 +1,15 @@
 /application>/i
+        <activity android:name="io.mesalabs.unica.troubleshooting.TroubleshootingActivity" android:exported="false" android:configChanges="keyboardHidden|orientation|screenSize" android:label="@string/unica_troubleshooting_title"/>
+        <activity android:name="io.mesalabs.unica.movecertificate.MoveCertificateActivity" android:exported="false" android:label="@string/unica_movecert_title"/>
+        <activity android:name="io.mesalabs.unica.pif.PifActivity" android:exported="false" android:label="@string/unica_pif_title"/>
+        <activity android:name="io.mesalabs.unica.keybox.KeyboxActivity" android:enableOnBackInvokedCallback="true" android:exported="false" android:label="Manage Keybox"/>
+        <activity android:name="io.mesalabs.unica.gpu.GpuActivity" android:exported="false" android:configChanges="keyboardHidden|orientation|screenSize" android:label="@string/unica_gpu_title"/>
+        <activity android:name="io.mesalabs.unica.ota.OtaActivity" android:exported="false" android:configChanges="keyboardHidden|orientation|screenSize" android:label="@string/unica_ota_title"/>
+        <activity android:name="io.mesalabs.unica.battery.BatteryActivity" android:exported="false" android:label="@string/unica_battery_title"/>
+        <receiver android:name="io.mesalabs.unica.battery.BatteryBoot" android:exported="false">
+            <intent-filter><action android:name="android.intent.action.BOOT_COMPLETED"/></intent-filter>
+        </receiver>
+        <service android:name="io.mesalabs.unica.battery.BatteryBoot$ApplyJob" android:exported="true" android:permission="android.permission.BIND_JOB_SERVICE"/>
         <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="true" android:label="@string/unica_settings_title" android:name="com.android.settings.Settings$UnicaSettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -47,7 +58,7 @@
             <meta-data android:name="com.android.settings.FRAGMENT_CLASS" android:value="io.mesalabs.unica.settings.spoof.CameraFeatureFragment"/>
             <meta-data android:name="com.android.settings.HIGHLIGHT_MENU_KEY" android:value="@string/menu_key_unica_top_settings"/>
         </activity>
-        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="true" android:label="@string/unica_font_selector_title" android:name="com.android.settings.Settings$UnicaFontSelectorSettingsActivity" android:parentActivityName="com.android.settings.Settings$UnicaSettingsActivity">
+        <activity android:configChanges="keyboardHidden|orientation|screenSize" android:exported="true" android:label="@string/unica_font_selector_title" android:name="com.android.settings.Settings$UnicaFontSelectorSettingsActivity" android:parentActivityName="com.android.settings.Settings$UnicaUISettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT"/>

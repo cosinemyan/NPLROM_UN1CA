@@ -1,0 +1,23 @@
+--- a/backends/qualcomm/runtime/QnnExecuTorchBackend.cpp
++++ b/backends/qualcomm/runtime/QnnExecuTorchBackend.cpp
+@@ -43,6 +43,20 @@
+       QnnContextCustomProtocol().DeserializeContextCustomBuffer(
+           const_cast<void*>(processed->data()));
+   if (status == Error::Ok) {
++    // Older pinned exports use an unpadded 4+8+8 byte context header.
++    // Select by the exact declared payload length, never by guessing bytes.
++    constexpr size_t legacy_header_size = 20;
++    if (processed->size() >= legacy_header_size &&
++        ctx_size == processed->size() - legacy_header_size) {
++      ctx_bin = static_cast<uint8_t*>(
++                    const_cast<void*>(processed->data())) + legacy_header_size;
++      QNN_EXECUTORCH_LOG_INFO("Using verified legacy 20-byte context header");
++    } else {
++      ET_CHECK_OR_RETURN_ERROR(
++          processed->size() >= QNN_CTX_BIN_ALIGNMENT &&
++              ctx_size == processed->size() - QNN_CTX_BIN_ALIGNMENT,
++          InvalidProgram, "QNN context payload length mismatch");
++    }
+     QNN_EXECUTORCH_LOG_INFO(
+         "Deserializing processed data using QnnContextCustomProtocol");
+     // After this stage, qnn_context_blob.nbytes & qnn_context_blob.buffer will

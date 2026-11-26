@@ -1,0 +1,23 @@
+From: UN1CA <unica@local>
+Subject: [PATCH] Consolidate keybox actions in Manage Keybox
+
+Remove the obsolete top-level import controller. Import and clear remain in
+Manage Keybox, accessible independently of the spoofing switch.
+
+--- a/smali_classes4/io/mesalabs/unica/settings/spoof/SpoofSettingsFragment.smali
++++ b/smali_classes4/io/mesalabs/unica/settings/spoof/SpoofSettingsFragment.smali
+@@ -42,14 +42,6 @@
+     new-instance v0, Ljava/util/ArrayList;
+ 
+     invoke-direct {v0}, Ljava/util/ArrayList;-><init>()V
+-
+-    new-instance v1, Lio/mesalabs/unica/settings/keybox/KeyboxLoadPreferenceController;
+-
+-    const-string/jumbo v2, "unica_keybox_load"
+-
+-    invoke-direct {v1, p0, v2, p1}, Lio/mesalabs/unica/settings/keybox/KeyboxLoadPreferenceController;-><init>(Landroid/content/Context;Ljava/lang/String;Landroidx/fragment/app/Fragment;)V
+-
+-    invoke-virtual {v0, v1}, Ljava/util/ArrayList;->add(Ljava/lang/Object;)Z
+ 
+     new-instance v1, Lio/mesalabs/unica/settings/pif/PIFCustomPreferenceController;
+ 

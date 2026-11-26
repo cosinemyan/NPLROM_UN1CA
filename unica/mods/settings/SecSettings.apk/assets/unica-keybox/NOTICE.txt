@@ -1,0 +1,3 @@
+AOSP software attestation test keybox from Android system/keymaster/contexts/soft_attestation_cert.cpp, distributed by Duck-ToolBox (MIT), revision ec5632982c26a49fe4e262814b373ed4e8917477.
+The bundled signing keys are public software test material. They are not hardware-backed credentials.
+Repository browsing uses the Tricky Addon keybox repository protocol as implemented by Duck-ToolBox.

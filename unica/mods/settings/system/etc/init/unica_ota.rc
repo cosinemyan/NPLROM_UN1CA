@@ -1,0 +1,19 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+service unica_ota /system/bin/unica-ota-stage
+    user root
+    group system cache
+    capabilities CHOWN
+    seclabel u:r:unica_ota:s0
+    disabled
+    oneshot
+
+on post-fs-data
+    mkdir /data/misc/unica_ota 0750 root system
+    mkdir /data/misc/unica_ota/request 0770 system system
+    mkdir /data/misc/unica_ota/staged 0750 root system
+    restorecon_recursive /data/misc/unica_ota
+    mkdir /cache/unica-ota 0750 root system
+    restorecon_recursive /cache/unica-ota
+
+on property:sys.unica.ota.request=*
+    start unica_ota

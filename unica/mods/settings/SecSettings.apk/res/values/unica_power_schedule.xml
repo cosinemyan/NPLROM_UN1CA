@@ -1,0 +1,4 @@
+<resources>
+    <string name="unica_power_schedule_title">Power schedule</string>
+    <string name="unica_power_schedule_summary">Schedule power on and automatic shutdown</string>
+</resources>

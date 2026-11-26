@@ -1,0 +1,6 @@
+property_virtualizer.cpp and property_virtualizer.hpp are unmodified copies from:
+https://github.com/KOWX712/PlayIntegrityFix
+revision: cc06c31e1de8c6d4d25e48c62c2dbc3995979fc3
+path: zygisk/src/main/cpp/
+License: GPL-3.0 (see LICENSE).
+pif_config.hpp is the ROM-owned minimal configuration adapter, not upstream's parser.

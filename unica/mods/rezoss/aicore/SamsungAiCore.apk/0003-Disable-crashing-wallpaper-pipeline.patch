@@ -1,0 +1,89 @@
+AUTHOR Rezoss
+
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -49,7 +49,7 @@
+                 <action android:name="visual.intent.action.BIND_ON_DEVICE_SERVICE"/>
+             </intent-filter>
+         </service>
+-        <service android:exported="true" android:name="com.samsung.android.aicore.visual.wallpaper.WallpaperService" android:permission="com.samsung.android.aicore.permission.BIND_WALLPAPER_SERVICE">
++        <service android:enabled="false" android:exported="true" android:name="com.samsung.android.aicore.visual.wallpaper.WallpaperService" android:permission="com.samsung.android.aicore.permission.BIND_WALLPAPER_SERVICE">
+             <intent-filter>
+                 <action android:name="visual.intent.action.BIND_WALLPAPER_SERVICE"/>
+             </intent-filter>
+diff --git a/assets/versionConfig.json b/assets/versionConfig.json
+--- a/assets/versionConfig.json
++++ b/assets/versionConfig.json
+@@ -9,7 +9,6 @@
+                 "default": 20250812
+             },
+             "features": [
+-                "FEATURE_WALLPAPER"
+             ],
+             "use_service": false,
+             "extract_libs": false,
+@@ -23,7 +22,6 @@
+                 "default": 20260508
+             },
+             "features": [
+-                "FEATURE_WALLPAPER",
+                 "FEATURE_INOUT_PAINTING",
+                 "FEATURE_GEN_EDIT_ON_DEVICE",
+                 "FEATURE_HARMONIZATION_ON_DEVICE"
+@@ -40,7 +38,6 @@
+                 "default": 20251229
+             },
+             "features": [
+-                "FEATURE_WALLPAPER",
+                 "FEATURE_INOUT_PAINTING",
+                 "FEATURE_GEN_EDIT_ON_DEVICE",
+                 "FEATURE_HARMONIZATION_ON_DEVICE",
+@@ -60,7 +57,6 @@
+                 "default": 20250717
+             },
+             "features": [
+-                "FEATURE_WALLPAPER"
+             ],
+             "use_service": false,
+             "extract_libs": false,
+@@ -77,7 +73,6 @@
+                 "pa3q": 20260507
+             },
+             "features": [
+-                "FEATURE_WALLPAPER",
+                 "FEATURE_INOUT_PAINTING",
+                 "FEATURE_GEN_EDIT_ON_DEVICE",
+                 "FEATURE_HARMONIZATION_ON_DEVICE"
+@@ -94,7 +89,6 @@
+                 "default": 20251216
+             },
+             "features": [
+-                "FEATURE_WALLPAPER",
+                 "FEATURE_INOUT_PAINTING",
+                 "FEATURE_GEN_EDIT_ON_DEVICE",
+                 "FEATURE_HARMONIZATION_ON_DEVICE",
+@@ -114,7 +108,6 @@
+                 "default": 20250717
+             },
+             "features": [
+-                "FEATURE_WALLPAPER"
+             ],
+             "use_service": false,
+             "extract_libs": false,
+@@ -128,7 +121,6 @@
+                 "default": 20260508
+             },
+             "features": [
+-                "FEATURE_WALLPAPER",
+                 "FEATURE_INOUT_PAINTING",
+                 "FEATURE_GEN_EDIT_ON_DEVICE",
+                 "FEATURE_HARMONIZATION_ON_DEVICE"
+@@ -145,7 +137,6 @@
+                 "default": 20260525
+             },
+             "features": [
+-                "FEATURE_WALLPAPER",
+                 "FEATURE_INOUT_PAINTING",
+                 "FEATURE_GEN_EDIT_ON_DEVICE",
+                 "FEATURE_HARMONIZATION_ON_DEVICE",

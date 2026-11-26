@@ -1,0 +1,60 @@
+Subject: [PATCH] Scope shade reply editors and invalidate stale sessions
+
+--- a/smali_classes3/com/android/systemui/statusbar/policy/RemoteInputView$RemoteEditText.smali
++++ b/smali_classes3/com/android/systemui/statusbar/policy/RemoteInputView$RemoteEditText.smali
+@@ -262,9 +262,15 @@
+ .method public final onCreateInputConnection(Landroid/view/inputmethod/EditorInfo;)Landroid/view/inputmethod/InputConnection;
+     .locals 4
+ 
++    move-object v2, p1
++
+     invoke-super {p0, p1}, Landroid/widget/EditText;->onCreateInputConnection(Landroid/view/inputmethod/EditorInfo;)Landroid/view/inputmethod/InputConnection;
+ 
+     move-result-object p1
++
++    iget-object v0, p0, Lcom/android/systemui/statusbar/policy/RemoteInputView$RemoteEditText;->mRemoteInputView:Lcom/android/systemui/statusbar/policy/RemoteInputView;
++
++    invoke-static {p0, v2, v0}, Lio/mesalabs/rezoss/ai/ShadeReplyEditor;->decorate(Landroid/widget/EditText;Landroid/view/inputmethod/EditorInfo;Ljava/lang/Object;)V
+ 
+     :try_start_0
+     iget-object v0, p0, Landroid/widget/EditText;->mContext:Landroid/content/Context;
+@@ -354,6 +360,8 @@
+ 
+     invoke-super {p0, p1, p2, p3}, Landroid/widget/EditText;->onFocusChanged(ZILandroid/graphics/Rect;)V
+ 
++    invoke-static {p0, p1}, Lio/mesalabs/rezoss/ai/ShadeReplyEditor;->focus(Landroid/widget/EditText;Z)V
++
+     iget-object p2, p0, Lcom/android/systemui/statusbar/policy/RemoteInputView$RemoteEditText;->mRemoteInputView:Lcom/android/systemui/statusbar/policy/RemoteInputView;
+ 
+     if-eqz p2, :cond_0
+--- a/smali_classes3/com/android/systemui/statusbar/policy/RemoteInputView$SendButtonTextWatcher.smali
++++ b/smali_classes3/com/android/systemui/statusbar/policy/RemoteInputView$SendButtonTextWatcher.smali
+@@ -35,6 +35,8 @@
+     .locals 0
+ 
+     iget-object p0, p0, Lcom/android/systemui/statusbar/policy/RemoteInputView$SendButtonTextWatcher;->this$0:Lcom/android/systemui/statusbar/policy/RemoteInputView;
++
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/ShadeReplyEditor;->changed(Ljava/lang/Object;)V
+ 
+     sget-object p1, Lcom/android/systemui/statusbar/policy/RemoteInputView;->VIEW_TAG:Ljava/lang/Object;
+ 
+--- a/smali_classes3/com/android/systemui/statusbar/policy/RemoteInputView.smali
++++ b/smali_classes3/com/android/systemui/statusbar/policy/RemoteInputView.smali
+@@ -908,6 +908,8 @@
+ .method public final onDetachedFromWindow()V
+     .locals 4
+ 
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/ShadeReplyEditor;->detached(Ljava/lang/Object;)V
++
+     invoke-super {p0}, Landroid/widget/LinearLayout;->onDetachedFromWindow()V
+ 
+     iget-object v0, p0, Lcom/android/systemui/statusbar/policy/RemoteInputView;->mEditText:Lcom/android/systemui/statusbar/policy/RemoteInputView$RemoteEditText;
+@@ -1212,6 +1214,8 @@
+ 
+ .method public final onNotificationUpdateOrReset()V
+     .locals 6
++
++    invoke-static {p0}, Lio/mesalabs/rezoss/ai/ShadeReplyEditor;->updated(Ljava/lang/Object;)V
+ 
+     iget-object v0, p0, Lcom/android/systemui/statusbar/policy/RemoteInputView;->mProgressBar:Landroid/widget/ProgressBar;
+ 

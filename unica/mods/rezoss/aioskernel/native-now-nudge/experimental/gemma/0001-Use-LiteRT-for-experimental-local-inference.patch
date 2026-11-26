@@ -1,0 +1,162 @@
+Subject: [PATCH] Route experimental local AIOS builds through Gemma LiteRT
+
+Applied only by experimental/gemma/build.sh to a temporary source copy.
+Keep API transports, Samsung IPC, output validation and request deadlines.
+The normal ROM backend remains Qwen.
+
+--- a/backend/java/io/mesalabs/rezoss/nudge/TextBackend.java
++++ b/backend/java/io/mesalabs/rezoss/nudge/TextBackend.java
+@@ -18,6 +18,7 @@
+     private static TextBackend shared;
+     private final Context context;
+     private final ModelStore store;
++    private final GemmaRuntime gemma;
+     private final ApiProviderClient api;
+     private File modelDirectory;
+     private final java.util.concurrent.locks.ReentrantLock runnerLock=new java.util.concurrent.locks.ReentrantLock(true);
+@@ -27,12 +28,12 @@
+     private final Set<Task> tasks=Collections.synchronizedSet(new HashSet<Task>());
+     private volatile boolean validated;
+     private volatile Process auxiliary;
+-    private TextBackend(Service service) { context=service.getApplicationContext(); store=new ModelStore(context); api=new ApiProviderClient(context); }
++    private TextBackend(Service service) { context=service.getApplicationContext(); store=new ModelStore(context); api=new ApiProviderClient(context); gemma=GemmaRuntime.get(context); }
+     public static synchronized boolean create(Service service) {
+         if(Settings.Global.getInt(service.getContentResolver(),"rezoss_aios_v73_backend",1)!=1) return false;
+         if(shared==null)shared=new TextBackend(service);
+         INSTANCES.put(service,shared);
+-        Log.i(TAG,"Replacement Qwen3 V73 profile enabled; Samsung weights are not used"); return true;
++        Log.i(TAG,"Experimental Gemma E2B profile enabled; Samsung weights are not used"); return true;
+     }
+     public static synchronized IBinder bind(Service service) { TextBackend b=INSTANCES.get(service); return b==null?null:b.endpoint; }
+     static synchronized TextBackend local(Service service) { return INSTANCES.get(service); }
+@@ -55,13 +56,12 @@
+         if(modelDirectory==null)throw new IllegalStateException("Model package not imported");
+         return modelDirectory;
+     }
+-    boolean filesPresent(){return store.info()!=null;}
++    boolean filesPresent(){return gemma.filesPresent();}
+     boolean configured(){try{return "default".equals(api.route(false))?filesPresent():api.configured();}catch(Exception e){return false;}}
+     void cancel(String id){api.cancel(id);}
+     private boolean ready(String route){return "default".equals(route)?filesPresent():api.configured();}
+     private void prepareModel(long deadline)throws Exception {
+-        File next=store.ensure(deadline);
+-        if(!next.equals(modelDirectory)){validated=false;modelDirectory=next;}
++        gemma.prepare(deadline);validated=true;
+     }
+     void submit(Runnable job){worker.execute(job);}
+     void remove(Runnable job){worker.remove(job);}
+@@ -83,31 +83,14 @@
+     }
+     private boolean validate() {
+         if(!filesPresent())return false;
+-        runnerLock.lock();
+-        try {
+-            prepareModel(SystemClock.elapsedRealtime()+45000);
+-            if(validated)return true;
+-            File job=Files.createTempDirectory(context.getCacheDir().toPath(),"load-").toFile();
+-            auxiliary=launch(job,"test","--load_only");
+-            if(!auxiliary.waitFor(45,TimeUnit.SECONDS)){auxiliary.destroyForcibly();return false;}
+-            validated=auxiliary.exitValue()==0;auxiliary=null;Log.i(TAG,"V73 model validation="+validated);return validated;
+-        }catch(Exception e){Log.e(TAG,"Model validation failed",e);return false;}
+-        finally{if(auxiliary!=null){auxiliary.destroyForcibly();auxiliary=null;}runnerLock.unlock();}
++        try{gemma.prepare(SystemClock.elapsedRealtime()+45000);return true;}
++        catch(Exception e){Log.e(TAG,"Gemma preparation failed",e);return false;}
+     }
+     private int count(String prompt)throws Exception {
+         return count(prompt,null);
+     }
+     private int count(String prompt,Control control)throws Exception {
+-        if(control!=null&&(control.cancelled()||SystemClock.elapsedRealtime()>=control.deadline()))throw new IOException("deadline");
+-        File job=Files.createTempDirectory(context.getCacheDir().toPath(),"count-").toFile();
+-        try{auxiliary=launch(job,prompt,"--count_only");
+-        if(control!=null)control.process(auxiliary);
+-        long timeout=control==null?10000:Math.min(10000,Math.max(1,control.deadline()-SystemClock.elapsedRealtime()));
+-        if(!auxiliary.waitFor(timeout,TimeUnit.MILLISECONDS)){auxiliary.destroyForcibly();throw new IOException(control==null?"Tokenizer timeout":"deadline");}
+-        if(auxiliary.exitValue()!=0)throw new IOException("Tokenizer failure");auxiliary=null;
+-        int n=Integer.parseInt(new String(Files.readAllBytes(new File(job,"output.txt").toPath()),"UTF-8").trim());
+-        return n;
+-        }finally{if(auxiliary!=null){auxiliary.destroyForcibly();auxiliary=null;}if(control!=null)control.process(null);for(File f:job.listFiles())f.delete();job.delete();}
++        return gemma.count(prompt,control);
+     }
+     private final Binder endpoint=new Binder(){
+         public String getInterfaceDescriptor(){return PREFIX+"IAIOSKernelService";}
+@@ -197,44 +180,11 @@
+                     if(done.done()||SystemClock.elapsedRealtime()>=deadline)throw new IOException("deadline");
+                     finish(1,result(ids,name,text));return;
+                 }
+-                Log.i(TAG,"reply route=local queueMs="+(SystemClock.elapsedRealtime()-submitted)+" structured="+PromptAdapter.structured(source));
+-                if(replyContract!=null){
+-                    prepareModel(deadline);String[] replies=new String[3];
+-                    for(int tone=0;tone<3;tone++){
+-                        if(done.done()||SystemClock.elapsedRealtime()>=deadline)throw new IOException("deadline");
+-                        File part=Files.createTempDirectory(context.getCacheDir().toPath(),"reply-tone-").toFile();
+-                        try{
+-                            String input=replyContract.promptForTone(tone);
+-                            if(count(input,control)>850)throw new IOException("context_limit");
+-                            synchronized(this){if(done.done())return;process=launch(part,input,null,32);if(done.done()){stop();return;}}
+-                            if(!process.waitFor(Math.max(1,deadline-SystemClock.elapsedRealtime()),TimeUnit.MILLISECONDS))throw new IOException("deadline");
+-                            if(process.exitValue()!=0)throw new IOException("runner_failed");
+-                            replies[tone]=ReplyText.clean(ModelOutput.completion(new String(Files.readAllBytes(new File(part,"output.txt").toPath()),"UTF-8")).trim());
+-                            Log.i(TAG,"reply tone="+tone+" chars="+replies[tone].length()+" ageMs="+(SystemClock.elapsedRealtime()-submitted));
+-                        }finally{stop();process=null;File[] files=part.listFiles();if(files!=null)for(File file:files)file.delete();part.delete();}
+-                    }
+-                    String text=replyContract.lines(replies);
+-                    if(done.done()||SystemClock.elapsedRealtime()>=deadline)throw new IOException("deadline");
+-                    finish(1,result(ids,name,text));return;
+-                }
+-                prepareModel(Math.min(deadline,SystemClock.elapsedRealtime()+45000));job=Files.createTempDirectory(context.getCacheDir().toPath(),"reply-").toFile();
+-                String localPrompt=screening==null?PromptAdapter.adaptLocal(source):prompt;
+-                long countStarted=SystemClock.elapsedRealtime();
+-                if(count(localPrompt,screening==null?null:control)>850)throw new IllegalArgumentException("Prompt exceeds replacement 1024-token context budget");
+-                if(screening!=null){
+-                    done.remaining(SystemClock.elapsedRealtime());
+-                    Log.i(TAG,"SCREENING tokenizeMs="+(SystemClock.elapsedRealtime()-countStarted)+" ageMs="+(SystemClock.elapsedRealtime()-submitted)+" maxTokens="+CallScreeningContract.MAX_NEW_TOKENS);
+-                }
+-                synchronized(this){if(done.done())return;process=launch(job,localPrompt,null,screening==null?96:CallScreeningContract.MAX_NEW_TOKENS);if(done.done()){stop();return;}}
+-                long generationWait=screening==null?Math.max(1,deadline-SystemClock.elapsedRealtime()):done.remaining(SystemClock.elapsedRealtime());
+-                if(!process.waitFor(generationWait,TimeUnit.MILLISECONDS)){stop();throw new IOException("Reply timeout");}if(done.done())return;
+-                if(process.exitValue()!=0)throw new IOException("Runner exit="+process.exitValue()+" job="+job);
+-                String text=new String(Files.readAllBytes(new File(job,"output.txt").toPath()),"UTF-8").replace("<|im_end|>","").trim();
+-                int think=text.lastIndexOf("</think>");if(think>=0)text=text.substring(think+8).trim();
++                String localPrompt=screening!=null?screening.prompt:replyContract!=null?replyContract.prompt:PromptAdapter.adapt(source);
++                String text=gemma.generate(localPrompt,screening==null?96:CallScreeningContract.MAX_NEW_TOKENS,control);
+                 text=screening==null?(replyContract==null?ReplyText.validated(text,source):replyContract.output(text)):screening.output(text);
+-                if(SystemClock.elapsedRealtime()>=deadline)throw new IOException("Call Screening deadline");
+-                if(text.isEmpty()||text.contains("<think>"))throw new IOException("Empty/incomplete response");
+-                Log.i(TAG,"VALIDATED uid="+owner+" chars="+text.length()+" ageMs="+(SystemClock.elapsedRealtime()-submitted));finish(1,result(ids,name,text));
++                if(done.done()||SystemClock.elapsedRealtime()>=deadline)throw new IOException("deadline");
++                finish(1,result(ids,name,text));
+             }catch(Exception ex){Log.e(TAG,"Task failed job="+job,ex);finish(3,null);}finally{stop();process=null;if(job!=null)new File(job,"prompt.txt").delete();if(locked)runnerLock.unlock();}
+         }
+     }
+@@ -271,26 +221,10 @@
+                     return recall?ActionContract.output(raw):LocalFormat.output(raw,summary);
+                 }finally{control.request(null);}
+             }
+-            prepareModel(control.deadline());
+-            long countStarted=SystemClock.elapsedRealtime();
+-            int tokens=count(prompt,control);
+-            Log.i(TAG,"local tokenizeMs="+(SystemClock.elapsedRealtime()-countStarted)+" tokens="+tokens+" recall="+recall);
+-            if(tokens>850)throw new IllegalArgumentException("context_limit");
+-            if(control.cancelled()||SystemClock.elapsedRealtime()>=control.deadline())throw new InterruptedIOException();
+-            job=Files.createTempDirectory(context.getCacheDir().toPath(),"local-").toFile();
+-            Process process=launch(job,prompt,null,recall?ActionContract.MAX_NEW_TOKENS:96);control.process(process);
+-            try{
+-                if(control.cancelled()){process.destroyForcibly();throw new InterruptedIOException();}
+-                if(!process.waitFor(Math.max(1,control.deadline()-SystemClock.elapsedRealtime()),TimeUnit.MILLISECONDS))throw new IOException("deadline");
+-                if(control.cancelled()||SystemClock.elapsedRealtime()>=control.deadline())throw new IOException("deadline");
+-                if(process.exitValue()!=0)throw new IOException("runner_failed");
+-                String raw=new String(Files.readAllBytes(new File(job,"output.txt").toPath()),"UTF-8");
+-                // Preserve tabs/pipes and trailing empty Unsafe payload exactly.
+-                // The SSCO client validates this protocol before Samsung sees it.
+-                String output=recall?ActionContract.output(raw):LocalFormat.output(raw,summary);
+-                if(control.cancelled()||SystemClock.elapsedRealtime()>=control.deadline())throw new IOException("deadline");
+-                return output;
+-            }finally{process.destroyForcibly();control.process(null);}
++            String raw=gemma.generate(prompt,recall?ActionContract.MAX_NEW_TOKENS:summary?64:96,control);
++            String output=recall?ActionContract.output(raw):LocalFormat.output(raw,summary);
++            if(control.cancelled()||SystemClock.elapsedRealtime()>=control.deadline())throw new IOException("deadline");
++            return output;
+         }finally{if(job!=null){File[] files=job.listFiles();if(files!=null)for(File f:files)f.delete();job.delete();}runnerLock.unlock();}
+     }
+     static String adapt(String raw){return PromptAdapter.adapt(raw);}

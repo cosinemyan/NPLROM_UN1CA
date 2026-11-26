@@ -31,19 +31,36 @@ diff --git a/smali_classes3/com/samsung/android/uniform/widget/facewidget/AODFac
      iget-object v0, v0, Lcom/samsung/android/app/aodservice/common/provider/settingdata/LockClockSettingData;->u:Laod/fc;
 
      invoke-virtual {v0}, Laod/fc;->c()Ljava/lang/Object;
-@@ -132,6 +144,17 @@
+@@ -132,6 +144,34 @@
 
      if-nez v0, :cond_3
 
-+    if-eqz v7, :cond_unica_reset_heights
++    if-eqz v7, :cond_unica_check_custom_font
 +
 +    const/16 v0, 0x323
 +
-+    if-lt v2, v0, :cond_unica_reset_heights
++    if-lt v2, v0, :cond_unica_check_custom_font
 +
 +    const/16 v0, 0x325
 +
-+    if-le v2, v0, :cond_3
++    if-gt v2, v0, :cond_unica_check_custom_font
++
++    goto :cond_3
++
++    :cond_unica_check_custom_font
++    const/16 v0, 0x2bc
++
++    if-eq v2, v0, :cond_3
++
++    if-eqz v3, :cond_unica_reset_heights
++
++    const-string v0, "unica_font:"
++
++    invoke-virtual {v3, v0}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
++
++    move-result v0
++
++    if-nez v0, :cond_3
 +
 +    :cond_unica_reset_heights
      const/high16 v0, 0x3f800000    # 1.0f

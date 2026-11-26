@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unica_support_group_title">Support</string>
+    <string name="unica_troubleshooting_title">Troubleshooting</string>
+    <string name="unica_troubleshooting_summary">Module conflicts and AI log analysis</string>
+</resources>

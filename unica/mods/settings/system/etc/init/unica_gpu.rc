@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# On-demand only. No GPU writes, tuning or recovery flashing during boot.
+service unica_gpu /system/bin/unica-gpu
+    user root
+    group system cache
+    capabilities
+    seclabel u:r:unica_gpu:s0
+    disabled
+    oneshot
+
+on post-fs-data
+    mkdir /data/misc/unica_gpu 0750 root system
+    restorecon /data/misc/unica_gpu
+    mkdir /data/misc/unica_gpu/requests 0770 system system
+    mkdir /data/misc/unica_gpu/responses 0750 root system
+    mkdir /data/misc/unica_gpu/archives 0750 root root
+    # Existing data may have inherited generic labels despite a cached sehash.
+    restorecon_recursive --force /data/misc/unica_gpu
+    mkdir /cache/unica-gpu 0750 root system
+    restorecon_recursive --force /cache/unica-gpu
+    restorecon /dev/block/sda28
+    restorecon /dev/block/sde20
+
+on property:sys.unica.gpu.request=*
+    start unica_gpu

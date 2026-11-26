@@ -9,3 +9,13 @@
 /system/etc/unica/notification_ai_scpm_policies\.json u:object_r:system_file:s0
 /system/etc/unica/now_nudge_defaults\.sh u:object_r:system_file:s0
 /system/etc/unica/scpm_allowlist_apply\.sh u:object_r:system_file:s0
+/system/bin u:object_r:system_file:s0
+/system/bin/unica-battery u:object_r:unica_battery_exec:s0
+/system/etc/init/unica_battery\.rc u:object_r:system_file:s0
+/system/bin/unica-ota-stage u:object_r:unica_ota_exec:s0
+/system/etc/init/unica_ota\.rc u:object_r:system_file:s0
+/system/bin/unica-movecert u:object_r:unica_movecert_exec:s0
+/system/etc/init/unica_movecert\.rc u:object_r:system_file:s0
+/system/bin/unica-gpu u:object_r:unica_gpu_exec:s0
+/system/etc/init/unica_gpu\.rc u:object_r:system_file:s0
+/system/etc/unica/gpu(/.*)? u:object_r:system_file:s0

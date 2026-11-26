@@ -1,0 +1,6 @@
+<!-- Merge into DressRoom <application>, never into SystemUI/AODService. -->
+<provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="dev.denver.dressroomadvanced.SettingsProvider"
+    android:authorities="io.mesalabs.unica.dressroomadvanced.settings"
+    android:exported="true" android:grantUriPermissions="false" />
+<!-- Exported access is checked by Binder UID/package in every provider entrypoint. -->

@@ -1,0 +1,29 @@
+--- a/examples/qualcomm/oss_scripts/llama/qnn_multimodal_runner.cpp
++++ b/examples/qualcomm/oss_scripts/llama/qnn_multimodal_runner.cpp
+@@ -101,6 +101,8 @@
+     eval_mode,
+     1,
+     "0: TokenGenerator(kv) / 1: HybridMode (prefill+kv) / 2: Lookahead Decoding");
++
++DEFINE_bool(text_only, false, "Generate text without image input.");
+ 
+ DEFINE_bool(
+     shared_buffer,
+@@ -176,7 +178,7 @@
+     }
+   };
+   executorch::extension::llm::GenerationConfig config;
+-  config.echo = true;
++  config.echo = !FLAGS_text_only;
+   config.ignore_eos = false;
+   config.max_new_tokens = -1;
+   config.warming = false;
+@@ -193,7 +195,7 @@
+         !FLAGS_audio_path.empty(), "For ALM, please specify audio path.");
+     audio_raw_files = example::load_raw_files(FLAGS_audio_path.c_str());
+   }
+-  if (modality_of(model_version) == example::Modality::kVision) {
++  if (!FLAGS_text_only && modality_of(model_version) == example::Modality::kVision) {
+     ET_CHECK_MSG(
+         !FLAGS_image_path.empty(), "For VLM, please specify image path.");
+     image_raw_files = example::load_raw_files(FLAGS_image_path.c_str());

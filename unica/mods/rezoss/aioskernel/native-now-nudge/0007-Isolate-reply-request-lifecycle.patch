@@ -1,0 +1,204 @@
+Subject: [PATCH] Isolate native reply request completion and processor ownership
+
+Apply after native patches 0001-0006 and Rezoss 0027. Extends 0004's wait
+method and 0003's delivery method without changing their waits or routing.
+Each result identity owns its latch, processor and memory lease. Completion
+cannot signal a newer request. Scope cancellation replaces global exit/job
+signals, and timeout/exception cleanup closes only owned resources. Callbacks
+after cleanup are ignored. Existing register counts and labels are preserved.
+Requires ReplyRequests.java from the existing generated client helper DEX.
+
+--- a/smali_classes15/com/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver.smali
++++ b/smali_classes15/com/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver.smali
+@@ -4821,7 +4821,11 @@
+ 
+     invoke-direct {v3, v6}, Ljava/util/concurrent/CountDownLatch;-><init>(I)V
+ 
+-    sput-object v3, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->latch:Ljava/util/concurrent/CountDownLatch;
++    move-object/from16 v10, p6
++
++    invoke-static {v9, v3, v10}, Lio/mesalabs/rezoss/ai/ReplyRequests;->begin(Ljava/util/concurrent/atomic/AtomicReference;Ljava/util/concurrent/CountDownLatch;Ljava/lang/Object;)V
++
++    :rezoss_request_try_start
+ 
+     sget-object v3, Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/PromptProcessorFactory;->INSTANCE:Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/PromptProcessorFactory;
+ 
+@@ -4829,10 +4833,12 @@
+ 
+     move-result-object v3
+ 
+-    sput-object v3, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->promptProcessor:Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/PromptProcessor;
++    invoke-static {v9, v3}, Lio/mesalabs/rezoss/ai/ReplyRequests;->processor(Ljava/util/concurrent/atomic/AtomicReference;Ljava/lang/Object;)V
+ 
+     sget-object v14, Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/sr/LlmMemoryManager;->INSTANCE:Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/sr/LlmMemoryManager;
+ 
++    invoke-static {v9, v14}, Lio/mesalabs/rezoss/ai/ReplyRequests;->memory(Ljava/util/concurrent/atomic/AtomicReference;Ljava/lang/Object;)V
++
+     invoke-virtual {v14, v8}, Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/sr/LlmMemoryManager;->request(Landroid/content/Context;)V
+ 
+     sget-object v3, Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/PromptBuilderFactory;->INSTANCE:Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/PromptBuilderFactory;
+@@ -4881,7 +4887,11 @@
+ 
+     invoke-direct/range {v2 .. v10}, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver$runSuggestedReplies$promptCallback$1;-><init>(Lkotlinx/coroutines/x;JLcom/samsung/android/smartsuggestions/service/smartreply/base/Conversation;Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/SmartReplyPromptBuilder;Landroid/content/Context;Ljava/util/concurrent/atomic/AtomicReference;Ljava/lang/String;)V
+ 
+-    sget-object v15, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->promptProcessor:Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/PromptProcessor;
++    invoke-static {v9}, Lio/mesalabs/rezoss/ai/ReplyRequests;->processor(Ljava/util/concurrent/atomic/AtomicReference;)Ljava/lang/Object;
++
++    move-result-object v15
++
++    check-cast v15, Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/PromptProcessor;
+ 
+     if-eqz v15, :cond_0
+ 
+@@ -4900,7 +4910,9 @@
+     invoke-interface/range {v15 .. v20}, Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/PromptProcessor;->textPrompting(Ljava/lang/String;Ljava/lang/String;Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/PromptCallback;Ljava/util/List;Ljava/lang/String;)V
+ 
+     :cond_0
+-    sget-object v2, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->latch:Ljava/util/concurrent/CountDownLatch;
++    invoke-static {v9}, Lio/mesalabs/rezoss/ai/ReplyRequests;->latch(Ljava/util/concurrent/atomic/AtomicReference;)Ljava/util/concurrent/CountDownLatch;
++
++    move-result-object v2
+ 
+     if-eqz v2, :cond_1
+ 
+@@ -4920,7 +4932,7 @@
+     :rezoss_reply_wait_ready
+     sget-object v3, Ljava/util/concurrent/TimeUnit;->SECONDS:Ljava/util/concurrent/TimeUnit;
+ 
+-    invoke-virtual {v2, v6, v7, v3}, Ljava/util/concurrent/CountDownLatch;->await(JLjava/util/concurrent/TimeUnit;)Z
++    invoke-static {v9, v6, v7}, Lio/mesalabs/rezoss/ai/ReplyRequests;->await(Ljava/util/concurrent/atomic/AtomicReference;J)V
+ 
+     :cond_1
+     new-instance v2, Ljava/lang/StringBuilder;
+@@ -4937,18 +4949,11 @@
+ 
+     invoke-static {v11, v2}, Lxc/e;->i(Ljava/lang/String;Ljava/lang/String;)V
+ 
+-    sget-object v2, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->promptProcessor:Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/PromptProcessor;
+-
+-    if-eqz v2, :cond_2
+-
+-    invoke-interface {v2}, Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/PromptProcessor;->close()V
+-
++    :rezoss_request_try_end
+     :cond_2
+-    sput-object v13, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->promptProcessor:Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/PromptProcessor;
+-
+-    invoke-virtual {v14}, Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/sr/LlmMemoryManager;->release()V
+-
+-    sget-object v2, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->latch:Ljava/util/concurrent/CountDownLatch;
++    invoke-static {v9}, Lio/mesalabs/rezoss/ai/ReplyRequests;->finish(Ljava/util/concurrent/atomic/AtomicReference;)Ljava/util/concurrent/CountDownLatch;
++
++    move-result-object v2
+ 
+     const-string/jumbo v3, "runSuggestedReplies, "
+ 
+@@ -5105,6 +5110,14 @@
+     invoke-direct {v0, v8, v2, v1}, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->sendFailureAction(Landroid/content/Context;Lcom/samsung/android/smartsuggestions/service/smartreply/constants/SmartReplyConstants$FailType;Lcom/samsung/android/smartsuggestions/service/smartreply/base/SmartReplyRequestParam;)V
+ 
+     return-void
++    :rezoss_request_exception
++    move-exception v2
++
++    invoke-static {v9}, Lio/mesalabs/rezoss/ai/ReplyRequests;->finish(Ljava/util/concurrent/atomic/AtomicReference;)Ljava/util/concurrent/CountDownLatch;
++
++    throw v2
++
++    .catchall {:rezoss_request_try_start .. :rezoss_request_try_end} :rezoss_request_exception
+ .end method
+ 
+ .method public static synthetic runSuggestedReplies$default(Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;Lcom/samsung/android/smartsuggestions/service/smartreply/base/Conversation;Ljava/lang/String;Lcom/samsung/android/smartsuggestions/service/smartreply/base/SmartReplyRequestParam;JLkotlinx/coroutines/x;Landroid/content/Context;Ljava/lang/String;ILjava/lang/Object;)V
+@@ -7404,12 +7417,6 @@
+     invoke-interface {p0, v0}, Lkotlinx/coroutines/w0;->cancel(Ljava/util/concurrent/CancellationException;)V
+ 
+     :cond_1
+-    sget-object p0, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->latch:Ljava/util/concurrent/CountDownLatch;
+-
+-    if-eqz p0, :cond_2
+-
+-    invoke-virtual {p0}, Ljava/util/concurrent/CountDownLatch;->countDown()V
+-
+     :cond_2
+     :goto_0
+     sget-object p0, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->jobMap:Ljava/util/Map;
+@@ -7697,14 +7704,7 @@
+ 
+     if-nez p2, :cond_2
+ 
+-    sget-object p2, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->promptProcessor:Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/PromptProcessor;
+-
+-    if-eqz p2, :cond_1
+-
+-    invoke-interface {p2}, Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/PromptProcessor;->close()V
+-
+     :cond_1
+-    sput-object v0, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->promptProcessor:Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/PromptProcessor;
+ 
+     :cond_2
+     sget-object p2, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->isFtuSent:Ljava/util/Map;
+@@ -7713,14 +7713,7 @@
+ 
+     invoke-interface {p2, p3, v1}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+ 
+-    sget-object p2, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->latch:Ljava/util/concurrent/CountDownLatch;
+-
+-    if-eqz p2, :cond_3
+-
+-    invoke-virtual {p2}, Ljava/util/concurrent/CountDownLatch;->countDown()V
+-
+     :cond_3
+-    sput-object v0, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->latch:Ljava/util/concurrent/CountDownLatch;
+ 
+     const-string p2, "SmartReplyResolver[reply]"
+ 
+@@ -7789,14 +7782,7 @@
+ 
+     if-nez v0, :cond_2
+ 
+-    sget-object v0, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->promptProcessor:Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/PromptProcessor;
+-
+-    if-eqz v0, :cond_1
+-
+-    invoke-interface {v0}, Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/PromptProcessor;->close()V
+-
+     :cond_1
+-    sput-object v1, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->promptProcessor:Lcom/samsung/android/smartsuggestions/service/smartreply/prompt/base/PromptProcessor;
+ 
+     :cond_2
+     invoke-direct {p0, p1, p2}, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->sendExitAction(Landroid/content/Context;Ljava/lang/String;)V
+--- a/smali_classes15/com/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver$runSuggestedReplies$promptCallback$1.smali
++++ b/smali_classes15/com/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver$runSuggestedReplies$promptCallback$1.smali
+@@ -239,15 +239,7 @@
+ 
+     invoke-direct/range {v1 .. v6}, Lcom/samsung/android/smartsuggestions/service/smartreply/l;-><init>(JLjava/util/List;Lcom/samsung/android/smartsuggestions/service/smartreply/constants/SmartReplyConstants$FailType;I)V
+ 
+-    invoke-virtual {v0, v1}, Ljava/util/concurrent/atomic/AtomicReference;->set(Ljava/lang/Object;)V
+-
+-    invoke-static {}, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->access$getLatch$p()Ljava/util/concurrent/CountDownLatch;
+-
+-    move-result-object p0
+-
+-    if-eqz p0, :cond_1
+-
+-    invoke-virtual {p0}, Ljava/util/concurrent/CountDownLatch;->countDown()V
++    invoke-static {v0, v1}, Lio/mesalabs/rezoss/ai/ReplyRequests;->publish(Ljava/util/concurrent/atomic/AtomicReference;Ljava/lang/Object;)V
+ 
+     :cond_1
+     return-void
+@@ -327,15 +319,7 @@
+ 
+     invoke-direct/range {v1 .. v6}, Lcom/samsung/android/smartsuggestions/service/smartreply/l;-><init>(JLjava/util/List;Lcom/samsung/android/smartsuggestions/service/smartreply/constants/SmartReplyConstants$FailType;I)V
+ 
+-    invoke-virtual {v0, v1}, Ljava/util/concurrent/atomic/AtomicReference;->set(Ljava/lang/Object;)V
+-
+-    invoke-static {}, Lcom/samsung/android/smartsuggestions/service/smartreply/SmartReplyResolver;->access$getLatch$p()Ljava/util/concurrent/CountDownLatch;
+-
+-    move-result-object p0
+-
+-    if-eqz p0, :cond_1
+-
+-    invoke-virtual {p0}, Ljava/util/concurrent/CountDownLatch;->countDown()V
++    invoke-static {v0, v1}, Lio/mesalabs/rezoss/ai/ReplyRequests;->publish(Ljava/util/concurrent/atomic/AtomicReference;Ljava/lang/Object;)V
+ 
+     :cond_1
+     return-void

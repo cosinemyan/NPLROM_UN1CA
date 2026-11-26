@@ -1,0 +1,55 @@
+--- a/smali/com/samsung/android/aioskernelservice/AIOSKernelService.smali
++++ b/smali/com/samsung/android/aioskernelservice/AIOSKernelService.smali
+@@ -1099,6 +1099,16 @@
+ .method public onBind(Landroid/content/Intent;)Landroid/os/IBinder;
+     .locals 3
+ 
++    invoke-static {p0}, Lio/mesalabs/rezoss/nudge/TextBackend;->bind(Landroid/app/Service;)Landroid/os/IBinder;
++
++    move-result-object v0
++
++    if-eqz v0, :rezoss_original_bind
++
++    return-object v0
++
++    :rezoss_original_bind
++
+     const-string v0, "intent"
+ 
+     invoke-static {p1, v0}, LT0/e;->e(Ljava/lang/Object;Ljava/lang/String;)V
+@@ -1139,6 +1149,16 @@
+ 
+     invoke-super {p0}, Landroid/app/Service;->onCreate()V
+ 
++    invoke-static {p0}, Lio/mesalabs/rezoss/nudge/TextBackend;->create(Landroid/app/Service;)Z
++
++    move-result v0
++
++    if-eqz v0, :rezoss_original_create
++
++    return-void
++
++    :rezoss_original_create
++
+     sget-object v0, Lcom/samsung/android/aioskernelservice/AIOSKernelService;->sDestroyThread:Ljava/lang/Thread;
+ 
+     if-eqz v0, :cond_0
+@@ -1176,6 +1196,18 @@
+ .method public onDestroy()V
+     .locals 3
+ 
++    invoke-static {p0}, Lio/mesalabs/rezoss/nudge/TextBackend;->close(Landroid/app/Service;)Z
++
++    move-result v0
++
++    if-eqz v0, :rezoss_original_destroy
++
++    invoke-super {p0}, Landroid/app/Service;->onDestroy()V
++
++    return-void
++
++    :rezoss_original_destroy
++
+     iget-object v0, p0, Lcom/samsung/android/aioskernelservice/AIOSKernelService;->TAG:Ljava/lang/String;
+ 
+     new-instance v1, Ljava/lang/StringBuilder;

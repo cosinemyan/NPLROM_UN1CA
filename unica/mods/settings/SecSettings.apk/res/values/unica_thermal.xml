@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unica_relax_sdhms_title">Relax SDHMS</string>
+    <string name="unica_relax_sdhms_checking">Checking Samsung thermal policy…</string>
+    <string name="unica_relax_sdhms_off">Samsung’s normal thermal policy is active.</string>
+    <string name="unica_relax_sdhms_on">Relaxed thermal policy is active. Higher temperatures may cause burns or damage.</string>
+    <string name="unica_relax_sdhms_applying">Restarting Samsung Device Health Manager to apply the policy…</string>
+    <string name="unica_relax_sdhms_pending">The saved choice and active policy differ, or SDHMS is still starting. Turn off to restore the normal policy.</string>
+    <string name="unica_relax_sdhms_unavailable">Cannot verify SDHMS. Reopen this page to check again.</string>
+    <string name="unica_relax_sdhms_failed">Could not confirm the requested policy. The switch shows the saved choice. Turn off to restore normal limits, then reopen this page to verify.</string>
+    <string name="unica_relax_sdhms_warning_title">High temperature danger</string>
+    <string name="unica_relax_sdhms_warning">Relax SDHMS replaces Samsung’s normal thermal policy with a less restrictive fallback. This removes software CPU/GPU limits and model-specific overheat controls, and can affect charging and other heat controls.\n\nThe phone may become dangerously hot, cause skin burns, shorten battery life, or damage hardware. External cooling does not guarantee safe internal temperatures. Kernel protections remain separate and do not guarantee safety.\n\nThis choice stays enabled after reboot. Stop using the phone if it becomes hot and turn this option off to restore Samsung’s normal policy. SDHMS will restart briefly; the phone will not reboot.</string>
+    <string name="unica_relax_sdhms_enable">Enable anyway</string>
+</resources>

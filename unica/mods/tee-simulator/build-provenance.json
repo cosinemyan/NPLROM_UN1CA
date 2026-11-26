@@ -1,0 +1,9 @@
+{
+  "upstream": "06f9f2ee11b86c5144a1f345f70f8fb23cae4493",
+  "abi": "arm64-v8a",
+  "native_api_floor": 35,
+  "rom_sdk": 37,
+  "ndk": "28.2.13676358",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "source_manifest_sha256": "0f657ff5c4e3889e749c0ced4bae85de5ff8e8268db7cdd0583360258bd8aaff"
+}

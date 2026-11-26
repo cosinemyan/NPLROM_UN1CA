@@ -1,0 +1,29 @@
+Dressroom-Advanced native APK port for UN1CA / dm3q
+
+Upstream: https://github.com/BlueOutside/Dressroom-Advanced
+Author: @BlueOutside (https://github.com/BlueOutside)
+Reference: 5bb66521ee7d82d51f30a1238e18dd153b263c54 (1.1.5)
+Visible credit: "Dressroom-Advanced" by BlueOutside
+Native adaptation and integration: Rezoss, 2026
+
+This is an unofficial modified ROM integration. The fullport directory retains
+upstream UI, font, depth, media and widget algorithms, replacing LSPosed entry
+points with explicit calls patched into the corresponding Samsung APKs.
+No libxposed library, module loader, runtime interception registry or LSPosed
+service is packaged. Reflection resolves Samsung objects used by those fixed
+calls; it does not install hooks.
+
+UN1CA Font Selector remains the backend. The optional Use Display font control
+resolves the font actually applied by Settings using Samsung's Typeface API.
+Private per-user JSON, mask references and font imports are served by a provider
+inside DressRoom. No companion application or world-readable /data file is used.
+
+Source compilation, ordered patch preflight and temporary APK rebuilds do not
+establish device/UI/rendering compatibility. The full ROM and connected device
+have not been built, flashed, installed or tested as part of this port.
+
+Upstream's source-available license is retained in LICENSE.upstream. Distributors
+must retain attribution, visibly credit and link the upstream project on release
+pages, provide corresponding covered source/build inputs, and distribute covered
+code and bundles without mandatory payment. Covered upstream modifications
+retain those terms; independent UN1CA integration scripts retain their own license.

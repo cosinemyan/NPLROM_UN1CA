@@ -1,5 +1,6 @@
 {
   "policy_version": 1000000000,
+  "aiNotificationNudgeEnabled": true,
   "summary_policies": [10, 3, 3, 9, 12, 40],
   "summary_exclude_keywords": "부고, 訃告, 사망, 별세",
   "summary_allow_list": [

@@ -1,0 +1,13 @@
+--- a/include/net/cfg80211.h
++++ b/include/net/cfg80211.h
+@@ -19,6 +19,10 @@
+ #include <linux/netlink.h>
+ #include <linux/skbuff.h>
+ #include <linux/nl80211.h>
++
++/* Recovered from the untouched S23U cfg80211 BTF enum, value 64. */
++#define NL80211_EXT_FEATURE_AUTH_TX_RANDOM_TA \
++	((enum nl80211_ext_feature_index)64)
+ #include <linux/if_ether.h>
+ #include <linux/ieee80211.h>
+ #include <linux/net.h>

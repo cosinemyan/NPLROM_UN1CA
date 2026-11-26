@@ -1,0 +1,80 @@
+--- a/examples/qualcomm/oss_scripts/llama/qnn_llama_runner.cpp
++++ b/examples/qualcomm/oss_scripts/llama/qnn_llama_runner.cpp
+@@ -21,7 +21,16 @@
+ #include <executorch/runtime/platform/log.h>
+ #include <gflags/gflags.h>
+ #include <fstream>
++#include <sstream>
++#include <executorch/extension/llm/runner/util.h>
++#include <executorch/extension/llm/runner/llm_runner_helper.h>
+ #include <vector>
++
++DEFINE_string(prompt_file, "", "Read UTF-8 prompt from private file.");
++DEFINE_bool(count_only, false, "Tokenize prompt without loading the model.");
++DEFINE_bool(load_only, false, "Load and validate model, then exit.");
++DEFINE_int32(max_new_tokens, 96, "Maximum response tokens.");
++DEFINE_bool(reply_only, false, "Exclude prompt from output.");
+ 
+ DEFINE_string(decoder_model_version, "llama2", "The decoder model to execute.");
+ DEFINE_string(
+@@ -182,7 +191,7 @@
+         formatted_prompt.append(system_prompt);
+         formatted_prompt.append("<|im_end|>\n");
+       }
+-      formatted_prompt.append("<|im_start|>assistant");
++      formatted_prompt.append("<|im_start|>assistant\n<think>\n\n</think>\n\n");
+       break;
+     case example::DecoderModelVersion::kSmollm2_135m:
+       if (!system_prompt.empty()) {
+@@ -245,6 +254,9 @@
+       FLAGS_gcap,
+       nullptr,
+       std::move(attention_sink_rope_module));
++  auto load_error = runner.load();
++  ET_CHECK_MSG(load_error == executorch::runtime::Error::Ok, "Model load failed: %d", (int)load_error);
++  if (FLAGS_load_only) return;
+   auto decoder_model_version = runner.get_decoder_model_version();
+   std::vector<char> buf;
+   buf.reserve(5 * FLAGS_seq_len); // assume each token is around 5 char
+@@ -265,6 +277,8 @@
+       static_cast<float>(FLAGS_temperature),
+       0,
+       0};
++  config.echo = !FLAGS_reply_only;
++  config.max_new_tokens = FLAGS_max_new_tokens;
+   if (use_tokenized_prompt) {
+     runner.generate_from_prompt_or_file(
+         FLAGS_tokenized_prompt.c_str(), use_tokenized_prompt, config, callback);
+@@ -275,8 +289,9 @@
+         std::string formatted_prompt;
+         formatted_prompt = get_formatted_prompt(
+             prompt, FLAGS_system_prompt, decoder_model_version.get());
+-        runner.generate_from_prompt_or_file(
++        auto error = runner.generate_from_prompt_or_file(
+             formatted_prompt.c_str(), use_tokenized_prompt, config, callback);
++        ET_CHECK_MSG(error == executorch::runtime::Error::Ok, "Generation failed: %d", (int)error);
+       }
+     }
+   }
+@@ -288,6 +303,21 @@
+ int main(int argc, char** argv) {
+   std::vector<std::string> prompts = CollectPrompts(argc, argv);
+   gflags::ParseCommandLineFlags(&argc, &argv, true);
++  if (!FLAGS_prompt_file.empty()) {
++    std::ifstream input(FLAGS_prompt_file);
++    ET_CHECK_MSG(input.good(), "Cannot read prompt file");
++    std::ostringstream content; content << input.rdbuf();
++    prompts = {content.str()};
++  }
++  if (FLAGS_count_only) {
++    ET_CHECK_MSG(prompts.size() == 1, "Token count needs one prompt");
++    auto tokenizer = executorch::extension::llm::load_tokenizer(FLAGS_tokenizer_path);
++    ET_CHECK_MSG(tokenizer != nullptr, "Tokenizer load failed");
++    auto tokens = tokenizer->encode(prompts[0], 0, 0);
++    ET_CHECK_MSG(tokens.ok(), "Tokenization failed");
++    std::ofstream output(FLAGS_output_path); output << tokens.get().size();
++    return 0;
++  }
+   if (!gflags::GetCommandLineFlagInfoOrDie("prompt").is_default &&
+       !gflags::GetCommandLineFlagInfoOrDie("tokenized_prompt").is_default) {
+     ET_CHECK_MSG(false, "Only provide prompt or tokenized_input but not both.");

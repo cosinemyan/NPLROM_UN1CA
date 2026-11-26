@@ -1,0 +1,10 @@
+{
+  "reference_repository": "https://github.com/eltavine/Duck-ToolBox",
+  "reference_revision": "ec5632982c26a49fe4e262814b373ed4e8917477",
+  "aosp_asset_source": "crates/duck-tricky-store/assets/aosp-keybox.xml",
+  "aosp_asset_sha256": "57ff10ee68b76aecf7760da9bb3bba621d8509d8196e10a22d89aa8371cbb849",
+  "repository_protocol_source": "ui/src/features/tricky-store/pages/RepoPage.vue",
+  "community_origin": "https://keybox.kowx712.cc",
+  "notes": "Native implementation; uses existing Settings.Secure unica_keybox_data and leaves the spoof toggle unchanged.",
+  "browser_architecture": "Normal-UID INTERNET-only helper io.mesalabs.unica.keybox.browser. Returns selected URL to Settings; no keybox material or Settings.Secure access."
+}

@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: @rezoss_reza <rezoss79@users.noreply.github.com>
+Date: Sat, 19 Sep 2026 00:00:00 +0200
+Subject: [PATCH] Preserve Now Nudge pass-package notification message
+
+When PdeNotificationListenerService.filterOutByClassifier() sees a
+notification that fails Samsung's core classifier but passes the package
+allowlist, it rebuilds the notification raw data before returning it.
+
+Keep the original notification message in that pass-package fallback instead
+of replacing it with an empty string so downstream Now Nudge processing still
+has the app-exposed message payload.
+
+---
+diff --git a/smali_classes11/com/samsung/android/moneta/datacollector/application/notification/PdeNotificationListenerService.smali b/smali_classes11/com/samsung/android/moneta/datacollector/application/notification/PdeNotificationListenerService.smali
+--- a/smali_classes11/com/samsung/android/moneta/datacollector/application/notification/PdeNotificationListenerService.smali
++++ b/smali_classes11/com/samsung/android/moneta/datacollector/application/notification/PdeNotificationListenerService.smali
+@@ -1995,7 +1995,7 @@
+
+     iget-object v12, v0, Lxo/b;->h:Ljava/lang/String;
+
+-    const-string v13, ""
++    iget-object v13, v0, Lxo/b;->i:Ljava/lang/String;
+
+     invoke-direct/range {v3 .. v13}, Lxo/b;-><init>(Ljava/lang/String;JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V

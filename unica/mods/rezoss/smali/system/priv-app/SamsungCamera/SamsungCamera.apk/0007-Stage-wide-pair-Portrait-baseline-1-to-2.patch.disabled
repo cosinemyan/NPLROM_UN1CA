@@ -1,0 +1,280 @@
+From: UN1CA <unica@local>
+Subject: [PATCH] Stage dm3q wide-pair Portrait baseline at1x to2x
+
+Keep failed trial0006 disabled. Pin rear Portrait to camera23 and the legacy
+DualBokehPhotoMaker, with1..2 bounds matching the inspected provider metadata.
+Start rear sessions at1x; ignore remembered3x values. Omit both tele shortcuts.
+Clamp live Portrait camera23 requests to1000..2000 before deriving Samsung
+scaler.zoomRatio and the center crop from that same value. Preserve existing
+register counts and the front Portrait initialization value. No vendor library,
+calibration or native crop-command adaptation. Runtime baseline validation is
+required; this is not a validated1..2x port and does not enable3x.
+
+--- a/smali_classes2/te/l0.smali
++++ b/smali_classes2/te/l0.smali
+@@ -1450,6 +1450,24 @@
+ .method public static g(Ll9/j0;IIZ)Ll9/x;
+     .locals 3
+
++    if-nez p1, :cond_wide_baseline_original
++
++    sget-object v0, Ll9/j0;->SHOOTING_MODE_PORTRAIT:Ll9/j0;
++
++    if-ne p0, v0, :cond_wide_baseline_original
++
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideBaseline;->enabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_baseline_original
++
++    sget-object v0, Ll9/x;->BACK_NORMAL_DUAL_PORTRAIT:Ll9/x;
++
++    return-object v0
++
++    :cond_wide_baseline_original
++
+     if-eqz p1, :cond_4
+
+     const/4 p2, 0x1
+--- a/smali_classes2/te/f1.smali
++++ b/smali_classes2/te/f1.smali
+@@ -466,7 +466,20 @@
+
+     if-eqz v7, :cond_b
+
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideBaseline;->enabled()Z
++
++    move-result v7
++
++    if-eqz v7, :cond_wide_baseline_table_default
++
++    sget-object v7, Ll9/x;->BACK_NORMAL_DUAL_PORTRAIT:Ll9/x;
++
++    goto :goto_wide_baseline_table
++
++    :cond_wide_baseline_table_default
+     sget-object v7, Ll9/x;->BACK_SEAMLESS_ZOOM:Ll9/x;
++
++    :goto_wide_baseline_table
+
+     invoke-virtual {v1, v14, v7}, Landroid/util/SparseArray;->put(ILjava/lang/Object;)V
+
+--- a/smali_classes2/u8/g.smali
++++ b/smali_classes2/u8/g.smali
+@@ -559,6 +559,17 @@
+
+     if-eqz p0, :cond_5
+
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideBaseline;->enabled()Z
++
++    move-result p0
++
++    if-eqz p0, :cond_wide_baseline_original_maker
++
++    sget-object p0, Lcom/samsung/android/camera/core2/maker/MakerFactory;->MAKER_DUAL_BOKEH_PHOTO:Ljava/lang/Class;
++
++    goto :goto_0
++
++    :cond_wide_baseline_original_maker
+     check-cast p1, Lp8/e0;
+
+     iget-object p0, p1, Lp8/e0;->v:Lcom/sec/android/app/camera/Camera;
+--- a/smali_classes2/u8/e.smali
++++ b/smali_classes2/u8/e.smali
+@@ -684,6 +684,36 @@
+
+     iget-object v0, p0, Lu8/e;->s:Lcom/samsung/android/camera/core2/CamCapability;
+
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideBaseline;->enabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_baseline_f_original
++
++    sget-object v0, Ll9/g3;->PORTRAIT:Ll9/g3;
++
++    if-ne p1, v0, :cond_wide_baseline_f_original
++
++    iget-object v0, p0, Lu8/e;->s:Lcom/samsung/android/camera/core2/CamCapability;
++
++    iget-object v0, v0, Lcom/samsung/android/camera/core2/CamCapability;->c:Ljava/lang/String;
++
++    const-string v1, "23"
++
++    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_baseline_f_original
++
++    const/high16 v0, 0x40000000
++
++    return v0
++
++    :cond_wide_baseline_f_original
++
++    iget-object v0, p0, Lu8/e;->s:Lcom/samsung/android/camera/core2/CamCapability;
++
+     sget-object v1, Ll9/g3;->NOT_SUPPORTED:Ll9/g3;
+
+     if-ne p1, v1, :cond_0
+@@ -850,6 +880,36 @@
+
+ .method public final g(Ll9/g3;Ll9/a2;)F
+     .locals 2
++
++    iget-object v0, p0, Lu8/e;->s:Lcom/samsung/android/camera/core2/CamCapability;
++
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideBaseline;->enabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_baseline_g_original
++
++    sget-object v0, Ll9/g3;->PORTRAIT:Ll9/g3;
++
++    if-ne p1, v0, :cond_wide_baseline_g_original
++
++    iget-object v0, p0, Lu8/e;->s:Lcom/samsung/android/camera/core2/CamCapability;
++
++    iget-object v0, v0, Lcom/samsung/android/camera/core2/CamCapability;->c:Ljava/lang/String;
++
++    const-string v1, "23"
++
++    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_baseline_g_original
++
++    const/high16 v0, 0x3f800000
++
++    return v0
++
++    :cond_wide_baseline_g_original
+
+     iget-object v0, p0, Lu8/e;->s:Lcom/samsung/android/camera/core2/CamCapability;
+
+--- a/smali_classes2/ud/z.smali
++++ b/smali_classes2/ud/z.smali
+@@ -71,6 +71,12 @@
+     invoke-virtual {v6, v1, v0}, Lv/c;->a(ILl9/j0;)V
+
+     :cond_1
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideBaseline;->enabled()Z
++
++    move-result v0
++
++    if-nez v0, :cond_3
++
+     sget-object v0, Le5/d;->SUPPORT_BACK_TELE_CAMERA:Le5/d;
+
+     invoke-static {v0}, Le5/g;->o(Le5/d;)Z
+@@ -242,6 +248,31 @@
+
+ .method public final l(I)I
+     .locals 2
++
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideBaseline;->enabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_baseline_zoom_original
++
++    iget-object v0, p0, Lcd/a;->a:Ll9/s;
++
++    check-cast v0, Lcom/sec/android/app/camera/Camera;
++
++    invoke-virtual {v0}, Lcom/sec/android/app/camera/Camera;->U()Z
++
++    move-result v0
++
++    if-nez v0, :cond_wide_baseline_front_zoom
++
++    const/16 v0, 0x3e8
++
++    return v0
++
++    :cond_wide_baseline_front_zoom
++    return p1
++
++    :cond_wide_baseline_zoom_original
+
+     sget-object v0, Le5/d;->SUPPORT_PORTRAIT_SEAMLESS_ZOOM:Le5/d;
+
+--- /dev/null
++++ b/smali_classes5/com/rezoss/camera/PortraitWideBaseline.smali
+@@ -0,0 +1,30 @@
++.class public final Lcom/rezoss/camera/PortraitWideBaseline;
++.super Ljava/lang/Object;
++
++.method public static enabled()Z
++    .locals 2
++
++    sget-object v0, Landroid/os/Build;->DEVICE:Ljava/lang/String;
++
++    const-string v1, "dm3"
++
++    invoke-virtual {v0, v1}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
++
++    move-result v0
++
++    if-eqz v0, :disabled
++
++    sget-object v0, Le5/d;->SUPPORT_PORTRAIT_SEAMLESS_ZOOM:Le5/d;
++
++    invoke-static {v0}, Le5/g;->o(Le5/d;)Z
++
++    move-result v0
++
++    return v0
++
++    :disabled
++    const/4 v0, 0x0
++
++    return v0
++.end method
++
+--- a/smali_classes2/x8/p.smali
++++ b/smali_classes2/x8/p.smali
+@@ -1027,6 +1027,39 @@
+
+     if-lez v0, :cond_2
+
++    invoke-static {}, Lcom/rezoss/camera/PortraitWideBaseline;->enabled()Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_baseline_request_original
++
++    sget-object v0, Ll9/g3;->PORTRAIT:Ll9/g3;
++
++    if-ne v3, v0, :cond_wide_baseline_request_original
++
++    iget-object v0, v2, Lcom/samsung/android/camera/core2/CamCapability;->c:Ljava/lang/String;
++
++    const-string v3, "23"
++
++    invoke-virtual {v3, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
++
++    move-result v0
++
++    if-eqz v0, :cond_wide_baseline_request_original
++
++    const/16 v0, 0x3e8
++
++    invoke-static {p3, v0}, Ljava/lang/Math;->max(II)I
++
++    move-result p3
++
++    const/16 v0, 0x7d0
++
++    invoke-static {p3, v0}, Ljava/lang/Math;->min(II)I
++
++    move-result p3
++
++    :cond_wide_baseline_request_original
+     invoke-virtual {v2}, Lcom/samsung/android/camera/core2/CamCapability;->U()Landroid/graphics/Rect;
+
+     move-result-object v0
