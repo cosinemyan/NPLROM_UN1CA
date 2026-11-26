@@ -255,6 +255,8 @@ ADD_TO_WORK_DIR()
     local GROUP="$5"
     local MODE="$6"
     local LABEL="$7"
+    # Keep caller label for child entries when policy lookup returns empty.
+    local DEFAULT_LABEL="$7"
 
     if [ ! -d "$SOURCE" ]; then
         if [ "$(cut -d "/" -f 2 -s <<< "$SOURCE")" ]; then
@@ -364,6 +366,9 @@ ADD_TO_WORK_DIR()
             LOGW "No file_context entry found for \"$ENTRY\" in \"${SOURCE//$SRC_DIR\//}\". Using default value"
 
             LABEL="$(_GET_SELINUX_LABEL "$PARTITION" "/$ENTRY")"
+            if [ -z "$LABEL" ]; then
+                LABEL="${DEFAULT_LABEL:-u:object_r:system_file:s0}"
+            fi
 
             echo "/$(_HANDLE_SPECIAL_CHARS "$ENTRY") $LABEL" >> "$WORK_DIR/configs/file_context-$PARTITION"
         fi
@@ -405,6 +410,9 @@ ADD_TO_WORK_DIR()
                     LOGW "No file_context entry found for \"$f\" in \"${SOURCE//$SRC_DIR\//}\". Using default value"
 
                     LABEL="$(_GET_SELINUX_LABEL "$PARTITION" "/$f")"
+                    if [ -z "$LABEL" ]; then
+                        LABEL="${DEFAULT_LABEL:-u:object_r:system_file:s0}"
+                    fi
 
                     echo "/$(_HANDLE_SPECIAL_CHARS "$f") $LABEL" >> "$WORK_DIR/configs/file_context-$PARTITION"
                 fi
@@ -440,6 +448,9 @@ ADD_TO_WORK_DIR()
                     LOGW "No file_context entry found for \"$TMP\" in \"${SOURCE//$SRC_DIR\//}\". Using default value"
 
                     LABEL="$(_GET_SELINUX_LABEL "$PARTITION" "/$TMP")"
+                    if [ -z "$LABEL" ]; then
+                        LABEL="${DEFAULT_LABEL:-u:object_r:system_file:s0}"
+                    fi
 
                     echo "/$(_HANDLE_SPECIAL_CHARS "$TMP") $LABEL" >> "$WORK_DIR/configs/file_context-$PARTITION"
                 fi

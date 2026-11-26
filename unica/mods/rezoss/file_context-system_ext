@@ -3,3 +3,4 @@
 /system_ext/etc/permissions/privapp-permissions-com\.android\.systemui\.xml u:object_r:system_file:s0
 /system_ext/etc/permissions/privapp-permissions-com\.google\.android\.mosey\.xml u:object_r:system_file:s0
 /system_ext/priv-app/MoseyApp u:object_r:system_file:s0
+/system_ext/priv-app/MoseyApp/MoseyApp\.apk u:object_r:system_file:s0

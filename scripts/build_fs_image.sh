@@ -123,6 +123,15 @@ BUILD_IMAGE_MKFS()
             ;;
     esac
 
+    # Drop or repair file_contexts rows that are missing the SELinux label
+    # (mkfs.erofs errors with "line N is missing fields").
+    if [ -f "$FILE_CONTEXT_FILE" ]; then
+        sed -i -E \
+            -e '/^[[:space:]]*$/d' \
+            -e 's|^(/[^[:space:]]+)[[:space:]]+$|\1 u:object_r:system_file:s0|' \
+            "$FILE_CONTEXT_FILE"
+    fi
+
     EVAL "$BUILD_CMD" || exit 1
 
     if $MANUAL_SPARSE; then

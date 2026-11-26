@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="unica_now_nudge_replies_title">Now Nudge reply fallbacks</string>
+    <string name="unica_now_nudge_reply_language_title">Language code</string>
+    <string name="unica_now_nudge_reply_category_title">Category</string>
+    <string name="unica_now_nudge_reply_positive_title">Positive reply</string>
+    <string name="unica_now_nudge_reply_neutral_title">Neutral reply</string>
+    <string name="unica_now_nudge_reply_negative_title">Negative reply</string>
+    <string name="unica_now_nudge_reply_save_title">Save fallbacks</string>
+    <string name="unica_now_nudge_reply_save_summary">Write the fallback replies used when Now Nudge has no suggestion.</string>
+    <string name="unica_now_nudge_reply_saved">Reply fallbacks saved.</string>
+    <string name="unica_now_nudge_reply_failed">Failed to save reply fallbacks.</string>
+    <string name="unica_now_nudge_reply_invalid">Enter valid language, category, and reply text.</string>
+</resources>
