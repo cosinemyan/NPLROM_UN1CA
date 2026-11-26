@@ -1,120 +1,88 @@
 Subject: [PATCH] Add optional Maximum essential app switches
 
---- a/smali_classes2/yl/c.smali
-+++ b/smali_classes2/yl/c.smali
-@@ -179,8 +179,10 @@
-     goto :goto_2
-
-     :cond_4
-     :goto_0
-+    move-object v9, v1
+diff -ruN a/smali/com/samsung/android/sm/powermode/ebs/service/EbsInitService.smali b/smali/com/samsung/android/sm/powermode/ebs/service/EbsInitService.smali
+--- a/smali/com/samsung/android/sm/powermode/ebs/service/EbsInitService.smali
++++ b/smali/com/samsung/android/sm/powermode/ebs/service/EbsInitService.smali
+@@ -61,6 +61,8 @@
+ .method public final a(Landroid/content/Intent;)V
+     .locals 9
+ 
++    invoke-static {p0}, Lio/mesalabs/unica/maximum/EssentialApps;->recoverIfInactive(Landroid/content/Context;)V
 +
-     iget-object p0, p0, Lyl/c;->e:Ljava/util/ArrayList;
-
-     invoke-static {p0, p1}, Lyl/d;->e(Ljava/util/ArrayList;Landroid/content/pm/ApplicationInfo;)Z
-
-@@ -243,12 +245,16 @@
-     iget p0, p1, Landroid/content/pm/ApplicationInfo;->uid:I
-
-     iput p0, v0, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->f:I
-
-+    invoke-static {v9, v0}, Lio/mesalabs/unica/maximum/EssentialApps;->adjust(Landroid/content/Context;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;)V
+     const-string v0, "DcEbs.EbsInitService"
+ 
+     if-nez p1, :cond_0
+diff -ruN a/smali/rl/a.smali b/smali/rl/a.smali
+--- a/smali/rl/a.smali
++++ b/smali/rl/a.smali
+@@ -67,6 +67,20 @@
+ .method public final a(I)V
+     .locals 12
+ 
++    iget-object v0, p0, Lrl/a;->a:Lvv/e;
 +
-     return-object v0
-
-     :cond_6
-     :goto_2
-+    move-object v9, v1
-+
-     new-instance p0, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;
-
-     invoke-direct {p0}, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;-><init>()V
-
-@@ -307,6 +313,8 @@
-     iget p1, p1, Landroid/content/pm/ApplicationInfo;->uid:I
-
-     iput p1, p0, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->f:I
-
-+    invoke-static {v9, p0}, Lio/mesalabs/unica/maximum/EssentialApps;->adjust(Landroid/content/Context;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;)V
-+
-     return-object p0
- .end method
---- a/smali_classes2/cm/c.smali
-+++ b/smali_classes2/cm/c.smali
-@@ -820,8 +820,18 @@
-
-     invoke-virtual {v6, v0}, Landroid/view/View;->setOnClickListener(Landroid/view/View$OnClickListener;)V
-
-     :cond_15
-+    invoke-virtual {v2}, Lcm/a;->r()Lcom/samsung/android/sm/common/view/RoundedCornerRelativeLayout;
++    invoke-interface {v0}, Lvv/e;->getValue()Ljava/lang/Object;
 +
 +    move-result-object v0
 +
-+    invoke-virtual {v2}, Lcm/a;->t()Landroidx/appcompat/widget/SwitchCompat;
++    check-cast v0, Lrl/m;
 +
-+    move-result-object v1
++    invoke-virtual {v0}, Lrl/m;->a()Landroid/content/Context;
 +
-+    invoke-static {v0, v1, v4}, Lio/mesalabs/unica/maximum/EssentialApps;->bind(Landroid/view/View;Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;)V
++    move-result-object v0
 +
-     return-void
-
-     :cond_16
-     invoke-static {v10}, Lkotlin/jvm/internal/l;->m(Ljava/lang/String;)V
---- a/smali_classes2/yl/i.smali
-+++ b/smali_classes2/yl/i.smali
-@@ -980,8 +980,14 @@
-
++    invoke-static {v0, p1}, Lio/mesalabs/unica/maximum/EssentialApps;->onMode(Landroid/content/Context;I)V
++
+     iget-object v0, p0, Lrl/a;->b:Lvv/e;
+ 
+     iget-object p0, p0, Lrl/a;->a:Lvv/e;
+diff -ruN a/smali/rl/c.smali b/smali/rl/c.smali
+--- a/smali/rl/c.smali
++++ b/smali/rl/c.smali
+@@ -307,5 +307,7 @@
+     iput p0, v0, Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;->f:I
+ 
+     :goto_4
++    invoke-static {v3, v0}, Lio/mesalabs/unica/maximum/EssentialApps;->adjust(Landroid/content/Context;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;)V
++
+     return-object v0
+ .end method
+diff -ruN a/smali/rl/m.smali b/smali/rl/m.smali
+--- a/smali/rl/m.smali
++++ b/smali/rl/m.smali
+@@ -788,6 +788,12 @@
  .method public final g(Z[Ljava/lang/String;I)V
      .locals 4
-
-+    invoke-virtual {p0}, Lyl/i;->a()Landroid/content/Context;
+ 
++    invoke-virtual {p0}, Lrl/m;->a()Landroid/content/Context;
 +
 +    move-result-object v0
 +
 +    invoke-static {v0, p1, p2, p3}, Lio/mesalabs/unica/maximum/EssentialApps;->beforeSuspend(Landroid/content/Context;Z[Ljava/lang/String;I)V
 +
      array-length v0, p2
-
-     const-string v1, " + packageNames  size: "
-
---- a/smali_classes2/yl/a.smali
-+++ b/smali_classes2/yl/a.smali
-@@ -66,8 +66,22 @@
- # virtual methods
- .method public final a(I)V
-     .locals 12
-
-+    iget-object v0, p0, Lyl/a;->a:Lmx/g;
-+
-+    invoke-interface {v0}, Lmx/g;->getValue()Ljava/lang/Object;
+ 
+     const-string v1, "setSuspendAllAppsMode uid: "
+diff -ruN a/smali/vl/b.smali b/smali/vl/b.smali
+--- a/smali/vl/b.smali
++++ b/smali/vl/b.smali
+@@ -831,6 +831,16 @@
+     invoke-virtual {v6, v7}, Landroid/view/View;->setOnClickListener(Landroid/view/View$OnClickListener;)V
+ 
+     :cond_15
++    invoke-virtual {v4}, Lvl/a;->v()Lcom/samsung/android/sm/common/view/RoundedCornerRelativeLayout;
 +
 +    move-result-object v0
 +
-+    check-cast v0, Lyl/i;
++    invoke-virtual {v4}, Lvl/a;->x()Landroidx/appcompat/widget/SwitchCompat;
 +
-+    invoke-virtual {v0}, Lyl/i;->a()Landroid/content/Context;
++    move-result-object v1
 +
-+    move-result-object v0
++    invoke-static {v0, v1, v5}, Lio/mesalabs/unica/maximum/EssentialApps;->bind(Landroid/view/View;Landroid/widget/CompoundButton;Lcom/samsung/android/sm/powermode/ebs/data/EbsAppData;)V
 +
-+    invoke-static {v0, p1}, Lio/mesalabs/unica/maximum/EssentialApps;->onMode(Landroid/content/Context;I)V
-+
-     iget-object v0, p0, Lyl/a;->b:Lmx/g;
-
-     iget-object p0, p0, Lyl/a;->a:Lmx/g;
-
---- a/smali_classes2/com/samsung/android/sm/powermode/ebs/service/EbsInitService.smali
-+++ b/smali_classes2/com/samsung/android/sm/powermode/ebs/service/EbsInitService.smali
-@@ -60,8 +60,10 @@
- # virtual methods
- .method public final a(Landroid/content/Intent;)V
-     .locals 9
-
-+    invoke-static {p0}, Lio/mesalabs/unica/maximum/EssentialApps;->recoverIfInactive(Landroid/content/Context;)V
-+
-     const-string v0, "DcEbs.EbsInitService"
-
-     if-nez p1, :cond_0
-
+     return-void
+ 
+     :cond_16
 --- a/smali_classes2/io/mesalabs/unica/maximum/EssentialApps$0.smali
 +++ b/smali_classes2/io/mesalabs/unica/maximum/EssentialApps$0.smali
 @@ -0,0 +1,56 @@

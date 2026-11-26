@@ -7,7 +7,22 @@ ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 OUTPUT=${1:-$SRC_DIR/out/archived/QWEN_LLM/QWEN_LLM_rezoss_v9.apk}
 MODE=${2:-full}
 [[ "$MODE" == full || "$MODE" == --stub ]] || { echo "Usage: build.sh [OUTPUT_APK] [--stub]" >&2; exit 1; }
-SDK=${ANDROID_HOME:-$HOME/Android/Sdk}; TOOLS=$SDK/build-tools/37.0.0
+SDK=""
+for _cand in \
+    "${ANDROID_HOME:-}" \
+    "${ANDROID_SDK_ROOT:-}" \
+    "${HOME:-}/Android/Sdk" \
+    "/home/cosine/Android/Sdk" \
+    "/opt/android-sdk" \
+    "/usr/lib/android-sdk"; do
+    if [[ -n "$_cand" && -f "$_cand/platforms/android-37.0/android.jar" ]]; then
+        SDK="$_cand"
+        break
+    fi
+done
+unset _cand
+[[ -n "$SDK" ]] || { echo "Android SDK with platforms/android-37.0 not found (set ANDROID_HOME)" >&2; exit 1; }
+TOOLS=$SDK/build-tools/37.0.0
 WORK=$(mktemp -d /tmp/rezoss-api-app.XXXXXX)
 trap 'rm -rf "$WORK"' EXIT
 PAYLOAD=$ROOT/../../aioskernel/native-now-nudge/payload

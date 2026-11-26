@@ -57,31 +57,56 @@ _REZOSS_RESTORE_ARCHIVED_KERNEL()
   fi
 }
 
+_REZOSS_GITHUB_CURL()
+{
+  # Prefer authenticated GitHub API when available (avoids unauth 403 rate limits).
+  local URL="$1"
+  shift
+  local TOKEN="${GH_TOKEN:-${GITHUB_TOKEN:-}}"
+  if [ -z "$TOKEN" ] && command -v gh >/dev/null 2>&1; then
+    TOKEN="$(gh auth token --hostname github.com 2>/dev/null || true)"
+  fi
+  if [ -n "$TOKEN" ]; then
+    curl -fsSL -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json" "$@" "$URL"
+  else
+    curl -fsSL "$@" "$URL"
+  fi
+}
+
 _REZOSS_CHANGE_EDGARS_KERNEL_IMPL()
 {
   local TMP_DIR="${REZOSS_KERNEL_TMP_DIR:-$MODPATH/tmp}"
   local RELEASE_JSON ZIP_URL ZIP_NAME IMAGE_GZ MAGISKBOOT MAGISK_APK_URL
+  local LOCAL_KERNEL_ZIP LOCAL_MAGISKBOOT
 
-  LOG "- Get latest release kernel"
   rm -rf "$TMP_DIR" || return 1
   mkdir -p "$TMP_DIR" || return 1
 
-  # Rezoss: s23-ksu-next-susfs releases/latest (first .zip asset)
-  RELEASE_JSON="$(curl -fsSL "https://api.github.com/repos/Rezoss-Reza/s23-ksu-next-susfs/releases/latest")" \
-    || return 1
-  ZIP_URL="$(echo "$RELEASE_JSON" | jq -r '
-    .assets[]
-    | select(.name | test("\\.zip$"))
-    | .browser_download_url
-  ' | head -n1)" || return 1
-  if [ ! "$ZIP_URL" ] || [ "$ZIP_URL" = "null" ]; then
-    LOGE "Edgars Kernel zip asset not found"
-    return 1
-  fi
+  # Prefer vendored AnyKernel zip (survives GitHub API 403 / offline).
+  LOCAL_KERNEL_ZIP="$(ls -1 "$MODPATH/ksu-next"/common-5.15.*.zip 2>/dev/null | sort -V | tail -n1 || true)"
+  if [ -f "$LOCAL_KERNEL_ZIP" ]; then
+    LOG "- Using local Edgars Kernel zip: ${LOCAL_KERNEL_ZIP//$SRC_DIR\//}"
+    ZIP_NAME="$(basename "$LOCAL_KERNEL_ZIP")"
+    cp -f "$LOCAL_KERNEL_ZIP" "$TMP_DIR/$ZIP_NAME" || return 1
+  else
+    LOG "- Get latest release kernel"
+    # Rezoss: s23-ksu-next-susfs releases/latest (first .zip asset)
+    RELEASE_JSON="$(_REZOSS_GITHUB_CURL "https://api.github.com/repos/Rezoss-Reza/s23-ksu-next-susfs/releases/latest")" \
+      || return 1
+    ZIP_URL="$(echo "$RELEASE_JSON" | jq -r '
+      .assets[]
+      | select(.name | test("\\.zip$"))
+      | .browser_download_url
+    ' | head -n1)" || return 1
+    if [ ! "$ZIP_URL" ] || [ "$ZIP_URL" = "null" ]; then
+      LOGE "Edgars Kernel zip asset not found"
+      return 1
+    fi
 
-  ZIP_NAME="$(basename "$ZIP_URL")" || return 1
-  LOG "- Using Edgars Kernel asset: $ZIP_NAME"
-  curl -fL --retry 3 -o "$TMP_DIR/$ZIP_NAME" "$ZIP_URL" || return 1
+    ZIP_NAME="$(basename "$ZIP_URL")" || return 1
+    LOG "- Using Edgars Kernel asset: $ZIP_NAME"
+    curl -fL --retry 3 -o "$TMP_DIR/$ZIP_NAME" "$ZIP_URL" || return 1
+  fi
 
   LOG "- Extracting Image.gz"
   rm -rf "$TMP_DIR/zip_extract" || return 1
@@ -93,12 +118,17 @@ _REZOSS_CHANGE_EDGARS_KERNEL_IMPL()
     return 1
   fi
 
-  LOG "- Download magiskboot from magisk github"
   MAGISKBOOT="$TMP_DIR/magiskboot"
-  if [[ ! -x "$MAGISKBOOT" ]]; then
+  LOCAL_MAGISKBOOT="$MODPATH/ksu-next/magiskboot"
+  if [ -f "$LOCAL_MAGISKBOOT" ]; then
+    LOG "- Using local magiskboot"
+    cp -f "$LOCAL_MAGISKBOOT" "$MAGISKBOOT" || return 1
+    chmod +x "$MAGISKBOOT" || return 1
+  elif [[ ! -x "$MAGISKBOOT" ]]; then
+    LOG "- Download magiskboot from magisk github"
     LOG "[*] magiskboot not found, downloading Magisk app to extract it..."
 
-    MAGISK_APK_URL="$(curl -fsSL https://api.github.com/repos/topjohnwu/Magisk/releases/latest \
+    MAGISK_APK_URL="$(_REZOSS_GITHUB_CURL https://api.github.com/repos/topjohnwu/Magisk/releases/latest \
       | jq -r '.assets[] | select(.name | test("Magisk-v.*\\.apk$")) | .browser_download_url' \
       | head -n1)" || return 1
     if [ ! "$MAGISK_APK_URL" ] || [ "$MAGISK_APK_URL" = "null" ]; then
@@ -171,57 +201,92 @@ _REZOSS_PATCH_KSU_NEXT_INIT_BOOT_IMPL()
 
   mkdir -p "$TMP_DIR" || return 1
 
-  LOG "- Get latest KernelSU-Next release"
-  KSU_RELEASE_JSON="$(curl -fsSL "https://api.github.com/repos/KernelSU-Next/KernelSU-Next/releases/latest")" \
-    || return 1
-  KSU_RELEASE_TAG="$(echo "$KSU_RELEASE_JSON" | jq -r '.tag_name // empty')" || return 1
-  LOG "- Using KernelSU-Next ${KSU_RELEASE_TAG:-latest}"
-
-  KSU_HOST_ARCH="$(uname -m)" || return 1
-  case "$KSU_HOST_ARCH" in
-    x86_64|amd64)
-      KSU_KSUD_REGEX="^ksud-(x86_64|amd64).*linux"
-      ;;
-    aarch64|arm64)
-      KSU_KSUD_REGEX="^ksud-aarch64.*linux"
-      ;;
-    *)
-      LOGE "Unsupported host architecture for KernelSU-Next ksud: $KSU_HOST_ARCH"
-      return 1
-      ;;
-  esac
-
-  KSU_KSUD_URL="$(echo "$KSU_RELEASE_JSON" | jq -r --arg regex "$KSU_KSUD_REGEX" '
-    .assets[]
-    | select(.name | test($regex))
-    | select(.name | test("android") | not)
-    | .browser_download_url
-  ' | head -n1)" || return 1
-  if [ ! "$KSU_KSUD_URL" ] || [ "$KSU_KSUD_URL" = "null" ]; then
-    LOGE "KernelSU-Next ksud asset not found for host architecture: $KSU_HOST_ARCH"
-    return 1
-  fi
-
-  KSU_MODULE_NAME="${KSU_KMI}_kernelsu.ko"
-  KSU_MODULE_URL="$(echo "$KSU_RELEASE_JSON" | jq -r --arg name "$KSU_MODULE_NAME" '
-    .assets[]
-    | select(.name == $name)
-    | .browser_download_url
-  ' | head -n1)" || return 1
-  if [ ! "$KSU_MODULE_URL" ] || [ "$KSU_MODULE_URL" = "null" ]; then
-    LOGE "KernelSU-Next module asset not found: $KSU_MODULE_NAME"
-    return 1
-  fi
-
   KSU_KSUD="$TMP_DIR/ksud"
-  KSU_MODULE="$TMP_DIR/$KSU_MODULE_NAME"
+  KSU_MODULE="$TMP_DIR/${KSU_KMI}_kernelsu.ko"
 
-  LOG "- Download ksud"
-  curl -fL --retry 3 -o "$KSU_KSUD" "$KSU_KSUD_URL" || return 1
-  chmod +x "$KSU_KSUD" || return 1
+  # Prefer vendored CI/release cache under ksu-next/ when GitHub API is 403'd.
+  if [ -f "$MODPATH/ksu-next/ksud-x86_64-unknown-linux-musl.zip" ]; then
+    LOG "- Using local ksud from unica/mods/rezoss/ksu-next"
+    unzip -p "$MODPATH/ksu-next/ksud-x86_64-unknown-linux-musl.zip" \
+      'x86_64-unknown-linux-musl/release/ksud' > "$KSU_KSUD" || return 1
+    chmod +x "$KSU_KSUD" || return 1
+  fi
+  if [ -f "$MODPATH/ksu-next/aarch64-android13-5.15-ksu-lkm.zip" ]; then
+    LOG "- Using local LKM from unica/mods/rezoss/ksu-next"
+    unzip -p "$MODPATH/ksu-next/aarch64-android13-5.15-ksu-lkm.zip" \
+      'android13-5.15_kernelsu.ko' > "$KSU_MODULE" || return 1
+  elif [ -f "$MODPATH/ksu-next/aarch64-android13-5.15-lkm.zip" ]; then
+    LOG "- Using local LKM from unica/mods/rezoss/ksu-next"
+    unzip -p "$MODPATH/ksu-next/aarch64-android13-5.15-lkm.zip" \
+      'android13-5.15_kernelsu.ko' > "$KSU_MODULE" || return 1
+  fi
 
-  LOG "- Download $KSU_MODULE_NAME"
-  curl -fL --retry 3 -o "$KSU_MODULE" "$KSU_MODULE_URL" || return 1
+  if [ ! -x "$KSU_KSUD" ] || [ ! -s "$KSU_MODULE" ]; then
+    LOG "- Get latest KernelSU-Next release"
+    KSU_RELEASE_JSON="$(_REZOSS_GITHUB_CURL "https://api.github.com/repos/KernelSU-Next/KernelSU-Next/releases/latest")" \
+      || return 1
+    KSU_RELEASE_TAG="$(echo "$KSU_RELEASE_JSON" | jq -r '.tag_name // empty')" || return 1
+    LOG "- Using KernelSU-Next ${KSU_RELEASE_TAG:-latest}"
+
+    if [ ! -x "$KSU_KSUD" ]; then
+      KSU_HOST_ARCH="$(uname -m)" || return 1
+      case "$KSU_HOST_ARCH" in
+        x86_64|amd64)
+          KSU_KSUD_REGEX="^ksud-(x86_64|amd64).*linux"
+          ;;
+        aarch64|arm64)
+          KSU_KSUD_REGEX="^ksud-aarch64.*linux"
+          ;;
+        *)
+          LOGE "Unsupported host architecture for KernelSU-Next ksud: $KSU_HOST_ARCH"
+          return 1
+          ;;
+      esac
+
+      KSU_KSUD_URL="$(echo "$KSU_RELEASE_JSON" | jq -r --arg regex "$KSU_KSUD_REGEX" '
+        .assets[]
+        | select(.name | test($regex))
+        | select(.name | test("android") | not)
+        | .browser_download_url
+      ' | head -n1)" || return 1
+      if [ ! "$KSU_KSUD_URL" ] || [ "$KSU_KSUD_URL" = "null" ]; then
+        LOGE "KernelSU-Next ksud asset not found for host architecture: $KSU_HOST_ARCH"
+        return 1
+      fi
+      LOG "- Download ksud"
+      curl -fL --retry 3 -o "$KSU_KSUD" "$KSU_KSUD_URL" || return 1
+      chmod +x "$KSU_KSUD" || return 1
+    fi
+
+    if [ ! -s "$KSU_MODULE" ]; then
+      # Device LKM is aarch64 on S23. KernelSU-Next v3.4+ prefixes aarch64_.
+      KSU_MODULE_NAME=""
+      KSU_MODULE_URL=""
+      for KSU_MODULE_CANDIDATE in \
+          "aarch64_${KSU_KMI}_kernelsu.ko" \
+          "arm64_${KSU_KMI}_kernelsu.ko" \
+          "${KSU_KMI}_kernelsu.ko"; do
+        KSU_MODULE_URL="$(echo "$KSU_RELEASE_JSON" | jq -r --arg name "$KSU_MODULE_CANDIDATE" '
+          .assets[]
+          | select(.name == $name)
+          | .browser_download_url
+        ' | head -n1)" || return 1
+        if [ "$KSU_MODULE_URL" ] && [ "$KSU_MODULE_URL" != "null" ]; then
+          KSU_MODULE_NAME="$KSU_MODULE_CANDIDATE"
+          break
+        fi
+      done
+      unset KSU_MODULE_CANDIDATE
+      if [ ! "$KSU_MODULE_NAME" ] || [ ! "$KSU_MODULE_URL" ] || [ "$KSU_MODULE_URL" = "null" ]; then
+        LOGE "KernelSU-Next module asset not found for KMI: $KSU_KMI (tried aarch64_/arm64_/unprefixed)"
+        return 1
+      fi
+      LOG "- Download $KSU_MODULE_NAME"
+      curl -fL --retry 3 -o "$KSU_MODULE" "$KSU_MODULE_URL" || return 1
+    fi
+  else
+    LOG "- Using vendored KernelSU-Next ksud + LKM (skip GitHub release fetch)"
+  fi
 
   LOG "- Patching init_boot.img for KMI $KSU_KMI"
   cp -f "$KSU_INIT_BOOT" "$TMP_DIR/init_boot.img" || return 1
@@ -274,7 +339,7 @@ _REZOSS_INSTALL_KSU_NEXT_SPOOFED_MANAGER_IMPL()
   mkdir -p "$CACHE_DIR" || return 1
 
   LOG "- Get KernelSU-Next spoofed manager APK (latest release)"
-  RELEASE_JSON="$(curl -fsSL "https://api.github.com/repos/KernelSU-Next/KernelSU-Next/releases/latest")" \
+  RELEASE_JSON="$(_REZOSS_GITHUB_CURL "https://api.github.com/repos/KernelSU-Next/KernelSU-Next/releases/latest")" \
     || return 1
   APK_URL="$(echo "$RELEASE_JSON" | jq -r '
     .assets[]

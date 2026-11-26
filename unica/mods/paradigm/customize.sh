@@ -413,10 +413,27 @@ DECODE_APK "system" "system/priv-app/SemanticSearchCore/SemanticSearchCore.apk"
 SEMANTIC_SEARCH_CORE_DECODED="$APKTOOL_DIR/system/priv-app/SemanticSearchCore/SemanticSearchCore.apk"
 SEMANTIC_SEARCH_CORE_LIB="$SEMANTIC_SEARCH_CORE_DECODED/lib/arm64-v8a"
 SEMANTIC_SEARCH_CORE_SHARED="$SEMANTIC_SEARCH_CORE_DECODED/assets/shared"
-SEMANTIC_SEARCH_CORE_FW="$FW_DIR/SM-S918B_EUX"
+# Prefer NPL QSSI source FW (SM-S911B); tip hardcodes S918B which we may not have extracted.
+SEMANTIC_SEARCH_CORE_FW=""
+_SEMANTIC_SEARCH_CORE_SRC_MODEL="$(echo "$SOURCE_FIRMWARE" | cut -d '/' -f1)"
+_SEMANTIC_SEARCH_CORE_SRC_CSC="$(echo "$SOURCE_FIRMWARE" | cut -d '/' -f2)"
+for _SEMANTIC_SEARCH_CORE_FW_CANDIDATE in \
+    "$FW_DIR/${_SEMANTIC_SEARCH_CORE_SRC_MODEL}_${_SEMANTIC_SEARCH_CORE_SRC_CSC}" \
+    "$FW_DIR/SM-S911B_EUX" \
+    "$FW_DIR/SM-S918B_EUX"; do
+    if [ -f "$_SEMANTIC_SEARCH_CORE_FW_CANDIDATE/vendor/lib64/snap/libQnnHtpV73Stub.so" ]; then
+        SEMANTIC_SEARCH_CORE_FW="$_SEMANTIC_SEARCH_CORE_FW_CANDIDATE"
+        break
+    fi
+done
+unset _SEMANTIC_SEARCH_CORE_FW_CANDIDATE _SEMANTIC_SEARCH_CORE_SRC_MODEL _SEMANTIC_SEARCH_CORE_SRC_CSC
 SEMANTIC_SEARCH_CORE_QNN_MISSING=0
 if [ ! -d "$SEMANTIC_SEARCH_CORE_LIB" ] || [ ! -d "$SEMANTIC_SEARCH_CORE_SHARED" ]; then
     LOGE "SemanticSearchCore.apk decoded QNN directories are missing"
+    return 1
+fi
+if [ -z "$SEMANTIC_SEARCH_CORE_FW" ]; then
+    LOGE "No extracted firmware with Hexagon V73 QNN libs found under out/fw"
     return 1
 fi
 for f in \
@@ -432,7 +449,7 @@ done
 if [ "$SEMANTIC_SEARCH_CORE_QNN_MISSING" != "0" ]; then
     return 1
 fi
-LOG "- Replacing SemanticSearchCore.apk QNN HTP V81 binaries with S23U Hexagon V73 binaries"
+LOG "- Replacing SemanticSearchCore.apk QNN HTP V81 binaries with Hexagon V73 from ${SEMANTIC_SEARCH_CORE_FW//$FW_DIR\//}"
 cp -f "$SEMANTIC_SEARCH_CORE_FW/vendor/lib64/snap/libQnnHtp.so" "$SEMANTIC_SEARCH_CORE_LIB/libQnnHtp.so"
 cp -f "$SEMANTIC_SEARCH_CORE_FW/vendor/lib64/snap/libQnnSystem.so" "$SEMANTIC_SEARCH_CORE_LIB/libQnnSystem.so"
 cp -f "$SEMANTIC_SEARCH_CORE_FW/vendor/lib64/snap/libQnnHtpV73Stub.so" "$SEMANTIC_SEARCH_CORE_LIB/libQnnHtpV73Stub.so"

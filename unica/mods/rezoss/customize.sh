@@ -473,15 +473,37 @@ REZOSS_ENABLE_MOSEY_APPLE_SHARING="${REZOSS_ENABLE_MOSEY_APPLE_SHARING:-true}"
 if [[ "$REZOSS_ENABLE_MOSEY_APPLE_SHARING" == "true" ]]; then
     LOG "- Adding S26U One UI 9 Mosey system_ext service"
     # S23U One UI 9 already provides mosey_app/server policy and file contexts.
-    ADD_TO_WORK_DIR "m3qxxx" "system_ext" "priv-app/MoseyApp" 0 0 755 "u:object_r:system_file:s0"
-    ADD_TO_WORK_DIR "m3qxxx" "system_ext" "bin/mosey_server" 0 1000 755 "u:object_r:mosey_server_exec:s0"
-    ADD_TO_WORK_DIR "m3qxxx" "system_ext" "lib64/libmosey_daemon_ffi.so" 0 0 644 "u:object_r:system_lib_file:s0"
-    for f in "init/mosey.rc" "vintf/manifest/manifest_mosey.xml" \
-        "default-permissions/default-permissions-com.google.android.mosey.xml" \
-        "permissions/privapp-permissions-com.google.android.mosey.xml" \
-        "sysconfig/preinstalled-packages-com.google.android.mosey.xml"; do
-        ADD_TO_WORK_DIR "m3qxxx" "system_ext" "etc/$f" 0 0 644 "u:object_r:system_file:s0"
+    # Prefer S26U m3qxxx system_ext stack when present; otherwise use the bundled
+    # Rezoss Mosey payload (system_ext app + vendor daemon).
+    REZOSS_MOSEY_FROM_M3Q=false
+    for REZOSS_MOSEY_CANDIDATE in \
+        "$SRC_DIR/prebuilts/samsung/m3qxxx/system_ext/priv-app/MoseyApp" \
+        "$SRC_DIR/prebuilts/samsung/m3qxxx/system/system/system_ext/priv-app/MoseyApp" \
+        "$SRC_DIR/prebuilts/samsung/m3qxxx/system/system_ext/priv-app/MoseyApp"; do
+        if [ -e "$REZOSS_MOSEY_CANDIDATE" ]; then
+            REZOSS_MOSEY_FROM_M3Q=true
+            break
+        fi
     done
+    if $REZOSS_MOSEY_FROM_M3Q; then
+        ADD_TO_WORK_DIR "m3qxxx" "system_ext" "priv-app/MoseyApp" 0 0 755 "u:object_r:system_file:s0"
+        ADD_TO_WORK_DIR "m3qxxx" "system_ext" "bin/mosey_server" 0 1000 755 "u:object_r:mosey_server_exec:s0"
+        ADD_TO_WORK_DIR "m3qxxx" "system_ext" "lib64/libmosey_daemon_ffi.so" 0 0 644 "u:object_r:system_lib_file:s0"
+        for f in "init/mosey.rc" "vintf/manifest/manifest_mosey.xml" \
+            "default-permissions/default-permissions-com.google.android.mosey.xml" \
+            "permissions/privapp-permissions-com.google.android.mosey.xml" \
+            "sysconfig/preinstalled-packages-com.google.android.mosey.xml"; do
+            ADD_TO_WORK_DIR "m3qxxx" "system_ext" "etc/$f" 0 0 644 "u:object_r:system_file:s0"
+        done
+    else
+        LOG "- m3qxxx Mosey prebuilt missing; using unica/mods/rezoss Mosey payload"
+        # MoseyApp + system_ext permission XMLs already from MODPATH system_ext overlay.
+        ADD_TO_WORK_DIR "$MODPATH" "vendor" "bin/mosey_server" 0 1000 755 "u:object_r:mosey_server_exec:s0"
+        ADD_TO_WORK_DIR "$MODPATH" "vendor" "lib64/libmosey_daemon_ffi.so" 0 0 644 "u:object_r:vendor_file:s0"
+        ADD_TO_WORK_DIR "$MODPATH" "vendor" "etc/init/mosey.rc" 0 0 644 "u:object_r:vendor_configs_file:s0"
+        ADD_TO_WORK_DIR "$MODPATH" "vendor" "etc/vintf/manifest/manifest_mosey.xml" 0 0 644 "u:object_r:vendor_configs_file:s0"
+    fi
+    unset REZOSS_MOSEY_FROM_M3Q REZOSS_MOSEY_CANDIDATE
 else
     LOG "- Skipping Mosey Quick Share extension; REZOSS_ENABLE_MOSEY_APPLE_SHARING=false"
     DELETE_FROM_WORK_DIR "system" "system/etc/default-permissions/default-permissions-com.google.android.mosey.xml"
@@ -987,13 +1009,63 @@ LOG "- Patch VisualCloudCore Galaxy Store model check"
 APPLY_PATCH "system" "system/app/VisualCloudCore/VisualCloudCore.apk" \
     "$MODPATH/visualcloudcore/VisualCloudCore.apk/0001-Use-S25-Ultra-model-for-stub-update-check.patch"
 
-LOG "- Patch product framework overlay doze auto-brightness"
-APPLY_PATCH "product" "overlay/framework-res__dm3qxxx__auto_generated_rro_product.apk" \
-    "$MODPATH/rro/framework-res__dm3qxxx__auto_generated_rro_product.apk/0001-Add-doze-auto-brightness-arrays.patch"
+# Product framework RRO is device-specific (dm1qxxx / dm2qxxx / dm3qxxx / …).
+# Never hardcode dm3qxxx when building dm1q/dm2q.
+REZOSS_PRODUCT_RRO=""
+case "$TARGET_CODENAME" in
+    dm1q)
+        for _rro in \
+            "overlay/framework-res__dm1qxxx__auto_generated_rro_product.apk" \
+            "overlay/framework-res__dm1qksx__auto_generated_rro_product.apk"; do
+            if [ -f "$WORK_DIR/product/$_rro" ]; then
+                REZOSS_PRODUCT_RRO="$_rro"
+                break
+            fi
+        done
+        ;;
+    dm2q)
+        REZOSS_PRODUCT_RRO="overlay/framework-res__dm2qxxx__auto_generated_rro_product.apk"
+        ;;
+    dm3q)
+        REZOSS_PRODUCT_RRO="overlay/framework-res__dm3qxxx__auto_generated_rro_product.apk"
+        ;;
+esac
+if [ -z "$REZOSS_PRODUCT_RRO" ] || [ ! -f "$WORK_DIR/product/$REZOSS_PRODUCT_RRO" ]; then
+    REZOSS_PRODUCT_RRO="$(find "$WORK_DIR/product/overlay" -maxdepth 1 \
+        -name 'framework-res__*__auto_generated_rro_product.apk' -printf 'overlay/%f\n' 2>/dev/null | head -n 1 || true)"
+fi
+REZOSS_PRODUCT_RRO_NAME="$(basename "$REZOSS_PRODUCT_RRO")"
+REZOSS_PRODUCT_RRO_PATCH_DIR="$MODPATH/rro/$REZOSS_PRODUCT_RRO_NAME"
+# S23/+ share the dm1q doze arrays patch when a device-specific copy is absent.
+if [ ! -f "$REZOSS_PRODUCT_RRO_PATCH_DIR/0001-Add-doze-auto-brightness-arrays.patch" ] && \
+        [[ "$TARGET_CODENAME" == "dm1q" || "$TARGET_CODENAME" == "dm2q" ]]; then
+    REZOSS_PRODUCT_RRO_PATCH_DIR="$MODPATH/rro/framework-res__dm1qxxx__auto_generated_rro_product.apk"
+fi
 
-LOG "- Patch product framework overlay Now Nudge notification allowlist"
-APPLY_PATCH "product" "overlay/framework-res__dm3qxxx__auto_generated_rro_product.apk" \
-    "$MODPATH/rro/framework-res__dm3qxxx__auto_generated_rro_product.apk/0002-Add-Now-Nudge-notification-allow-packages.patch"
+if [ -n "$REZOSS_PRODUCT_RRO" ] && [ -f "$WORK_DIR/product/$REZOSS_PRODUCT_RRO" ]; then
+    if [ -f "$REZOSS_PRODUCT_RRO_PATCH_DIR/0001-Add-doze-auto-brightness-arrays.patch" ]; then
+        LOG "- Patch product framework overlay doze auto-brightness ($REZOSS_PRODUCT_RRO_NAME)"
+        APPLY_PATCH "product" "$REZOSS_PRODUCT_RRO" \
+            "$REZOSS_PRODUCT_RRO_PATCH_DIR/0001-Add-doze-auto-brightness-arrays.patch"
+    else
+        LOGW "No doze auto-brightness RRO patch for $REZOSS_PRODUCT_RRO_NAME; skipping"
+    fi
+
+    REZOSS_NUDGE_RRO_PATCH="$REZOSS_PRODUCT_RRO_PATCH_DIR/0002-Add-Now-Nudge-notification-allow-packages.patch"
+    if [ ! -f "$REZOSS_NUDGE_RRO_PATCH" ]; then
+        # Package allowlist is device-agnostic; reuse the dm3q patch when needed.
+        REZOSS_NUDGE_RRO_PATCH="$MODPATH/rro/framework-res__dm3qxxx__auto_generated_rro_product.apk/0002-Add-Now-Nudge-notification-allow-packages.patch"
+    fi
+    if [ -f "$REZOSS_NUDGE_RRO_PATCH" ]; then
+        LOG "- Patch product framework overlay Now Nudge notification allowlist ($REZOSS_PRODUCT_RRO_NAME)"
+        APPLY_PATCH "product" "$REZOSS_PRODUCT_RRO" "$REZOSS_NUDGE_RRO_PATCH"
+    else
+        LOGW "No Now Nudge RRO patch available; skipping"
+    fi
+else
+    LOGW "Product framework RRO not found for $TARGET_CODENAME; skipping doze/Now Nudge overlay patches"
+fi
+unset REZOSS_PRODUCT_RRO REZOSS_PRODUCT_RRO_NAME REZOSS_PRODUCT_RRO_PATCH_DIR REZOSS_NUDGE_RRO_PATCH _rro
 
 # =============================================================================
 # Notification Highlights / Galaxy AI Stack
@@ -1017,7 +1089,17 @@ unset REZOSS_SCS_POLICY_XML
 LOG "- Build opt-in UN1CA local notification-summary provider"
 LOCAL_SUMMARY_SERVICE_DIR="$MODPATH/local-summary-service"
 LOCAL_SUMMARY_SERVICE_APK="$LOCAL_SUMMARY_SERVICE_DIR/system/priv-app/RezossAI/RezossAI.apk"
-EVAL "bash \"$LOCAL_SUMMARY_SERVICE_DIR/build.sh\" \"$LOCAL_SUMMARY_SERVICE_APK\""
+# npl_menu often runs as root with HOME=/root; still locate the host Android SDK.
+if [ -z "${ANDROID_HOME:-}" ]; then
+    for _REZOSS_SDK in "/home/cosine/Android/Sdk" "${HOME:-}/Android/Sdk" "/opt/android-sdk"; do
+        if [ -f "$_REZOSS_SDK/platforms/android-37.0/android.jar" ]; then
+            export ANDROID_HOME="$_REZOSS_SDK"
+            break
+        fi
+    done
+    unset _REZOSS_SDK
+fi
+EVAL "bash \"$LOCAL_SUMMARY_SERVICE_DIR/build.sh\" \"$LOCAL_SUMMARY_SERVICE_APK\"" || return 1
 ADD_TO_WORK_DIR "$LOCAL_SUMMARY_SERVICE_DIR" "system" "system/priv-app/RezossAI/RezossAI.apk" 0 0 644 "u:object_r:system_file:s0"
 SET_METADATA "system" "system/priv-app/RezossAI" 0 0 755 "u:object_r:system_file:s0"
 SET_METADATA "system" "system/priv-app/RezossAI/RezossAI.apk" 0 0 644 "u:object_r:system_file:s0"

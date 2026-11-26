@@ -15,13 +15,31 @@ from pathlib import Path
 PACKAGE = 'com.samsung.android.ssco'
 NAME = 'SemanticSearchCore.apk'
 CHUNK_SIZE = 52428800
+REPO_ROOT = Path(__file__).resolve().parents[4]
+AAPT2_CANDIDATES = (
+    REPO_ROOT / 'external/apktool/brut.apktool/apktool-lib/build/resources/main/prebuilt/linux/aapt2',
+    REPO_ROOT / 'external/apktool/brut.apktool/apktool-lib/src/main/resources/prebuilt/linux/aapt2',
+)
+
+
+def aapt2_bin():
+    which = shutil.which('aapt2')
+    if which:
+        return which
+    for candidate in AAPT2_CANDIDATES:
+        if candidate.is_file():
+            return str(candidate)
+    return None
 
 
 def version(apk):
     with zipfile.ZipFile(apk) as archive:
         if archive.testzip() is not None:
             raise ValueError('APK ZIP integrity check failed')
-    result = subprocess.run(['aapt2', 'dump', 'badging', str(apk)],
+    aapt2 = aapt2_bin()
+    if not aapt2:
+        raise FileNotFoundError('aapt2')
+    result = subprocess.run([aapt2, 'dump', 'badging', str(apk)],
                             check=True, capture_output=True, text=True)
     match = re.search(r"^package: name='([^']+)' versionCode='(\d+)'", result.stdout, re.M)
     if not match or match[1] != PACKAGE:
@@ -49,17 +67,21 @@ def update(folder, url, backups):
                             raise ValueError('Prebuilt chunks are not contiguous')
                         with chunk.open('rb') as source:
                             shutil.copyfileobj(source, output)
-            old_version = version(current)
+            # Store URI often missing on One UI 9 / SDK 37 hosts; keep cached prebuilt.
             if not url or url.startswith('galaxy-store-source:'):
-                print(f'SemanticSearchCore: Store unavailable; using prebuilt {old_version}')
+                print('SemanticSearchCore: Store unavailable; using existing prebuilt')
                 return
+            if not aapt2_bin():
+                print('SemanticSearchCore: aapt2 not found; skipping Store refresh, using existing prebuilt')
+                return
+            old_version = version(current)
             candidate = scratch / 'download.apk'
             try:
                 subprocess.run(['curl', '--fail', '--location', '--retry', '2',
                                 '--connect-timeout', '30', '--max-time', '1800',
                                 '--output', str(candidate), url], check=True)
                 new_version = version(candidate)
-            except (subprocess.CalledProcessError, ValueError, zipfile.BadZipFile) as error:
+            except (subprocess.CalledProcessError, ValueError, zipfile.BadZipFile, FileNotFoundError) as error:
                 print(f'SemanticSearchCore: Store download invalid/unavailable ({type(error).__name__}); using prebuilt {old_version}')
                 return
             if new_version <= old_version:
